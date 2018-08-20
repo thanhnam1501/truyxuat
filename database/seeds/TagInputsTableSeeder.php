@@ -31,5 +31,9 @@ class TagInputsTableSeeder extends Seeder
 
         // kieu tu dinh nghia
         TagInput::create(['name' => 'define']);
+
+        // Label
+        TagInput::create(['name' => 'label']);
+
     }
 }

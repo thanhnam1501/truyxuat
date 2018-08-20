@@ -461,18 +461,18 @@ $(function() {
         
         var tp_date = function(){
             
-            if($(".plugin-date").length > 0){
-                
-                var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-                        
-                var now     = new Date();
-                var day     = days[now.getDay()];
-                var date    = now.getDate();
-                var month   = months[now.getMonth()];
-                var year    = now.getFullYear();
-                
-                $(".plugin-date").html(day+", "+month+" "+date+", "+year);
+            if ($(".plugin-date").length > 0) {
+
+                var days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+                var months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+
+                var now = new Date();
+                var day = days[now.getDay()];
+                var date = now.getDate();
+                var month = months[now.getMonth()];
+                var year = now.getFullYear();
+
+                $(".plugin-date").html(day + ", Ngày " + date + ", Tháng " + month + ", Năm " + year);
             }
             
         }

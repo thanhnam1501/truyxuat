@@ -12,5 +12,8 @@ npm-debug.log
 yarn-error.log
 .env
 composer.lock
-/public/assets/build/
+ package-lock.json
+/public/build/css
+/public/build/js
 /public/mix-manifest.json
+/storage/

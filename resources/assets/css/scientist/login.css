@@ -1,0 +1,36 @@
+.text-link{
+	color: gray;
+	font-weight:600;
+}
+
+.btn-register a,.btn-fogot a{
+	display: inline;
+	text-decoration: underline;
+	padding: 0;
+}
+.btn-register a:hover,.btn-fogot a:hover{
+	color: #ACACAC !important;
+	text-decoration: none;
+}
+.remember-checkbox:hover label{
+	color: #ACACAC !important;
+}
+.btn-fogot{
+	text-align: left;
+	padding: 0;
+}
+.btn-register{
+	text-align: right;
+	padding: 0;
+}
+.remember-checkbox input,.remember-checkbox label{
+	line-height: 30px;
+	color: white;
+	margin: 0;
+}
+
+.form-title{
+	color: #DEDEDE;
+	border-bottom: none;
+	text-align: center;
+}

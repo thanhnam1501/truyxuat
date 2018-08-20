@@ -46,9 +46,9 @@ return [
             'provider' => 'users',
         ],
 
-        'scientist' => [
+        'profile' => [
             'driver' => 'session',
-            'provider' => 'scientists',
+            'provider' => 'profiles',
         ],
     ],
 
@@ -74,9 +74,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'scientists' => [
+        'profiles' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Scientist::class,
+            'model' => App\Models\Profile::class,
         ],
 
         // 'users' => [
@@ -107,10 +107,10 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
-        'scientists' => [
-            'provider' => 'users',
+        'profiles' => [
+            'provider' => 'profiles',
             'table' => 'password_resets',
-            'table' => 'scientist_password_resets',
+            'table' => 'profile_password_resets',
             'expire' => 60,
         ],
     ],

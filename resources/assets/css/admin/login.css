@@ -1,0 +1,158 @@
+.btn-forgot{
+	margin-left: 0px;
+	padding-left: 0;
+}
+
+.btn-register,.btn-forgot{
+	display: inline;
+}
+.btn-forgot:hover{
+	color: #0074ba !important;
+	text-decoration: none;
+}
+.remember-checkbox label{
+	font-size: 13px;
+}
+.remember-checkbox input,.remember-checkbox label{
+	line-height: 30px;
+	color: white;
+	margin: 0;
+	cursor: pointer;
+}
+.login-footer {
+	color: white;
+	text-align: center;
+}
+.login-btn {
+	color: white;
+    background-color: #0074ba;
+    border-color:#0074ba;
+    padding: 6px 8px !important;
+}
+.login-btn:hover {
+	color: white;
+    background-color: #0166A3;
+    border-color:#0166A3;
+}
+
+body, html {
+	height: 100%;
+	background-repeat: no-repeat;    /*background-image: linear-gradient(rgb(12, 97, 33),rgb(104, 145, 162));*/
+	background:black;
+	position: relative;
+}
+#login-box {
+	position: absolute;
+	top: 12%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 350px;
+	margin: 0 auto;
+	border: 1px solid black;
+	background: rgba(48, 46, 45, 0.5);
+	min-height: 250px;
+	padding: 20px;
+	z-index: 2;
+}
+#login-box .logo .logo-caption {
+	color: white;
+	text-align: center;
+	margin-bottom: 0px;
+}
+#login-box .logo .tweak {
+	color: #0074ba;
+}
+#login-box .controls {
+	padding-top: 30px;
+}
+#login-box .controls input {
+	border-radius: 0px;
+	background: white;
+	border: 0px;
+	color: black;
+}
+#login-box .controls input:focus {
+	box-shadow: none;
+}
+#login-box .controls input:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+}
+#login-box .controls input:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+#login-box button.btn-custom {
+	border-radius: 2px;
+	margin-top: 8px;
+	background:#0074ba;
+	border-color: rgba(48, 46, 45, 1);
+	color: white;
+}
+#login-box button.btn-custom:hover{
+	-webkit-transition: all 500ms ease;
+	-moz-transition: all 500ms ease;
+	-ms-transition: all 500ms ease;
+	-o-transition: all 500ms ease;
+	transition: all 500ms ease;
+	background: rgba(48, 46, 45, 1);
+	border-color: #0074ba;
+}
+#particles-js{
+  	width: 100%;
+  	height: 100%;
+  	background-size: cover;
+  	background-position: 50% 50%;
+  	position: fixed;
+  	top: 0px;
+  	z-index:1;
+}
+
+#header {
+	background: transparent;
+	text-transform: uppercase;
+	text-align: center;
+	padding-top: 10px;
+}
+
+#header .content p{
+	font-size: 2em;
+	color: #0074ba;
+	margin-bottom: 0px;
+}
+#header .content span{
+	font-size: 16px;
+	color: #fed200;
+}
+
+#header .left-logo, #header .right-logo {
+	width: 20%;
+	display: inline-block;
+	margin-top: 6px;
+}
+
+#header .right-logo img {
+	width: 100%;
+}
+
+@media only screen and (max-width: 992px){
+	#header {
+		display: none;
+	}
+	#login-box {
+		top: 5%;
+	}
+	.custom-col-right {
+		padding-left: 0 !important;
+	}
+}
+
+.custom-col-left {
+	text-align: left;
+	padding-left: 0;
+}
+
+.custom-col-right {
+	text-align: right;
+	padding-right: 0;
+}
