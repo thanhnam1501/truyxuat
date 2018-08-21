@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\RoleUser;
+use App\Models\Option;
+use App\Models\OptionValue;
 use DB;
 use Datatables;
 use Entrust;
@@ -33,7 +35,9 @@ class UserController extends Controller
     public function index()
     {
 
-        return view('backend.accounts.list_users');
+      $positions = Option::where('code','USER-POS')->first()->values;
+
+      return view('backend.accounts.list_users', compact('positions'));
     }
 
     /**
@@ -47,14 +51,20 @@ class UserController extends Controller
 
         return Datatables::of($profiles)
                 ->addIndexColumn()
-                ->editColumn('status', function ($user) {
+                ->editColumn('status', function($user) {
                     if ($user->status == 0) {
                         return '<label data-tooltip="tooltip" title="Mở khóa tài khoản" class="switch switch-small"><input type="checkbox" data-user_id="'.$user->id.'" class="lock-account"/><span></span></label>';
                     } elseif ($user->status == 1) {
                         return '<label data-tooltip="tooltip" title="Khóa tài khoản" class="switch switch-small"><input type="checkbox" data-user_id="'.$user->id.'" checked class="lock-account"/><span></span></label>';
                     }
                 })
-                ->addColumn('action', function ($user) {
+                ->editColumn('type', function($user) {
+
+                    $type = Option::where('code','USER-POS')->first()->values()->where('value',$user->type)->first()->name;
+
+                    return $type;
+                })
+                ->addColumn('action', function($user) {
                     $string = "";
 
                     // if (Entrust::can('account-detail')) {
@@ -89,7 +99,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('name', 'email');
+        $data = $request->only('name', 'email', 'type');
 
         if (!$this->checkEmail($data['email'])) {
             return response()->json([
@@ -176,7 +186,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->only('email', 'name');
+        $data = $request->only('email', 'name', 'type');
 
         $user = User::where('email', $data['email'])->first();
 
@@ -185,6 +195,7 @@ class UserController extends Controller
             try {
                 $user->update([
                 'name'  => $data['name'],
+                'type'  => $data['type'],
               ]);
 
                 DB::commit();

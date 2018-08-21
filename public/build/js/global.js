@@ -92,4 +92,9 @@ jQuery.validator.addMethod("requiredFile", function (value, element, params) {
 
   return failed == false;
 });
+
+jQuery.validator.addMethod("requiredSelectDyn", function (value, element, params) {
+
+  return this.optional(element) || value != params;
+});
 /* End additional method jquery validate */
