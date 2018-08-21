@@ -81,10 +81,12 @@ jQuery.validator.addMethod("requiredFile", function (value, element, params) {
     var failed = false;
 
     if ($(element).data('exists') == undefined || $(element).data('exists') != 1) {
-        if (value == "" || value == null || value == "") {
+
+        if (value == "" || value == null) {
             failed = true;
         }
     } else {
+
         failed = false;
     }
 
