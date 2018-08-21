@@ -3,7 +3,7 @@ $(document).ready(function() {
 
   $('#create-user-frm').validate({
     rules: {
-      name: {
+      representative: {
         required: true,
         minlength: 6
       },
@@ -14,8 +14,8 @@ $(document).ready(function() {
       }
     },
     messages: {
-      name: {
-        required: "Họ và tên không được bỏ trống",
+      representative: {
+        required: "Tên cá nhân / tổ chức không được bỏ trống",
         minlength: jQuery.validator.format("Họ và tên phải có ít nhất {0} ký tự!")
       },
       email: {
