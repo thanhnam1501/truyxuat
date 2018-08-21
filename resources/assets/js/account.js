@@ -209,4 +209,8 @@ $(document).ready(function() {
       }
     });
   });
+
+  $('#send-email').on('click', function(){
+     $('#modal-send-email').modal('show');
+  });
 });

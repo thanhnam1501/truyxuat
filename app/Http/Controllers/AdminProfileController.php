@@ -65,11 +65,11 @@ class AdminProfileController extends Controller
                   }
               })
               ->editColumn('email', function($profile){
-                $string = '<a href="#">'.$profile->email.'</a>';
+                $string = '<a href="javascript:;" onclick="sendEmail('.$profile->id.')">'.$profile->email.'</a>';
                 return $string;
               })
               ->editColumn('mobile', function($profile){
-                $string = '<a href="#">'.$profile->mobile.'</a>';
+                $string = '<a id="call-mobile" href="#">'.$profile->mobile.'</a>';
                 return $string;
               })
               ->addColumn('action', function($profile) {
