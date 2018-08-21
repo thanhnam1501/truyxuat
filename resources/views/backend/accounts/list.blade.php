@@ -50,18 +50,18 @@
         <h4 class="modal-title">Thêm mới người dùng</h4>
       </div>
       <div class="modal-body">
-				<form role="form" enctype="multipart/form-data" id="create-user-frm">
-						<div class="form-group">
-								<label>Tên đơn vị/tổ chức <span class='error'>(*)</span></label>
-								<input type="text" id="name" name="name" class="form-control"/>
-						</div>
-						<div class="form-group">
-								<label class='control-label'>Email <span style="color: red">(*)</span></label>
-								<input readonly type="email" id="email" name="email" class="form-control"/>
-								<span class='control-label hide' id="email-error-custom"></span>
-						</div>
-						<p><i>Lưu ý: mật khẩu sẽ là "123456"</i></p>
-				</form>
+			<form role="form" enctype="multipart/form-data" id="create-user-frm">
+				<div class="form-group">
+					<label>Tên đơn vị/tổ chức <span class='error'>(*)</span></label>
+					<input type="text" id="name" name="name" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label class='control-label'>Email <span style="color: red">(*)</span></label>
+					<input readonly type="email" id="email" name="email" class="form-control"/>
+					<span class='control-label hide' id="email-error-custom"></span>
+				</div>
+				<p id="note-password"><i>Lưu ý: mật khẩu sẽ là "123456"</i></p>
+			</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
@@ -78,36 +78,36 @@
         <h4 class="modal-title">Chi tiết người dùng</h4>
       </div>
       <div class="modal-body">
-				<div class="form-group">
-					<div class="input-group input-group-lg">
-							<span class="input-group-addon"><i class="fa fa-user"></i></span>
-							<span class="form-control" id="name-detail"></span>
-					</div>
+			<div class="form-group">
+				<div class="input-group input-group-lg">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<span class="form-control" id="name-detail"></span>
 				</div>
-				<div class="form-group">
-					<div class="input-group input-group-lg">
-							<span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-							<span class='form-control' id="email-detail"></span>
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group input-group-lg">
+						<span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+						<span class='form-control' id="email-detail"></span>
 				</div>
-				<div class="form-group">
-					<div class="input-group input-group-lg">
-							<span class="input-group-addon"><i class="fa fa-picture-o"></i></span>
-							<img class='img-responsive' src="{!! asset('img/avatar/default.jpg') !!}" style="width: 30%"></img>
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group input-group-lg">
+						<span class="input-group-addon"><i class="fa fa-picture-o"></i></span>
+						<img class='img-responsive' src="{!! asset('img/avatar/default.jpg') !!}" style="width: 30%"></img>
 				</div>
-				<div class="form-group">
-					<div class="input-group input-group-lg">
-							<span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
-							<span class='form-control' id="status-detail"></span>
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group input-group-lg">
+						<span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+						<span class='form-control' id="status-detail"></span>
 				</div>
-				<div class="form-group hide">
-					<div class="input-group input-group-lg">
-							<span class="input-group-addon"><i class="fa fa-users"></i></span>
-							<span class='form-control' id="type-detail"></span>
-					</div>
+			</div>
+			<div class="form-group hide">
+				<div class="input-group input-group-lg">
+						<span class="input-group-addon"><i class="fa fa-users"></i></span>
+						<span class='form-control' id="type-detail"></span>
 				</div>
+			</div>
       </div>
     </div>
   </div>
@@ -133,6 +133,8 @@
 			$('#create-user-btn').attr('data-type',0);
 
 			$('#create-user-btn').data('type',0);
+
+			$('#note-password').removeClass('hide');
 
 			$('#create-user-mdl').modal('show')
 	}
@@ -165,6 +167,8 @@
 							$('#create-user-btn').data('type',1);
 
 							$('#create-user-btn').data('profile_id',id);
+
+							$('#note-password').addClass('hide');
 
 							$('#create-user-mdl').modal('show')
 

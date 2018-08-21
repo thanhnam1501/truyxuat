@@ -11,6 +11,9 @@ $(document).ready(function() {
         required: true,
         email: true,
         minlength: 6
+      },
+      type: {
+        requiredSelectDyn: "-1",
       }
     },
     messages: {
@@ -22,6 +25,9 @@ $(document).ready(function() {
         required: "Email không được bỏ trống",
         email: "Email không đúng định dạng ( example@gmail.com )",
         minlength: jQuery.validator.format("Email phải có ít nhất {0} ký tự!")
+      },
+      type: {
+        requiredSelectDyn: "Chức vụ không được bỏ trống",
       }
     }
   });
@@ -30,7 +36,7 @@ $(document).ready(function() {
 
     if ($('#create-user-btn').data('type') == 1) {
 
-      var url = app_url + 'admin/account-users/' + $('#create-user-btn').data('scientist_id');
+      var url = app_url + 'admin/account-users/' + $('#create-user-btn').data('user_id');
 
       var type = "PUT";
 
@@ -106,6 +112,11 @@ $(document).ready(function() {
           data: 'email',
           name: 'email',
           width: '300px'
+        },
+        {
+          data: 'type',
+          name: 'type',
+          width: ''
         },
         {
           data: 'status',
