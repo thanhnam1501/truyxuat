@@ -76,7 +76,7 @@ $.validator.addMethod('filesize', function (value, element, param) {
      });
   });
 
- jQuery.validator.addMethod("requiredSelect", function(value, element, params) {
+jQuery.validator.addMethod("requiredSelect", function(value, element, params) {
 
   var failed = false;
 
@@ -103,5 +103,10 @@ jQuery.validator.addMethod("requiredFile", function(value, element, params) {
   }
   
   return failed == false;
+});
+
+jQuery.validator.addMethod("requiredSelectDyn", function(value, element, params) {
+
+  return this.optional(element) || value != params;
 });
 /* End additional method jquery validate */
