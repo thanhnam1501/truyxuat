@@ -47,7 +47,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Thêm mới người dùng</h4>
+        <h4 class="modal-title">Thêm mới cá nhân</h4>
       </div>
       <div class="modal-body">
 			<form role="form" enctype="multipart/form-data" id="create-user-frm">
@@ -78,10 +78,11 @@
         <h4 class="modal-title">Chi tiết người dùng</h4>
       </div>
       <div class="modal-body">
-			<div class="form-group">
-				<div class="input-group input-group-lg">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<span class="form-control" id="name-detail"></span>
+				<div class="form-group">
+					<div class="input-group input-group-lg">
+							<span class="input-group-addon"><i class="fa fa-user"></i></span>
+							<span class="form-control" id="representative-detail"></span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -126,9 +127,11 @@
 
 			$('#create-user-mdl').find('.modal-title').text('Thêm mới người dùng');
 
+			$('#create-note').removeClass('hide');
+
 			$('#email').attr('readonly',false);
 
-			$('#name').attr('readonly',false);
+			$('#representative').attr('readonly',false);
 
 			$('#create-user-btn').attr('data-type',0);
 
@@ -156,13 +159,15 @@
 
 							$('#email').val(res.profile.email);
 
-							$('#name').val(res.profile.name);
+							$('#representative').val(res.profile.representative);
 
 							$('#email').parent().removeClass('has-error');
 
 							$('#email-error-custom').addClass('hide');
 
 							$('#email-error-custom').text("");
+
+							$('#create-note').addClass('hide');
 
 							$('#create-user-btn').data('type',1);
 
@@ -194,7 +199,7 @@
 	      {
 	        if (!res.error) {
 
-	          $('#name-detail').text(res.profile.name);
+	          $('#representative-detail').text(res.profile.representative);
 	          $('#avatar-detail').text(res.profile.avatar);
 	          $('#email-detail').text(res.profile.email);
 	          $('#type-detail').text(res.profile.type);

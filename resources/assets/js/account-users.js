@@ -116,7 +116,6 @@ $(document).ready(function() {
         {
           data: 'type',
           name: 'type',
-          width: ''
         },
         {
           data: 'status',

@@ -53,11 +53,11 @@
 			<form role="form" enctype="multipart/form-data" id="create-user-frm">
 				<div class="form-group">
 					<label>Họ và tên <span class='error'>(*)</span></label>
-					<input type="text" id="name" name="name" class="form-control"/>
+					<input type="text" id="name" name="name" class="form-control" placeholder="Vui lòng nhập họ và tên" />
 				</div>
 				<div class="form-group">
 					<label class='control-label'>Email <span class='error'>(*)</span></label>
-					<input readonly type="email" id="email" name="email" class="form-control"/>
+					<input readonly type="email" id="email" name="email" class="form-control" placeholder="Vui lòng nhập email" />
 					<span class='control-label hide' id="email-error-custom"></span>
 				</div>
 				<div class="form-group">
