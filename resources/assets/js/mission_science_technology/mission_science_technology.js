@@ -236,12 +236,12 @@ $(document).ready(function() {
 
   $('#update-science-technology-btn').on('click', function() {
 
-    if ($('#frm-update-mission-science-technology').length > 0) {
-      if (!$('#frm-update-mission-science-technology').valid()) {
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
 
-        return false;
-      }
-    }
+    //     return false;
+    //   }
+    // }
 
     var formData = new FormData($('#frm-update-mission-science-technology')[0]);
 
