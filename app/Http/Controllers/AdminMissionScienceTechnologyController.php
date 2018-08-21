@@ -51,10 +51,10 @@ class AdminMissionScienceTechnologyController extends Controller
           foreach ($topic->values as $value) {
 
             if ($value->mission_science_technology_attribute_id == $attr_id) {
-              if (strlen($value->value) >= 150) {
-                  return substr($value->value, 0, 149)."...";
+              if (strlen($value->value) > 300) {
+                  return "<span data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
               } else {
-                return $value->value;
+                  return $value->value;
               }
             }
           }
@@ -127,7 +127,7 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->profile)) {
+          if (!empty($topic->profile->organization)) {
             return $topic->profile->organization->name;
           } else {
             return "Chưa cập nhập";
@@ -140,35 +140,35 @@ class AdminMissionScienceTechnologyController extends Controller
 
           $string = "";
 
-          // if (Entrust::can('view-detail')) {
+          if (Entrust::can('view-detail')) {
 
             $string .=  "<a data-id=".$topic->id." data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs btn-view-detail'><i class='fa fa-eye'></i></a>";
-          // }
+          }
 
-          //if ($topic->is_submit_ele_copy == 1 && Entrust::can(['receive-hard-copy'])) {
+          if ($topic->is_submit_ele_copy == 1 && Entrust::can(['receive-hard-copy'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
-          //}
+          }
 
           $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
 
-          ///if ($topic->is_submit_ele_copy == 1 && Entrust::can(['return-hard-copy'])) {
+          if ($topic->is_submit_ele_copy == 1 && Entrust::can(['return-hard-copy'])) {
 
-              // $string .= "<i data-tooltip='tooltip' title='Trả lại bản cứng' class='fa fa-undo ico ico-danger'></i>";
-          //}
+              $string .= "<i data-tooltip='tooltip' title='Trả lại bản cứng' class='fa fa-undo ico ico-danger'></i>";
+          }
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
-          //}
+          }
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
-          //}
+          }
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
 
-              // $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
-          //}
+              $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
+          }
 
           return $string;
         })

@@ -38,7 +38,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('account-user/get-list', 'UserController@list')->name('users.getList');
             //* End
 
-            //* Quản lý tài khoản đơn vị
+            //* Quản lý tài khoản cá nhân
             Route::resource('account-profiles', 'AdminProfileController');
             Route::post('account-profiles/get-list', 'AdminProfileController@list')->name('profiles.getList');
             Route::post('account-profiles/lock', 'AdminProfileController@lockAccount')->name('profiles.lockAccount');

@@ -281,12 +281,12 @@ class MissionScienceTechnologyController extends Controller
             $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_01', 'mission_science_technologies');
             $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_02', 'mission_science_technologies');
 
-            if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
-                return response()->json([
-                  'error' => true,
-                  'message' => 'Vui lòng đính kèm file!'
-                ]);
-            }
+            // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+            //     return response()->json([
+            //       'error' => true,
+            //       'message' => 'Vui lòng đính kèm file!'
+            //     ]);
+            // }
 
             $stechs = MissionScienceTechnology::find($data['id']);
             $columns = MissionScienceTechnologyAttribute::all();
@@ -554,6 +554,15 @@ class MissionScienceTechnologyController extends Controller
       $key = $request->key;
       $is_submit_ele_copy = $request->is_submit_ele_copy;
       $mission = MissionScienceTechnology::where('key', $key)->whereNull('deleted_at')->first();
+
+      if ($mission->is_submit_hard_copy == 1) {
+          return response()->json([
+            'error' => true,
+            'msg' => 'Hồ sơ đã nộp bản cứng, không được sửa.',
+            'reload'  =>  true
+          ]);
+      }
+      // 
       $check_is_filled = $mission->is_filled == 1 ? true : false;
       $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
 
@@ -568,12 +577,12 @@ class MissionScienceTechnologyController extends Controller
 
       $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_02', 'mission_science_technologies');
 
-      if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
-          return response()->json([
-            'error' => true,
-            'message' => 'Vui lòng đính kèm file!'
-          ]);
-      }
+      // if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
+      //     return response()->json([
+      //       'error' => true,
+      //       'message' => 'Vui lòng đính kèm file!'
+      //     ]);
+      // }
 
       $old_data = $mission;
 

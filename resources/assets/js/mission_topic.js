@@ -195,12 +195,12 @@ $(document).ready(function() {
 
   $('#update-topic-btn').on('click', function() {
 
-    if ($('#update-topic-frm').length > 0) {
-      if (!$('#update-topic-frm').valid()) {
+    // if ($('#update-topic-frm').length > 0) {
+    //   if (!$('#update-topic-frm').valid()) {
 
-        return false;
-      }
-    }
+    //     return false;
+    //   }
+    // }
 
     $.ajax({
       type: "POST",
@@ -310,12 +310,12 @@ $(document).ready(function() {
 
     $('#btn_submit_ele_copy').on('click', function(event) {
 
-      if ($('#update-topic-frm').length > 0) {
-        if (!$('#update-topic-frm').valid()) {
+      // if ($('#update-topic-frm').length > 0) {
+      //   if (!$('#update-topic-frm').valid()) {
 
-          return false;
-        }
-      }
+      //     return false;
+      //   }
+      // }
 
       event.preventDefault();
       /* Act on the event */
@@ -351,16 +351,24 @@ $(document).ready(function() {
                   }, 1000)
 
                 } else {
-                  if (res.msg == "Not Filled") {
-                    swal({
-                      title: "Vui lòng điền đẩy đủ thông tin vào phiếu đăng ký nhiệm vụ !",
-                      text: "",
-                      icon: "warning",
-                      button: "Đóng",
-                      dangerMode: true,
-                    });
-                  }else {
-                    toastr.error(res.msg);
+                  // if (res.msg == "Not Filled") {
+                  //   swal({
+                  //     title: "Vui lòng điền đẩy đủ thông tin vào phiếu đăng ký nhiệm vụ !",
+                  //     text: "",
+                  //     icon: "warning",
+                  //     button: "Đóng",
+                  //     dangerMode: true,
+                  //   });
+                  // }else {
+                    
+                  // }
+                  
+                  toastr.error(res.msg);
+
+                  if (res.reload) {
+                      setTimeout(function() {
+                        location.reload();
+                      }, 1000)
                   }
                 }
               },
