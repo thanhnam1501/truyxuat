@@ -206,6 +206,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/approve-mission', 'AdminMissionScienceTechnologyController@approveMission')->name('admin.mission-science-technologies.approveMission');
             Route::post('/upload-list-categories', 'AdminMissionScienceTechnologyController@uploadListCategories')->name('admin.mission-science-technologies.uploadListCategories');
             Route::post('/view-detail', 'AdminMissionScienceTechnologyController@viewDetail')->name('admin.mission-science-technologies.viewDetail');
+            Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
         });
         //* End
 
