@@ -236,12 +236,12 @@ $(document).ready(function() {
 
   $('#update-science-technology-btn').on('click', function() {
 
-    if ($('#frm-update-mission-science-technology').length > 0) {
-      if (!$('#frm-update-mission-science-technology').valid()) {
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
 
-        return false;
-      }
-    }
+    //     return false;
+    //   }
+    // }
 
     var formData = new FormData($('#frm-update-mission-science-technology')[0]);
 
@@ -354,12 +354,12 @@ $(document).ready(function() {
     event.preventDefault();
     /* Act on the event */
 
-    if ($('#frm-update-mission-science-technology').length > 0) {
-      if (!$('#frm-update-mission-science-technology').valid()) {
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
 
-        return false;
-      }
-    }
+    //     return false;
+    //   }
+    // }
 
     var is_submit_ele_copy = $(this).attr('data-is_submit_ele_copy');
 
@@ -403,6 +403,12 @@ $(document).ready(function() {
                   });
                 }else {
                   toastr.error(res.msg);
+
+                  if (res.reload == true) {
+                    setTimeout(function() {
+                      location.reload();
+                    }, 1000);
+                  }
                 }
               }
 
