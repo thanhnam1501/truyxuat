@@ -492,8 +492,97 @@
       </div>
     </div>
   </div>
+  {{-- modal --}}
+
+  <div class="modal fade" id="modal-assign">
+    <div class="modal-dialog" style="width: 60%">
+      <div class="modal-content">
+        <div class="modal-header">
+          {{-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> --}}
+          <center><h4 class="modal-title" id="">GIAO HỒ SƠ CHO CHUYÊN VIÊN</h4> </center>
+        </div>
+          
+        <div class="modal-body">
+          <form role="form" enctype="multipart/form-data" id="frm-devolve">
+            <div class="form-group col-md-12">
+              <div class="col-md-3 search-label">
+                <label for="">Người giao <span class="error">(*)</span></label>
+              </div>
+              <div class="col-md-9">
+                <select class="form-control" id="role_user_devolve_file">
+                    @if (!empty($role_user_devolve_file) && $role_user_devolve_file->count() != 0) 
+                      @foreach($role_user_devolve_file as $value)
+                        <option value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                      @endforeach 
+                    @else 
+                      <option value="-1">Không có chuyên viên nào</option>
+                    @endif
+                  </select>
+                  <span class="error"></span>
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <div class="col-md-3 search-label">
+                <label for="">Người xử lý <span class="error">(*)</span></label>
+              </div>
+              <div class="col-md-9">
+                <select class="form-control" id="role_user_handle_file">
+                    @if (!empty($role_user_handle_file) && $role_user_handle_file->count() != 0) 
+                      @foreach($role_user_handle_file as $value)
+                        <option value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                      @endforeach 
+                    @else 
+                      <option value="-1">Không có chuyên viên nào</option>
+                    @endif
+                  </select>
+                  <span class="error"></span>
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <div class="col-md-3 search-label">
+                <label for="">Deadline <span class="error">(*)</span></label>
+              </div>
+              <div class="col-md-9">
+                 <div class='input-group date' id='deadline-group'>
+                    <input type='text' class="form-control" id="deadline"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <span class="error" id="err-deadline"></span>
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-3 search-label">
+                  <label for="">Ghi chú</label>
+                </div>
+                <div class="col-md-9">
+                  <textarea id="note" class='form-control' placeholder='Ghi chú' rows="5"></textarea>
+                </div>
+            </div>
+            {{-- <div class="form-group col-md-12">
+                <div class="col-md-3 search-label">
+                  <label for="">Lý do</label>
+                </div>
+                <div class="col-md-9">
+                  <input type='checkbox' name='' value=''id="checkbox-send-email-judged" > &nbsp;Gửi email thông báo
+                </div>
+            </div> --}}
+
+            <br>
+          </form>
+          </div>
+          <div class="clearfix"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+          <button type="button" class="btn btn-success" id="btn-submit-devolve" data-id="">Đồng ý</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @section('footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="{{mix('build/js/admin_mission_science_technology.js')}}"></script>
 @endsection

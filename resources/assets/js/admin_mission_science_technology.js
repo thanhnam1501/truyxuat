@@ -323,4 +323,58 @@ $(document).ready(function() {
     });
 
   });
+
+  $('#science-technology-tbl').on('click',' .assign-doc', function(){
+    $('#modal-assign').modal('show');
+  });
+
+  $('#deadline').datetimepicker();
+
+  $('#modal-assign').on('click','#btn-submit-devolve', function(event){
+    event.preventDefault(); 
+    var user_devolve = $("#role_user_devolve_file").val();
+    var user_hanle = $("#role_user_handle_file").val();
+    var deadline = $('#deadline-group').find("input").val();
+    var note = $('#note').val();
+
+    if (user_devolve == '-1') {
+      $("#role_user_devolve_file").next().text("Vui lòng chọn người giao hồ sơ");
+      return false;
+    } else {
+      $("#role_user_devolve_file").next().text("");
+    }
+
+    if (user_hanle == '-1') {
+      $("#role_user_handle_file").next().text("Vui lòng chọn người xử lý hồ sơ");
+      return false;
+    }else {
+      $("#role_user_handle_file").next().text("");
+    }
+
+    if (deadline == "") {
+      $("#err-deadline").text("Vui lòng chọn hạn xử lý hồ sơ");
+      return false;
+    }else {
+      $("#err-deadline").text("");
+    }
+
+    $.ajax({
+      url: app_url + "/admin/mission-science-technologies/submit-assign",
+      type: 'POST',
+      data: {
+        admin_id : user_devolve,
+        user_id : user_hanle,
+        deadline: deadline,
+        note: note
+      },
+      success: function (res){
+        if (res != null) {
+          console.log(res);  
+        }
+      }, error: function (err){
+
+      }
+    });
+    
+  });
 });
