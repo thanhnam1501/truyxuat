@@ -278,12 +278,12 @@ class MissionTopicController extends Controller
 
       $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
 
-      if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
-          return response()->json([
-            'error' => true,
-            'message' => 'Vui lòng đính kèm file!'
-          ]);
-      }
+      // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+      //     return response()->json([
+      //       'error' => true,
+      //       'message' => 'Vui lòng đính kèm file!'
+      //     ]);
+      // }
 
       foreach ($topic->values as $key => $value) {
 
@@ -454,26 +454,35 @@ class MissionTopicController extends Controller
         $key = $request->key;
         $is_submit_ele_copy = $request->is_submit_ele_copy;
         $mission = MissionTopic::where('key', $key)->whereNull('deleted_at')->first();
-        $check_is_filled = $mission->is_filled == 1 ? true : false;
-        $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
 
-        if (!$check_is_filled) {
-          return response()->json([
-            'error' =>  true,
-            'msg'   =>  'Not Filled'
-          ]);
-        }
-
-        $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_01', 'mission_topics');
-
-        $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_02', 'mission_topics');
-
-        if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
+        if ($mission->is_submit_hard_copy) {
             return response()->json([
               'error' => true,
-              'message' => 'Vui lòng đính kèm file!'
+              'msg' => 'Hồ sơ đã thu bản cứng, không được sửa',
+              'reload'  => true,
             ]);
         }
+
+        //$check_is_filled = $mission->is_filled == 1 ? true : false;
+        $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
+
+        // if (!$check_is_filled) {
+        //   return response()->json([
+        //     'error' =>  true,
+        //     'msg'   =>  'Not Filled'
+        //   ]);
+        // }
+
+        // $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_01', 'mission_topics');
+
+        // $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_02', 'mission_topics');
+
+        // if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
+        //     return response()->json([
+        //       'error' => true,
+        //       'message' => 'Vui lòng đính kèm file!'
+        //     ]);
+        // }
 
         $old_data = $mission;
 
