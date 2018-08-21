@@ -32,6 +32,7 @@
 					<tr>
 						<th>STT</th>
 						<th>Người đăng ký</th>
+						<th>Số điện thoại</th>
 						<th>Email</th>
 						<th>Tên tổ chức</th>
 						<th>Trạng thái</th>

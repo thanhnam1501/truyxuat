@@ -10,7 +10,8 @@ use DB;
 use Datatables;
 use Entrust;
 use Auth;
-
+use Validator;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function __construct()
@@ -63,11 +64,6 @@ class UserController extends Controller
 
                     if (Entrust::can('user-roles')) {
                         $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('user.roles', $user->id).'" class="btn btn-info btn-xs"><i class="fa fa-shield"></i></a>';
-                    }
-
-
-                    if($user->id == Auth::user()->id){
-                       $string .= '<a data-tooltip="tooltip" title="Thay đổi mật khẩu" href="'.route('user.change-password').'" class="btn btn-default btn-xs"><i class="fa fa-lock"></i></a>';
                     }
 
 
@@ -381,9 +377,7 @@ class UserController extends Controller
                     'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
                 ], 200);
         }
-
-       if($request->hasFile('file'))
-       {
+        else{
          $avatar = $request->file('file')->store('img/avatar');
          $id =  Auth::user()->id;
          $profile = User::where('id',$id)->update(['avatar' => $avatar]);
@@ -405,7 +399,7 @@ class UserController extends Controller
     $passwordconf = $request->password_confirmation;
     if(Hash::check($request->oldpassword, Auth::user()->password) == true && $password == $passwordconf){
         $password = bcrypt($password);
-        Profile::find(Auth::guard('profile')->user()->id)->update(['password' => $password]);
+        user::find(Auth::user()->id)->update(['password' => $password]);
         $message = 'Thay đổi mật khẩu thành công !';
         return view('backend.admins.change-password', ['messageSuccess'   =>  $message]);
     }else{
