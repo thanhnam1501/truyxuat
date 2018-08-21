@@ -21,7 +21,7 @@ class AddAdminIdDeadlineNoteToUserHandleFilesTable extends Migration
 
             if (!Schema::hasColumn('user_handle_files', 'deadline')) {
                 # code...
-                $table->timestamps('deadline')->nullable();
+                $table->datetime('deadline')->nullable();
             }
 
             if (!Schema::hasColumn('user_handle_files', 'note')) {
@@ -39,7 +39,17 @@ class AddAdminIdDeadlineNoteToUserHandleFilesTable extends Migration
     public function down()
     {
         Schema::table('user_handle_files', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('user_handle_files', 'admin_id')) {
+                $table->dropColumn('admin_id');
+            }
+
+            if (Schema::hasColumn('user_handle_files', 'deadline')) {
+                $table->dropColumn('deadline');
+            }
+
+            if (Schema::hasColumn('user_handle_files', 'note')) {
+                $table->dropColumn('note');
+            }
         });
     }
 }

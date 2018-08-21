@@ -326,9 +326,13 @@ $(document).ready(function() {
 
   $('#science-technology-tbl').on('click',' .assign-doc', function(){
     $('#modal-assign').modal('show');
+
+    var data_id = $(this).attr('data-id');
+    $('#mission_id').val(data_id);
   });
 
-  $('#deadline').datetimepicker();
+  $('#deadline').datetimepicker({format: "YYYY-MM-DD HH:mm:ss",
+    minDate: moment()});
 
   $('#modal-assign').on('click','#btn-submit-devolve', function(event){
     event.preventDefault(); 
@@ -365,11 +369,22 @@ $(document).ready(function() {
         admin_id : user_devolve,
         user_id : user_hanle,
         deadline: deadline,
-        note: note
+        note: note,
+        mission_id : $('#mission_id').val()
       },
       success: function (res){
         if (res != null) {
-          console.log(res);  
+          if (res != true) {
+            toastr.success(res.msg);
+            $("#role_user_devolve_file").val("-1");
+            $("#role_user_handle_file").val("-1");
+            $('#deadline-group').find("input").val("");
+            $('#note').val("");
+
+            $("#modal-assign").modal("hide");
+
+            $("#science-technology-tbl").DataTable().ajax.reload();
+          }
         }
       }, error: function (err){
 

@@ -504,6 +504,7 @@
           
         <div class="modal-body">
           <form role="form" enctype="multipart/form-data" id="frm-devolve">
+            <input type="hidden" name="mission_id" id="mission_id" class="form-control" value="">
             <div class="form-group col-md-12">
               <div class="col-md-3 search-label">
                 <label for="">Người giao <span class="error">(*)</span></label>
