@@ -31,7 +31,7 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic->get();	
+			$old_data = $topic->get()[0];	
 			if ($topic->exists()) {
 				
 				DB::beginTransaction();
@@ -45,7 +45,7 @@ class AdminMission {
 					//* Mã hồ sơ
 					$order = DB::table($data['table_name'])->select('order_submit_hard_copy')->orderBy('order_submit_hard_copy', 'desc')->limit(1)->first();
 					$order = intval($order->order_submit_hard_copy) + 1 ;
-			    $numb = str_pad($order, 4, '0', STR_PAD_LEFT);
+			    	$numb = str_pad($order, 4, '0', STR_PAD_LEFT);
 					$year = date('Y', strtotime(now()));
 
 					$code = $year.".".$data['form'].".".$numb;
@@ -56,7 +56,7 @@ class AdminMission {
 					]);
 					//* End
 
-					$new_data = $topic->get();
+					$new_data = $topic->get()[0];
 
 					//* Create logs *//
 		      $arr = [
@@ -108,7 +108,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic->get();
+			$old_data = $topic->get()[0];
 			//
 			if ($topic->exists()) {
 			//
@@ -133,23 +133,32 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic->get();
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
-			      $arr = [
-			          'admin_id' 	 => Auth::guard('web')->user()->id,
-			          'content'    => $action,
-			          'old_data'   => json_encode($old_data),
-			          'new_data'   => json_encode($new_data),
-			          'table_name' => $data['table_name'],
-			          'record_id'  => $data['id']
-			        ];
-			      ApplyLog::createLog($arr);
+					      $arr = [
+					          'admin_id' 	 => Auth::guard('web')->user()->id,
+					          'content'    => $action,
+					          'old_data'   => json_encode($old_data),
+					          'new_data'   => json_encode($new_data),
+					          'table_name' => $data['table_name'],
+					          'record_id'  => $data['id']
+					        ];
+					      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
 						//* code send email here
 						//* End
+						//
+						
+						UserHandleFile::where('mission_table', $data['table_name'])
+							->where('mission_id', $data['id'])
+							->where('user_id', Auth::guard('web')->user()->id)
+							->update([
+								'is_handle' => 1
+							]);
+
 						DB::commit();
 
 				    return $result = [
@@ -445,7 +454,7 @@ class AdminMission {
 	          'note'  =>  $data['note']
 	        ]);
 
-	        $mission = MissionScienceTechnology::find($data['mission_id']);
+	        $mission = $data['model']::find($data['mission_id']);
 	        $old_data = $mission;
 
 	        $mission->update([
