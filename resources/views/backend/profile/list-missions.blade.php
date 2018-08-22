@@ -23,6 +23,12 @@
         <div class="col-md-12">
           <a href="#create-mission-mdl" data-toggle="modal" class="btn btn-info"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Đăng ký nhiệm vụ mới</a>
         </div>
+        
+        <div class="col-md-12" style="margin-top: 10px">
+
+            <h5>Anh/chị vui lòng đọc thông tư 08/2017 để biết thêm thông tin chi tiết về các loại đề tài, dự án. <a href="" style="font-size: 14px"><Đọc tại đây></a></h5>
+
+        </div>
 
         <div class="clearfix"></div>
 
