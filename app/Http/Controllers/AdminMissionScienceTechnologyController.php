@@ -53,17 +53,21 @@ class AdminMissionScienceTechnologyController extends Controller
           'y' =>  date('Y', strtotime(now())),
         ];
 
-        $role_user_devolve_file = User::select('users.*')
-            ->  join('role_users', 'role_users.user_id', '=', 'users.id')
-            ->  join('roles', 'roles.id', '=', 'role_users.role_id')
-            ->  where('role_users.role_id', 4)
-            ->  get();
+        // $role_user_devolve_file = User::select('users.*')
+        //     ->  join('role_users', 'role_users.user_id', '=', 'users.id')
+        //     ->  join('roles', 'roles.id', '=', 'role_users.role_id')
+        //     ->  where('role_users.role_id', 4)
+        //     ->  get();
 
-        $role_user_handle_file = User::select('users.*')
-            ->  join('role_users', 'role_users.user_id', '=', 'users.id')
-            ->  join('roles', 'roles.id', '=', 'role_users.role_id')
-            ->  where('role_users.role_id', 5)
-            ->  get();
+        // $role_user_handle_file = User::select('users.*')
+        //     ->  join('role_users', 'role_users.user_id', '=', 'users.id')
+        //     ->  join('roles', 'roles.id', '=', 'role_users.role_id')
+        //     ->  where('role_users.role_id', 5)
+        //     ->  get();
+        //     
+        $role_user_devolve_file = User::where('type', 3)->get();
+
+        $role_user_handle_file  = User::where('type', 4)->get();
 
         return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file', 'group_councils'));
 
@@ -165,38 +169,45 @@ class AdminMissionScienceTechnologyController extends Controller
           }
         })
         ->editColumn('type', function(MissionScienceTechnology $topic) {
-          return "Dự án khoa học và công nghệ";
+          return "Dự án KH&CN";
         })
         ->addColumn('action', function(MissionScienceTechnology $topic) {
 
           $string = "";
 
           if (Entrust::can('view-detail')) {
-            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' href='".route('admin.mission-science-technologys.detail',$topic->key)."' target='_blank'><i class='fa fa-eye'></i></a>";
+
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-science-technologys.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
           }
 
+          // if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
-          $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
-
-          if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
-
-            $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs'><i class='fa fa-undo'></i></a>";
-          }
+          //   $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs'><i class='fa fa-undo'></i></a>";
+          // }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['assign-doc'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Giao hồ sơ cho cán bộ xử lý' class='btn btn-warning btn-xs assign-doc'><i class='fa fa-paperclip'></i></a>";
           }
 
-          if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+          if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid ) {
+
+            $check = UserHandleFile::where('user_id', Auth::guard('web')->user()->id)
+                    ->where('mission_id', $topic->id)
+                    ->where('mission_table', 'mission_science_technologies')
+                    ->where('is_handle', 0)
+                    ->count();
+
+            if ($check > 0) {      
+              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+            } 
           }
 
-          if ($topic->is_valid && Entrust::can(['assign-council'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+          if ($topic->is_valid && empty($topic->council_id) && Entrust::can(['assign-council'])) {
+            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
           }
 
           if (!empty($topic->council_id) && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
@@ -400,7 +411,7 @@ class AdminMissionScienceTechnologyController extends Controller
     public function submitAssign(Request $request) {
       $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id');
       $data['mission_table']  = 'mission_science_technologies';
-
+      $data['model'] = 'App\Models\MissionScienceTechnology';
       $result = AdminMission::submitAssign($data);
 
       return $result;

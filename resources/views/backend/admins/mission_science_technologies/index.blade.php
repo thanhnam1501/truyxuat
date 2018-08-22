@@ -548,11 +548,12 @@
 
                   {{-- <span class="error">Vui lòng chọn hội đồng</span> --}}
           </div>
-        <div class="modal-footer">
+        
+      </div>
+      <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
           <button type="button" class="btn btn-success" id="add-council-submit-btn">Lưu thông tin</button>
         </div>
-      </div>
     </div>
   </div>
   </div>
