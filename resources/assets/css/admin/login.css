@@ -156,3 +156,15 @@ body, html {
 	text-align: right;
 	padding-right: 0;
 }
+
+.note-register {
+    color: white;
+    border-bottom: 1px white solid;
+    padding-bottom: 15px;
+}
+
+.note-register a {
+	font-size: 14px;
+	font-weight: 400;
+}
+

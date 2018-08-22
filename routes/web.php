@@ -94,6 +94,14 @@ Route::middleware('revalidate')->group(function () {
             Route::post('mission-science-technologys/get-list','AdminMissionScienceTechnologyController@list')->name('mission-science-technologys.getList');
             Route::get('mission-science-technologys/detail/{key}', 'AdminMissionScienceTechnologyController@show')->name('admin.mission-science-technologys.detail');
 
+            Route::get('mission-science-technologys/get-round-collection/{id}','AdminMissionScienceTechnologyController@getRoundCollection')->name('mission-science-technologys.getRoundCollection');
+
+            Route::post('mission-science-technologys/get-list-council','AdminMissionScienceTechnologyController@getListCouncil')->name('mission-science-technologys.getListCouncil');
+
+
+            Route::post('mission-science-technologys/add-council','AdminMissionScienceTechnologyController@addCouncil')->name('mission-science-technologys.addCouncil');
+
+
             Route::get('position-councils/get-list', 'PositionCouncilController@getList')->name('position-councils.get-list');
 
             Route::resource('position-councils', 'PositionCouncilController');

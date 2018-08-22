@@ -104,10 +104,10 @@
                     <div class="profile-data">
                         <div class="profile-data-name">{{Auth::user()->name}}</div>
                     </div>
-                            {{-- <div class="profile-controls">
-                                <a href="#" class="profile-control-left"><span class="fa fa-info"></span></a>
+                            <div class="profile-controls">
+                                <a href="{{route('user.change-password')}}" class="profile-control-left"><span class="fa fa-info"></span></a>
                                 <a href="#" class="profile-control-right"><span class="fa fa-envelope"></span></a>
-                            </div> --}}
+                            </div>
                         </div>
                     </li>
                     {{-- <li class="xn-title">Navigation</li> --}}
@@ -174,9 +174,8 @@
                     <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
                             <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
-
                     <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
-                            <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án khoa học và công nghẹ</span></a>
+                            <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
                     {{-- END menu chức năng hồ sơ --}}
 
@@ -189,7 +188,7 @@
                         <a href="#" ><span class="fa fa-list-ul"></span><span class="xn-text">Hội đồng</span></a>
 
                         <ul>
-                            <li class="@if(Request::is('council*')) active @endif">
+                            <li class="@if(Request::is('*council*')) active @endif">
                                 <a href="{{ route('council.index') }}"><span class="fa fa-user"></span> <span class="xn-text">Hội đồng</span></a>
                             </li>
 
@@ -205,6 +204,12 @@
                         </ul>
 
                     </li>
+
+                    @if(Entrust::can('round-collection-view'))
+                        <li class="@if(Request::is('*admin/round-collection*')) active @endif">
+                            <a href="{{ route('round-collections.index') }}"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Đợt thu hồ sơ</span></a>
+                        </li>
+                    @endif
 
 {{--                     <li class="@if(Request::is('*admin/mission-topics*')||Request::is('*mission-sxtns*')||Request::is('*mission-science-technologys*')) active @endif" >
                         <a href="#" ><span class="fa fa-briefcase"></span><span class="xn-text">Nhiệm vụ</span></a>
@@ -242,12 +247,6 @@
                     @if (Entrust::can('permissions-view'))
                         <li class="@if(Request::is('*admin/permissions*')) active @endif">
                             <a href="{{ route('permissions.index') }}"><span class="fa fa-shield"></span> <span class="xn-text">Quyền hạn</span></a>
-                        </li>
-                    @endif
-
-                    @if(Entrust::can('round-collection-view'))
-                        <li class="@if(Request::is('*admin/round-collection*')) active @endif">
-                            <a href="{{ route('round-collections.index') }}"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Đợt thu hồ sơ</span></a>
                         </li>
                     @endif
 
