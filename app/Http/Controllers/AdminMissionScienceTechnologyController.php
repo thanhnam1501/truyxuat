@@ -130,6 +130,11 @@ class AdminMissionScienceTechnologyController extends Controller
         ->addColumn('is_judged', function(MissionScienceTechnology $topic) {
             $str = "<label class='label label-default'>Chưa cập nhập</label>";
 
+            $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
+
+            if ($check == 1) {
+              $str = "<label class='label label-default'>Đã chọn hội đồng</label>";
+            }
             if ($topic->is_judged == 1) {
                 $str = "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
             }
@@ -141,16 +146,19 @@ class AdminMissionScienceTechnologyController extends Controller
             return $str;
         })
         ->addColumn('is_perform', function(MissionScienceTechnology $topic) {
+            $str = "<label class='label label-default'>Chưa cập nhập</label>";
+            
+            if ($topic->is_performed == 1) {
 
-            if ($topic->is_perform == 1) {
-
-                return "<label class='label label-info'>Được thực hiện</label>";
-            } else if ($topic->is_unperformed == 1) {
-
-                return "<label class='label label-danger'>Không được thực hiện</label>";
-            } else {
-                return "<label class='label label-default'>Chưa cập nhập</label>";
+                $str = "<label class='label label-info'>Được thực hiện</label>";
             }
+
+            if ($topic->is_unperformed == 1) {
+
+                $str = "<label class='label label-danger'>Không được thực hiện</label>";
+            }
+
+            return $str;
         })
         ->editColumn('roundCollection', function(MissionScienceTechnology $topic) {
 
@@ -206,18 +214,27 @@ class AdminMissionScienceTechnologyController extends Controller
             } 
           }
 
-          if ($topic->is_valid && empty($topic->council_id) && Entrust::can(['assign-council'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+          if ($topic->is_valid && Entrust::can(['assign-council'])) {
+
+            $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
+
+            if ($check == 0) { // chua dc add hoi dong
+              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+            }
+            
           }
 
-          if (!empty($topic->council_id) && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
+          if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
+            $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
+
+            if ($check == 1) {
+              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
+            }
+            
           }    
 
-          if ($topic->is_judged && Entrust::can(['approve-doc','unapprove-doc'])) {
+          if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
-
-               // $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
           }
 
           return $string;

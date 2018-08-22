@@ -197,7 +197,7 @@ class AdminMission {
 	{
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get()[0];
 
 			if ($topic->exists()) {
 
@@ -233,7 +233,7 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
 			      $arr = [
@@ -285,7 +285,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get()[0];
 			//
 			if ($topic->exists()) {
 			//
@@ -310,7 +310,7 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
 			      $arr = [
