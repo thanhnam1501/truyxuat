@@ -258,7 +258,7 @@
 
                           <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
                         </button>
-                      @elseif ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
+                      @elseif ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && $topic->is_filled)
                         <a href="javascript:;" class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $topic->key }}" data-is_submit_ele_copy="0">
                           <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
                         </a>
@@ -309,9 +309,11 @@
         				<div class="timeline-content">
                   <center>
                     <h3>TRẠNG THÁI HỒ SƠ</h3> <br>
-                    <p class="error">
+                    <h4>
+                      <p class="error">
                         Hồ sơ đang chờ xử lý
-                    </p>
+                      </p>
+                    </h4>
                   </center>
         				</div>
         			</div>
