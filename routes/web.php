@@ -92,7 +92,7 @@ Route::middleware('revalidate')->group(function () {
             //Quản lý dự án khoa học công nghệ
             Route::resource('mission-science-technologys', 'AdminMissionScienceTechnologyController');
             Route::post('mission-science-technologys/get-list','AdminMissionScienceTechnologyController@list')->name('mission-science-technologys.getList');
-
+            Route::get('mission-science-technologys/detail/{key}', 'AdminMissionScienceTechnologyController@show')->name('admin.mission-science-technologys.detail');
 
             Route::get('position-councils/get-list', 'PositionCouncilController@getList')->name('position-councils.get-list');
 
@@ -120,7 +120,7 @@ Route::middleware('revalidate')->group(function () {
                 Route::post('/submit-valid', 'AdminMissionTopicController@submitValid')->name('admin.mission-topics.submitValid');
 
                 Route::post('/submit-judged', 'AdminMissionTopicController@submitJudged')->name('admin.mission-topics.submitJudged');
-
+                Route::get('/detail/{key}', 'AdminMissionTopicController@detail')->name('admin.mission-topics.detail');
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
             });
 

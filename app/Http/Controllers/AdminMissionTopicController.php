@@ -12,6 +12,7 @@ use Money;
 use Auth;
 use Entrust;
 use DB;
+use Crypt;
 use AdminMission;
 use UploadFile;
 use Datatables;
@@ -142,7 +143,7 @@ class AdminMissionTopicController extends Controller
 
           if (Entrust::can('view-detail')) {
 
-            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs'><i class='fa fa-eye'></i></a>";
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-topics.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
@@ -238,4 +239,45 @@ class AdminMissionTopicController extends Controller
 
       return response()->json($result);
     }
+
+  public function detail($key, $print = null)
+  {
+    $topic = MissionTopic::where('key',$key)->first();
+
+    if (!empty($topic)) {
+
+      $columns = MissionTopicAttribute::all();
+
+      $data = array();
+      foreach ($columns as $key => $column) {
+        foreach ($topic->values as $value) {
+          if ($value->mission_topic_attribute_id == $column->id) {
+            if ($column->column == "expected_fund") {
+              $value->value = number_format(Crypt::decrypt($value->value)) . " (VNĐ)";
+            }
+            $data[$key]["order"]  = $column->order;
+            $data[$key]["value"]  = $value->value;
+            $data[$key]["label"]  = $column->label;
+            $data[$key]["column"] = $column->column;
+          }
+        }
+      }
+
+      $date = array();
+
+      $date['d'] = date('d',time());
+      $date['m'] = date('m',time());
+      $date['y'] = date('Y',time());
+
+      return view('backend.admins.mission_topics.detail',[
+        'data'  => $data,
+        'topic'  => $topic,
+        'date'  => $date,
+      ]);
+
+    } else {
+
+      abort(404);
+    }
+  }
 }

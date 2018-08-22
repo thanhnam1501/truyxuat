@@ -175,7 +175,7 @@
                             <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
 
-                    <li class="@if(Request::is('*admin/mission-science-technologies*')) active @endif">
+                    <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án khoa học và công nghẹ</span></a>
                         </li>
                     {{-- END menu chức năng hồ sơ --}}
