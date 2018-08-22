@@ -135,12 +135,12 @@ $(document).ready(function() {
       evaluation_form_01 : {
         extension: 'pdf',
         filesize: max_file_size,
-        requiredFile: true,
+        //requiredFile: true,
       },
       evaluation_form_02 : {
         extension: 'pdf',
         filesize: max_file_size,
-        requiredFile: true,
+        //requiredFile: true,
       },
     },
     messages: {
@@ -183,12 +183,12 @@ $(document).ready(function() {
       evaluation_form_01 : {
         extension: '(*) Chỉ nhận định dạng PDF',
         filesize: '(*) Dung lượng file không được lớn hơn 5Mb',
-        requiredFile: '(*) Vui lòng đính kèm file',
+        //requiredFile: '(*) Vui lòng đính kèm file',
       },
       evaluation_form_02 : {
         extension: '(*) Chỉ nhận định dạng PDF',
         filesize: '(*) Dung lượng file không được lớn hơn 5Mb',
-        requiredFile: '(*) Vui lòng đính kèm file',
+        //requiredFile: '(*) Vui lòng đính kèm file',
       },
     }
   });
@@ -354,30 +354,27 @@ $(document).ready(function() {
                   }, 1000)
 
                 } else {
-                  // if (res.msg == "Not Filled") {
-                  //   swal({
-                  //     title: "Vui lòng điền đẩy đủ thông tin vào phiếu đăng ký nhiệm vụ !",
-                  //     text: "",
-                  //     icon: "warning",
-                  //     button: "Đóng",
-                  //     dangerMode: true,
-                  //   });
-                  // }else {
-                    
-                  // }
-                  
-                  toastr.error(res.msg);
+
+                  if (res.modal) {
+                    $('#collectName').html('');
+                    for (var i = 0; i < res.collectName.length; i++) {
+                      $('#collectName').append('<li>'+res.collectName[i]+'</li>')
+                    }
+                    $('#null-field-mdl').modal('show');
+                  } else {
+                    toastr.error(res.msg);
 
                   if (res.reload) {
-                      setTimeout(function() {
-                        location.reload();
-                      }, 1000)
+                    setTimeout(function() {
+                      location.reload();
+                    }, 1000)
                   }
                 }
-              },
-              error: function (xhr, ajaxOptions, thrownError) {
-                toastr.error(thrownError);
               }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              toastr.error(thrownError);
+            }
           });
         }
       });

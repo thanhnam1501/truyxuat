@@ -404,26 +404,24 @@ $(document).ready(function() {
                   location.reload();
                 }, 1000)
 
-              } else {
-                if (res.msg == "Not Filled") {
-                  swal({
-                    title: "Vui lòng điền đẩy đủ thông tin vào phiếu đăng ký nhiệm vụ !",
-                    text: "",
-                    icon: "warning",
-                    button: "Đóng",
-                    dangerMode: true,
-                  });
-                }else {
-                  toastr.error(res.msg);
+              }  else {
 
-                  if (res.reload == true) {
+                  if (res.modal) {
+                    $('#collectName').html('');
+                    for (var i = 0; i < res.collectName.length; i++) {
+                      $('#collectName').append('<li>'+res.collectName[i]+'</li>')
+                    }
+                    $('#null-field-mdl').modal('show');
+                  } else {
+                    toastr.error(res.msg);
+
+                  if (res.reload) {
                     setTimeout(function() {
                       location.reload();
-                    }, 1000);
+                    }, 1000)
                   }
                 }
               }
-
             },
             error: function (xhr, ajaxOptions, thrownError) {
               toastr.error(thrownError);

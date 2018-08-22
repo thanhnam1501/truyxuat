@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-  <li class="{{ route('home.list-missions') }}">Danh sách nhiệm vụ</li>
+  <li class=""><a href="{{ route('home.list-missions') }}">Danh sách nhiệm vụ</a></li>
   <li class="active">Dự án khoa học và công nghệ</li>
 @endsection
 
@@ -225,7 +225,7 @@
                         {!! $status_submit_ele_copy !!}
                       @endif
                       <br><br>
-                      @if (!$is_submit_ele_copy && !$is_submit_hard_copy && is_filled)
+                      @if (!$is_submit_ele_copy && !$is_submit_hard_copy && $is_filled)
 
                         <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="1">
 
@@ -369,6 +369,27 @@
       </div>
     </div>
     
+  </div>
+
+  <div class="modal fade" id="null-field-mdl">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Nhập đầy đủ các trường sau và lưu thông tin trước khi nộp bản mềm</h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+          <ul id="collectName">
+            
+          </ul>
+        </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
   </div>
 @endsection
 
