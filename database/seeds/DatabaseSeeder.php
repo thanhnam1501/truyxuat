@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MissionSxtnsTableSeeder::class);
         $this->call(MissionTopicAttributesTableSeeder::class);
         $this->call(GroupCouncilTableSeeder::class);
+        $this->call(OptionsTableSeeder::class);
+        $this->call(OptionValuesTableSeeder::class);
     }
 }

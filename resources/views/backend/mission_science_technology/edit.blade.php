@@ -26,10 +26,10 @@
       <div class="panel panel-default tabs">
         <ul class="nav nav-tabs" role="tablist">
           @if (!$is_submit_ele_copy)
-            <li class="active"><a href="#tab-form" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp; Form đăng ký</a></li>
+            <li class="active"><a href="#tab-form" id="tab-form-btn" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp; Form đăng ký</a></li>
           @endif
           @if ($is_submit_ele_copy)
-            <li class="active"><a href="#tab-view" role="tab" data-toggle="tab"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; Xem và in hồ sơ</a></li>
+            <li class="active"><a href="#tab-view" id="tab-review-btn" role="tab" data-toggle="tab"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; Xem và in hồ sơ</a></li>
           @endif
           <li><a href="#tab-timeline" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; Theo dõi hồ sơ</a></li>
         </ul>
@@ -121,7 +121,7 @@
                 <textarea name="science_technology_efficiency" id="science_technology_efficiency" class="form-control" rows="6" placeholder="Vui lòng nhập hiệu quả về khoa học và công nghệ">{{$data['science_technology_efficiency']}}</textarea>
               </div>
               <br>
-              <div class="form-group">
+{{--               <div class="form-group">
                   <label class="col-md-12 col-xs-12 control-label">Phiếu đánh giá của chuyên gia độc lập 01
                       @if ($check_input_01 == true)
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -153,12 +153,46 @@
                       <input type="file" class="evaluation_form" id="evaluation_form_02" name="evaluation_form_02" data-order="02" accept="application/pdf" @if(!empty($data['evaluation_form_02'])) data-exists="1" @endif/>
                       <span style="font-style: italic; color: red">(*) Định dạng PDF, dung lượng <5MB</span>
                   </div>
-              </div>
+              </div> --}}
 
             </form>
           </div>
           <div class="clearfix"></div>
+            <div class="">
+              <hr>
+              <div class="col-md-8">
+                <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
+              </div>
+              <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
+                @if ($is_filled)
 
+                  @if (!$is_submit_ele_copy)
+
+                    <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="1">
+
+                      <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
+                    </button>
+
+                    <button class="btn btn-success"id="update-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
+
+                  @endif
+
+                  @if ($is_submit_ele_copy && !$is_submit_hard_copy)
+                    <a href="javascript:;" class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="0">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
+                    </a>
+                  @endif
+
+                  @if ($is_submit_ele_copy)
+                    <a href="{!! route('missionScienceTechnology.print',  $st_key) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
+                  @endif
+  
+                @else
+                  <button class="btn btn-success"id="update-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
+                @endif
+
+              </div> </div>
+            </div>
         </div>
         @endif
 
@@ -188,6 +222,18 @@
                     <h4>
                       @if (isset($status_submit_ele_copy))
                         {!! $status_submit_ele_copy !!}
+                      @endif
+                      <br><br>
+                      @if (!$is_submit_ele_copy && !$is_submit_hard_copy)
+
+                        <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="1">
+
+                          <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
+                        </button>
+                      @elseif($is_submit_ele_copy && !$is_submit_hard_copy)
+                        <a href="javascript:;" class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $st_key }}" data-is_submit_ele_copy="0">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
+                        </a>
                       @endif
                     </h4>
                     <br>
@@ -297,41 +343,30 @@
                 <br><br><br><br><br><br><br><br><br><br><br><br>
               </div>
             </div>
+
+            <div class="clearfix"></div>
+            <div class="">
+              <hr>
+              <div class="col-md-8">
+                <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
+              </div>
+              <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
+
+                @if ($is_submit_ele_copy && !$is_submit_hard_copy)
+                  <a href="javascript:;" class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $st_key }}" data-is_submit_ele_copy="0">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
+                  </a>
+                @endif
+
+                @if ($is_submit_ele_copy)
+                  <a href="{!! route('missionScienceTechnology.print',  $st_key) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
+                @endif
+
+              </div> </div>
+            </div>
         </div>
         @endif
       </div>
-    </div>
-    <div class="panel-footer">
-      <div class="col-md-8">
-        <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
-      </div>
-      <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
-        @if ($is_filled)
-
-          @if (!$is_submit_ele_copy)
-
-            <button class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="1">
-
-              <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
-            </button>
-
-            <button class="btn btn-success"id="update-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
-
-          @endif
-
-          @if ($is_submit_ele_copy)
-            <a href="javascript:;" class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="0">
-              <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
-            </a>
-
-            <a href="{!! route('missionScienceTechnology.print',  $st_key) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
-          @endif
-
-        @else
-          <button class="btn btn-success"id="update-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
-        @endif
-
-      </div> </div>
     </div>
   </div>
 @endsection
