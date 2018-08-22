@@ -94,6 +94,7 @@ $(document).ready(function() {
           columns: [
               {data: 'DT_Row_Index', name: 'DT_Row_Index', 'searchable':false, 'class':'text-center', width: '80px'},
               {data: 'representative', name: 'representative'},
+              {data: 'mobile', name: 'mobile'},
               {data: 'email', name: 'email', width: '300px'},
               {data: 'organization', name: 'organization.name'},
               {data: 'status', name: 'status', 'searchable':false, width: '150px', 'class':'text-center'},
@@ -207,5 +208,9 @@ $(document).ready(function() {
         });
       }
     });
+  });
+
+  $('#send-email').on('click', function(){
+     $('#modal-send-email').modal('show');
   });
 });
