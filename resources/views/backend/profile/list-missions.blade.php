@@ -26,7 +26,7 @@
         
         <div class="col-md-12" style="margin-top: 10px">
 
-            <h5>Anh/chị vui lòng đọc thông tư 08/2017 để biết thêm thông tin chi tiết về các loại đề tài, dự án. <a href="" style="font-size: 14px"><Đọc tại đây></a></h5>
+            <h5>Anh/chị vui lòng đọc văn bản hợp nhất số 03 (Thông tư số 07/2014/TT-BKHCN và Thông tư số 03/2017/TT-BKHCN ) để biết thêm thông tin chi tiết về các loại đề tài, dự án. <br><a href="{{ asset('documents/van_ban_hop_nhat.zip') }}" style="font-size: 14px"><Đọc tại đây></a></h5>
 
         </div>
 
