@@ -159,7 +159,6 @@ class AdminMissionScienceTechnologyController extends Controller
           $string = "";
 
           if (Entrust::can('view-detail')) {
-
             $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs'><i class='fa fa-eye'></i></a>";
           }
 

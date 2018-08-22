@@ -205,7 +205,30 @@
     </html> --}}
 
 @extends('backend.layouts.auth')
+<style>
 
+	.note-register {
+
+    color: white;
+
+    border-bottom: 1px white solid;
+
+    padding-bottom: 15px;
+
+}
+
+
+
+.note-register a {
+
+	font-size: 14px;
+
+	font-weight: 400;
+
+}
+
+
+</style>
 @section('content')
     <div class="logo">
     	<h1 class="logo-caption">Đăng ký</h1>
@@ -308,14 +331,16 @@
     			</div>
 
     			<div class="col-md-12">
-    				<hr>
-    				<div class="col-md-6 btn-fogot custom-col-left">
-    					<a href="{{ route('profile.login') }}" class="btn-link">Đăng nhập</a>
-    				</div>
-    				<div class="col-md-6 btn-register custom-col-right">
+    				
+    				<h6 class="note-register">Nếu đã có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.login') }}">Đăng nhập</a></h6>
+    				<div class="col-md-6 btn-register custom-col-left">
     					<a data-toggle="modal" href='#register-guide' class="btn-link">Hướng dẫn đăng ký</a>
     				</div>
     			</div>
+    			<div class="col-md-12" style="margin-top: 10px">
+
+					<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
+				</div>
     		</div>
     	</form>
     </div>
