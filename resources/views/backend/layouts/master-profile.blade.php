@@ -90,7 +90,6 @@
 		  logged_in_greeting="Xin chào! Bạn cần trợ giúp?"
 		  logged_out_greeting="Xin chào! Bạn cần trợ giúp?">
 		</div>
-
     <!-- START PAGE CONTAINER -->
     <div class="page-container">
         <div id="cover" class=""><img src="{{ asset('img/load.svg') }}"></div>
@@ -135,7 +134,7 @@
                     <a href="{{asset('')}}"><span class="fa fa-desktop"></span> <span class="xn-text">Bảng điều khiển</span></a>
                 </li> --}}
 
-                <li class=" @if(Request::is('*mission*')) active @endif" >
+                <li class=" @if(Request::is('*/*')) active @endif" >
                     <a href="{{ route('home.list-missions') }}" ><span class="fa fa-list-ul"></span><span>Danh sách nhiệm vụ</span></a>
 
                     {{-- <ul>

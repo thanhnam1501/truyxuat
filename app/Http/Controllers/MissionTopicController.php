@@ -260,23 +260,23 @@ class MissionTopicController extends Controller
 
   public function update(Request $request) {
 
-    $data = $request->all();
+    $data = $request->only('expected_fund','expected_main_content','expected_result_perform','id','key','name','propose_base','result_target_requirement','target','time_result_requirement','type','urgency');
 
     $fund = Money::format($data['expected_fund'], 'VNĐ');
 
     $data['expected_fund'] = Crypt::encrypt($fund);
 
-    $data['evaluation_form_01'] = '';
-    $data['evaluation_form_02'] = '';
+    // $data['evaluation_form_01'] = '';
+    // $data['evaluation_form_02'] = '';
 
     DB::beginTransaction();
     try {
 
       $topic = MissionTopic::find($data['id']);
 
-      $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
+      // $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
 
-      $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
+      // $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
 
       // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
       //     return response()->json([
@@ -287,7 +287,12 @@ class MissionTopicController extends Controller
 
       foreach ($topic->values as $key => $value) {
 
-        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)->first()->column;
+        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)
+                                    ->first()
+                                    ->column;
+        if ($column == "evaluation_form_02" || $column == "evaluation_form_01") {
+          continue;
+        }
 
         $value->value = $data[$column];
 
@@ -463,6 +468,23 @@ class MissionTopicController extends Controller
             ]);
         }
 
+        if (!$mission->is_filled) {
+          return response()->json([
+            'error' => true,
+            'msg' => 'Vui lòng nhập đầy đủ form đăng ký và lưu thông tin trước khi nộp bản mềm',
+          ]);
+        }
+
+        $checkBeforeSubmitEle = Self::checkBeforeSubmitEle($mission->id);
+
+        if ($checkBeforeSubmitEle['error']) {
+            return response()->json([
+              'error' => true,
+              'collectName' => $checkBeforeSubmitEle['collectName'],
+              'modal'  => true,
+            ]);
+        }
+
         //$check_is_filled = $mission->is_filled == 1 ? true : false;
         $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
 
@@ -500,7 +522,7 @@ class MissionTopicController extends Controller
         }
 
         //* Create logs *//
-        $data = [
+        $arr = [
        			'profile_id' => Auth::guard('profile')->user()->id,
        			'content'    => $content,
        			'old_data'   => json_encode($old_data),
@@ -509,7 +531,7 @@ class MissionTopicController extends Controller
        			'record_id'  => $mission->id
        		];
 
-        ApplyLog::createLog($data);
+        ApplyLog::createLog($arr);
 
         DB::commit();
 
@@ -526,4 +548,37 @@ class MissionTopicController extends Controller
       }
 
     }
+
+  public function checkBeforeSubmitEle($id)
+  { 
+    $topic = MissionTopic::find($id);
+
+    $collectName = collect();
+
+    $error = false;
+
+    if (!empty($topic)) {
+        
+      foreach ($topic->values as $value) {
+          
+        if (empty($value->value)) {
+          
+          if ($value->mission_topic_attribute_id == 10 || $value->mission_topic_attribute_id == 11) {
+            continue;
+          }
+
+          $column = MissionTopicAttribute::find($value->mission_topic_attribute_id)->label;
+
+          $collectName->push($column);
+
+          $error = true;
+        }
+      }
+    }
+
+    return [
+      'error' => $error,
+      'collectName' => $collectName,
+    ];
+  }
 }

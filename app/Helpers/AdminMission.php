@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Auth;
 use App\Models\ApplyLog;
 use App\Models\MissionScienceTechnologyAttribute;
+use App\Models\MissionScienceTechnology;
+use App\Models\UserHandleFile;
 use Crypt;
 
 
@@ -29,10 +31,9 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
-
+			$old_data = $topic->get();	
 			if ($topic->exists()) {
-
+				
 				DB::beginTransaction();
 				try {
 
@@ -40,7 +41,6 @@ class AdminMission {
 						'time_submit_hard_copy'	=> Carbon::now(),
 						'is_submit_hard_copy'	=> 1,
 					]);
-					$new_data = $topic;
 
 					//* Mã hồ sơ
 					$order = DB::table($data['table_name'])->select('order_submit_hard_copy')->orderBy('order_submit_hard_copy', 'desc')->limit(1)->first();
@@ -56,8 +56,10 @@ class AdminMission {
 					]);
 					//* End
 
+					$new_data = $topic->get();
+
 					//* Create logs *//
-		      $data = [
+		      $arr = [
 		          'admin_id' => Auth::guard('web')->user()->id,
 		          'content'    => 'Xác nhận thu hồ sơ bản cứng',
 		          'old_data'   => json_encode($old_data),
@@ -65,7 +67,7 @@ class AdminMission {
 		          'table_name' => 'mission_science_technologies',
 		          'record_id'  => $data['id']
 		        ];
-		      ApplyLog::createLog($data);
+		      ApplyLog::createLog($arr);
 					//* End
 
 					DB::commit();
@@ -106,7 +108,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get();
 			//
 			if ($topic->exists()) {
 			//
@@ -131,10 +133,10 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get();
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -142,7 +144,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
@@ -225,7 +227,7 @@ class AdminMission {
 						$new_data = $topic;
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -233,7 +235,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 			//
 					DB::commit();
@@ -302,7 +304,7 @@ class AdminMission {
 						$new_data = $topic;
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -310,7 +312,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
@@ -371,5 +373,54 @@ class AdminMission {
 			$data['expected_fund'] = !empty($data['expected_fund']) ? number_format(Crypt::decrypt($data['expected_fund'])). " VNĐ" : 0;
 		}
 		return $data;
+	}
+
+	public static function submitAssign($data) {
+		DB::beginTransaction();
+
+      	try {
+	        UserHandleFile::create([
+	          'admin_id'  =>  $data['admin_id'],
+	          'user_id'   =>  $data['user_id'],
+	          'mission_id'  =>  $data['mission_id'],
+	          'mission_table' =>  $data['mission_table'],
+	          'deadline'  =>  $data['deadline'],
+	          'note'  =>  $data['note']
+	        ]);
+
+	        $mission = MissionScienceTechnology::find($data['mission_id']);
+	        $old_data = $mission;
+
+	        $mission->update([
+	          'is_assign' =>  1
+	        ]);
+
+	        $new_data = $mission;
+
+	        $arr = [
+	           'content'  =>  'Giao hồ sơ cho chuyên viên kiểm tra hợp lệ',
+	           'admin_id' => $data['admin_id'],
+	           'old_data' =>  json_encode($old_data),
+	           'new_data' =>  json_encode($new_data),
+	           'table_name' =>  'mission_science_technologies',
+	           'record_id'  =>  $data['mission_id']
+	         ];
+	      
+	        ApplyLog::createLog($arr);
+
+	        DB::commit();
+
+	        return response()->json([
+	          'error' =>  false,
+	          'msg'   =>  'Giao thành công !'
+	        ]);
+      	} catch (Exception $e) {
+	        DB::rollback();
+
+	        return response()->json([
+	          'error' =>  true,
+	          'msg'   =>  $e->getMessage()
+	        ]);
+      	}
 	}
 }

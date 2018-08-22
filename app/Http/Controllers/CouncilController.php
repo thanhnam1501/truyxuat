@@ -239,11 +239,12 @@ class CouncilController extends Controller
 			return $council_user->name;
 		})
 		->addColumn('email', function($council_user) {
-			return $council_user->email;
+			return '<a href="mailto:'.$council_user->email.'">'.$council_user->email.'</a>';
+			
 		})
 		->addColumn('phone', function($council_user) {
 			if ($council_user->mobile != "") {
-				return $council_user->mobile;
+				return '<a href="tel:'.$council_user->mobile.'">'.$council_user->mobile.'</a>';
 			}
 			else {
 				return 'Chưa cập nhật';

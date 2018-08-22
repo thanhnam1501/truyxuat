@@ -64,6 +64,14 @@ class AdminProfileController extends Controller
                       return "Chưa cập nhập";
                   }
               })
+              ->editColumn('email', function($profile){
+                $string = '<a href="javascript:;" onclick="sendEmail('.$profile->id.')">'.$profile->email.'</a>';
+                return $string;
+              })
+              ->editColumn('mobile', function($profile){
+                $string = '<a id="call-mobile" href="#">'.$profile->mobile.'</a>';
+                return $string;
+              })
               ->addColumn('action', function($profile) {
 
                   $string = "";

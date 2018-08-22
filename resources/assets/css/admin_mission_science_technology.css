@@ -57,3 +57,7 @@
 #modal-view-detail b, em, .style-value {
   font-size: 14px;
 }
+
+#science-technology-tbl_length {
+  border: none;
+}

@@ -27,10 +27,10 @@
       <div class="panel panel-default tabs">
           <ul class="nav nav-tabs" role="tablist">
             @if (!$topic->is_submit_ele_copy)
-              <li class="active"><a href="#tab-form" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp; Form đăng ký</a></li>
+              <li class="active"><a href="#tab-form" id="tab-form-btn" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp; Form đăng ký</a></li>
             @endif
             @if ($topic->is_submit_ele_copy)
-              <li class="active"><a href="#tab-review" role="tab" data-toggle="tab"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; Xem và in hồ sơ</a></li>
+              <li class="active"><a href="#tab-review" id="tab-review-btn" role="tab" data-toggle="tab"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; Xem và in hồ sơ</a></li>
             @endif
             <li><a href="#tab-timeline" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; Theo dõi hồ sơ</a></li>
           </ul>
@@ -101,8 +101,8 @@
                   <input type="text" id='expected_fund' name="expected_fund" value="{{isset($data['expected_fund'])?number_format($data['expected_fund']).' VNĐ':" "}}" class="form-control" placeholder="Vui lòng nhập dự kiến nhu cầu kinh phí"/>
                 </div>
                 <br>
-                <div class="form-group">
-                  <label for="evaluation_form_01" class="label-custom-size">Phiếu đánh giá của chuyên gia độc lập 01
+{{--                 <div class="form-group">
+                  <label for="aluation_form_01" class="label-custom-size">Phiếu đánh giá của chuyên gia độc lập 01
                       @if (isset($data['evaluation_form_01']))
                         @if (!empty($data['evaluation_form_01']))
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -132,9 +132,34 @@
                   </label>
                   <input data-order='02' type="file" class="evaluation_form" id="evaluation_form_02" name="evaluation_form_02" accept="application/pdf" @if (!empty($data['evaluation_form_02'])) data-exists='1' @endif/>
                   <span style="font-style: italic; color: red">(*) Định dạng PDF, dung lượng <5MB</span>
-                </div>
+                </div> --}}
               </form>
 
+            </div>
+            <div class="clearfix"></div>
+            <div class="">
+              <hr>
+              <div class="col-md-8">
+                <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
+              </div>
+              <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
+                @if ($topic->is_filled)
+
+                  @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
+
+                    <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
+
+                      <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
+                    </button>
+
+                    <button class="btn btn-success"id="update-topic-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
+
+                  @endif
+                @else
+                  <button class="btn btn-success"id="update-topic-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
+                @endif
+
+              </div> </div>
             </div>
           </div>
         @endif
@@ -178,6 +203,25 @@
                   <br><br><br><br><br><br><br><br><br><br><br><br>
                 </div>
               </div>
+            <div class="clearfix"></div>
+            <div class="">
+              <hr>
+              <div class="col-md-8">
+                <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
+              </div>
+              <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
+                  @if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
+                    <a href="javascript:;" class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $topic->key }}" data-is_submit_ele_copy="0">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
+                    </a>
+                  @endif
+
+                  @if ($topic->is_submit_ele_copy)
+                    <a href="{!! route('missionTopic.detail',[$topic->key,'print']) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
+                  @endif
+
+              </div> </div>
+            </div>
           </div>
         @endif
         <div class="tab-pane" id="tab-timeline">
@@ -208,6 +252,17 @@
                         {!! $status_submit_ele_copy !!}
                       @endif
                     </h4>
+                      @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && $topic->is_filled)
+
+                        <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
+
+                          <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
+                        </button>
+                      @elseif ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && $topic->is_filled)
+                        <a href="javascript:;" class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $topic->key }}" data-is_submit_ele_copy="0">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
+                        </a>
+                      @endif
                   </center>
         				</div>
         			</div>
@@ -254,9 +309,11 @@
         				<div class="timeline-content">
                   <center>
                     <h3>TRẠNG THÁI HỒ SƠ</h3> <br>
-                    <p class="error">
+                    <h4>
+                      <p class="error">
                         Hồ sơ đang chờ xử lý
-                    </p>
+                      </p>
+                    </h4>
                   </center>
         				</div>
         			</div>
@@ -265,41 +322,26 @@
         </div>
       </div>
     </div>
-    <div class="panel-footer">
-      <div class="col-md-8">
-        <h5><span class="error">(*)</span> Ghi chú: <br>- <i>Phiếu đề xuất được trình bày không quá 4 trang giấy khổ A4</i> <br>- <i>Các mục <span class="error">(*)</span> là bắt buộc</i></h5>
+  </div>
+
+  <div class="modal fade" id="null-field-mdl">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Nhập đầy đủ các trường sau và lưu thông tin trước khi nộp bản mềm</h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+          <ul id="collectName">
+            
+          </ul>
+        </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
       </div>
-      <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
-        @if ($topic->is_filled)
-
-          @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
-
-            <button class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
-
-              <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
-            </button>
-
-            <button class="btn btn-success"id="update-topic-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
-
-          @endif
-
-          @if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
-            <a href="javascript:;" class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="0">
-              <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
-            </a>
-
-            <a href="{!! route('missionTopic.detail',[$topic->key,'print']) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
-          @endif
-
-          @if ($topic->is_submit_ele_copy)
-            <a href="{!! route('missionTopic.detail',[$topic->key,'print']) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
-          @endif
-
-        @else
-          <button class="btn btn-success"id="update-topic-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
-        @endif
-
-      </div> </div>
     </div>
   </div>
 @endsection
