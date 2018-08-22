@@ -225,7 +225,7 @@
                         {!! $status_submit_ele_copy !!}
                       @endif
                       <br><br>
-                      @if (!$is_submit_ele_copy && !$is_submit_hard_copy)
+                      @if (!$is_submit_ele_copy && !$is_submit_hard_copy && is_filled)
 
                         <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="1">
 
@@ -284,9 +284,11 @@
         				<div class="timeline-content">
                   <center>
                     <h3>TRẠNG THÁI HỒ SƠ</h3> <br>
-                    <p class="error">
+                    <h4>
+                      <p class="error">
                         Hồ sơ đang chờ xử lý
-                    </p>
+                      </p>
+                    </h4>
                   </center>
         				</div>
         			</div>
