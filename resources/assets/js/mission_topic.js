@@ -285,37 +285,40 @@ $(document).ready(function() {
 
   });
 
-    $('.evaluation_form').on('change', function() {
-      var fd = new FormData();
-      order = $(this).data('order');
-      fd.append('file', $(this)[0].files[0]);
-      fd.append('order', order);
-      fd.append('key', $('#key').val());
+    // $('.evaluation_form').on('change', function() {
+    //   var fd = new FormData();
+    //   order = $(this).data('order');
+    //   fd.append('file', $(this)[0].files[0]);
+    //   fd.append('order', order);
+    //   fd.append('key', $('#key').val());
 
-      $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        url: app_url + 'mission-topics/uploadFile',
-        type: 'Post',
-        data: fd,
-        success: function(res) {
-          if (res.error) {
-            toastr.error(res.message);
-          }
+    //   $.ajax({
+    //     cache: false,
+    //     contentType: false,
+    //     processData: false,
+    //     url: app_url + 'mission-topics/uploadFile',
+    //     type: 'Post',
+    //     data: fd,
+    //     success: function(res) {
+    //       if (res.error) {
+    //         toastr.error(res.message);
+    //       }
+    //     }
+    //   });
+
+    // });
+
+    $('.btn_submit_ele_copy').on('click', function(event) {
+      if ($('#update-topic-frm').length > 0) {
+        if (!$('#update-topic-frm').valid()) {
+
+          $('#tab-form-btn').click();
+
+          toastr.error('Vui lòng nhập đầy đủ form đăng ký và lưu thông tin trước khi nộp bản mềm');
+
+          return false;
         }
-      });
-
-    });
-
-    $('#btn_submit_ele_copy').on('click', function(event) {
-
-      // if ($('#update-topic-frm').length > 0) {
-      //   if (!$('#update-topic-frm').valid()) {
-
-      //     return false;
-      //   }
-      // }
+      }
 
       event.preventDefault();
       /* Act on the event */

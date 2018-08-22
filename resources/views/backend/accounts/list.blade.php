@@ -32,6 +32,7 @@
 					<tr>
 						<th>STT</th>
 						<th>Người đăng ký</th>
+						<th>Số điện thoại</th>
 						<th>Email</th>
 						<th>Tên tổ chức</th>
 						<th>Trạng thái</th>
@@ -114,6 +115,41 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="modal-send-email" >
+	<div class="modal-dialog" style="width: 80%">
+		<div class="modal-content" >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Gửi Email</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" enctype="multipart/form-data" id="create-user-frm">
+						<div class="form-group">
+								<label>Tên đơn vị/tổ chức </label>
+								<input readonly type="text" id="name" name="name" class="form-control"/>
+						</div>
+						<div class="form-group">
+								<label class='control-label'>Email <span style="color: red">(*)</span></label>
+								<input readonly type="email" id="email" name="email" class="form-control"/>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Chủ đề</label>
+							<input type="text" id='subject' name='subject' class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="control-label">Nội dung</label>
+							<textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
+						</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+				<button type="button" class="btn btn-primary">Gửi</button>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 
 @section('footer')
@@ -223,6 +259,10 @@
 	        toastr.error(thrownError);
 	      }
 	  });
+	}
+
+	function sendEmail(){
+		$('#modal-send-email').modal('show');
 	}
 
 </script>

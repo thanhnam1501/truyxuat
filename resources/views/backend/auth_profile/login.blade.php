@@ -107,6 +107,31 @@
 --}}
 @extends('backend.layouts.auth')
 
+<style>
+
+	.note-register {
+
+    color: white;
+
+    border-bottom: 1px white solid;
+
+    padding-bottom: 15px;
+
+}
+
+
+
+.note-register a {
+
+	font-size: 14px;
+
+	font-weight: 400;
+
+}
+
+
+</style>
+
 @section('content')
 <div class="logo">
 	<h1 class="logo-caption">Đăng nhập</h1>
@@ -178,13 +203,14 @@
 			<br>
 			<br>
 			<div class="col-md-12">
+				
 				<h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6>
-				{{-- <hr> --}}
+
 				<div class="col-md-6 btn-fogot custom-col-left">
 					<a href="{{ route('profile.password.request') }}" class="btn-link">Quên mật khẩu?</a>
 				</div>
 				<div class="col-md-6 btn-register custom-col-right">
-					
+					{{-- <a href="{{ route('profile.register') }}" class="btn-link">Đăng ký tài khoản</a> --}}
 				</div>
 				<br>
 				
@@ -193,6 +219,11 @@
 			<div class="col-md-12" style="margin-top: 10px">
 				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
 			</div>
+			<div class="col-md-12" style="margin-top: 10px">
+
+				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
+
+ 			</div>
 		</div>
 	</form>
 </div>

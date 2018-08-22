@@ -97,4 +97,8 @@ jQuery.validator.addMethod("requiredSelectDyn", function (value, element, params
 
   return this.optional(element) || value != params;
 });
+
+jQuery.validator.setDefaults({
+  ignore: ""
+});
 /* End additional method jquery validate */
