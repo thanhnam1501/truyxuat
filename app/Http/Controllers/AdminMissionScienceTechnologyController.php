@@ -16,7 +16,13 @@ use App\Models\MissionTopicAttribute;
 use App\Models\GroupCouncil;
 use App\Models\Council;
 use App\Models\CouncilUser;
+
 use App\Models\User;
+use App\Models\RoleUser;
+use App\Models\Role;
+use App\Models\UserHandleFile;
+use App\Models\ApplyLog;
+
 use Auth;
 use DB;
 use Datatables;
@@ -43,7 +49,21 @@ class AdminMissionScienceTechnologyController extends Controller
           'm' =>  date('m', strtotime(now())),
           'y' =>  date('Y', strtotime(now())),
         ];
-        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'group_councils'));
+
+        $role_user_devolve_file = User::select('users.*')
+            ->  join('role_users', 'role_users.user_id', '=', 'users.id')
+            ->  join('roles', 'roles.id', '=', 'role_users.role_id')
+            ->  where('role_users.role_id', 4)
+            ->  get();
+
+        $role_user_handle_file = User::select('users.*')
+            ->  join('role_users', 'role_users.user_id', '=', 'users.id')
+            ->  join('roles', 'roles.id', '=', 'role_users.role_id')
+            ->  where('role_users.role_id', 5)
+            ->  get();
+
+        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file'));
+
     }
 
     public function getSubmitEleList()
@@ -59,10 +79,10 @@ class AdminMissionScienceTechnologyController extends Controller
           foreach ($topic->values as $value) {
 
             if ($value->mission_science_technology_attribute_id == $attr_id) {
-              if (strlen($value->value) >= 150) {
-                  return substr($value->value, 0, 149)."...";
+              if (strlen($value->value) > 300) {
+                  return "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
               } else {
-                return $value->value;
+                  return $value->value;
               }
             }
           }
@@ -135,7 +155,7 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->profile)) {
+          if (!empty($topic->profile->organization)) {
             return $topic->profile->organization->name;
           } else {
             return "Chưa cập nhập";
@@ -148,35 +168,44 @@ class AdminMissionScienceTechnologyController extends Controller
 
           $string = "";
 
-          // if (Entrust::can('view-detail')) {
+          if (Entrust::can('view-detail')) {
 
-            $string .=  "<a data-id=".$topic->id." data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs btn-view-detail'><i class='fa fa-eye'></i></a>";
-          // }
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs'><i class='fa fa-eye'></i></a>";
+          }
 
-          //if ($topic->is_submit_ele_copy == 1 && Entrust::can(['receive-hard-copy'])) {
+          if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
-          //}
+          }
+
 
           $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
 
-          ///if ($topic->is_submit_ele_copy == 1 && Entrust::can(['return-hard-copy'])) {
+          if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
-              // $string .= "<i data-tooltip='tooltip' title='Trả lại bản cứng' class='fa fa-undo ico ico-danger'></i>";
-          //}
+            $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs'><i class='fa fa-undo'></i></a>";
+          }
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['assign-doc'])) {
+            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Giao hồ sơ cho cán bộ xử lý' class='btn btn-warning btn-xs assign-doc'><i class='fa fa-paperclip'></i></a>";
+          }
+
+          if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
-          //}
+          }
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_valid && Entrust::can(['assign-council'])) {
+            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+          }
+
+          if (!empty($topic->council_id) && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
-          //}
+          }    
 
-          //if ($topic->is_submit_hard_copy == 1 && Entrust::can(['valid-doc','invalid-doc'])) {
+          if ($topic->is_judged && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
 
-              // $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
-          //}
+               // $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
+          }
 
           return $string;
         })
@@ -366,5 +395,57 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->make(true);
       }
+    }
+    
+    public function submitAssign(Request $request) {
+      $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id');
+      DB::beginTransaction();
+
+      try {
+        UserHandleFile::create([
+          'admin_id'  =>  $data['admin_id'],
+          'user_id'   =>  $data['user_id'],
+          'mission_id'  =>  $data['mission_id'],
+          'mission_table' =>  'mission_science_technologies',
+          'deadline'  =>  $data['deadline'],
+          'note'  =>  $data['note']
+        ]);
+
+        $mission = MissionScienceTechnology::find($data['mission_id']);
+        $old_data = $mission;
+
+        $mission->update([
+          'is_assign' =>  1
+        ]);
+
+        $new_data = $mission;
+
+        $arr = [
+           'content'  =>  'Giao hồ sơ cho chuyên viên kiểm tra hợp lệ',
+           'admin_id' => $data['admin_id'],
+           'old_data' =>  json_encode($old_data),
+           'new_data' =>  json_encode($new_data),
+           'table_name' =>  'mission_science_technologies',
+           'record_id'  =>  $data['mission_id']
+         ];
+      
+        ApplyLog::createLog($arr);
+
+        DB::commit();
+
+        return response()->json([
+          'error' =>  false,
+          'msg'   =>  'Giao thành công !'
+        ]);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        return response()->json([
+          'error' =>  true,
+          'msg'   =>  $e->getMessage()
+        ]);
+      }
+
+
     }
 }

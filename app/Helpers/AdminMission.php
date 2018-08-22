@@ -29,10 +29,9 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
-
+			$old_data = $topic->get();	
 			if ($topic->exists()) {
-
+				
 				DB::beginTransaction();
 				try {
 
@@ -40,7 +39,6 @@ class AdminMission {
 						'time_submit_hard_copy'	=> Carbon::now(),
 						'is_submit_hard_copy'	=> 1,
 					]);
-					$new_data = $topic;
 
 					//* Mã hồ sơ
 					$order = DB::table($data['table_name'])->select('order_submit_hard_copy')->orderBy('order_submit_hard_copy', 'desc')->limit(1)->first();
@@ -56,8 +54,10 @@ class AdminMission {
 					]);
 					//* End
 
+					$new_data = $topic->get();
+
 					//* Create logs *//
-		      $data = [
+		      $arr = [
 		          'admin_id' => Auth::guard('web')->user()->id,
 		          'content'    => 'Xác nhận thu hồ sơ bản cứng',
 		          'old_data'   => json_encode($old_data),
@@ -65,7 +65,7 @@ class AdminMission {
 		          'table_name' => 'mission_science_technologies',
 		          'record_id'  => $data['id']
 		        ];
-		      ApplyLog::createLog($data);
+		      ApplyLog::createLog($arr);
 					//* End
 
 					DB::commit();
@@ -106,7 +106,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get();
 			//
 			if ($topic->exists()) {
 			//
@@ -131,10 +131,10 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get();
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -142,7 +142,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
@@ -225,7 +225,7 @@ class AdminMission {
 						$new_data = $topic;
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -233,7 +233,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 			//
 					DB::commit();
@@ -302,7 +302,7 @@ class AdminMission {
 						$new_data = $topic;
 
 						//* Create logs *//
-			      $data = [
+			      $arr = [
 			          'admin_id' 	 => Auth::guard('web')->user()->id,
 			          'content'    => $action,
 			          'old_data'   => json_encode($old_data),
@@ -310,7 +310,7 @@ class AdminMission {
 			          'table_name' => $data['table_name'],
 			          'record_id'  => $data['id']
 			        ];
-			      ApplyLog::createLog($data);
+			      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email

@@ -38,7 +38,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('account-user/get-list', 'UserController@list')->name('users.getList');
             //* End
 
-            //* Quản lý tài khoản đơn vị
+            //* Quản lý tài khoản cá nhân
             Route::resource('account-profiles', 'AdminProfileController');
             Route::post('account-profiles/get-list', 'AdminProfileController@list')->name('profiles.getList');
             Route::post('account-profiles/lock', 'AdminProfileController@lockAccount')->name('profiles.lockAccount');
@@ -210,6 +210,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/approve-mission', 'AdminMissionScienceTechnologyController@approveMission')->name('admin.mission-science-technologies.approveMission');
             Route::post('/upload-list-categories', 'AdminMissionScienceTechnologyController@uploadListCategories')->name('admin.mission-science-technologies.uploadListCategories');
             Route::post('/view-detail', 'AdminMissionScienceTechnologyController@viewDetail')->name('admin.mission-science-technologies.viewDetail');
+            Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
         });
         //* End
 

@@ -397,4 +397,74 @@ $(document).ready(function() {
         });        
     
   })
+
+  $('#science-technology-tbl').on('click',' .assign-doc', function(){
+    $('#modal-assign').modal('show');
+
+    var data_id = $(this).attr('data-id');
+    $('#mission_id').val(data_id);
+  });
+
+  $('#deadline').datetimepicker({format: "YYYY-MM-DD HH:mm:ss",
+    minDate: moment()});
+
+  $('#modal-assign').on('click','#btn-submit-devolve', function(event){
+    event.preventDefault(); 
+    var user_devolve = $("#role_user_devolve_file").val();
+    var user_hanle = $("#role_user_handle_file").val();
+    var deadline = $('#deadline-group').find("input").val();
+    var note = $('#note').val();
+
+    if (user_devolve == '-1') {
+      $("#role_user_devolve_file").next().text("Vui lòng chọn người giao hồ sơ");
+      return false;
+    } else {
+      $("#role_user_devolve_file").next().text("");
+    }
+
+    if (user_hanle == '-1') {
+      $("#role_user_handle_file").next().text("Vui lòng chọn người xử lý hồ sơ");
+      return false;
+    }else {
+      $("#role_user_handle_file").next().text("");
+    }
+
+    if (deadline == "") {
+      $("#err-deadline").text("Vui lòng chọn hạn xử lý hồ sơ");
+      return false;
+    }else {
+      $("#err-deadline").text("");
+    }
+
+    $.ajax({
+      url: app_url + "/admin/mission-science-technologies/submit-assign",
+      type: 'POST',
+      data: {
+        admin_id : user_devolve,
+        user_id : user_hanle,
+        deadline: deadline,
+        note: note,
+        mission_id : $('#mission_id').val()
+      },
+      success: function (res){
+        if (res != null) {
+          if (res != true) {
+            toastr.success(res.msg);
+            $("#role_user_devolve_file").val("-1");
+            $("#role_user_handle_file").val("-1");
+            $('#deadline-group').find("input").val("");
+            $('#note').val("");
+
+            $("#modal-assign").modal("hide");
+
+            $("#science-technology-tbl").DataTable().ajax.reload();
+          }
+        }
+      }, error: function (err){
+
+      }
+    });
+    
+  });
+
 });

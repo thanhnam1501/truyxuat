@@ -141,5 +141,17 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'invalid-doc',
             'display_name'=>'Xác nhận hồ sơ không hợp lệ',
         ]);
+        Permission::create([
+            'name'=>'approve-doc',
+            'display_name'=>'Xác nhận hồ sơ được phê duyệt thực hiện',
+        ]);
+        Permission::create([
+            'name'=>'unapprove-doc',
+            'display_name'=>'Xác nhận hồ sơ không được phê duyệt thực hiện',
+        ]);
+        Permission::create([
+            'name'=>'assign-council',
+            'display_name'=>'Chọn hội đồng đánh giá',
+        ]);
     }
 }
