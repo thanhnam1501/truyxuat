@@ -104,10 +104,6 @@
             @endif
 
             @if ($is_submit_ele_copy)
-              <a href="javascript:;" class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $st_key }}" data-is_submit_ele_copy="0">
-                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
-              </a>
-
               <a href="{!! route('missionScienceTechnology.print',  $st_key) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
             @endif
 

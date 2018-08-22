@@ -92,10 +92,7 @@
           @endif
 
           @if ($topic->is_submit_ele_copy)
-            <a href="javascript:;" class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="0">
-              <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp; &nbsp; Sửa bản mềm
-            </a>
-
+          
             <a href="{!! route('missionTopic.detail',[$topic->key,'print']) !!}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu đề xuất</a>
           @endif
 

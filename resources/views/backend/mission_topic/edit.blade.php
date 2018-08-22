@@ -252,7 +252,7 @@
                         {!! $status_submit_ele_copy !!}
                       @endif
                     </h4>
-                      @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
+                      @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && $topic->is_filled)
 
                         <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
 
@@ -319,6 +319,27 @@
         			</div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="null-field-mdl">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Nhập đầy đủ các trường sau và lưu thông tin trước khi nộp bản mềm</h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+          <ul id="collectName">
+            
+          </ul>
+        </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
         </div>
       </div>
     </div>
