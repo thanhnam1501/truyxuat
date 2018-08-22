@@ -30,8 +30,8 @@
 		  attribution=setup_tool
 		  page_id="217093748844415"
 		  theme_color="#0074ba"
-		  logged_in_greeting="Hi! How can we help you?"
-		  logged_out_greeting="Hi! How can we help you?">
+		  logged_in_greeting="Xin chào! Bạn cần trợ giúp?"
+		  logged_out_greeting="Xin chào! Bạn cần trợ giúp?">
 		</div>
 
 		<div class="container-fluid">
