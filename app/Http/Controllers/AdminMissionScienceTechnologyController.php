@@ -13,6 +13,10 @@ use App\Models\RoundCollection;
 use App\Models\MissionScienceTechnologyFile;
 use App\Models\MissionTopic;
 use App\Models\MissionTopicAttribute;
+use App\Models\GroupCouncil;
+use App\Models\Council;
+use App\Models\CouncilUser;
+use App\Models\User;
 use Auth;
 use DB;
 use Datatables;
@@ -22,6 +26,9 @@ use UploadFile;
 
 class AdminMissionScienceTechnologyController extends Controller
 {
+    public function __construct() {
+      $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +37,13 @@ class AdminMissionScienceTechnologyController extends Controller
     public function index()
     {
         $round_collection = RoundCollection::where('status', 1)->get();
+        $group_councils = GroupCouncil::where('status', 1)->get();
         $date = [
           'd' =>  date('d', strtotime(now())),
           'm' =>  date('m', strtotime(now())),
           'y' =>  date('Y', strtotime(now())),
         ];
-        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date'));
+        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'group_councils'));
     }
 
     public function getSubmitEleList()
@@ -149,7 +157,7 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
           //}
 
-          $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+          $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
 
           ///if ($topic->is_submit_ele_copy == 1 && Entrust::can(['return-hard-copy'])) {
 
@@ -305,5 +313,58 @@ class AdminMissionScienceTechnologyController extends Controller
       $result = AdminMission::viewDetail($data);
 
       return $result;
+    }
+
+    public function getRoundCollection($id) {
+      $mission = MissionScienceTechnology::find($id);
+
+      return RoundCollection::find($mission->round_collection_id);
+    }
+
+
+    public function getListCouncil(Request $request) {
+      if (null != $request->get('round_collection_id') && null != $request->get('group_council_id')) {
+
+        $round_collection_id = $request->get('round_collection_id');
+
+        $group_council_id = $request->get('group_council_id');
+
+        $councils = Council::where('round_collection_id', $round_collection_id)
+                    ->where('group_council_id', $group_council_id)
+                    ->where('status', 1)->get();
+
+        return Datatables::of($councils)
+        ->addIndexColumn()
+        ->addColumn('name', function($council) {
+          return $council->name;
+        })
+        ->addColumn('chairman_name', function($council) {
+          $userCouncil = CouncilUser::where('position_council_id', 1)->where('council_id', $council->id)->orderBy('id', 'DESC')->first();
+
+          if ($userCouncil != null) {
+            return User::find($userCouncil->user_id)->name;
+          }
+          else {
+            return 'Chưa cập nhật';
+          }
+          
+        })
+
+        ->addColumn('group_council', function($council) use ($group_council_id) {
+          return GroupCouncil::find($group_council_id)->name;
+        })
+
+
+        ->addColumn('round_collection', function($council) use ($round_collection_id) {
+
+          $round_collection =  RoundCollection::find($round_collection_id);
+
+          return $round_collection->year . '-' . $round_collection->name;
+        })
+        ->addColumn('action', function($council) {
+          return '<input type="radio" name="council_id" value="'.$council->id.'">';
+        })
+        ->make(true);
+      }
     }
 }

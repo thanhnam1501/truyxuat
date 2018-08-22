@@ -175,15 +175,23 @@
 			<div class="col-md-6">
 				<button type="submit" class="btn login-btn btn-block">Đăng nhập</button>
 			</div>
-
+			<br>
+			<br>
 			<div class="col-md-12">
-				<hr>
+				<h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6>
+				{{-- <hr> --}}
 				<div class="col-md-6 btn-fogot custom-col-left">
 					<a href="{{ route('profile.password.request') }}" class="btn-link">Quên mật khẩu?</a>
 				</div>
 				<div class="col-md-6 btn-register custom-col-right">
-					<a href="{{ route('profile.register') }}" class="btn-link">Đăng ký tài khoản</a>
+					
 				</div>
+				<br>
+				
+			</div>
+
+			<div class="col-md-12" style="margin-top: 10px">
+				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
 			</div>
 		</div>
 	</form>

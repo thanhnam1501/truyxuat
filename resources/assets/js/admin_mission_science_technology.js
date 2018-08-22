@@ -323,4 +323,78 @@ $(document).ready(function() {
     });
 
   });
+
+
+  $('#science-technology-tbl').on('click', '.add-council-btn', function(e) {
+    e.preventDefault();
+    
+   $('#addCouncilModal').modal('show'); 
+   var id = $(this).data('id');
+   $.ajax({
+     url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
+     type: 'GET',
+     success: function(res) {
+        $('#round_collection').html(res.year + ' - ' + res.name);
+        $('#year_round_collection').html(res.year);
+        $('#list-council-tbl').attr('data-round_colection_id', res.id);
+
+        $('#list-council-tbl').DataTable().destroy();
+        $('#list-council-tbl').DataTable({
+          searching: false,
+          paginate: false,
+          ordering: false,
+          ajax: {
+            url: app_url + 'admin/mission-science-technologys/get-list-council',
+            type: 'post',
+            data: {
+              round_collection_id : res.id,
+              group_council_id: $('#group_council').val(),
+            }
+          },
+        columns: [
+          {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center', 'searchable':false},
+          {data: 'name', name: 'name', 'class':'text-center'},
+          {data: 'chairman_name', name: 'chairman_name'},
+          {data: 'group_council', name: 'group_council', 'class':'text-center'},
+          {data: 'round_collection', name: 'round_collection','class':'text-center'},
+          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        ]
+        });        
+
+     }
+   
+   });
+        
+  })
+
+  $('#group_council').on('change', function() {
+    var group_council_id = $(this).val();
+
+    var round_collection_id = $('#list-council-tbl').data('round_colection_id');
+
+    $('#list-council-tbl').DataTable().destroy();
+
+    $('#list-council-tbl').DataTable({
+          ajax: {
+            url: app_url + 'admin/mission-science-technologys/get-list-council',
+            type: 'post',
+            data: {
+              round_collection_id : round_collection_id,
+              group_council_id: group_council_id,
+            }
+          },
+        searching: false,
+        paginate: false,
+        ordering: false,
+        columns: [
+          {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+          {data: 'name', name: 'name', 'class':'text-center'},
+          {data: 'chairman_name', name: 'chairman_name'},
+          {data: 'group_council', name: 'group_council', 'class':'text-center'},
+          {data: 'round_collection', name: 'round_collection', 'class':'text-center'},
+          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        ]
+        });        
+    
+  })
 });

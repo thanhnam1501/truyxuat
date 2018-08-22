@@ -176,7 +176,7 @@
                         </li>
 
                     <li class="@if(Request::is('*admin/mission-science-technologies*')) active @endif">
-                            <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án khoa học và công nghẹ</span></a>
+                            <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH & CN</span></a>
                         </li>
                     {{-- END menu chức năng hồ sơ --}}
 

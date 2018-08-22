@@ -492,6 +492,65 @@
       </div>
     </div>
   </div>
+
+
+  <div class="modal fade" id="addCouncilModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%">
+      <div class="modal-content">
+        <div class="modal-header">
+          {{-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> --}}
+          <center><h4 class="modal-title" id="">CHỌNG HỘI ĐỒNG ĐÁNH GIÁ</h4> </center>
+        </div>
+        <div class="modal-body">
+
+          <div class="row form-group">
+            <div class="col-md-2 search-label" style="text-align: left !important"><label>Nhóm:</label></div>
+            <div class="col-md-6">
+              <select name="group_council" id="group_council" class="form-control"> 
+                @if (isset($group_councils) && !empty($group_councils))
+                  @foreach ($group_councils as $group_council)
+                    <option value="{{$group_council->id}}">{{$group_council->name}}</option>
+                  @endforeach
+                @endif
+
+              </select>
+            </div>
+          </div>
+          
+          <div class="row form-group">
+            <div class="col-md-2"><label>Đợt gọi hồ sơ:</label></div>
+            <div class="col-md-6"><p id="round_collection"></p>
+            </div>
+          </div>
+          
+          <div class="row form-group">
+            <div class="col-md-2"><label>Năm:</label></div>
+            <div class="col-md-6"><p id="year_round_collection"></p></div>
+          </div>
+  
+          <div class="row">
+              <table class="table table-bordered table-hover" id="list-council-tbl" width="100%">
+                    <thead>
+                      <tr>
+                        <th style="width: 3%">STT</th>
+                        <th style="width: 30%">Tên hội đồng</th>
+                        <th style="width: 20%">Chủ tịch hội đồng</th>
+                        <th style="width: 25%">Nhóm</th>
+                        <th style="width: 15%">Đợt gọi hồ sơ</th>
+                        <th style="width: 7%">#</th>
+                      </tr>
+                    </thead>
+                  </table>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+          <button type="button" class="btn btn-success" id="add-council-submit-btn" data-id="">Lưu thông tin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 @endsection
 
 @section('footer')
