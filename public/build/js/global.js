@@ -82,6 +82,7 @@ jQuery.validator.addMethod("requiredFile", function (value, element, params) {
 
   if ($(element).data('exists') == undefined || $(element).data('exists') != 1) {
 
+
     if (value == "" || value == null) {
       failed = true;
     }
@@ -89,13 +90,14 @@ jQuery.validator.addMethod("requiredFile", function (value, element, params) {
 
     failed = false;
   }
-
+  
   return failed == false;
 });
 
 jQuery.validator.addMethod("requiredSelectDyn", function (value, element, params) {
 
   return this.optional(element) || value != params;
+
 });
 
 jQuery.validator.setDefaults({

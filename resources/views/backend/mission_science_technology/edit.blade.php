@@ -36,6 +36,7 @@
       </div>
 
       <div class="panel-body tab-content">
+        
         @if (!$is_submit_ele_copy)
         <div class="tab-pane active" id="tab-form">
           <div class="col-md-12">
@@ -121,7 +122,7 @@
                 <textarea name="science_technology_efficiency" id="science_technology_efficiency" class="form-control" rows="6" placeholder="Vui lòng nhập hiệu quả về khoa học và công nghệ">{{$data['science_technology_efficiency']}}</textarea>
               </div>
               <br>
-{{--               <div class="form-group">
+             {{--  <div class="form-group">
                   <label class="col-md-12 col-xs-12 control-label">Phiếu đánh giá của chuyên gia độc lập 01
                       @if ($check_input_01 == true)
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -291,9 +292,7 @@
         			</div>
             </div>
           </div>
-
         </div>
-
         @if ($is_submit_ele_copy)
         <div class="tab-pane active" id="tab-view">
           <div class="col-md-12">
@@ -343,7 +342,6 @@
                 <br><br><br><br><br><br><br><br><br><br><br><br>
               </div>
             </div>
-
             <div class="clearfix"></div>
             <div class="">
               <hr>
@@ -368,6 +366,7 @@
         @endif
       </div>
     </div>
+    
   </div>
 @endsection
 

@@ -500,7 +500,7 @@ class MissionTopicController extends Controller
         }
 
         //* Create logs *//
-        $data = [
+        $arr = [
        			'profile_id' => Auth::guard('profile')->user()->id,
        			'content'    => $content,
        			'old_data'   => json_encode($old_data),
@@ -509,7 +509,7 @@ class MissionTopicController extends Controller
        			'record_id'  => $mission->id
        		];
 
-        ApplyLog::createLog($data);
+        ApplyLog::createLog($arr);
 
         DB::commit();
 

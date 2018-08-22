@@ -56,3 +56,8 @@
 #action-column{
 	width: 15% !important;
 }
+
+
+.custom-footer {
+    background: white !important;
+}
