@@ -17,7 +17,7 @@ class CreateCouncilMissionScienceTechnologiesTable extends Migration
             Schema::create('council_mission_science_technologies', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('council_id');
-                $table->integer('mission_science_technology_id');
+                $table->integer('mission_id');
                 $table->timestamps();
             });
         }

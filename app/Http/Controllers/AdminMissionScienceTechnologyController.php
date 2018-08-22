@@ -343,6 +343,7 @@ class AdminMissionScienceTechnologyController extends Controller
 
 
     public function getListCouncil(Request $request) {
+      $mission = MissionScienceTechnology::find($request->get('mission_id'));
       // dd($request->get('round_collection_id') . '-' . $request->get('group_council_id'));
       if (null != $request->get('round_collection_id') && null != $request->get('group_council_id')) {
 
@@ -382,7 +383,14 @@ class AdminMissionScienceTechnologyController extends Controller
 
           return $round_collection->year . '-' . $round_collection->name;
         })
-        ->addColumn('action', function($council) {
+        ->addColumn('action', function($council) use ($mission) {
+          // $council_mission = $mission->council->first();
+          // if ($council_mission != null) {
+          //   $id_council = $council_mission->council_id;
+          //   if ($council->id == $id_council) {
+          //     return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'" checked>';
+          //   }
+          // }
           return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'">';
         })
         ->make(true);
@@ -401,38 +409,17 @@ class AdminMissionScienceTechnologyController extends Controller
     }
 
     public function addCouncil(Request $request) {
-      $data =  $request->only(['council_id', 'mission_science_technology_id']);
 
-      if ($data['council_id'] == null || $data['mission_science_technology_id'] == null) {
-          return response()->json([
-            'error' =>  true,
-            'message' =>  'Vui lòng chọn đầy đủ thông tin',
-          ]); 
-      }
-      else {
-        try {
-          DB::beginTransaction();
+      $data['council_id'] =  $request->get('council_id');
 
-          CouncilMissionScienceTechnology::create([
-            'council_id' => $data['council_id'], 'mission_science_technology_id' =>$data['mission_science_technology_id']
-          ]);
+      $data['mission_id'] =  $request->get('mission_science_technology_id');
+      
+      $data['mission_council']  = 'App\Models\CouncilMissionScienceTechnology';
 
-          DB::commit();
+      $result = AdminMission::addCouncil($data);
 
-          return response()->json([
-              'error' =>  false,
-              'message' =>  'Thêm hội đồng thành công',
-          ]);
-        }
-         catch(Exception $e) {
-            DB::rollback();
+      return response()->json($result);
 
-          return response()->json([
-            'error' =>  true,
-            'message'   =>  $e->getMessage()
-          ]);
-         }
-      }
     }
 
     public function show($key)

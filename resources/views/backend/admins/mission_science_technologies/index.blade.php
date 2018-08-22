@@ -506,6 +506,8 @@
         <div class="modal-body">
 
           <div class="row form-group">
+            <input type="hidden" id="add_council_mission_id">
+            <input type="hidden" id="round_collection_id">
             <div class="col-md-2 search-label" style="text-align: left !important"><label>Nhóm:</label></div>
             <div class="col-md-6">
               <select name="group_council" id="group_council" class="form-control"> 

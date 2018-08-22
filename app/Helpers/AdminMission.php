@@ -375,6 +375,63 @@ class AdminMission {
 		return $data;
 	}
 
+
+	public static function addCouncil($data) {
+
+		if ($data['council_id'] == null || $data['mission_id'] == null) {
+          return $result = [
+            'error' =>  true,
+            'message' =>  'Vui lòng chọn đầy đủ thông tin',
+          ]; 
+      }
+      else {
+        try {
+          DB::beginTransaction();
+
+          $mission_council = $data['mission_council']::where('mission_id', $data['mission_id'])->get();
+
+          if ($mission_council->count() >= 1) {
+
+          	$mission_council = $mission_council->first();
+
+          	$mission_council->council_id = $data['council_id'];
+
+          	$mission_council->save();
+
+          	DB::commit();
+
+          	return $result = [
+              'error' =>  false,
+              'message' =>  'Cập nhật thành công',
+          ];
+
+          }
+          else {
+          		$data['mission_council']::create([
+	            'council_id' => $data['council_id'], 'mission_id' => $data['mission_id']
+	          ]);
+
+          		DB::commit();
+
+          		return $result = [
+	              'error' =>  false,
+	              'message' =>  'Thêm hội đồng thành công',
+	          ];
+          }
+
+        }
+
+         catch(Exception $e) {
+            DB::rollback();
+
+          return $result = [
+            'error' =>  true,
+            'message'   =>  $e->getMessage()
+          ];
+         }
+      }
+    }
+
 	public static function submitAssign($data) {
 		DB::beginTransaction();
 
@@ -422,5 +479,6 @@ class AdminMission {
 	          'msg'   =>  $e->getMessage()
 	        ]);
       	}
+
 	}
 }

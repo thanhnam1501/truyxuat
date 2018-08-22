@@ -329,15 +329,20 @@ $(document).ready(function() {
     e.preventDefault();
     
    $('#addCouncilModal').modal('show'); 
+
    var id = $(this).data('id');
+
+   $('#add_council_mission_id').val(id);
    $.ajax({
      url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
      type: 'GET',
      success: function(res) {
+
         $('#add-council-submit-btn').attr('data-mission_id', id);
         $('#round_collection').html(res.year + ' - ' + res.name);
         $('#year_round_collection').html(res.year);
-        $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        // $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        $('#round_collection_id').val(res.id);
 
         $('#list-council-tbl').DataTable().destroy();
         $('#list-council-tbl').DataTable({
@@ -348,6 +353,7 @@ $(document).ready(function() {
             url: app_url + 'admin/mission-science-technologys/get-list-council',
             type: 'post',
             data: {
+              mission_id : id,
               round_collection_id : res.id,
               group_council_id: $('#group_council').val(),
             }
@@ -371,7 +377,7 @@ $(document).ready(function() {
   $('#group_council').on('change', function() {
     var group_council_id = $(this).val();
 
-    var round_collection_id = $('#list-council-tbl').data('round_colection_id');
+    var round_collection_id = $('#round_collection_id').val();
 
     $('#list-council-tbl').DataTable().destroy();
 
