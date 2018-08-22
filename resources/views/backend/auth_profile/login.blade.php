@@ -219,11 +219,7 @@
 			<div class="col-md-12" style="margin-top: 10px">
 				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
 			</div>
-			<div class="col-md-12" style="margin-top: 10px">
 
-				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
-
- 			</div>
 		</div>
 	</form>
 </div>
