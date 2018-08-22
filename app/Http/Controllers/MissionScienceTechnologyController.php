@@ -573,9 +573,19 @@ class MissionScienceTechnologyController extends Controller
         ]);
       }
 
-      $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_01', 'mission_science_technologies');
+      $checkBeforeSubmitEle = Self::checkBeforeSubmitEle($mission->id);
 
-      $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_02', 'mission_science_technologies');
+      if ($checkBeforeSubmitEle['error']) {
+          return response()->json([
+            'error' => true,
+            'collectName' => $checkBeforeSubmitEle['collectName'],
+            'modal'  => true,
+          ]);
+      }
+
+      // $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_01', 'mission_science_technologies');
+
+      // $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_02', 'mission_science_technologies');
 
       // if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
       //     return response()->json([
@@ -625,5 +635,38 @@ class MissionScienceTechnologyController extends Controller
       ]);
     }
 
+  }
+
+  public function checkBeforeSubmitEle($id)
+  { 
+    $topic = MissionScienceTechnology::find($id);
+
+    $collectName = collect();
+
+    $error = false;
+
+    if (!empty($topic)) {
+        
+      foreach ($topic->values as $value) {
+          
+        if (empty($value->value)) {
+          
+          if ($value->mission_science_technology_attribute_id == 15 || $value->mission_science_technology_attribute_id == 16 || $value->mission_science_technology_attribute_id == 12) {
+            continue;
+          }
+
+          $column = MissionScienceTechnologyAttribute::find($value->mission_science_technology_attribute_id)->label;
+
+          $collectName->push($column);
+
+          $error = true;
+        }
+      }
+    }
+
+    return [
+      'error' => $error,
+      'collectName' => $collectName,
+    ];
   }
 }

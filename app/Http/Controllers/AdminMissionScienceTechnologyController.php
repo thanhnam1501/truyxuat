@@ -26,6 +26,7 @@ use App\Models\CouncilMissionScienceTechnology;
 
 use Auth;
 use DB;
+use Crypt;
 use Datatables;
 use Entrust;
 use AdminMission;
@@ -171,7 +172,7 @@ class AdminMissionScienceTechnologyController extends Controller
           $string = "";
 
           if (Entrust::can('view-detail')) {
-            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs'><i class='fa fa-eye'></i></a>";
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' href='".route('admin.mission-science-technologys.detail',$topic->key)."' target='_blank'><i class='fa fa-eye'></i></a>";
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
@@ -230,17 +231,6 @@ class AdminMissionScienceTechnologyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
     {
         //
     }
@@ -409,52 +399,11 @@ class AdminMissionScienceTechnologyController extends Controller
     
     public function submitAssign(Request $request) {
       $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id');
-      DB::beginTransaction();
+      $data['mission_table']  = 'mission_science_technologies';
 
-      try {
-        UserHandleFile::create([
-          'admin_id'  =>  $data['admin_id'],
-          'user_id'   =>  $data['user_id'],
-          'mission_id'  =>  $data['mission_id'],
-          'mission_table' =>  'mission_science_technologies',
-          'deadline'  =>  $data['deadline'],
-          'note'  =>  $data['note']
-        ]);
+      $result = AdminMission::submitAssign($data);
 
-        $mission = MissionScienceTechnology::find($data['mission_id']);
-        $old_data = $mission;
-
-        $mission->update([
-          'is_assign' =>  1
-        ]);
-
-        $new_data = $mission;
-
-        $arr = [
-           'content'  =>  'Giao hồ sơ cho chuyên viên kiểm tra hợp lệ',
-           'admin_id' => $data['admin_id'],
-           'old_data' =>  json_encode($old_data),
-           'new_data' =>  json_encode($new_data),
-           'table_name' =>  'mission_science_technologies',
-           'record_id'  =>  $data['mission_id']
-         ];
-      
-        ApplyLog::createLog($arr);
-
-        DB::commit();
-
-        return response()->json([
-          'error' =>  false,
-          'msg'   =>  'Giao thành công !'
-        ]);
-      } catch (Exception $e) {
-        DB::rollback();
-
-        return response()->json([
-          'error' =>  true,
-          'msg'   =>  $e->getMessage()
-        ]);
-      }
+      return $result;
 
 
     }
@@ -471,5 +420,45 @@ class AdminMissionScienceTechnologyController extends Controller
 
       return response()->json($result);
 
+    }
+
+    public function show($key)
+    {   $st_key = $key;
+        $mission = MissionScienceTechnology::where('key', $key)->first();
+
+        $columns = MissionScienceTechnologyAttribute::all();
+
+        $data = array();
+
+        foreach ($columns as $key => $column) {
+          foreach ($mission->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $column->id) {
+              if ($column->column == 'expected_fund') {
+                // if (!empty($value->value)) {
+                    $value->value = (!empty($value->value))? number_format(Crypt::decrypt($value->value))." VNĐ" :"0 VNĐ";
+                // }
+
+              }
+              $data[$key]['order']  = $column->order;
+              $data[$key]['value']  = $value->value;
+              $data[$key]['label']  = $column->label;
+              $data[$key]['column'] = $column->column;
+              $data[$key]['parent_attribute_id'] = $column->parent_attribute_id;
+            }
+          }
+        }
+
+        $date = array();
+
+        $date['d'] = date('d',strtotime(now()));
+        $date['m'] = date('m',strtotime(now()));
+        $date['y'] = date('Y',strtotime(now()));
+
+        $is_filled = $mission->is_filled == 1 ? true : false;
+
+        $is_submit_ele_copy = $mission->is_submit_ele_copy;
+        $is_submit_hard_copy = $mission->is_submit_hard_copy;
+
+        return view('backend.admins.mission_science_technologies.detail', compact('is_submit_hard_copy', 'is_submit_ele_copy', 'data', 'key', 'st_key','date', 'is_filled'));
     }
 }
