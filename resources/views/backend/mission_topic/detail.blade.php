@@ -82,7 +82,7 @@
 
           @if (!$topic->is_submit_ele_copy)
 
-            <button class="btn btn-info" id="btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
+            <button class="btn btn-info btn_submit_ele_copy" id="" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
 
               <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
             </button>
@@ -105,6 +105,26 @@
   </div>
 </form>
 
+  <div class="modal fade" id="null-field-mdl">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Nhập đầy đủ các trường sau và lưu thông tin trước khi nộp bản mềm</h4>
+        </div>
+        <div class="modal-body">
+          <h5>
+          <ul id="collectName">
+            
+          </ul>
+        </h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @section('footer')
