@@ -22,6 +22,7 @@ use App\Models\RoleUser;
 use App\Models\Role;
 use App\Models\UserHandleFile;
 use App\Models\ApplyLog;
+use App\Models\CouncilMissionScienceTechnology;
 
 use Auth;
 use DB;
@@ -44,6 +45,7 @@ class AdminMissionScienceTechnologyController extends Controller
     {
         $round_collection = RoundCollection::where('status', 1)->get();
         $group_councils = GroupCouncil::where('status', 1)->get();
+
         $date = [
           'd' =>  date('d', strtotime(now())),
           'm' =>  date('m', strtotime(now())),
@@ -62,7 +64,7 @@ class AdminMissionScienceTechnologyController extends Controller
             ->  where('role_users.role_id', 5)
             ->  get();
 
-        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file'));
+        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file', 'group_councils'));
 
     }
 
@@ -352,6 +354,7 @@ class AdminMissionScienceTechnologyController extends Controller
 
 
     public function getListCouncil(Request $request) {
+      // dd($request->get('round_collection_id') . '-' . $request->get('group_council_id'));
       if (null != $request->get('round_collection_id') && null != $request->get('group_council_id')) {
 
         $round_collection_id = $request->get('round_collection_id');
@@ -391,7 +394,7 @@ class AdminMissionScienceTechnologyController extends Controller
           return $round_collection->year . '-' . $round_collection->name;
         })
         ->addColumn('action', function($council) {
-          return '<input type="radio" name="council_id" value="'.$council->id.'">';
+          return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'">';
         })
         ->make(true);
       }
@@ -447,5 +450,40 @@ class AdminMissionScienceTechnologyController extends Controller
       }
 
 
+    }
+
+    public function addCouncil(Request $request) {
+      $data =  $request->only(['council_id', 'mission_science_technology_id']);
+
+      if ($data['council_id'] == null || $data['mission_science_technology_id'] == null) {
+          return response()->json([
+            'error' =>  true,
+            'message' =>  'Vui lòng chọn đầy đủ thông tin',
+          ]); 
+      }
+      else {
+        try {
+          DB::beginTransaction();
+
+          CouncilMissionScienceTechnology::create([
+            'council_id' => $data['council_id'], 'mission_science_technology_id' =>$data['mission_science_technology_id']
+          ]);
+
+          DB::commit();
+
+          return response()->json([
+              'error' =>  false,
+              'message' =>  'Thêm hội đồng thành công',
+          ]);
+        }
+         catch(Exception $e) {
+            DB::rollback();
+
+          return response()->json([
+            'error' =>  true,
+            'message'   =>  $e->getMessage()
+          ]);
+         }
+      }
     }
 }

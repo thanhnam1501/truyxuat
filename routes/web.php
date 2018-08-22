@@ -98,6 +98,9 @@ Route::middleware('revalidate')->group(function () {
             Route::post('mission-science-technologys/get-list-council','AdminMissionScienceTechnologyController@getListCouncil')->name('mission-science-technologys.getListCouncil');
 
 
+            Route::post('mission-science-technologys/add-council','AdminMissionScienceTechnologyController@addCouncil')->name('mission-science-technologys.addCouncil');
+
+
             Route::get('position-councils/get-list', 'PositionCouncilController@getList')->name('position-councils.get-list');
 
             Route::resource('position-councils', 'PositionCouncilController');

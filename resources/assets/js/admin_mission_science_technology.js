@@ -334,6 +334,7 @@ $(document).ready(function() {
      url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
      type: 'GET',
      success: function(res) {
+        $('#add-council-submit-btn').attr('data-mission_id', id);
         $('#round_collection').html(res.year + ' - ' + res.name);
         $('#year_round_collection').html(res.year);
         $('#list-council-tbl').attr('data-round_colection_id', res.id);
@@ -467,4 +468,40 @@ $(document).ready(function() {
     
   });
 
+  $('#add-council-submit-btn').on('click', function() {
+
+    if (IsNull($('input[name=council_id]:checked').val())) {
+      toastr.error('Vui lòng chọn hội đồng');
+      return ;
+    }
+    else {
+      var council_id = $('input[name=council_id]:checked').val();
+      var mission_science_technology_id = $('#add-council-submit-btn').data('mission_id');
+
+      $.ajax({
+        url: app_url + 'admin/mission-science-technologys/add-council',
+        type: 'post',
+        data: {
+          council_id: council_id,
+          mission_science_technology_id: mission_science_technology_id,
+        },
+        success: function(res) {
+          if (!res.error) {
+            $('#addCouncilModal').modal('hide');
+            toastr.success(res.message);
+            $('#science-technology-tbl').DataTable().ajax.reload();
+            
+          }
+          else {
+            toastr.error(res.message);
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
+      });
+      
+    }
+
+  })
 });

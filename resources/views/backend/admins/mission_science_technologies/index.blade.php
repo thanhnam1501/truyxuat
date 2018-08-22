@@ -501,7 +501,7 @@
         <div class="modal-header">
           {{-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> --}}
 
-          <center><h4 class="modal-title" id="">CHỌNG HỘI ĐỒNG ĐÁNH GIÁ</h4> </center>
+          <center><h4 class="modal-title" id="">CHỌN HỘI ĐỒNG ĐÁNH GIÁ</h4> </center>
         </div>
         <div class="modal-body">
 
@@ -543,10 +543,12 @@
                       </tr>
                     </thead>
                   </table>
+
+                  {{-- <span class="error">Vui lòng chọn hội đồng</span> --}}
           </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
-          <button type="button" class="btn btn-success" id="add-council-submit-btn" data-id="">Lưu thông tin</button>
+          <button type="button" class="btn btn-success" id="add-council-submit-btn">Lưu thông tin</button>
         </div>
       </div>
     </div>

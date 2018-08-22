@@ -66,4 +66,8 @@ class MissionScienceTechnology extends Model
   {
     return $this->belongsTo('App\Models\Profile','profile_id');
   }
+
+  public function council () {
+    return $this->belongsToMany('App\Models\Council', 'council_mission_science_technologies', 'mission_science_technology_id', 'council_id');
+  }
 }
