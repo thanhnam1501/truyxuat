@@ -5,7 +5,7 @@ $(document).ready(function() {
       serverSide: true,
       ajax: {
         url: app_url + 'admin/mission-science-technologies/get-list',
-        type: 'post',
+        type: 'POST',
       },
       ordering: false,
       columns: [
@@ -509,5 +509,78 @@ $(document).ready(function() {
       
     }
 
-  })
+  });
+
+  $('#btn-search-mission').on('click', function(event) {
+    event.preventDefault();
+
+    $('#science-technology-tbl').DataTable().destroy();
+
+    $('#science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list',
+        type: 'POST',
+        data: {
+          data: $('#search-mission-frm').serialize(),
+          filter: true
+        }
+      },
+      ordering: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'values', name: 'values.value', width: '228px'},
+        {data: 'profile', name: 'profile.email', width: '110px'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+        {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
+        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+        {data: 'is_assign', name: 'is_assign', 'class':'text-center', width: '80px'},
+        {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
+        {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
+        {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+      ]
+    });
+
+  });
+
+  $('#science-technology-tbl').on('click', '.btn-give-back-hard-copy', function(event){
+    event.preventDefault();
+
+    swal({
+      title: "Bạn có chắc chắn muốn trả lại bản cứng?",
+      icon: "warning",
+      buttons: ['Hủy','Đồng ý'],
+      confirmButtonColor: "#1caf9a",
+      })
+      .then((willDelete) => {
+      if (willDelete) {
+        $.ajax({
+            type: "POST",
+            url:  app_url + "admin/mission-science-technologies/give-back-hard-copy",
+            data: {
+              id: $(this).data('id'),
+            },
+            success: function(res)
+            {
+              // console.log(res);
+              if (!res.error) {
+
+                toastr.success(res.msg);
+
+                $('#science-technology-tbl').DataTable().ajax.reload();
+
+              } else {
+
+                toastr.error(res.msg);
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              toastr.error(thrownError);
+            }
+        });
+      }
+    });
+  });
 });

@@ -490,4 +490,47 @@ class AdminMission {
       	}
 
 	}
+
+	public static function giveBackHardCopy($data){
+
+		DB::beginTransaction();
+
+      	try {
+
+	        $mission = $data['model']::find($data['id']);
+	        $old_data = $mission;
+
+	        $mission->update([
+	          'is_submit_hard_copy' =>  0,
+	          'time_submit_hard_copy'	=>	null
+	        ]);
+
+	        $new_data = $mission;
+
+	        $arr = [
+	           'content'  =>  'Trả lại bản cứng',
+	           'admin_id' =>  Auth::guard('web')->user()->id,
+	           'old_data' =>  json_encode($old_data),
+	           'new_data' =>  json_encode($new_data),
+	           'table_name' =>  $data['mission_table'],
+	           'record_id'  =>  $data['id']
+	         ];
+	      
+	        ApplyLog::createLog($arr);
+
+	        DB::commit();
+
+	        return response()->json([
+	          'error' =>  false,
+	          'msg'   =>  'Trả bản cứng thành công !'
+	        ]);
+      	} catch (Exception $e) {
+	        DB::rollback();
+
+	        return response()->json([
+	          'error' =>  true,
+	          'msg'   =>  $e->getMessage()
+	        ]);
+      	}
+	}
 }
