@@ -519,9 +519,9 @@ $(document).ready(function() {
       type: 'post',
       data: data,
       success:function(res) {
-        console.log(res);
+      
         if (!res.error) {
-          toastr.success('Đánh giá thành công');
+          toastr.success(res.message);
           setTimeout(function () {
               window.location.href = app_url + 'admin/mission-science-technologies';
           }, 1000);    
