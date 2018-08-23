@@ -41,6 +41,7 @@ $(document).ready(function() {
             url:  app_url + "admin/mission-science-technologies/submit-hard-copy",
             data: {
               id: $(this).data('id'),
+              mission_name: $(this).data('name')
             },
             success: function(res)
             {

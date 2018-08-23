@@ -248,7 +248,7 @@ class AdminMissionScienceTechnologyController extends Controller
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
+            $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
           }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
@@ -364,7 +364,7 @@ class AdminMissionScienceTechnologyController extends Controller
     }
 
     public function submitHardCopy(Request $request) {
-      $data = $request->only('id');
+      $data = $request->only('id', 'mission_name');
 
       $data['table_name'] = 'mission_science_technologies';
       $data['form'] = 'A3';
