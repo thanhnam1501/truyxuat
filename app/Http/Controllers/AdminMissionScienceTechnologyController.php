@@ -224,6 +224,12 @@ class AdminMissionScienceTechnologyController extends Controller
             
           }
 
+          if (Entrust::can(['evaluation-doc'])) {
+
+              $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+            
+          }
+
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
 
@@ -488,5 +494,45 @@ class AdminMissionScienceTechnologyController extends Controller
         $is_submit_hard_copy = $mission->is_submit_hard_copy;
 
         return view('backend.admins.mission_science_technologies.detail', compact('is_submit_hard_copy', 'is_submit_ele_copy', 'data', 'key', 'st_key','date', 'is_filled'));
+    }
+
+    public function evaluation($key){
+       return view('backend.admins.mission_science_technologies.evaluation-form');
+    }
+
+    public function storeEvaluation(Request $request) {
+      // $content = array([
+      //   'comment_evaluation'  => array([
+      //                               '1.1' =>  array([
+      //                                    'note' =>  '...',
+      //                                    'rate' =>  0 hoặc 1 
+      //                               ]),
+
+      //                               '1.2' =>  array([
+      //                                    'note' =>  '...',
+      //                                    'rate' =>  0 hoặc 1 
+      //                               ]),
+
+      //                               '1.3' =>  array([
+      //                                    'note' =>  '...',
+      //                                    'rate' =>  0 hoặc 1 
+      //                               ]),
+      //                             ]);
+
+      //   'expert_opinions'  => array([
+      //                               'perform' =>  0 hoặc 1,
+
+      //                               'not_perform' => 0 hoặc 1,
+
+      //                               'perform_with_request' => 0 hoặc 1,
+
+      //                               'request' =>  array([
+      //                                   'name'  =>  '....',
+      //                                   'target'  =>  '....',
+      //                                   'result'  =>  '...',
+      //                               ]),
+                                    
+      //                             ]);
+      // ]);     
     }
 }
