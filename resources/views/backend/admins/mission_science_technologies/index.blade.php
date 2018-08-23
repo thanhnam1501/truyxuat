@@ -24,6 +24,8 @@
 
 @section('content')
         <div class="panel panel-default">
+          <form role="form" enctype="multipart/form-data" id="search-mission-frm">
+          
           <div class="panel-heading">
             <h3 class="panel-title">
               <strong><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;Lọc dữ liệu</strong>
@@ -36,12 +38,14 @@
                   <label for="">Đợt gọi hồ sơ</label>
                 </div>
                 <div class="col-md-9">
-                  <select class="form-control">
-                    @if (isset($round_collection)) @foreach($round_collection as $value)
-                      <option>Mời chọn đợt gọi hồ sơ</option>
+                  <select class="form-control" name="round_collection" id="round_collection">
+                    @if (isset($round_collection))
+                      <option value="-1">Mời chọn đợt gọi hồ sơ</option>
+                      @foreach($round_collection as $value)
+                      
                       <option value="{{ $value['id'] }}">{{ $value['name'] }} - {{ $value['year'] }}</option>
                     @endforeach @else
-                      <option>Không có đợt gọi hồ sơ nào</option>
+                      <option value="-1">Không có đợt gọi hồ sơ nào</option>
                     @endif
                   </select>
                 </div>
@@ -52,7 +56,7 @@
                   <label for="">Tên nhiệm vụ</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="">
+                  <input type="text" class="form-control" placeholder="" name="mission_name" value="">
                 </div>
               </div>
 
@@ -61,76 +65,73 @@
                   <label for="">Đơn vị</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="">
+                  <input type="text" class="form-control" placeholder="" name="organization" value="">
                 </div>
               </div>
 
               <div class="form-group col-md-12">
+                  <div class="col-md-3 search-label">
+                    <label for="">TT nộp hồ sơ</label>
+                  </div>
+                  <div class="col-md-9">
+                    <select class="form-control" name="status_submit_hard_copy">
+                      <option value="-1">Tất cả</option>
+                      <option value="1">Đã nộp bản cứng</option>
+                      <option value="0">Chưa nộp bản cứng</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
-                  <label for="">Năm</label>
+                  <label for="">TT giao hồ sơ</label>
                 </div>
                 <div class="col-md-9">
-                  <select class="form-control">
-                    @if (isset($round_collection)) @foreach($round_collection as $value)
-                      <option>Mời chọn năm</option>
-                      <option data-id="{{ $value['id'] }}">{{ $value['name'] }} - {{ $value['year'] }}</option>
-                    @endforeach @else
-                      <option>Không có năm nào</option>
-                    @endif
+                  <select class="form-control" name="status_submit_is_assign">
+                    <option value="-1">Tất cả</option>
+                      <option value="1">Đã giao cho chuyên viên</option>
+                      <option value="0">Chưa giao cho chuyên viên</option>
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
+                
 
                 <div class="form-group col-md-12">
                   <div class="col-md-3 search-label">
-                    <label for="">Trạng thái nộp</label>
+                    <label for="">TT hợp lệ</label>
                   </div>
                   <div class="col-md-9">
-                    <select class="form-control">
-                      <option value="">Trạng thái</option>
-                      <option value="ele">Đã nộp bản mềm</option>
-                      <option value="hard">Đã nộp bản cứng</option>
+                    <select class="form-control" name="status_submit_is_valid">
+                      <option value="-1">Tất cả</option>
+                      <option value="1">Hợp lệ</option>
+                      <option value="0">Không hợp lệ</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group col-md-12">
                   <div class="col-md-3 search-label">
-                    <label for="">Trạng thái hồ sơ</label>
+                    <label for="">TT đánh giá</label>
                   </div>
                   <div class="col-md-9">
-                    <select class="form-control">
-                      <option value="">Trạng thái hồ sơ</option>
-                      <option value="true">Hợp lệ</option>
-                      <option value="false">Không hợp lệ</option>
+                    <select class="form-control" name="status_submit_is_judged">
+                      <option value="-1">Tất cả</option>
+                      <option value="1">Được đánh giá trong hội đồng</option>
+                      <option value="0">Không được đưa vào hội đồng đánh giá</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group col-md-12">
                   <div class="col-md-3 search-label">
-                    <label for="">Trạng thái BCN</label>
+                    <label for="">TT phê duyệt</label>
                   </div>
                   <div class="col-md-9">
-                    <select class="form-control">
-                      <option value="">Chưa cập nhật</option>
-                      <option value="ele">Được đánh giá trong hội đồng</option>
-                      <option value="hard">Không được đưa vào hội đồng đánh giá</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group col-md-12">
-                  <div class="col-md-3 search-label">
-                    <label for="">Phê duyệt</label>
-                  </div>
-                  <div class="col-md-9">
-                    <select class="form-control">
-                      <option value="">Chưa cập nhật</option>
-                      <option value="ele">Được phê duyệt thực hiện</option>
-                      <option value="hard">Không được phê duyệt thực hiện</option>
+                    <select class="form-control" name="status_submit_is_performed">
+                      <option value="-1">Tất cả</option>
+                      <option value="1">Được phê duyệt thực hiện</option>
+                      <option value="0">Không được phê duyệt thực hiện</option>
                     </select>
                   </div>
                 </div>
@@ -142,12 +143,14 @@
                 <div class="col-md-12">
                   <div class="col-md-12">
                     <div class="col-md-12">
-                      <button type='submit' class='btn btn-lg btn-success'><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;Lọc dữ liệu</button>
+                      <button type='button' class='btn btn-lg btn-success' id="btn-search-mission"><i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;Lọc dữ liệu</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+          </form>
           </div>
 
           <div class="panel panel-default">

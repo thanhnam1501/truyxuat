@@ -231,6 +231,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/upload-list-categories', 'AdminMissionScienceTechnologyController@uploadListCategories')->name('admin.mission-science-technologies.uploadListCategories');
             Route::post('/view-detail', 'AdminMissionScienceTechnologyController@viewDetail')->name('admin.mission-science-technologies.viewDetail');
             Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
+            Route::post('/give-back-hard-copy', 'AdminMissionScienceTechnologyController@giveBackHardCopy')->name('admin.mission-science-technologies.giveBackHardCopy');
         });
         //* End
 
