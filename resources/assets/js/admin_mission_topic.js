@@ -25,7 +25,7 @@ $(document).ready(function() {
   });
 
   $('#topic-tbl').on('click','.submit-hard-copy-btn', function() {
-    
+
     swal({
       title: "Bạn có chắc chắn nhận bản cứng hoàn thiện của hồ sơ này?",
       icon: "info",
@@ -344,7 +344,7 @@ $(document).ready(function() {
 
             $("#modal-assign").modal("hide");
 
-            $("#science-technology-tbl").DataTable().ajax.reload();
+            $("#topic-tbl").DataTable().ajax.reload();
           }
         }
       }, error: function (err){
@@ -375,7 +375,7 @@ $(document).ready(function() {
           if (!res.error) {
             $('#addCouncilModal').modal('hide');
             toastr.success(res.message);
-            $('#science-technology-tbl').DataTable().ajax.reload();
+            $('#topic-tbl').DataTable().ajax.reload();
             
           }
           else {
