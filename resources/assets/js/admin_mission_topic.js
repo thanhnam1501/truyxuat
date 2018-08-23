@@ -25,7 +25,7 @@ $(document).ready(function() {
   });
 
   $('#topic-tbl').on('click','.submit-hard-copy-btn', function() {
-
+    
     swal({
       title: "Bạn có chắc chắn nhận bản cứng hoàn thiện của hồ sơ này?",
       icon: "info",
@@ -39,6 +39,7 @@ $(document).ready(function() {
             url:  app_url + "admin/mission-topics/submit-hard-copy",
             data: {
               id: $(this).data('id'),
+              mission_name: $(this).data('name')
             },
             success: function(res)
             {

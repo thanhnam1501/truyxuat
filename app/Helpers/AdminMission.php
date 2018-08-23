@@ -9,6 +9,8 @@ use App\Models\ApplyLog;
 use App\Models\MissionScienceTechnologyAttribute;
 use App\Models\MissionScienceTechnology;
 use App\Models\UserHandleFile;
+use App\Models\Email;
+use App\Models\Profile;
 use App\Models\EvaluationForm;
 use Crypt;
 
@@ -32,7 +34,9 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic->get()[0];	
+			$old_data = $topic->get()[0];
+			$id_profile = $old_data->profile_id;
+
 			if ($topic->exists()) {
 				
 				DB::beginTransaction();
@@ -60,17 +64,32 @@ class AdminMission {
 					$new_data = $topic->get()[0];
 
 					//* Create logs *//
-		      $arr = [
-		          'admin_id' => Auth::guard('web')->user()->id,
-		          'content'    => 'Xác nhận thu hồ sơ bản cứng',
-		          'old_data'   => json_encode($old_data),
-		          'new_data'   => json_encode($new_data),
-		          'table_name' => 'mission_science_technologies',
-		          'record_id'  => $data['id']
-		        ];
-		      ApplyLog::createLog($arr);
+			        $arr = [
+			          'admin_id' => Auth::guard('web')->user()->id,
+			          'content'    => 'Xác nhận thu hồ sơ bản cứng',
+			          'old_data'   => json_encode($old_data),
+			          'new_data'   => json_encode($new_data),
+			          'table_name' => 'mission_science_technologies',
+			          'record_id'  => $data['id']
+			        ];
+			        ApplyLog::createLog($arr);
 					//* End
 
+			      	// send email to user
+			      	// $id = $topic->profile_id;
+			      	$profile = Profile::find($id_profile);
+			      	$to = $profile->email;
+			      	$subject = "Thông báo trạng thái thu hồ sơ bản cứng";
+			      	$view = "emails.status_file";
+			      	$parameter = [
+			      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
+			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng thuộc nhiệm vụ: " '.$data['mission_name'].' " đã được thu.'
+			      	];
+			      	$type = 2;
+			      	$status = 2;
+			      	$numb = 0;
+			      	Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+			      	// end
 					DB::commit();
 
 			    return $result = [
