@@ -354,7 +354,7 @@ class AdminProfileController extends Controller
 
     $view = null;
 
-    $type = null;
+    $type = 0;
 
     $status = null;
 
