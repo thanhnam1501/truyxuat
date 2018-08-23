@@ -153,16 +153,16 @@ $(document).ready(function() {
         required: true,
         minlength: 10
       },
-      evaluation_form_01 : {
-        requiredFile: true,
-        extension: 'pdf',
-        filesize: max_file_size,
-      },
-      evaluation_form_02 : {
-        requiredFile: true,
-        extension: 'pdf',
-        filesize: max_file_size,
-      },
+      // evaluation_form_01 : {
+      //   requiredFile: true,
+      //   extension: 'pdf',
+      //   filesize: max_file_size,
+      // },
+      // evaluation_form_02 : {
+      //   requiredFile: true,
+      //   extension: 'pdf',
+      //   filesize: max_file_size,
+      // },
     },
     messages: {
       name: {
@@ -221,27 +221,27 @@ $(document).ready(function() {
         required: "Dự kiến nhu cầu kinh phí không được bỏ trống",
         minCustom: jQuery.validator.format("Dự kiến nhu cầu kinh phí phải lớn hơn {0}")
       }
-      ,evaluation_form_01 : {
-        requiredFile: '(*) Vui lòng đính kèm file',
-        extension: 'Chỉ file .pdf được chấp nhận',
-        filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
-      }
-      ,evaluation_form_02 : {
-        requiredFile: '(*) Vui lòng đính kèm file',
-        extension: 'Chỉ file .pdf được chấp nhận',
-        filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
-      },
+      // ,evaluation_form_01 : {
+      //   requiredFile: '(*) Vui lòng đính kèm file',
+      //   extension: 'Chỉ file .pdf được chấp nhận',
+      //   filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
+      // }
+      // ,evaluation_form_02 : {
+      //   requiredFile: '(*) Vui lòng đính kèm file',
+      //   extension: 'Chỉ file .pdf được chấp nhận',
+      //   filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
+      // },
     }
   });
 
   $('#update-science-technology-btn').on('click', function() {
 
-    if ($('#frm-update-mission-science-technology').length > 0) {
-      if (!$('#frm-update-mission-science-technology').valid()) {
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
 
-        return false;
-      }
-    }
+    //     return false;
+    //   }
+    // }
 
     var formData = new FormData($('#frm-update-mission-science-technology')[0]);
 
@@ -326,40 +326,52 @@ $(document).ready(function() {
 
   });
 
-  $('.evaluation_form').on('change', function() {
-    var fd = new FormData();
-    order = $(this).data('order');
-    fd.append('file', $(this)[0].files[0]);
-    fd.append('order', order);
-    fd.append('key', $('#key').val());
+  // $('.evaluation_form').on('change', function() {
+  //   var fd = new FormData();
+  //   order = $(this).data('order');
+  //   fd.append('file', $(this)[0].files[0]);
+  //   fd.append('order', order);
+  //   fd.append('key', $('#key').val());
 
-    $.ajax({
-      cache: false,
-      contentType: false,
-      processData: false,
-      url: app_url + 'mission-science-technology/uploadFile',
-      type: 'Post',
-      data: fd,
-      success: function(res) {
-        if (res.error) {
-          // console.log(res);
-          toastr.error(res.message);
-        }
-      }
-    });
+  //   $.ajax({
+  //     cache: false,
+  //     contentType: false,
+  //     processData: false,
+  //     url: app_url + 'mission-science-technology/uploadFile',
+  //     type: 'Post',
+  //     data: fd,
+  //     success: function(res) {
+  //       if (res.error) {
+  //         // console.log(res);
+  //         toastr.error(res.message);
+  //       }
+  //     }
+  //   });
 
-  });
+  // });
 
-  $('#btn_submit_ele_copy').on('click', function(event) {
-    event.preventDefault();
-    /* Act on the event */
-
+  $('.btn_submit_ele_copy').on('click', function(event) {
+    
     if ($('#frm-update-mission-science-technology').length > 0) {
       if (!$('#frm-update-mission-science-technology').valid()) {
+
+        $('#tab-form-btn').click();
+
+        toastr.error('Vui lòng nhập đầy đủ form đăng ký và lưu thông tin trước khi nộp bản mềm');
 
         return false;
       }
     }
+
+    event.preventDefault();
+    /* Act on the event */
+
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
+
+    //     return false;
+    //   }
+    // }
 
     var is_submit_ele_copy = $(this).attr('data-is_submit_ele_copy');
 
@@ -392,20 +404,24 @@ $(document).ready(function() {
                   location.reload();
                 }, 1000)
 
-              } else {
-                if (res.msg == "Not Filled") {
-                  swal({
-                    title: "Vui lòng điền đẩy đủ thông tin vào phiếu đăng ký nhiệm vụ !",
-                    text: "",
-                    icon: "warning",
-                    button: "Đóng",
-                    dangerMode: true,
-                  });
-                }else {
-                  toastr.error(res.msg);
+              }  else {
+
+                  if (res.modal) {
+                    $('#collectName').html('');
+                    for (var i = 0; i < res.collectName.length; i++) {
+                      $('#collectName').append('<li>'+res.collectName[i]+'</li>')
+                    }
+                    $('#null-field-mdl').modal('show');
+                  } else {
+                    toastr.error(res.msg);
+
+                  if (res.reload) {
+                    setTimeout(function() {
+                      location.reload();
+                    }, 1000)
+                  }
                 }
               }
-
             },
             error: function (xhr, ajaxOptions, thrownError) {
               toastr.error(thrownError);

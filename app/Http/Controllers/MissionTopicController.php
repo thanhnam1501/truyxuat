@@ -11,6 +11,7 @@ use App\Models\MissionTopicAttribute;
 use App\Models\MissionScienceTechnology;
 use App\Models\RoundCollection;
 use App\Models\ApplyLog;
+use App\Models\CouncilMissionTopic;
 use Money;
 use Auth;
 use Entrust;
@@ -235,7 +236,26 @@ class MissionTopicController extends Controller
     if (!empty($topic)) {
 
       $status_submit_ele_copy = $topic->is_submit_ele_copy == 1 ? "<p>Hồ sơ đã nộp bản mềm</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_ele_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản mềm</p>";
-      $status_submit_hard_copy = $topic->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>" : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+      $status_submit_hard_copy = $topic->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+
+      $doc_status = "";
+
+      if ($topic->is_assign) {
+          $doc_status = "<p>Hồ sơ đã được giao cho cán bộ xử lý</p>";
+      }
+
+      if ($topic->is_valid) {
+          
+          $doc_status = "<p>Hồ sơ hợp lệ</p>";
+      } else if ($topic->is_invalid) {
+
+          $doc_status = "<p class'error'>Hồ sơ không hợp lệ</p>";
+      }
+
+      if (CouncilMissionTopic::where('mission_id', $topic->id)->count() > 0) {
+          
+          $doc_status = "<p>Hồ sơ đã được giao cho hội đồng đánh giá</p>";
+      }
 
       $is_submit_ele_copy = $topic->is_submit_ele_copy;
       $is_submit_hard_copy = $topic->is_submit_hard_copy;
@@ -254,40 +274,46 @@ class MissionTopicController extends Controller
         'is_submit_ele_copy'  =>  $is_submit_ele_copy,
         'is_submit_hard_copy' =>  $is_submit_hard_copy,
         'date'  => $date,
+        'doc_status'  => $doc_status,
       ]);
     }
   }
 
   public function update(Request $request) {
 
-    $data = $request->all();
+    $data = $request->only('expected_fund','expected_main_content','expected_result_perform','id','key','name','propose_base','result_target_requirement','target','time_result_requirement','type','urgency');
 
     $fund = Money::format($data['expected_fund'], 'VNĐ');
 
     $data['expected_fund'] = Crypt::encrypt($fund);
 
-    $data['evaluation_form_01'] = '';
-    $data['evaluation_form_02'] = '';
+    // $data['evaluation_form_01'] = '';
+    // $data['evaluation_form_02'] = '';
 
     DB::beginTransaction();
     try {
 
       $topic = MissionTopic::find($data['id']);
 
-      $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
+      // $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
 
-      $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
+      // $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
 
-      if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
-          return response()->json([
-            'error' => true,
-            'message' => 'Vui lòng đính kèm file!'
-          ]);
-      }
+      // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+      //     return response()->json([
+      //       'error' => true,
+      //       'message' => 'Vui lòng đính kèm file!'
+      //     ]);
+      // }
 
       foreach ($topic->values as $key => $value) {
 
-        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)->first()->column;
+        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)
+                                    ->first()
+                                    ->column;
+        if ($column == "evaluation_form_02" || $column == "evaluation_form_01") {
+          continue;
+        }
 
         $value->value = $data[$column];
 
@@ -454,26 +480,52 @@ class MissionTopicController extends Controller
         $key = $request->key;
         $is_submit_ele_copy = $request->is_submit_ele_copy;
         $mission = MissionTopic::where('key', $key)->whereNull('deleted_at')->first();
-        $check_is_filled = $mission->is_filled == 1 ? true : false;
-        $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
 
-        if (!$check_is_filled) {
+        if ($mission->is_submit_hard_copy) {
+            return response()->json([
+              'error' => true,
+              'msg' => 'Hồ sơ đã thu bản cứng, không được sửa',
+              'reload'  => true,
+            ]);
+        }
+
+        if (!$mission->is_filled) {
           return response()->json([
-            'error' =>  true,
-            'msg'   =>  'Not Filled'
+            'error' => true,
+            'msg' => 'Vui lòng nhập đầy đủ form đăng ký và lưu thông tin trước khi nộp bản mềm',
           ]);
         }
 
-        $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_01', 'mission_topics');
+        $checkBeforeSubmitEle = Self::checkBeforeSubmitEle($mission->id);
 
-        $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_02', 'mission_topics');
-
-        if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
+        if ($checkBeforeSubmitEle['error']) {
             return response()->json([
               'error' => true,
-              'message' => 'Vui lòng đính kèm file!'
+              'collectName' => $checkBeforeSubmitEle['collectName'],
+              'modal'  => true,
             ]);
         }
+
+        //$check_is_filled = $mission->is_filled == 1 ? true : false;
+        $check_is_submit_ele_copy = $mission->is_submit_ele_copy == 1 ? true : false;
+
+        // if (!$check_is_filled) {
+        //   return response()->json([
+        //     'error' =>  true,
+        //     'msg'   =>  'Not Filled'
+        //   ]);
+        // }
+
+        // $evaluation_form_01  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_01', 'mission_topics');
+
+        // $evaluation_form_02  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $mission->id, 'evaluation_form_02', 'mission_topics');
+
+        // if (empty($evaluation_form_01) || empty($evaluation_form_02)) {
+        //     return response()->json([
+        //       'error' => true,
+        //       'message' => 'Vui lòng đính kèm file!'
+        //     ]);
+        // }
 
         $old_data = $mission;
 
@@ -491,7 +543,7 @@ class MissionTopicController extends Controller
         }
 
         //* Create logs *//
-        $data = [
+        $arr = [
        			'profile_id' => Auth::guard('profile')->user()->id,
        			'content'    => $content,
        			'old_data'   => json_encode($old_data),
@@ -500,7 +552,7 @@ class MissionTopicController extends Controller
        			'record_id'  => $mission->id
        		];
 
-        ApplyLog::createLog($data);
+        ApplyLog::createLog($arr);
 
         DB::commit();
 
@@ -517,4 +569,37 @@ class MissionTopicController extends Controller
       }
 
     }
+
+  public function checkBeforeSubmitEle($id)
+  { 
+    $topic = MissionTopic::find($id);
+
+    $collectName = collect();
+
+    $error = false;
+
+    if (!empty($topic)) {
+        
+      foreach ($topic->values as $value) {
+          
+        if (empty($value->value)) {
+          
+          if ($value->mission_topic_attribute_id == 10 || $value->mission_topic_attribute_id == 11) {
+            continue;
+          }
+
+          $column = MissionTopicAttribute::find($value->mission_topic_attribute_id)->label;
+
+          $collectName->push($column);
+
+          $error = true;
+        }
+      }
+    }
+
+    return [
+      'error' => $error,
+      'collectName' => $collectName,
+    ];
+  }
 }
