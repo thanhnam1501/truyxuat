@@ -9,6 +9,7 @@ use App\Models\ApplyLog;
 use App\Models\MissionScienceTechnologyAttribute;
 use App\Models\MissionScienceTechnology;
 use App\Models\UserHandleFile;
+use App\Models\EvaluationForm;
 use Crypt;
 
 
@@ -490,6 +491,36 @@ class AdminMission {
       	}
 
 	}
+
+
+	public static function evaluationDoc($data) {
+
+		DB::beginTransaction();
+	      try {
+
+	        $evaluation_form = EvaluationForm::create(['user_id'  => $data['user_id'], 'mission_id' => $data['mission_id'], 'table_name'  =>  $data['table_name']]);
+
+	        $evaluation_form->content = $data['content'];
+	        $evaluation_form->save();
+
+
+	        DB::commit();
+
+	        return $result = [
+	          'error' =>  false,
+	          'message' =>  'Đánh giá thành công',
+	        ];
+	      }
+	      catch(Exception $e) {
+	        // Log::info('Can not update hard Copy submit: Council = ' .$result->id );
+	        DB::rollack();
+	        return $result = [
+	          'error' => true,
+	          'message' => 'Internal Server Error:'. $e->getMessage() . 'OK'
+	        ];
+	    }
+	}
+
 
 	public static function giveBackHardCopy($data){
 

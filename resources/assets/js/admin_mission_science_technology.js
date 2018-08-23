@@ -509,7 +509,51 @@ $(document).ready(function() {
       
     }
 
-  });
+  })
+
+  $('#evaluation-science-technology-btn').on('click', function() {
+    var data = $('#evalution-form').serialize();
+
+    $.ajax({
+      url: app_url + '/admin/mission-science-technologys/evaluation/store',
+      type: 'post',
+      data: data,
+      success:function(res) {
+        console.log(res);
+        if (!res.error) {
+          toastr.success('Đánh giá thành công');
+          setTimeout(function () {
+              window.location.href = app_url + 'admin/mission-science-technologies';
+          }, 1000);    
+
+        
+        }
+        else {
+          toastr.error(res.message);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+
+    });
+
+  })
+
+  $('.suggest_perform').on('click', function() {
+    var suggest_perform = $('input[name=suggest_perform]:checked').val();
+    if (suggest_perform == 2) {
+      $('#project_name').removeAttr('disabled');
+      $('#project_result').removeAttr('disabled');
+      $('#project_target').removeAttr('disabled');
+    }
+    else {
+      $('#project_name').attr('disabled','true');
+      $('#project_result').attr('disabled','true');
+      $('#project_target').attr('disabled','true');
+    }
+  })
+
 
   $('#btn-search-mission').on('click', function(event) {
     event.preventDefault();
@@ -583,4 +627,5 @@ $(document).ready(function() {
       }
     });
   });
+
 });
