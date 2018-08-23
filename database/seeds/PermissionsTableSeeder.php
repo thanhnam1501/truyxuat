@@ -153,5 +153,9 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'assign-council',
             'display_name'=>'Chọn hội đồng đánh giá',
         ]);
+        Permission::create([
+            'name'=>'evaluation-doc',
+            'display_name'=>'Đánh giá hồ sơ',
+        ]);
     }
 }

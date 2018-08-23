@@ -8,6 +8,12 @@ use App\Models\MissionTopicValue;
 use App\Models\MissionTopicAttributeValue;
 use App\Models\MissionTopicAttribute;
 use App\Models\RoundCollection;
+use App\Models\GroupCouncil;
+use App\Models\Council;
+use App\Models\CouncilUser;
+use App\Models\User;
+use App\Models\CouncilMissionTopic;
+use App\Models\UserHandleFile;
 use Money;
 use Auth;
 use Entrust;
@@ -27,10 +33,25 @@ class AdminMissionTopicController extends Controller
     public function index()
     {
 
-        $round_collection = RoundCollection::where('status',1)->get();
+        $round_collection = RoundCollection::where('status', 1)->get();
+        $group_councils = GroupCouncil::where('status', 1)->get();
+
+        $date = [
+          'd' =>  date('d', strtotime(now())),
+          'm' =>  date('m', strtotime(now())),
+          'y' =>  date('Y', strtotime(now())),
+        ];
+        //     
+        $role_user_devolve_file = User::where('type', 3)->get();
+
+        $role_user_handle_file  = User::where('type', 4)->get();
 
         return view('backend.admins.mission_topics.index',[
           'round_collection' => $round_collection,
+          'group_councils' => $group_councils,
+          'date' => $date,
+          'role_user_devolve_file' => $role_user_devolve_file,
+          'role_user_handle_file' => $role_user_handle_file,
         ]);
     }
 
@@ -47,8 +68,8 @@ class AdminMissionTopicController extends Controller
           foreach ($topic->values as $value) {
 
             if ($value->mission_topic_attribute_id == $attr_id) {
-              if (strlen($value->value) > 300) {
-                  return "<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
+              if (strlen($value->value) > 150) {
+                  return "<span data-container='body' data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 150)."..."."</span>";
               } else {
                   return $value->value;
               }
@@ -90,7 +111,11 @@ class AdminMissionTopicController extends Controller
             }
         })
         ->addColumn('is_judged', function(MissionTopic $topic) {
+            $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
 
+            if ($check == 1) {
+              return $str = "<label class='label label-info'>Đã chọn hội đồng</label>";
+            }
             if ($topic->is_judged == 1) {
 
                 return "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
@@ -159,12 +184,27 @@ class AdminMissionTopicController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Giao hồ sơ cho cán bộ xử lý' class='btn btn-warning btn-xs assign-doc'><i class='fa fa-paperclip'></i></a>";
           }
 
-          if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+          if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid ) {
+
+            $check = UserHandleFile::where('user_id', Auth::guard('web')->user()->id)
+                    ->where('mission_id', $topic->id)
+                    ->where('mission_table', 'mission_topics')
+                    ->where('is_handle', 0)
+                    ->count();
+
+            if ($check > 0) {      
+              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+            } 
           }
 
-          if ($topic->is_valid && empty($topic->council_id) && Entrust::can(['assign-council'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+          if ($topic->is_valid && Entrust::can(['assign-council'])) {
+
+            $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
+
+            if ($check == 0) { // chua dc add hoi dong
+              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+            }
+            
           }
 
           if (!empty($topic->council_id) && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
@@ -174,7 +214,6 @@ class AdminMissionTopicController extends Controller
           if ($topic->is_judged && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
 
-               // $string .= "<i data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='fa fa-check-square ico-info ico'></i>";
           }
 
           return $string;
@@ -279,5 +318,90 @@ class AdminMissionTopicController extends Controller
 
       abort(404);
     }
+  }
+
+  public function submitAssign(Request $request) {
+    $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id');
+    $data['mission_table']  = 'mission_topics';
+    $data['model'] = 'App\Models\MissionTopic';
+    $result = AdminMission::submitAssign($data);
+
+    return $result;
+  }
+
+  public function getRoundCollection($id) {
+    $mission = MissionTopic::find($id);
+
+    return RoundCollection::find($mission->round_collection_id);
+  }
+
+
+  public function getListCouncil(Request $request) {
+    $mission = MissionTopic::find($request->get('mission_id'));
+    // dd($request->get('round_collection_id') . '-' . $request->get('group_council_id'));
+    if (null != $request->get('round_collection_id') && null != $request->get('group_council_id')) {
+
+      $round_collection_id = $request->get('round_collection_id');
+
+      $group_council_id = $request->get('group_council_id');
+
+      $councils = Council::where('round_collection_id', $round_collection_id)
+                  ->where('group_council_id', $group_council_id)
+                  ->where('status', 1)->get();
+
+      return Datatables::of($councils)
+      ->addIndexColumn()
+      ->addColumn('name', function($council) {
+        return $council->name;
+      })
+      ->addColumn('chairman_name', function($council) {
+        $userCouncil = CouncilUser::where('position_council_id', 1)->where('council_id', $council->id)->orderBy('id', 'DESC')->first();
+
+        if ($userCouncil != null) {
+          return User::find($userCouncil->user_id)->name;
+        }
+        else {
+          return 'Chưa cập nhật';
+        }
+        
+      })
+
+      ->addColumn('group_council', function($council) use ($group_council_id) {
+        return GroupCouncil::find($group_council_id)->name;
+      })
+
+
+      ->addColumn('round_collection', function($council) use ($round_collection_id) {
+
+        $round_collection =  RoundCollection::find($round_collection_id);
+
+        return $round_collection->year . '-' . $round_collection->name;
+      })
+      ->addColumn('action', function($council) use ($mission) {
+        // $council_mission = $mission->council->first();
+        // if ($council_mission != null) {
+        //   $id_council = $council_mission->council_id;
+        //   if ($council->id == $id_council) {
+        //     return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'" checked>';
+        //   }
+        // }
+        return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'">';
+      })
+      ->make(true);
+    }
+  }
+
+  public function addCouncil(Request $request) {
+
+    $data['council_id'] =  $request->get('council_id');
+
+    $data['mission_id'] =  $request->get('mission_topic_id');
+    
+    $data['mission_council']  = 'App\Models\CouncilMissionTopic';
+
+    $result = AdminMission::addCouncil($data);
+
+    return response()->json($result);
+
   }
 }

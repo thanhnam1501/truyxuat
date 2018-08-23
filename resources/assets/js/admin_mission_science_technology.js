@@ -567,13 +567,13 @@ $(document).ready(function() {
               // console.log(res);
               if (!res.error) {
 
-                toastr.success(res.message);
+                toastr.success(res.msg);
 
                 $('#science-technology-tbl').DataTable().ajax.reload();
 
               } else {
 
-                toastr.error(res.message);
+                toastr.error(res.msg);
               }
             },
             error: function (xhr, ajaxOptions, thrownError) {
