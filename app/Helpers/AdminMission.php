@@ -502,7 +502,9 @@ class AdminMission {
 
 	        $mission->update([
 	          'is_submit_hard_copy' =>  0,
-	          'time_submit_hard_copy'	=>	null
+	          'time_submit_hard_copy'	=>	null,
+	          'code'					=>	null,
+	          'order_submit_hard_copy'	=>	0
 	        ]);
 
 	        $new_data = $mission;
