@@ -514,21 +514,42 @@ class AdminMission {
 
 	public static function evaluationDoc($data) {
 
+		$evaluation_form = EvaluationForm::where('user_id', $data['user_id'])
+										->where('mission_id', $data['mission_id'])
+										->where('table_name', $data['table_name'])->orderBy('id', 'Desc')->get();
+
+
 		DB::beginTransaction();
 	      try {
 
-	        $evaluation_form = EvaluationForm::create(['user_id'  => $data['user_id'], 'mission_id' => $data['mission_id'], 'table_name'  =>  $data['table_name']]);
+	      	if ($evaluation_form->count() >= 1) {
+	      		$evaluation_form = $evaluation_form->first();
+	      		$evaluation_form->content = $data['content'];
+	      		$evaluation_form->save();
+	      		DB::commit();
 
-	        $evaluation_form->content = $data['content'];
-	        $evaluation_form->save();
+	      		return $result = [
+	      			'status'	=>	1,
+		          'error' =>  false,
+		          'message' =>  'Cập nhật phiếu đánh giá thành công',
+		        ];
+	      	}
+	      	else {
+	      		$evaluation_form = EvaluationForm::create(['user_id'  => $data['user_id'], 'mission_id' => $data['mission_id'], 'table_name'  =>  $data['table_name']]);
+
+		        $evaluation_form->content = $data['content'];
+		        $evaluation_form->save();
 
 
-	        DB::commit();
+		        DB::commit();
 
-	        return $result = [
-	          'error' =>  false,
-	          'message' =>  'Đánh giá thành công',
-	        ];
+		        return $result = [
+		        	'status'	=>	2,
+		          'error' =>  false,
+		          'message' =>  'Đánh giá thành công',
+		        ];
+	      	}
+	        
 	      }
 	      catch(Exception $e) {
 	        // Log::info('Can not update hard Copy submit: Council = ' .$result->id );

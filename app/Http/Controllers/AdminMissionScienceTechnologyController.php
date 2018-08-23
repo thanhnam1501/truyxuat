@@ -607,6 +607,9 @@ class AdminMissionScienceTechnologyController extends Controller
       else {
         $is_perform = 0;
         $is_unperform = 0;
+        $data['project_name'] = "";
+        $data['project_result'] = "";
+        $data['project_target'] = "";
 
         if ($data['suggest_perform'] == 0) {
           $is_perform = 1;
@@ -614,6 +617,18 @@ class AdminMissionScienceTechnologyController extends Controller
 
         if ($data['suggest_perform'] == 1) {
           $is_unperform = 1;
+        }
+
+        if (null !==  $request->get('project_name')) {
+          $data['project_name'] = $request->get('project_name');
+        }
+
+        if (null !== $request->get('project_result')) {
+          $data['project_result'] = $request->get('project_result');
+        }
+
+        if (null !== $request->get('project_target')) {
+          $data['project_target'] = $request->get('project_target');
         }
 
         $content = array([
