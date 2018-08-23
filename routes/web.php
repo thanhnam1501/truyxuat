@@ -217,6 +217,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/submit-assign', 'AdminMissionTopicController@submitAssign')->name('admin.mission-topics.submitAssign');
 
             Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
+            Route::post('/give-back-hard-copy', 'AdminMissionTopicController@giveBackHardCopy')->name('admin.mission-topics.giveBackHardCopy');
         });
         //* End
 
