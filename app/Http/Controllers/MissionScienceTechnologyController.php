@@ -217,26 +217,26 @@ class MissionScienceTechnologyController extends Controller
         $order_evaluation_form_02 = 16;
 
         $status_submit_ele_copy = $result->is_submit_ele_copy == 1 ? "<p>Hồ sơ đã nộp bản mềm</p>Thời gian nộp: ".date('d-m-Y', strtotime($result->time_submit_ele_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản mềm</p>";
-        $status_submit_hard_copy = $topic->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+        $status_submit_hard_copy = $result->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($result->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
 
         $is_submit_ele_copy = $result->is_submit_ele_copy;
         $is_submit_hard_copy = $result->is_submit_hard_copy;
 
         $doc_status = "";
 
-        if ($topic->is_assign) {
+        if ($result->is_assign) {
             $doc_status = "<p>Hồ sơ đã được giao cho cán bộ xử lý</p>";
         }
 
-        if ($topic->is_valid) {
+        if ($result->is_valid) {
             
             $doc_status = "<p>Hồ sơ hợp lệ</p>";
-        } else if ($topic->is_invalid) {
+        } else if ($result->is_invalid) {
 
             $doc_status = "<p class'error'>Hồ sơ không hợp lệ</p>";
         }
 
-        if (CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count() > 0) {
+        if (CouncilMissionScienceTechnology::where('mission_id', $result->id)->count() > 0) {
             
             $doc_status = "<p>Hồ sơ đã được giao cho hội đồng đánh giá</p>";
         }
