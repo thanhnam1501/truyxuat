@@ -139,6 +139,17 @@ class AdminMissionTopicController extends Controller
             }
           }
 
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
         }
 
         return Datatables::of($topics)
@@ -286,6 +297,7 @@ class AdminMissionTopicController extends Controller
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
+
 
             if ($check == 1) {
               $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
@@ -493,6 +505,7 @@ class AdminMissionTopicController extends Controller
     return response()->json($result);
 
   }
+
 
   public function judgeCouncilView($key)
   {
