@@ -124,28 +124,34 @@
 				<h4 class="modal-title">Gửi Email</h4>
 			</div>
 			<div class="modal-body">
-				<form role="form" enctype="multipart/form-data" id="create-user-frm">
-						<div class="form-group">
-								<label>Tên đơn vị/tổ chức </label>
-								<input readonly type="text" id="name" name="name" class="form-control"/>
+				<form role="form" enctype="multipart/form-data" id="send-email-frm">
+						<div class="form-group" style="float: left; margin-right: 30%">
+							<label>Tên đơn vị/tổ chức: </label>
+							<label style="font-size: 20px" class="send-mail-name" ></label>
+								
 						</div>
 						<div class="form-group">
-								<label class='control-label'>Email <span style="color: red">(*)</span></label>
-								<input readonly type="email" id="email" name="email" class="form-control"/>
+							<label class='control-label'>Email: </label>
+							<label style="font-size: 20px" class="send-mail-email" ></label>
 						</div>
+					
 						<div class="form-group">
 							<label class="control-label">Chủ đề</label>
 							<input type="text" id='subject' name='subject' class="form-control">
 						</div>
 						<div class="form-group">
 							<label for="control-label">Nội dung</label>
-							<textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
+							<textarea name="content" id="content" cols="30" rows="10" class="form-control "></textarea>
+						</div>
+						<div class="form-group hidden">
+							<input id="send-mail-email" type="hidden" name='email' class="send-mail-email">
+							<input id="send-mail-name" type="hidden" name='name' class="send-mail-name">
 						</div>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-				<button type="button" class="btn btn-primary">Gửi</button>
+				<button type="button" class="btn btn-primary" id="send-email-btn">Gửi</button>
 			</div>
 		</div>
 	</div>
@@ -261,9 +267,30 @@
 	  });
 	}
 
-	function sendEmail(){
+	function sendEmail(id){
 		$('#modal-send-email').modal('show');
+		  if (!$('#send-email-frm').valid()) {
+
+        return false;
+    }
+		$.ajax({
+	      type: "GET",
+	      url: app_url + 'admin/account-profiles/'+id+'/edit',
+	      success: function(res)
+	      {
+	      	var profile = res.profile;
+	        $('.send-mail-name').text(profile.name);
+	        $('.send-mail-email').text(profile.email);
+	        $('#send-mail-name').val(profile.name);
+	        $('#send-mail-email').val(profile.email);
+	      },
+	      error: function (xhr, ajaxOptions, thrownError) {
+	        toastr.error(thrownError);
+	      }
+	  });
 	}
+
+	
 
 </script>
 

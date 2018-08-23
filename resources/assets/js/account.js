@@ -210,7 +210,50 @@ $(document).ready(function() {
     });
   });
 
-  $('#send-email').on('click', function(){
-     $('#modal-send-email').modal('show');
+$('#send-email-frm').validate({
+    rules: {
+      subject: {
+        required: true,
+       
+      },
+      content: {
+        required: true,
+        
+      }
+    },
+    messages: {
+      subject: {
+        required: "Chủ đề không được bỏ trống",
+      
+      },
+      content: {
+        required: "Nội dung không được bỏ trống",
+     
+      }
+    }
   });
+
+    $('#send-email-btn').on('click', function(){
+       if (!$('#send-email-frm').valid()) {
+
+        return false;
+    }
+    $.ajax({
+        type: "post",
+        url: app_url + "admin/account-profiles/send-email",
+        data: $('#send-email-frm').serialize(),
+        success: function(res)
+
+        {
+          if (res.error == false) {
+            $('#modal-send-email').modal('hide');
+            toastr.success(res.message);
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
+    });
+  });
+  
 });
