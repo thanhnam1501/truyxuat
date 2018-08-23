@@ -283,18 +283,18 @@ class AdminMissionScienceTechnologyController extends Controller
             
           }
 
-          $flag = $topic->judgeCouncil->first();
+          // $flag = $topic->judgeCouncil->first();
 
-          if (!empty($flag)) {
-              if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
-                $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
-              }
+          // if (!empty($flag)) {
+          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+          //       $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
 // =======
-//           if (Entrust::can(['evaluation-doc'])) {
+          if (Entrust::can(['evaluation-doc'])) {
 
-//               $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+              $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
             
-// >>>>>>> 5ebd140fa81af2b8123eb41f8eb85fc9cc1c70a1
+
           }
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
@@ -598,7 +598,7 @@ class AdminMissionScienceTechnologyController extends Controller
                     ->where('mission_id', $mission->id)
                     ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->first();
 
-      if ($evaluation_form->count() >= 1) {
+      if ($evaluation_form !== null && $evaluation_form->count() >= 1) {
         $content = $evaluation_form->content;
       }
 
