@@ -14,6 +14,7 @@ use App\Models\CouncilUser;
 use App\Models\User;
 use App\Models\CouncilMissionTopic;
 use App\Models\UserHandleFile;
+use App\Models\EvaluationForm;
 use Money;
 use Auth;
 use Entrust;
@@ -138,6 +139,17 @@ class AdminMissionTopicController extends Controller
             }
           }
 
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
         }
 
         return Datatables::of($topics)
@@ -286,6 +298,7 @@ class AdminMissionTopicController extends Controller
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
 
+
             if ($check == 1) {
               $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
             }
@@ -294,6 +307,14 @@ class AdminMissionTopicController extends Controller
 
           if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
+          }
+
+          $flag = $topic->judgeCouncil->first();
+
+          if (!empty($flag)) {
+              if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+                $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+              }
           }
 
           return $string;
@@ -483,6 +504,97 @@ class AdminMissionTopicController extends Controller
 
     return response()->json($result);
 
+  }
+
+
+  public function judgeCouncilView($key)
+  {
+    $topic = MissionTopic::where('key', $key)->first();
+
+    if (!empty($topic)) {
+      
+      $name = $topic->values()->where('mission_topic_attribute_id',1)->first()->value;
+    } 
+
+    if (!empty($topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first())) {
+        
+        $data = $topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first()->content;
+    }
+
+    $comment_evaluation = $data['comment_evaluation'];
+
+    $expert_opinions = $data['expert_opinions'];
+
+    $date = array();
+
+    $date['d'] = date('d',time());
+    $date['m'] = date('m',time());
+    $date['y'] = date('Y',time());
+
+    return view('backend.admins.mission_topics.judge-b1', compact('name','date','topic','comment_evaluation','expert_opinions'));
+  }
+
+  public function judgeCouncilStore(Request $request)
+  {
+    $data = $request->only('id','necessity_note','important_note','unique_note','natinal_resources_note','fund_note','perform_name','perform_target','perform_result','necessity_qualified','important_qualified','unique_qualified','natinal_resources_qualified','fund_qualified','is_perform');
+
+    $is_unperform = "0";
+
+    $is_perform_with_cond = "0";
+
+    if ($data['is_perform'] == 0) {
+
+      $is_unperform = 1;
+
+    } else if ($data['is_perform'] == 2) {
+
+      $data['is_perform'] = "0";
+
+      $is_perform_with_cond = [
+        'perform_name'  => $data['perform_name'],
+        'perform_target'  => $data['perform_target'],
+        'perform_result'  => $data['perform_result'],
+      ];
+    }
+    $dataStore = [
+      'mission_id'  => $data['id'],
+      'user_id'     => Auth::guard('web')->user()->id,
+      'table_name'  => 'mission_topics',
+    ];
+
+    $dataStore['content'] = [
+      'comment_evaluation'  => [
+        'necessity' => [
+          'note'  => $data['necessity_note'],
+          'qualified'  => $data['necessity_qualified'],
+        ],
+        'important' => [
+          'note'  => $data['important_note'],
+          'qualified'  => $data['important_qualified'],
+        ],
+        'unique' => [
+          'note'  => $data['unique_note'],
+          'qualified'  => $data['unique_qualified'],
+        ],
+        'natinal_resources' => [
+          'note'  => $data['natinal_resources_note'],
+          'qualified'  => $data['natinal_resources_qualified'],
+        ],
+        'fund' => [
+          'note'  => $data['fund_note'],
+          'qualified'  => $data['fund_qualified'],
+        ],
+      ],
+      'expert_opinions' => [
+        'is_perform'  => $data['is_perform'],
+        'is_unperform'  => $is_unperform,
+        'is_perform_with_cond'  => $is_perform_with_cond,
+      ]
+    ];
+
+    $result = AdminMission::evaluationDoc($dataStore);
+
+    return response()->json($result);
   }
 
   public function giveBackHardCopy(Request $request) {
