@@ -53,18 +53,6 @@ class AdminMissionScienceTechnologyController extends Controller
           'y' =>  date('Y', strtotime(now())),
         ];
 
-        // $role_user_devolve_file = User::select('users.*')
-        //     ->  join('role_users', 'role_users.user_id', '=', 'users.id')
-        //     ->  join('roles', 'roles.id', '=', 'role_users.role_id')
-        //     ->  where('role_users.role_id', 4)
-        //     ->  get();
-
-        // $role_user_handle_file = User::select('users.*')
-        //     ->  join('role_users', 'role_users.user_id', '=', 'users.id')
-        //     ->  join('roles', 'roles.id', '=', 'role_users.role_id')
-        //     ->  where('role_users.role_id', 5)
-        //     ->  get();
-        //     
         $role_user_devolve_file = User::where('type', 3)->get();
 
         $role_user_handle_file  = User::where('type', 4)->get();
@@ -73,36 +61,107 @@ class AdminMissionScienceTechnologyController extends Controller
 
     }
 
-    public function getSubmitEleList()
-    {
-        $topics = MissionScienceTechnology::where('is_submit_ele_copy',1)->orderBy('id','desc')->with(['values','roundCollection','profile']);
+    public function getSubmitEleList(Request $request)
+    { 
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+                ->where('mission_science_technologies.is_submit_ele_copy',1)
+                ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
+                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                ->where(function ($query) use ($request){
+                    if (isset($request->filter) && $request->filter == true) {
 
-        return Datatables::eloquent($topics)
-        ->addIndexColumn()
-        ->editColumn('values', function(MissionScienceTechnology $topic) {
+                        parse_str($request->data, $search);
+
+                        if ($search['status_submit_hard_copy'] != -1) {
+                          $query->where('is_submit_hard_copy', $search['status_submit_hard_copy']);
+                        }
+
+                        if ($search['status_submit_is_valid'] != -1) {
+                          if ($search['status_submit_is_valid'] == 1) {
+                            $query->where('is_valid', 1);
+                          }
+                          if ($search['status_submit_is_valid'] == 0) {
+                            $query->where('is_invalid', 1);
+                          }
+                        }
+
+                        if ($search['status_submit_is_judged'] != -1) {
+                          if ($search['status_submit_is_judged'] == 1) {
+                            $query->where('is_judged', 1);
+                          }
+                          if ($search['status_submit_is_judged'] == 0) {
+                            $query->where('is_denied', 1);
+                          }
+                        }
+
+                        if ($search['status_submit_is_performed'] != -1) {
+                          if ($search['status_submit_is_performed'] == 1) {
+                            $query->where('is_performed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == 0) {
+                            $query->where('is_unperformed', 1);
+                          }
+                        }
+
+                        if ($search['status_submit_is_assign'] != -1) {
+                          $query->where('is_assign', $search['status_submit_is_assign']);
+                        }
+
+                        if ($search['round_collection'] != -1) {
+                          $query->where('round_collection_id', $search['round_collection']);
+                        }
+
+                        if ( !empty($search['organization']) ) {
+                          $query->where('organizations.name', 'LIKE', '%'.$search['organization'].'%');
+                        }
+                    }
+                })->orderBy('id','desc')->get();
+
+        foreach ($topics as $key => $topic) {
+          $topic['mission_name'] = null;
 
           $attr_id = MissionScienceTechnologyAttribute::where('column','name')->first()->id;
 
           foreach ($topic->values as $value) {
-
             if ($value->mission_science_technology_attribute_id == $attr_id) {
               if (strlen($value->value) > 300) {
-                  return "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
+                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
               } else {
-                  return $value->value;
+                  $topic['mission_name'] = $value->value;
               }
             }
+          }
+
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
+
+        }
+
+        return Datatables::of($topics)
+        ->addIndexColumn()
+        ->editColumn('values', function(MissionScienceTechnology $topic){
+          if (!empty($topic->mission_name)) {
+            return $topic->mission_name;
           }
         })
         ->addColumn('status', function(MissionScienceTechnology $topic) {
 
             if ($topic->is_submit_hard_copy == 1) {
-
-                return "<label class='label label-info'>Đã nộp bản cứng</label>";
+                $str = "<label class='label label-info'>Đã nộp bản cứng</label>";
             } else {
-
-                return "<label class='label label-default'>Chưa nộp bản cứng</label>";
+                $str = "<label class='label label-default'>Chưa nộp bản cứng</label>";
             }
+
+            return $str;
         })
         ->addColumn('valid_status', function(MissionScienceTechnology $topic) {
             $str = "<label class='label label-default'>Chưa cập nhập</label>";
@@ -120,10 +179,8 @@ class AdminMissionScienceTechnologyController extends Controller
         ->addColumn('is_assign', function(MissionScienceTechnology $topic) {
 
             if ($topic->is_assign == 1) {
-
                 return "<label class='label label-info'>Đã giao</label>";
             } else {
-
                 return "<label class='label label-default'>Chưa giao</label>";
             }
         })
@@ -149,29 +206,30 @@ class AdminMissionScienceTechnologyController extends Controller
             $str = "<label class='label label-default'>Chưa cập nhập</label>";
             
             if ($topic->is_performed == 1) {
-
                 $str = "<label class='label label-info'>Được thực hiện</label>";
             }
 
             if ($topic->is_unperformed == 1) {
-
                 $str = "<label class='label label-danger'>Không được thực hiện</label>";
             }
 
             return $str;
         })
-        ->editColumn('roundCollection', function(MissionScienceTechnology $topic) {
-
+        ->editColumn('roundCollection', function(MissionScienceTechnology $topic){
+          
+          $str = "";
           if (!empty($topic->roundCollection)) {
-            return $topic->roundCollection->name." - ".$topic->roundCollection->year;
+            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
           } else {
-            return "Chưa cập nhập";
+            $str = "Chưa cập nhập";
           }
+
+          return $str;
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->profile->organization)) {
-            return $topic->profile->organization->name;
+          if (!empty($topic->organization_name)) {
+            return $topic->organization_name;
           } else {
             return "Chưa cập nhập";
           }
@@ -192,10 +250,10 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
           }
 
-          // if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
+          if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
-          //   $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs'><i class='fa fa-undo'></i></a>";
-          // }
+            $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs btn-give-back-hard-copy'><i class='fa fa-undo'></i></a>";
+          }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['assign-doc'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Giao hồ sơ cho cán bộ xử lý' class='btn btn-warning btn-xs assign-doc'><i class='fa fa-paperclip'></i></a>";
@@ -240,6 +298,7 @@ class AdminMissionScienceTechnologyController extends Controller
           return $string;
         })
         ->make(true);
+
     }
 
     /**
@@ -488,5 +547,14 @@ class AdminMissionScienceTechnologyController extends Controller
         $is_submit_hard_copy = $mission->is_submit_hard_copy;
 
         return view('backend.admins.mission_science_technologies.detail', compact('is_submit_hard_copy', 'is_submit_ele_copy', 'data', 'key', 'st_key','date', 'is_filled'));
+    }
+
+    public function giveBackHardCopy(Request $request){
+      $data = $request->only('id');
+      $data['mission_table']  = 'mission_science_technologies';
+      $data['model'] = 'App\Models\MissionScienceTechnology';
+      $result = AdminMission::giveBackHardCopy($data);
+
+      return $result;
     }
 }
