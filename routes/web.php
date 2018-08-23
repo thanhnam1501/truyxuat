@@ -128,6 +128,12 @@ Route::middleware('revalidate')->group(function () {
                 Route::post('/submit-valid', 'AdminMissionTopicController@submitValid')->name('admin.mission-topics.submitValid');
 
                 Route::post('/submit-judged', 'AdminMissionTopicController@submitJudged')->name('admin.mission-topics.submitJudged');
+
+                Route::get('/judge', function() {
+                    
+                    return view('backend.admins.mission_topics.judge-b2');
+                });
+
                 Route::get('/detail/{key}', 'AdminMissionTopicController@detail')->name('admin.mission-topics.detail');
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
             });
