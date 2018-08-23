@@ -1,10 +1,14 @@
 @extends('backend.layouts.master')
+@section('head')
+<link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/>
 
+@endsection
 @section('breadcrumb')
   <li class="">Danh sách nhiệm vụ</li>
   <li class=""><a href="{{ route('admin.mission-science-technologies.index') }}">Dự án khoa học và công nghệ</a></li>
   <li class="active">Phiếu đánh giá</li>
 @endsection
+
 
 @section('page-title')
 @endsection
@@ -53,50 +57,51 @@
 			<div class="content" style="font-size: 14px;">
 
 		        <div class="col-md-12" style="margin-top: 20px;">
-		        	<p><strong>Họ và tên chuyên gia: </strong> Vũ Văn Thương</p>
+		        	<p><strong>Họ và tên chuyên gia: </strong> {{Auth::user()->name}}</p>
 		        </div>
 				
 		        <div class="col-md-12">
-		        	<p><strong>Tên dự án KH&CN đề xuất: </strong><br> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque similique possimus, nemo illo necessitatibus </p>
+		        	<p><strong>Tên dự án KH&CN đề xuất: </strong><br>  {{$mission_name}} </p>
 		        </div>
 				<br><br>
 				<div class="col-md-12">
 
 					<form action="POST" id="evalution-form">
+						<input name="mission_id" id="mission_id" type="hidden" value="{{$mission->id}}">
 						<strong style="">I. NHẬN XÉT VÀ ĐÁNH GIÁ CHUNG ĐỀ XUẤT ĐẶT HÀNG</strong><br><br>
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">1.1 Tính cấp thiết và mục tiêu của đề xuất đặt hàng so với dự án đầu tư sản xuất các sản phẩm trọng điểm chủ lực của bộ, ngành địa phương và của quốc gia (được nêu tại mục 2 của Phiếu đề xuất nhiệm vụ)</label>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5"></textarea>
+							<textarea class="form-control" rows="5" id="urgency_target_note" name="urgency_target_note"></textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="urgency_target">Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="urgency_target">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="1" checked>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="0">Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
-							<label for="" class="">1.2 Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng</label>
+							<label for="" class="">1.2 Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng</label><br>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5"></textarea>
+							<textarea class="form-control" rows="5" id="necessity_note" name="necessity_note"></textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="necessity">Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="necessity">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="necessity_rate" value="1" checked>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="necessity_rate" value="0">Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
-							<label for="" class="">	1.3 Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì</label>
+							<label for="" class="">	1.3 Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì</label><br>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5"></textarea>
+							<textarea class="form-control" rows="5" id="possibility_note" name="possibility_note"></textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="possibility">Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="possibility">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="possibility_rate" value="1" checked>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="possibility_rate" value="0">Không đạt yêu cầu</label>
 
 						</div>
 					
@@ -104,39 +109,41 @@
 						<strong style="">II. Ý KIẾN CHUYÊN GIA </strong><span>(đánh dấu <strong>X</strong> vào 1 trong 3 ô dưới đây)</span><br><br>
 						<div class="form-group" style="padding-left: 3%">
 							<div class="radio">
-								<label><input type="radio" name="expert_opinions">Đề nghị thực hiện</label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="1" checked>Đề nghị thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="expert_opinions">Đề nghị không thực hiện</label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="0">Đề nghị không thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="expert_opinions">Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="2">Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
 							</div> 
+							
+							<div class="request_change">
+								<div class="form-group"  style="padding-left: 3%">
+									<label for="" class="">	2.1 Tên dự án KH&CN:</label>
+				
+									<textarea class="form-control" rows="5" name="project_name" id="project_name" disabled></textarea>
+									<br>
+									
+								</div>
 
-							<div class="form-group"  style="padding-left: 3%">
-								<label for="" class="">	2.1 Tên dự án KH&CN:</label>
-			
-								<textarea class="form-control" rows="5"></textarea>
-								<br>
-								
+								<div class="form-group"  style="padding-left: 3%">
+									<label for="" class="">	2.2 Mục tiêu:</label>
+				
+									<textarea class="form-control" rows="5" name="project_target" id="project_target" disabled></textarea>
+									<br>
+									
+								</div>
+
+								<div class="form-group"  style="padding-left: 3%">
+									<label for="" class="">	2.3 Yêu cầu đối với kết quả:</label>
+				
+									<textarea class="form-control" rows="5" name="project_result" id="project_result" disabled></textarea>
+									<br>
+									
+								</div>
+
 							</div>
-
-							<div class="form-group"  style="padding-left: 3%">
-								<label for="" class="">	2.2 Mục tiêu:</label>
-			
-								<textarea class="form-control" rows="5"></textarea>
-								<br>
-								
-							</div>
-
-							<div class="form-group"  style="padding-left: 3%">
-								<label for="" class="">	2.3 Yêu cầu đối với kết quả:</label>
-			
-								<textarea class="form-control" rows="5"></textarea>
-								<br>
-								
-							</div>
-
 
 						</div>
 
@@ -148,7 +155,7 @@
 		            <div class="col-md-offset-6 col-md-6 col-xs-12">
 		                <div style="float: right">
 		                    <center>
-			                    <h4>....., ngày ..... tháng ..... năm 20...</h4>
+			                    <h4>....., ngày {{$date['d']}} tháng {{$date['m']}} năm {{$date['y']}}</h4>
 			                    <h5><i>(Chuyên gia ký, ghi rõ họ tên)</i></h5>
 		                    </center>
 		                </div>
@@ -160,11 +167,13 @@
 	        </div>
 			<div class="clearfix"></div>
 			<hr>
-	        <div class="col-md-12" style="text-align: right;"><button class="btn btn-success"id="update-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button></div>
+	        <div class="col-md-12" style="text-align: right;"><button class="btn btn-success"id="evaluation-science-technology-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button></div>
 	    </div>
     </div>
  </div>
 @endsection
 
 @section('footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="{{ mix('build/js/admin_mission_science_technology.js') }}"></script>
 @endsection

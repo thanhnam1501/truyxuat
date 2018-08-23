@@ -23,6 +23,7 @@ use App\Models\Role;
 use App\Models\UserHandleFile;
 use App\Models\ApplyLog;
 use App\Models\CouncilMissionScienceTechnology;
+use App\Models\EvaluationForm;
 
 use Auth;
 use DB;
@@ -497,42 +498,97 @@ class AdminMissionScienceTechnologyController extends Controller
     }
 
     public function evaluation($key){
-       return view('backend.admins.mission_science_technologies.evaluation-form');
+        $mission = MissionScienceTechnology::where('key', $key)->first();
+
+        $date['d'] = date('d',strtotime(now()));
+        $date['m'] = date('m',strtotime(now()));
+        $date['y'] = date('Y',strtotime(now()));
+
+        $stechs = MissionScienceTechnology::select([
+                    'mission_science_technology_attributes.column',
+                    'mission_science_technology_attribute_values.value'
+                  ])
+                  ->  where('mission_science_technologies.key', $key)
+                  ->  where('mission_science_technology_attributes.column', 'name')
+                  ->  join('mission_science_technology_values', 'mission_science_technology_values.mission_science_technology_id', '=', 'mission_science_technologies.id')
+                  ->  join('mission_science_technology_attribute_values', 'mission_science_technology_attribute_values.id', '=', 'mission_science_technology_values.mission_science_technology_attribute_value_id')
+                  ->  join('mission_science_technology_attributes', 'mission_science_technology_attributes.id', 'mission_science_technology_attribute_values.mission_science_technology_attribute_id')
+                  ->  get()->first();
+
+        $mission_name = $stechs->value;
+
+       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name'));
     }
 
     public function storeEvaluation(Request $request) {
-      // $content = array([
-      //   'comment_evaluation'  => array([
-      //                               '1.1' =>  array([
-      //                                    'note' =>  '...',
-      //                                    'rate' =>  0 hoặc 1 
-      //                               ]),
 
-      //                               '1.2' =>  array([
-      //                                    'note' =>  '...',
-      //                                    'rate' =>  0 hoặc 1 
-      //                               ]),
+      $mission_id = $request->get('mission_id');
+ 
+      $table_name = 'mission_science_technologies';
 
-      //                               '1.3' =>  array([
-      //                                    'note' =>  '...',
-      //                                    'rate' =>  0 hoặc 1 
-      //                               ]),
-      //                             ]);
+      $user_id = Auth::id();
 
-      //   'expert_opinions'  => array([
-      //                               'perform' =>  0 hoặc 1,
+      $data = $request->all();
 
-      //                               'not_perform' => 0 hoặc 1,
+      if ($data['urgency_target_note'] == null || $data['urgency_target_rate'] == null || $data['necessity_note'] == null || $data['necessity_rate'] == null || $data['possibility_note'] == null || $data['urgency_target_note'] == null || $data['suggest_perform'] == null) {
+        return response()->json([
+            'error' =>  true,
+            'message' =>  'Vui lòng nhập đầy đủ thông tin',
+        ]);
+      }
+      else {
+        $is_perform = 0;
+        $is_unperform = 0;
 
-      //                               'perform_with_request' => 0 hoặc 1,
+        if ($data['suggest_perform'] == 0) {
+          $is_perform = 1;
+        }
 
-      //                               'request' =>  array([
-      //                                   'name'  =>  '....',
-      //                                   'target'  =>  '....',
-      //                                   'result'  =>  '...',
-      //                               ]),
-                                    
-      //                             ]);
-      // ]);     
+        if ($data['suggest_perform'] == 1) {
+          $is_unperform = 1;
+        }
+
+        $content = array([
+          'comment_evaluation'  => array([
+                                      'urgency_target' =>  array([
+                                           'note' =>  $data['urgency_target_note'],
+                                           'rate' =>  $data['urgency_target_rate'],
+                                      ]),
+
+                                      'necessity' =>  array([
+                                           'note' =>  $data['necessity_note'],
+                                           'rate' =>  $data['necessity_rate'],
+                                      ]),
+
+                                      'possibility' =>  array([
+                                           'note' =>  $data['possibility_note'],
+                                           'rate' =>  $data['possibility_rate'],
+                                      ]),
+                                  ]),
+
+          'expert_opinions'  => array([
+                                      'is_perform' =>  $is_perform,
+                                      'is_unperform' =>  $is_unperform,
+                                      'request' =>  array([
+                                          'name'  =>  $data['project_name'],
+                                          'target'  =>  $data['project_target'],
+                                          'result'  =>  $data['project_result'],
+                                      ]),
+                                     
+                                  ]),
+        ]); 
+      }
+      
+      $datas['mission_id'] = $mission_id;
+      $datas['table_name']  = $table_name;
+      $datas['user_id'] = $user_id;
+      $datas['content'] = $content;
+
+      $result = AdminMission::evaluationDoc($datas);
+
+      return response()->json($result);
+
+    
+       
     }
 }
