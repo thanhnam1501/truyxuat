@@ -11,6 +11,7 @@ use App\Models\Profile;
 use App\Models\Organization;
 use App\Models\RoundCollection;
 use App\Models\MissionScienceTechnologyFile;
+use App\Models\CouncilMissionScienceTechnology;
 use App\Models\ApplyLog;
 
 use Money;
@@ -216,10 +217,29 @@ class MissionScienceTechnologyController extends Controller
         $order_evaluation_form_02 = 16;
 
         $status_submit_ele_copy = $result->is_submit_ele_copy == 1 ? "<p>Hồ sơ đã nộp bản mềm</p>Thời gian nộp: ".date('d-m-Y', strtotime($result->time_submit_ele_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản mềm</p>";
-        $status_submit_hard_copy = $result->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>" : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+        $status_submit_hard_copy = $topic->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
 
         $is_submit_ele_copy = $result->is_submit_ele_copy;
         $is_submit_hard_copy = $result->is_submit_hard_copy;
+
+        $doc_status = "";
+
+        if ($topic->is_assign) {
+            $doc_status = "<p>Hồ sơ đã được giao cho cán bộ xử lý</p>";
+        }
+
+        if ($topic->is_valid) {
+            
+            $doc_status = "<p>Hồ sơ hợp lệ</p>";
+        } else if ($topic->is_invalid) {
+
+            $doc_status = "<p class'error'>Hồ sơ không hợp lệ</p>";
+        }
+
+        if (CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count() > 0) {
+            
+            $doc_status = "<p>Hồ sơ đã được giao cho hội đồng đánh giá</p>";
+        }
 
         //
         $mission = MissionScienceTechnology::where('key', $st_key)->first();
@@ -253,7 +273,7 @@ class MissionScienceTechnologyController extends Controller
         $date['y'] = date('Y',strtotime(now()));
 
         if (!empty($data)) {
-          return view("backend.mission_science_technology.edit", compact('arr','data', 'st_key', 'id', 'is_filled', 'check_input_01', 'check_input_02', 'order_evaluation_form_01', 'order_evaluation_form_02', 'status_submit_ele_copy', 'status_submit_hard_copy','is_submit_ele_copy', 'is_submit_hard_copy', 'date'));
+          return view("backend.mission_science_technology.edit", compact('arr','data', 'st_key', 'id', 'is_filled', 'check_input_01', 'check_input_02', 'order_evaluation_form_01', 'order_evaluation_form_02', 'status_submit_ele_copy', 'status_submit_hard_copy','is_submit_ele_copy', 'is_submit_hard_copy', 'date', 'doc_status'));
         }
     }
 
