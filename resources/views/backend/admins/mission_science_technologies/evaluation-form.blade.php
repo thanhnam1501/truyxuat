@@ -72,36 +72,36 @@
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">1.1 Tính cấp thiết và mục tiêu của đề xuất đặt hàng so với dự án đầu tư sản xuất các sản phẩm trọng điểm chủ lực của bộ, ngành địa phương và của quốc gia (được nêu tại mục 2 của Phiếu đề xuất nhiệm vụ)</label>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="urgency_target_note" name="urgency_target_note"></textarea>
+							<textarea class="form-control" rows="5" id="urgency_target_note" name="urgency_target_note" placeholder="Tính cấp thiết và mục tiêu của đề xuất đặt hàng so với dự án đầu tư sản xuất các sản phẩm trọng điểm chủ lực của bộ, ngành địa phương và của quốc gia (được nêu tại mục 2 của Phiếu đề xuất nhiệm vụ)">{{($content != null)? $content['comment_evaluation']['urgency_target']['note']: ''}}</textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="1" checked>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="0">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="1" {{($content != null && $content['comment_evaluation']['urgency_target']['rate'] == 1 ) ? 'checked' : ''}}>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="0" {{($content != null && $content['comment_evaluation']['urgency_target']['rate'] == 0 ) ? 'checked' : ''}}>Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">1.2 Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng</label><br>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="necessity_note" name="necessity_note"></textarea>
+							<textarea class="form-control" rows="5" id="necessity_note" name="necessity_note" placeholder="Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng"> {{($content != null) ? $content['comment_evaluation']['necessity']['note'] : ''}}</textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="necessity_rate" value="1" checked>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="necessity_rate" value="0">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="necessity_rate" value="1" {{($content != null && $content['comment_evaluation']['necessity']['rate'] == 1) ? 'checked' : ''}}>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="necessity_rate" value="0" {{($content != null && $content['comment_evaluation']['necessity']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">	1.3 Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì</label><br>
 							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="possibility_note" name="possibility_note"></textarea>
+							<textarea class="form-control" rows="5" id="possibility_note" name="possibility_note" placeholder="Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì">{{($content != null) ? $content['comment_evaluation']['possibility']['note'] : ''}}</textarea>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="possibility_rate" value="1" checked>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="possibility_rate" value="0">Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="possibility_rate" value="1" {{($content != null && $content['comment_evaluation']['possibility']['rate'] == 1) ? 'checked' : ''}}>Đạt yêu cầu</label>
+							<label class="radio-inline"><input type="radio" name="possibility_rate" value="0" {{($content != null && $content['comment_evaluation']['possibility']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
 
 						</div>
 					
@@ -109,20 +109,20 @@
 						<strong style="">II. Ý KIẾN CHUYÊN GIA </strong><span>(đánh dấu <strong>X</strong> vào 1 trong 3 ô dưới đây)</span><br><br>
 						<div class="form-group" style="padding-left: 3%">
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="1" checked>Đề nghị thực hiện</label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="1" {{($content != null && $content['expert_opinions']['is_perform'] == 1) ? 'checked' : ''}}>Đề nghị thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="0">Đề nghị không thực hiện</label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="0" {{($content != null && $content['expert_opinions']['is_unperform'] == 1) ? 'checked' : ''}}>Đề nghị không thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="2">Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
+								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="2" {{($content != null && $content['expert_opinions']['is_perform'] == 0 && $content['expert_opinions']['is_unperform'] == 0) ? 'checked' : ''}}>Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
 							</div> 
 							
 							<div class="request_change">
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.1 Tên dự án KH&CN:</label>
 				
-									<textarea class="form-control" rows="5" name="project_name" id="project_name" disabled></textarea>
+									<textarea class="form-control" rows="5" name="project_name" id="project_name" disabled>{{($content != null) ? $content['expert_opinions']['request']['name'] :''}}</textarea>
 									<br>
 									
 								</div>
@@ -130,7 +130,7 @@
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.2 Mục tiêu:</label>
 				
-									<textarea class="form-control" rows="5" name="project_target" id="project_target" disabled></textarea>
+									<textarea class="form-control" rows="5" name="project_target" id="project_target" disabled>{{($content != null) ? $content['expert_opinions']['request']['target'] : ''}}</textarea>
 									<br>
 									
 								</div>
@@ -138,7 +138,7 @@
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.3 Yêu cầu đối với kết quả:</label>
 				
-									<textarea class="form-control" rows="5" name="project_result" id="project_result" disabled></textarea>
+									<textarea class="form-control" rows="5" name="project_result" id="project_result" disabled>{{($content != null) ? $content['expert_opinions']['request']['result'] :''}}</textarea>
 									<br>
 									
 								</div>

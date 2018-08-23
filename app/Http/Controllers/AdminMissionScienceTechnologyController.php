@@ -585,7 +585,18 @@ class AdminMissionScienceTechnologyController extends Controller
 
         $mission_name = $stechs->value;
 
-       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name'));
+        $content = "";
+      $evaluation_form = EvaluationForm::where('user_id', Auth::id())
+                    ->where('mission_id', $mission->id)
+                    ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->first();
+
+      if ($evaluation_form->count() >= 1) {
+        $content = $evaluation_form->content;
+      }
+
+        // dd($content);
+
+       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name', 'content'));
     }
 
     public function storeEvaluation(Request $request) {
@@ -631,35 +642,35 @@ class AdminMissionScienceTechnologyController extends Controller
           $data['project_target'] = $request->get('project_target');
         }
 
-        $content = array([
-          'comment_evaluation'  => array([
-                                      'urgency_target' =>  array([
+        $content = array(
+          'comment_evaluation'  => array(
+                                      'urgency_target' =>  array(
                                            'note' =>  $data['urgency_target_note'],
                                            'rate' =>  $data['urgency_target_rate'],
-                                      ]),
+                                      ),
 
-                                      'necessity' =>  array([
+                                      'necessity' =>  array(
                                            'note' =>  $data['necessity_note'],
                                            'rate' =>  $data['necessity_rate'],
-                                      ]),
+                                      ),
 
-                                      'possibility' =>  array([
+                                      'possibility' =>  array(
                                            'note' =>  $data['possibility_note'],
                                            'rate' =>  $data['possibility_rate'],
-                                      ]),
-                                  ]),
+                                      ),
+                                  ),
 
-          'expert_opinions'  => array([
+          'expert_opinions'  => array(
                                       'is_perform' =>  $is_perform,
                                       'is_unperform' =>  $is_unperform,
-                                      'request' =>  array([
+                                      'request' =>  array(
                                           'name'  =>  $data['project_name'],
                                           'target'  =>  $data['project_target'],
                                           'result'  =>  $data['project_result'],
-                                      ]),
+                                      ),
                                      
-                                  ]),
-        ]); 
+                                  ),
+        ); 
       }
       
       $datas['mission_id'] = $mission_id;

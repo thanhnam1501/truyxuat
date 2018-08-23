@@ -541,6 +541,14 @@ $(document).ready(function() {
 
   })
 
+  $(function() {
+    if ($('input[name=suggest_perform]:checked').val() == 2) {
+      $('#project_name').removeAttr('disabled');
+      $('#project_result').removeAttr('disabled');
+      $('#project_target').removeAttr('disabled');
+    }
+  })
+
   $('.suggest_perform').on('click', function() {
     var suggest_perform = $('input[name=suggest_perform]:checked').val();
     if (suggest_perform == 2) {
@@ -550,8 +558,11 @@ $(document).ready(function() {
     }
     else {
       $('#project_name').attr('disabled','true');
+      $('#project_name').val('');
       $('#project_result').attr('disabled','true');
+      $('#project_result').val('');
       $('#project_target').attr('disabled','true');
+      $('#project_target').val('');
     }
   })
 
