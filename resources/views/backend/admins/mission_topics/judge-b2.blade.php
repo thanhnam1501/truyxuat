@@ -26,7 +26,8 @@
 @endsection
 
 @section('content')
-
+  
+<form>
   <div class="panel panel-default">
     <div class="panel-body">
 
@@ -42,13 +43,12 @@
           </div>
           <div class="col-md-12">
             <h5><strong>Họ và tên chuyên gia:</strong> {{Auth::user()->name}}</h5>
-            <h5><strong>Tên đề tài/dự án đề xuất:</strong> test test test</h5>
+            <h5><strong>Tên đề tài/dự án đề xuất:</strong> {{(isset($name))?$name:""}}</h5>
           </div>
           <div class="clearfix"></div>
           <br><br><br>
           <h5>
             <div class="col-md-12">
-              <form>
                 <h4><strong>I. NHẬN XÉT VÀ ĐÁNH GIÁ CHUNG ĐỀ XUẤT ĐẶT HÀNG</strong></h4>
                 <div class="col-md-12 block">
                     <p>1.1   Tính cấp thiết và triển vọng ứng dụng của các kết quả tạo ra vào việc xây dựng và hoạch định chính sách</p>
@@ -138,7 +138,6 @@
                         <textarea name="urgency" id="urgency" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($data['urgency'])?$data['urgency']:""}}</textarea>
                       </div>
                     </div>
-                </form>
               </div>
           </h5>
             <div class="col-md-12"> 
@@ -156,6 +155,10 @@
             </div>
         </div>
       </div>
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn btn-success pull-right">Đánh giá phiếu</button>
     </div>
   </div>
 </form>

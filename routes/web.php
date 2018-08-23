@@ -101,6 +101,10 @@ Route::middleware('revalidate')->group(function () {
 
             Route::post('mission-science-technologys/add-council','AdminMissionScienceTechnologyController@addCouncil')->name('mission-science-technologys.addCouncil');
 
+            Route::get('mission-science-technologys/evaluation/{key}','AdminMissionScienceTechnologyController@evaluation')->name('mission-science-technologys.evaluation');
+
+            Route::post('mission-science-technologys/evaluation/store','AdminMissionScienceTechnologyController@storeEvaluation')->name('mission-science-technologys.storeEvaluation');
+
 
             Route::get('position-councils/get-list', 'PositionCouncilController@getList')->name('position-councils.get-list');
 
@@ -129,12 +133,18 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::post('/submit-judged', 'AdminMissionTopicController@submitJudged')->name('admin.mission-topics.submitJudged');
 
-                Route::get('/judge', function() {
-                    
-                    return view('backend.admins.mission_topics.judge-b2');
-                });
+                Route::post('/judge', 'AdminMissionTopicController@judgeCouncilStore');
+
+                Route::get('/judge/{key}', 'AdminMissionTopicController@judgeCouncilView')->name('admin.mission-topics.judged');
+
+                Route::post('/get-list-council','AdminMissionTopicController@getListCouncil')->name('admin.mission-topics.getListCouncil');
+
+                Route::post('/add-council','AdminMissionTopicController@addCouncil')->name('admin.mission-topics.addCouncil');
+
+                Route::get('/get-round-collection/{id}','AdminMissionTopicController@getRoundCollection')->name('admin.mission-topics.getRoundCollection');
 
                 Route::get('/detail/{key}', 'AdminMissionTopicController@detail')->name('admin.mission-topics.detail');
+
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
             });
 
@@ -203,10 +213,17 @@ Route::middleware('revalidate')->group(function () {
         //* Quản lý đề tài hoặc đề án
         Route::group(['prefix' => 'mission-topics'], function() {
             Route::post('/get-list-submit-ele-copy', 'AdminMissionTopicController@getSubmitEleList')->name('admin.mission-topics.getSubmitEleList');
+
             Route::post('/submit-hard-copy', 'AdminMissionTopicController@submitHardCopy')->name('admin.mission-topics.submitHardCopy');
+
             Route::post('/approve-mission', 'AdminMissionTopicController@approveMission')->name('admin.mission-topics.approveMission');
+
             Route::post('/upload-list-categories', 'AdminMissionTopicController@uploadListCategories')->name('admin.mission-topics.uploadListCategories');
+
+            Route::post('/submit-assign', 'AdminMissionTopicController@submitAssign')->name('admin.mission-topics.submitAssign');
+
             Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
+            Route::post('/give-back-hard-copy', 'AdminMissionTopicController@giveBackHardCopy')->name('admin.mission-topics.giveBackHardCopy');
         });
         //* End
 
@@ -221,6 +238,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/upload-list-categories', 'AdminMissionScienceTechnologyController@uploadListCategories')->name('admin.mission-science-technologies.uploadListCategories');
             Route::post('/view-detail', 'AdminMissionScienceTechnologyController@viewDetail')->name('admin.mission-science-technologies.viewDetail');
             Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
+            Route::post('/give-back-hard-copy', 'AdminMissionScienceTechnologyController@giveBackHardCopy')->name('admin.mission-science-technologies.giveBackHardCopy');
         });
         //* End
 
