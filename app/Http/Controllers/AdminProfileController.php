@@ -20,7 +20,9 @@ class AdminProfileController extends Controller
 
   public function index()
   {
-
+    if (!Entrust::can('account-profile-menu')); {
+        abort(404);
+    }
     return view('backend.accounts.list');
   }
 
