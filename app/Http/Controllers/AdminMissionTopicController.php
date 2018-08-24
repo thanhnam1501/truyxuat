@@ -30,7 +30,7 @@ class AdminMissionTopicController extends Controller
      */
     public function index()
     {
-        if (!Entrust::can('mission-topics-menu')); {
+        if (!Entrust::can('mission-topics-menu')) {
             abort(404);
         }
         $round_collection = RoundCollection::where('status',1)->get();
