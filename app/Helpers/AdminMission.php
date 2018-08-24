@@ -79,11 +79,11 @@ class AdminMission {
 			      	// $id = $topic->profile_id;
 			      	$profile = Profile::find($id_profile);
 			      	$to = $profile->email;
-			      	$subject = "Thông báo trạng thái thu hồ sơ bản cứng";
+			      	$subject = "Thông báo thu hồ sơ bản cứng";
 			      	$view = "emails.status_file";
 			      	$parameter = [
 			      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
-			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng thuộc nhiệm vụ: " '.$data['mission_name'].' " đã được thu.'
+			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng nhiệm vụ: '.$data['mission_name'].' đã được thu.'
 			      	];
 			      	$type = 2;
 			      	$status = 2;
@@ -172,7 +172,7 @@ class AdminMission {
 						if ($data['checkbox'] == 'true') {
 							$profile = Profile::find($id_profile);
 					      	$to = $profile->email;
-					      	$subject = "Thông báo trạng thái kiểm tra tính hợp lệ của hồ sơ";
+					      	$subject = "Kết quả kiểm tra tính hợp lệ của hồ sơ";
 					      	$view = "emails.status_file";
 					      	$parameter = [
 					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
@@ -288,7 +288,7 @@ class AdminMission {
 						if (isset($data['is_send_email']) && $data['is_send_email'] == 'is_send_email') {
 							$profile = Profile::find($id_profile);
 					      	$to = $profile->email;
-					      	$subject = "Thông báo trạng thái phê duyệt thực hiện";
+					      	$subject = "Kết quả phê duyệt thực hiện";
 					      	$view = "emails.status_file";
 					      	$parameter = [
 					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
@@ -383,7 +383,7 @@ class AdminMission {
 						if ($data['checkbox'] == 'true') {
 							$profile = Profile::find($id_profile);
 					      	$to = $profile->email;
-					      	$subject = "Thông báo trạng thái đánh giá hồ sơ";
+					      	$subject = "Kết quả đánh giá hồ sơ đưa vào xét duyệt trong hội đồng";
 					      	$view = "emails.status_file";
 					      	$parameter = [
 					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
