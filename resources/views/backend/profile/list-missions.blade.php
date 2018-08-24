@@ -26,7 +26,7 @@
         
         <div class="col-md-12" style="margin-top: 10px">
 
-            <h5>Anh/chị vui lòng đọc văn bản hợp nhất số 03 (Thông tư số 07/2014/TT-BKHCN và Thông tư số 03/2017/TT-BKHCN ) để biết thêm thông tin chi tiết về các loại đề tài, dự án. <br><a href="{{ asset('documents/van_ban_hop_nhat.zip') }}" style="font-size: 14px"><Đọc tại đây></a></h5>
+            <h5>Anh/chị vui lòng đọc văn bản hợp nhất số 03 (Thông tư số 07/2014/TT-BKHCN và Thông tư số 03/2017/TT-BKHCN ) và văn bản hợp nhất số 01 (Thông tư số 32/2014/TT-BKHCN và Thông tư số 08/2016/TTBKHCN) để biết thêm thông tin chi tiết về các loại đề tài, đề án. <br><a href="{{ asset('documents/van_ban_hop_nhat.zip') }}" style="font-size: 14px"><Đọc tại đây></a></h5>
 
         </div>
 
@@ -96,7 +96,7 @@
                   <select class="form-control" name="mission_type" id="mission_type">
 
                     <option value="-1">-- Lựa chọn loại nghiệm vụ --</option>
-                    <option value="mission_topics">Đề tài hoặc dự án</option>
+                    <option value="mission_topics">Đề tài hoặc đề án</option>
                     {{-- <option value="mission_sxtns">Đề tài hoặc dự án</option> --}}
                     <option value="mission_science_technologys">Dự án khoa học hoặc công nghệ</option>
                   </select>

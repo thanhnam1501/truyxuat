@@ -26,6 +26,10 @@ use Datatables;
 
 class AdminMissionTopicController extends Controller
 {
+    public function __construct()
+    {
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,6 +37,10 @@ class AdminMissionTopicController extends Controller
      */
     public function index()
     {
+
+        if (!Entrust::can('mission-topics-menu')) {
+            abort(404);
+        }
 
         $round_collection = RoundCollection::where('status', 1)->get();
         $group_councils = GroupCouncil::where('status', 1)->get();
