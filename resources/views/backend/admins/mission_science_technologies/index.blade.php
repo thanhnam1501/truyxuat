@@ -245,6 +245,7 @@
         <div class="modal-body">
           <form enctype="multipart/form-data" id="approve-frm">
             <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="mission_name" id="mission_name" value="">
             <div class="form-group col-md-12">
               <div class="col-md-3">
                 <label for="">Trạng thái <span class="error">(*)</span></label>

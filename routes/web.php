@@ -43,6 +43,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('account-profiles/get-list', 'AdminProfileController@list')->name('profiles.getList');
             Route::post('account-profiles/lock', 'AdminProfileController@lockAccount')->name('profiles.lockAccount');
             Route::get('account-profiles/check-email/{email}', 'AdminProfileController@checkEmail')->name('profiles.checkEmail');
+            Route::post('account-profiles/send-email', 'AdminProfileController@sendEmail')->name('profiles.sendEmail');
             //* End
 
             //* Quản lý đợt thu hồ sơ

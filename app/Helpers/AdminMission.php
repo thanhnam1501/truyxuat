@@ -79,11 +79,11 @@ class AdminMission {
 			      	// $id = $topic->profile_id;
 			      	$profile = Profile::find($id_profile);
 			      	$to = $profile->email;
-			      	$subject = "Thông báo trạng thái thu hồ sơ bản cứng";
+			      	$subject = "Thông báo thu hồ sơ bản cứng";
 			      	$view = "emails.status_file";
 			      	$parameter = [
 			      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
-			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng thuộc nhiệm vụ: " '.$data['mission_name'].' " đã được thu.'
+			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng nhiệm vụ: '.$data['mission_name'].' đã được thu.'
 			      	];
 			      	$type = 2;
 			      	$status = 2;
@@ -125,11 +125,12 @@ class AdminMission {
 	}
 
 	public static function submitValid($data){
-
+		
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
 			$old_data = $topic->get()[0];
-			//
+			$id_profile = $old_data->profile_id;
+
 			if ($topic->exists()) {
 			//
 				DB::beginTransaction();
@@ -141,16 +142,16 @@ class AdminMission {
 
 							$action = "Xác nhận hồ sơ hợp lệ";
 							$msg = "Hồ sơ đã được xác nhận là hợp lệ";
-
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" được xác nhận là hợp lệ.';
 						} else if ($data['status'] == 'invalid') { // invalid
 							$topic->update([
 								'is_invalid'	=> 1,
 								'is_invalid_reason'	=>	$data['reason']
 							]);
 
-							$action = "Xác nhận không hồ sơ hợp lệ";
+							$action = "Xác nhận hồ sơ không hợp lệ";
 							$msg = "Hồ sơ đã được xác nhận là không hợp lệ";
-
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" được xác nhận là không hợp lệ với lý do: "'.$data['reason'].'".';
 						}
 
 						$new_data = $topic->get()[0];
@@ -168,7 +169,20 @@ class AdminMission {
 						//* End
 
 						//* Send email
-						//* code send email here
+						if ($data['checkbox'] == 'true') {
+							$profile = Profile::find($id_profile);
+					      	$to = $profile->email;
+					      	$subject = "Kết quả kiểm tra tính hợp lệ của hồ sơ";
+					      	$view = "emails.status_file";
+					      	$parameter = [
+					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
+					      		'content'	=>	$content_email 
+					      	];
+					      	$type = 2;
+					      	$status = 2;
+					      	$numb = 0;
+					      	Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+						}
 						//* End
 						//
 						
@@ -219,6 +233,8 @@ class AdminMission {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
 			$old_data = $topic->get()[0];
 
+			$id_profile = $old_data->profile_id;
+
 			if ($topic->exists()) {
 
 				DB::beginTransaction();
@@ -240,7 +256,7 @@ class AdminMission {
 
 							$action = "Xác nhận được phê duyệt thực hiện";
 							$msg = "Hồ sơ đã được phê duyệt thực hiện";
-
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" được xác nhận phê duyệt.';
 						} else if ($data['is_performed'] == 0) { // invalid
 							$topic->update([
 								'is_unperformed'	=> 1,
@@ -250,6 +266,7 @@ class AdminMission {
 
 							$action = "Xác nhận không hồ sơ được phê duyệt thực hiện";
 							$msg = "Hồ sơ không được phê duyệt thực hiện";
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" không được xác nhận phê duyệt với lý do: "'.$data['is_unperformed_reason'].'".';
 
 						}
 
@@ -266,7 +283,24 @@ class AdminMission {
 			        ];
 			      ApplyLog::createLog($arr);
 						//* End
-			//
+					
+					//* Send email
+						if (isset($data['is_send_email']) && $data['is_send_email'] == 'is_send_email') {
+							$profile = Profile::find($id_profile);
+					      	$to = $profile->email;
+					      	$subject = "Kết quả phê duyệt thực hiện";
+					      	$view = "emails.status_file";
+					      	$parameter = [
+					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
+					      		'content'	=>	$content_email 
+					      	];
+					      	$type = 2;
+					      	$status = 2;
+					      	$numb = 0;
+					      	Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+						}
+						//* End
+						//
 					DB::commit();
 
 			    return $result = [
@@ -306,7 +340,8 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
 			$old_data = $topic->get()[0];
-			//
+			$id_profile = $old_data->profile_id;
+
 			if ($topic->exists()) {
 			//
 				DB::beginTransaction();
@@ -318,7 +353,7 @@ class AdminMission {
 
 							$action = "Xác nhận hồ sơ được đánh giá trong hội đồng";
 							$msg = "Hồ sơ đã được xác nhận đánh giá trong hội đồng";
-
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" được đưa vào đánh giá trong hội đồng.';
 						} else if ($data['status'] == 'denied') { // invalid
 							$topic->update([
 								'is_denied'	=> 1,
@@ -327,25 +362,38 @@ class AdminMission {
 
 							$action = "Từ chối đánh giá hồ sơ trong hội đồng";
 							$msg = "Hồ sơ đã được xác nhận từ chối đánh giá trong hội đồng";
-
+							$content_email = 'Chúng tôi thông báo rằng, hồ sơ nhiệm vụ: "'.$data['mission_name'].'" bị từ chối đánh giá trong hội đồng với lý do: "'.$data['reason'].'".';
 						}
 
 						$new_data = $topic->get()[0];
 
 						//* Create logs *//
-			      $arr = [
-			          'admin_id' 	 => Auth::guard('web')->user()->id,
-			          'content'    => $action,
-			          'old_data'   => json_encode($old_data),
-			          'new_data'   => json_encode($new_data),
-			          'table_name' => $data['table_name'],
-			          'record_id'  => $data['id']
-			        ];
-			      ApplyLog::createLog($arr);
+			      		$arr = [
+				          'admin_id' 	 => Auth::guard('web')->user()->id,
+				          'content'    => $action,
+				          'old_data'   => json_encode($old_data),
+				          'new_data'   => json_encode($new_data),
+				          'table_name' => $data['table_name'],
+				          'record_id'  => $data['id']
+				        ];
+			      		ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
-						//* code send email here
+						if ($data['checkbox'] == 'true') {
+							$profile = Profile::find($id_profile);
+					      	$to = $profile->email;
+					      	$subject = "Kết quả đánh giá hồ sơ đưa vào xét duyệt trong hội đồng";
+					      	$view = "emails.status_file";
+					      	$parameter = [
+					      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
+					      		'content'	=>	$content_email 
+					      	];
+					      	$type = 2;
+					      	$status = 2;
+					      	$numb = 0;
+					      	Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+						}
 						//* End
 						DB::commit();
 
