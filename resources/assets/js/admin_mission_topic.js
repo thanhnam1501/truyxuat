@@ -349,6 +349,7 @@ $(document).ready(function() {
         if (res != null) {
           if (res != true) {
             toastr.success(res.msg);
+            $("#topic-tbl").DataTable().ajax.reload();
             $("#role_user_devolve_file").val("-1");
             $("#role_user_handle_file").val("-1");
             $('#deadline-group').find("input").val("");
@@ -356,7 +357,7 @@ $(document).ready(function() {
 
             $("#modal-assign").modal("hide");
 
-            $("#topic-tbl").DataTable().ajax.reload();
+            
           }
         }
       }, error: function (err){
