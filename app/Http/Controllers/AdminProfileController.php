@@ -49,11 +49,11 @@ class AdminProfileController extends Controller
               ->addIndexColumn()
               ->editColumn('status', function($profile) {
 
-                if ($profile->status == 0) {
+                if ($profile->status == 0 && Entrust::can('account-unlock')) {
 
                   return '<label data-tooltip="tooltip" title="Mở khóa tài khoản" class="switch switch-small"><input type="checkbox" data-profile_id="'.$profile->id.'" class="lock-account"/><span></span></label>';
 
-                } else if ($profile->status == 1) {
+                } else if ($profile->status == 1 && Entrust::can('account-lock')) {
 
                   return '<label data-tooltip="tooltip" title="Khóa tài khoản" class="switch switch-small"><input type="checkbox" data-profile_id="'.$profile->id.'" checked class="lock-account"/><span></span></label>';
 
