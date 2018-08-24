@@ -338,9 +338,9 @@ $(document).ready(function() {
      url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
      type: 'GET',
      success: function(res) {
-
+        $('#round_collection_add_council').html(res.year + ' - ' + res.name);
         $('#add-council-submit-btn').attr('data-mission_id', id);
-        $('#round_collection').html(res.year + ' - ' + res.name);
+        
         $('#year_round_collection').html(res.year);
         // $('#list-council-tbl').attr('data-round_colection_id', res.id);
         $('#round_collection_id').val(res.id);
@@ -485,12 +485,15 @@ $(document).ready(function() {
       var council_id = $('input[name=council_id]:checked').val();
       var mission_science_technology_id = $('#add-council-submit-btn').data('mission_id');
 
+      var group_council_id  = $('#group_council').val();
+      
       $.ajax({
         url: app_url + 'admin/mission-science-technologys/add-council',
         type: 'post',
         data: {
           council_id: council_id,
           mission_science_technology_id: mission_science_technology_id,
+          group_council_id: group_council_id,
         },
         success: function(res) {
           if (!res.error) {
@@ -542,27 +545,30 @@ $(document).ready(function() {
   })
 
   $(function() {
-    if ($('input[name=suggest_perform]:checked').val() == 2) {
-      $('#project_name').removeAttr('disabled');
-      $('#project_result').removeAttr('disabled');
-      $('#project_target').removeAttr('disabled');
-    }
+    // if ($('input[name=suggest_perform]:checked').val() == 2) {
+    //   $('#project_name').removeAttr('disabled');
+    //   $('#project_result').removeAttr('disabled');
+    //   $('#project_target').removeAttr('disabled');
+    // }
   })
 
   $('.suggest_perform').on('click', function() {
     var suggest_perform = $('input[name=suggest_perform]:checked').val();
     if (suggest_perform == 2) {
-      $('#project_name').removeAttr('disabled');
-      $('#project_result').removeAttr('disabled');
-      $('#project_target').removeAttr('disabled');
+      
+      // $('#project_name').removeAttr('disabled');
+      // $('#project_result').removeAttr('disabled');
+      // $('#project_target').removeAttr('disabled');
+      $('.request_change').css('display', 'block');
     }
     else {
-      $('#project_name').attr('disabled','true');
-      $('#project_name').val('');
-      $('#project_result').attr('disabled','true');
-      $('#project_result').val('');
-      $('#project_target').attr('disabled','true');
-      $('#project_target').val('');
+      // $('#project_name').attr('disabled','true');
+      // $('#project_name').val('');
+      // $('#project_result').attr('disabled','true');
+      // $('#project_result').val('');
+      // $('#project_target').attr('disabled','true');
+      // $('#project_target').val('');
+      $('.request_change').css('display', 'none');
     }
   })
 

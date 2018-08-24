@@ -309,13 +309,35 @@ class AdminMissionTopicController extends Controller
           $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
           }
 
-          $flag = $topic->judgeCouncil->first();
-
-          if (!empty($flag)) {
-              if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
-                $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          $flag_1 = false;
+          $flag_2 = false;
+          
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
               }
           }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc')) {
+            $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          }
+          //     
+          // $flag = $topic->judgeCouncil->first();
+
+          // if (!empty($flag)) {
+          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+          //       $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
+          // }
 
           return $string;
         })
@@ -498,6 +520,8 @@ class AdminMissionTopicController extends Controller
 
     $data['mission_id'] =  $request->get('mission_topic_id');
     
+    $data['group_council_id'] = $request->get('group_council_id');
+
     $data['mission_council']  = 'App\Models\CouncilMissionTopic';
 
     $result = AdminMission::addCouncil($data);
@@ -516,15 +540,19 @@ class AdminMissionTopicController extends Controller
       $name = $topic->values()->where('mission_topic_attribute_id',1)->first()->value;
     } 
 
+    $comment_evaluation = '';
+    $expert_opinions = '';
+
     if (!empty($topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first())) {
         
         $data = $topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first()->content;
-    }
+    
 
-    $comment_evaluation = $data['comment_evaluation'];
+      $comment_evaluation = $data['comment_evaluation'];
 
-    $expert_opinions = $data['expert_opinions'];
-
+      $expert_opinions = $data['expert_opinions'];
+  }
+  
     $date = array();
 
     $date['d'] = date('d',time());

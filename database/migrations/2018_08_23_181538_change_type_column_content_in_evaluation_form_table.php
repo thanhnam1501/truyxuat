@@ -14,7 +14,7 @@ class ChangeTypeColumnContentInEvaluationFormTable extends Migration
     public function up()
     {
         Schema::table('evaluation_form', function (Blueprint $table) {
-            if (Schema::hasColumn('content', 'evaluation_form')) {
+            if (Schema::hasColumn('evaluation_form', 'content')) {
                 $table->text('content')->nullable()->change();
             }
         });
@@ -28,7 +28,7 @@ class ChangeTypeColumnContentInEvaluationFormTable extends Migration
     public function down()
     {
         Schema::table('evaluation_form', function (Blueprint $table) {
-            if (Schema::hasColumn('content', 'evaluation_form')) {
+            if (Schema::hasColumn('evaluation_form', 'content')) {
                 $table->text('content')->change();
             }
         });

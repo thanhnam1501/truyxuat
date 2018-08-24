@@ -458,7 +458,7 @@
           
           <div class="row form-group">
             <div class="col-md-2"><label>Đợt gọi hồ sơ:</label></div>
-            <div class="col-md-6"><p id="round_collection"></p>
+            <div class="col-md-6"><p id="round_collection_add_council"></p>
             </div>
           </div>
           

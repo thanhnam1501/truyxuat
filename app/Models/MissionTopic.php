@@ -51,4 +51,12 @@ class MissionTopic extends Model
     {
         return $this->hasMany('App\Models\EvaluationForm','mission_id');
     }
+
+    public function council () {
+        return $this->belongsToMany('App\Models\Council', 'council_mission_topics', 'mission_id', 'council_id');
+      }
+
+      public function groupCouncil () {
+        return $this->belongsToMany('App\Models\GroupCouncil', 'council_mission_topics', 'mission_id', 'group_council_id');
+      }
 }

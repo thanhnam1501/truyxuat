@@ -417,13 +417,15 @@ class AdminMission {
         try {
           DB::beginTransaction();
 
-          $mission_council = $data['mission_council']::where('mission_id', $data['mission_id'])->get();
+          $mission_council = $data['mission_council']::where('mission_id', $data['mission_id'])->where('group_council_id', $data['group_council_id'])->get();
 
           if ($mission_council->count() >= 1) {
 
           	$mission_council = $mission_council->first();
 
           	$mission_council->council_id = $data['council_id'];
+
+          	$mission_council->group_council_id = $data['group_council_id'];
 
           	$mission_council->save();
 
@@ -437,7 +439,7 @@ class AdminMission {
           }
           else {
           		$data['mission_council']::create([
-	            'council_id' => $data['council_id'], 'mission_id' => $data['mission_id']
+	            'council_id' => $data['council_id'], 'mission_id' => $data['mission_id'], 'group_council_id' => $data['group_council_id']
 	          ]);
 
           		DB::commit();

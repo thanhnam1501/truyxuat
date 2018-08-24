@@ -139,11 +139,11 @@
 								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="2" {{($content != null && $content['expert_opinions']['is_perform'] == 0 && $content['expert_opinions']['is_unperform'] == 0) ? 'checked' : ''}}>Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
 							</div> 
 							
-							<div class="request_change">
+							<div class="request_change" style="display: none">
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.1 Tên dự án KH&CN:</label>
 				
-									<textarea class="form-control" rows="5" name="project_name" id="project_name" disabled>{{($content != null) ? $content['expert_opinions']['request']['name'] :''}}</textarea>
+									<textarea class="form-control" rows="5" name="project_name" id="project_name">{{($content != null) ? $content['expert_opinions']['request']['name'] :''}}</textarea>
 									<br>
 									
 								</div>
@@ -151,7 +151,7 @@
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.2 Mục tiêu:</label>
 				
-									<textarea class="form-control" rows="5" name="project_target" id="project_target" disabled>{{($content != null) ? $content['expert_opinions']['request']['target'] : ''}}</textarea>
+									<textarea class="form-control" rows="5" name="project_target" id="project_target">{{($content != null) ? $content['expert_opinions']['request']['target'] : ''}}</textarea>
 									<br>
 									
 								</div>
@@ -159,7 +159,7 @@
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.3 Yêu cầu đối với kết quả:</label>
 				
-									<textarea class="form-control" rows="5" name="project_result" id="project_result" disabled>{{($content != null) ? $content['expert_opinions']['request']['result'] :''}}</textarea>
+									<textarea class="form-control" rows="5" name="project_result" id="project_result">{{($content != null) ? $content['expert_opinions']['request']['result'] :''}}</textarea>
 									<br>
 									
 								</div>

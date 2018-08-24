@@ -370,6 +370,7 @@ $(document).ready(function() {
         data: {
           council_id: council_id,
           mission_topic_id: mission_topic_id,
+          group_council_id: $('#group_council').val(),
         },
         success: function(res) {
           if (!res.error) {
@@ -405,7 +406,7 @@ $(document).ready(function() {
      success: function(res) {
 
         $('#add-council-submit-btn').attr('data-mission_id', id);
-        $('#round_collection').html(res.year + ' - ' + res.name);
+        $('#round_collection_add_council').html(res.year + ' - ' + res.name);
         $('#year_round_collection').html(res.year);
         // $('#list-council-tbl').attr('data-round_colection_id', res.id);
         $('#round_collection_id').val(res.id);
