@@ -71,8 +71,8 @@ class MissionScienceTechnology extends Model
     return $this->belongsToMany('App\Models\Council', 'council_mission_science_technologies', 'mission_science_technology_id', 'council_id');
   }
 
-  public function judgeCouncil()
-  {
-      return $this->belongsToMany('App\Models\Council','council_mission_topics','mission_id','council_id')->wherePivot('group_council_id',1);
-  }
+  // public function judgeCouncil()
+  // {
+  //     return $this->belongsToMany('App\Models\Council','council_mission_science_technologies','mission_id','council_id')->wherePivot('group_council_id', 1);
+  // }
 }
