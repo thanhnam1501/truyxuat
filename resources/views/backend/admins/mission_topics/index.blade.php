@@ -102,6 +102,7 @@
                   <div class="col-md-9">
                     <select class="form-control" name="status_submit_is_valid">
                       <option value="-1">Tất cả</option>
+                      <option value="-2">Chưa cập nhập</option>
                       <option value="1">Hợp lệ</option>
                       <option value="0">Không hợp lệ</option>
                     </select>
@@ -115,6 +116,7 @@
                   <div class="col-md-9">
                     <select class="form-control" name="status_submit_is_judged">
                       <option value="-1">Tất cả</option>
+                      <option value="-2">Chưa cập nhập</option>
                       <option value="1">Được đánh giá trong hội đồng</option>
                       <option value="0">Không được đưa vào hội đồng đánh giá</option>
                     </select>
@@ -128,6 +130,7 @@
                   <div class="col-md-9">
                     <select class="form-control" name="status_submit_is_performed">
                       <option value="-1">Tất cả</option>
+                      <option value="-2">Chưa cập nhập</option>
                       <option value="1">Được phê duyệt thực hiện</option>
                       <option value="0">Không được phê duyệt thực hiện</option>
                     </select>
