@@ -198,7 +198,7 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
           }
 
-          if ($topic->is_valid && Entrust::can(['assign-council'])) {
+          if ($topic->is_valid && empty($topic->council_id) && Entrust::can(['assign-council'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
           }
 

@@ -244,10 +244,8 @@
 
                     </li> --}}
 
-
-                    <li class="xn-title">Hệ thống</li>
-
                     @if (Entrust::can('user-view'))
+                    <li class="xn-title">Hệ thống</li>
                         <li class="@if(Request::is('*admin/account-users*')) active @endif">
                             <a href="{{ route('account-users.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Tài khoản</span></a>
                         </li>
