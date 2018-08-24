@@ -171,39 +171,54 @@
                     {{-- Menu chức năng hồ sơ --}}
                     <li class="xn-title">Danh sách nhiệm vụ</li>
 
-                    <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
+                    @if (Entrust::can('mission-topics-menu'))
+                        <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
                             <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
-                    <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
+                    @endif
+
+                    @if (Entrust::can('mission-science-technology-menu'))
+                        <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
+                    @endif
                     {{-- END menu chức năng hồ sơ --}}
 
                     <li class="xn-title">Cá nhân / Tổ chức</li>
-                    <li class="@if(Request::is('*admin/account-profiles*')) active @endif">
-                        <a href="{{ route('account-profiles.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Cá nhân</span></a>
-                    </li>
+                    @if (Entrust::can('account-profile-menu'))
+                        <li class="@if(Request::is('*admin/account-profiles*')) active @endif">
+                            <a href="{{ route('account-profiles.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Cá nhân</span></a>
+                        </li>
+                    @endif
 
-                    <li class="xn-openable @if(Request::is('*council*') || Request::is('*admin/group-councils*')) active @endif" >
-                        <a href="#" ><span class="fa fa-list-ul"></span><span class="xn-text">Hội đồng</span></a>
+                    @if (Entrust::can('council-menu'))
+                        <li class="xn-openable @if(Request::is('*council*') || Request::is('*admin/group-councils*')) active @endif" >
+                            <a href="#" ><span class="fa fa-list-ul"></span><span class="xn-text">Hội đồng</span></a>
 
-                        <ul>
-                            <li class="@if(Request::is('*council*')) active @endif">
-                                <a href="{{ route('council.index') }}"><span class="fa fa-user"></span> <span class="xn-text">Hội đồng</span></a>
-                            </li>
+                            <ul>
+                                @if (Entrust::can('council-menu'))
+                                    <li class="@if(Request::is('*council*')) active @endif">
+                                        <a href="{{ route('council.index') }}"><span class="fa fa-user"></span> <span class="xn-text">Hội đồng</span></a>
+                                    </li>
+                                @endif
 
-                            {{-- @if(Entrust::can(['round-collection-view','round-collection-create','round-collection-edit','round-collection-delete',])) --}}
-                            <li class="@if(Request::is('*admin/group-councils*')) active @endif">
-                                <a href="{{ route('group-councils.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Nhóm hội đồng</span></a>
-                            </li>
+                                {{-- @if(Entrust::can(['round-collection-view','round-collection-create','round-collection-edit','round-collection-delete',])) --}}
+                                @if (Entrust::can('group-council-menu'))
+                                    <li class="@if(Request::is('*admin/group-councils*')) active @endif">
+                                        <a href="{{ route('group-councils.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Nhóm hội đồng</span></a>
+                                    </li>
+                                @endif
 
-                            <li class="@if(Request::is('*admin/position-councils*')) active @endif">
-                                <a href="{{ route('position-councils.index') }}"><span class="fa fa-map-marker"></span> <span class="xn-text">Vị trí hội đồng</span></a>
-                            </li>
-                            {{-- @endif --}}
-                        </ul>
+                                @if (Entrust::can('position-council-menu'))
+                                    <li class="@if(Request::is('*admin/position-councils*')) active @endif">
+                                        <a href="{{ route('position-councils.index') }}"><span class="fa fa-map-marker"></span> <span class="xn-text">Vị trí hội đồng</span></a>
+                                    </li>
+                                @endif
+                                {{-- @endif --}}
+                            </ul>
 
-                    </li>
+                        </li>
+                    @endif
 
                     @if(Entrust::can('round-collection-view'))
                         <li class="@if(Request::is('*admin/round-collection*')) active @endif">
@@ -250,9 +265,11 @@
                         </li>
                     @endif
 
-                    <li class="@if(Request::is('*admin/logs*')) active @endif">
-                        <a href="{{ route('admin.log') }}"><span class="fa fa-bug"></span> <span class="xn-text">Logs hệ thống</span></a>
-                    </li>
+                    @if (Entrust::can('logs-menu'))
+                        <li class="@if(Request::is('*admin/logs*')) active @endif">
+                            <a href="{{ route('admin.log') }}"><span class="fa fa-bug"></span> <span class="xn-text">Logs hệ thống</span></a>
+                        </li>
+                    @endif
                 </ul>
                 <!-- END X-NAVIGATION -->
             </div>
