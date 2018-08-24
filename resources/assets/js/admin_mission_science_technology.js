@@ -72,11 +72,14 @@ $(document).ready(function() {
     $('#modal-valid').modal('show');
     $('#status').val('-1');
     $('#invalid_reason').val('');
-    $('#checkbox-send-email').attr('checked', 'checked');
+    // $('#checkbox-send-email').attr('checked', 'checked');
     $('#invalid_reason').attr('disabled', 'disabled');
 
     var data_id = $(this).attr('data-id');
     $('#modal-valid .btn-success').attr('data_id', data_id);
+
+    var mission_name = $(this).data('name');
+    $('#modal-valid .btn-success').attr('mission_name', mission_name);
 
   });
 
@@ -87,6 +90,7 @@ $(document).ready(function() {
     var reason = $('#invalid_reason').val();
     var checkbox = $('#checkbox-send-email').is(':checked');
     var data_id = $('#modal-valid .btn-success').attr('data_id');
+    var mission_name = $('#modal-valid .btn-success').attr('mission_name');
 
     if (status == -1) {
       toastr.error('Vui lòng chọn trạng thái hồ sơ ! ');
@@ -101,8 +105,10 @@ $(document).ready(function() {
           status: status,
           reason: reason,
           checkbox: checkbox,
-          id: data_id
+          id: data_id,
+          mission_name: mission_name
         }, success: function(res){
+          // console.log(res);
           if (!res.error) {
 
             toastr.success(res.message);
@@ -136,6 +142,8 @@ $(document).ready(function() {
 
     $('#science-technology-tbl').on('click','.approve-btn', function() {
         $('#id').val($(this).data('id'));
+        var mission_name = $(this).data('name');
+        $('#mission_name').val(mission_name);
     });
 
     $('#approve-frm').validate({
@@ -229,12 +237,14 @@ $(document).ready(function() {
       $('#modal-judged').modal('show');
       $('#status_judged').val('-1');
       $('#denied_reason').val('');
-      $('#checkbox-send-email-judged').attr('checked', 'checked');
+      // $('#checkbox-send-email-judged').attr('checked', 'checked');
       $('#denied_reason').attr('disabled', 'disabled');
 
       var data_id = $(this).attr('data-id');
       $('#modal-judged .btn-success').attr('data_id', data_id);
 
+      var mission_name = $(this).data('name');
+      $('#modal-judged .btn-success').attr('mission_name', mission_name);
     });
 
     $('#modal-judged').on('click', '.btn-success', function(event) {
@@ -244,6 +254,7 @@ $(document).ready(function() {
       var reason = $('#denied_reason').val();
       var checkbox = $('#checkbox-send-email-judged').is(':checked');
       var data_id = $('#modal-judged .btn-success').attr('data_id');
+      var mission_name = $('#modal-judged .btn-success').attr('mission_name');
 
       if (status == -1) {
         toastr.error('Vui lòng chọn trạng thái xét duyệt ! ');
@@ -258,7 +269,8 @@ $(document).ready(function() {
             status: status,
             reason: reason,
             checkbox: checkbox,
-            id: data_id
+            id: data_id,
+            mission_name: mission_name
           }, success: function(res){
 
             if (!res.error) {

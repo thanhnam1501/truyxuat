@@ -281,7 +281,7 @@ class AdminMissionTopicController extends Controller
                     ->count();
 
             if ($check > 0) {      
-              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
             } 
           }
 
@@ -300,13 +300,13 @@ class AdminMissionTopicController extends Controller
 
 
             if ($check == 1) {
-              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
+              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
             }
             
           }        
 
           if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
-          $string .=  "<a data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
+          $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
           }
 
           $flag = $topic->judgeCouncil->first();
@@ -338,7 +338,7 @@ class AdminMissionTopicController extends Controller
     public function approveMission(Request $request)
     {
 
-      $data = $request->only('id','is_performed','is_unperformed_reason','approve_type','is_send_email');
+      $data = $request->only('id','is_performed','is_unperformed_reason','approve_type','is_send_email', 'mission_name');
 
       $data['table_name'] = 'mission_topics';
 
@@ -359,7 +359,7 @@ class AdminMissionTopicController extends Controller
     }
 
     public function submitValid(Request $request){
-      $data = $request->only('status', 'checkbox', 'reason', 'id');
+      $data = $request->only('status', 'checkbox', 'reason', 'id', 'mission_name');
 
       $data['table_name'] = 'mission_topics';
       $data['form'] = 'A1';
@@ -370,7 +370,7 @@ class AdminMissionTopicController extends Controller
     }
 
     public function submitJudged(Request $request){
-      $data = $request->only('status', 'checkbox', 'reason', 'id');
+      $data = $request->only('status', 'checkbox', 'reason', 'id', 'mission_name');
 
       $data['table_name'] = 'mission_topics';
       $data['form'] = 'A1';
