@@ -7,6 +7,7 @@ use App\Models\Profile;
 use DB;
 use Datatables;
 use Entrust;
+use App\Models\Email;
 
 class AdminProfileController extends Controller
 {
@@ -20,7 +21,9 @@ class AdminProfileController extends Controller
 
   public function index()
   {
-
+    if (!Entrust::can('account-profile-menu')) {
+        abort(404);
+    }
     return view('backend.accounts.list');
   }
 
@@ -69,7 +72,7 @@ class AdminProfileController extends Controller
                 return $string;
               })
               ->editColumn('mobile', function($profile){
-                $string = '<a id="call-mobile" href="#">'.$profile->mobile.'</a>';
+                $string = '<a id="call-mobile" href="tel:'.$profile->mobile.'">'.$profile->mobile.'</a>';
                 return $string;
               })
               ->addColumn('action', function($profile) {
@@ -339,5 +342,31 @@ class AdminProfileController extends Controller
             'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
         ]);
       }
+  }
+
+  public function sendEmail(Request $request)
+  {
+    $to = $request->email;
+
+    $subject = $request->subject;
+
+    $parameter['name'] = $request->name;
+
+    $parameter['content'] = $request->content;
+
+    $view = null;
+
+    $type = 0;
+
+    $status = null;
+
+    $numb = null;
+
+    Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+
+     return response()->json([
+            'error'     =>  false,
+            'message' =>  'Đã gửi mail thành công !',
+        ]);
   }
 }

@@ -45,6 +45,9 @@ class AdminMissionScienceTechnologyController extends Controller
      */
     public function index()
     {
+        if (!Entrust::can('mission-science-technology-menu')) {
+            abort(404);
+        }
         $round_collection = RoundCollection::where('status', 1)->get();
         $group_councils = GroupCouncil::where('status', 1)->get();
 
@@ -289,18 +292,18 @@ class AdminMissionScienceTechnologyController extends Controller
             
           }
 
-          $flag = $topic->judgeCouncil->first();
+          // $flag = $topic->judgeCouncil->first();
 
-          if (!empty($flag)) {
-              if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
-                $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
-              }
+          // if (!empty($flag)) {
+          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+          //       $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
 // =======
-//           if (Entrust::can(['evaluation-doc'])) {
+          if (Entrust::can(['evaluation-doc'])) {
 
-//               $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+              $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
             
-// >>>>>>> 5ebd140fa81af2b8123eb41f8eb85fc9cc1c70a1
+
           }
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
@@ -599,7 +602,18 @@ class AdminMissionScienceTechnologyController extends Controller
 
         $mission_name = $stechs->value;
 
-       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name'));
+        $content = "";
+      $evaluation_form = EvaluationForm::where('user_id', Auth::id())
+                    ->where('mission_id', $mission->id)
+                    ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->first();
+
+      if ($evaluation_form !== null && $evaluation_form->count() >= 1) {
+        $content = $evaluation_form->content;
+      }
+
+        // dd($content);
+
+       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name', 'content'));
     }
 
     public function storeEvaluation(Request $request) {
@@ -645,35 +659,35 @@ class AdminMissionScienceTechnologyController extends Controller
           $data['project_target'] = $request->get('project_target');
         }
 
-        $content = array([
-          'comment_evaluation'  => array([
-                                      'urgency_target' =>  array([
+        $content = array(
+          'comment_evaluation'  => array(
+                                      'urgency_target' =>  array(
                                            'note' =>  $data['urgency_target_note'],
                                            'rate' =>  $data['urgency_target_rate'],
-                                      ]),
+                                      ),
 
-                                      'necessity' =>  array([
+                                      'necessity' =>  array(
                                            'note' =>  $data['necessity_note'],
                                            'rate' =>  $data['necessity_rate'],
-                                      ]),
+                                      ),
 
-                                      'possibility' =>  array([
+                                      'possibility' =>  array(
                                            'note' =>  $data['possibility_note'],
                                            'rate' =>  $data['possibility_rate'],
-                                      ]),
-                                  ]),
+                                      ),
+                                  ),
 
-          'expert_opinions'  => array([
+          'expert_opinions'  => array(
                                       'is_perform' =>  $is_perform,
                                       'is_unperform' =>  $is_unperform,
-                                      'request' =>  array([
+                                      'request' =>  array(
                                           'name'  =>  $data['project_name'],
                                           'target'  =>  $data['project_target'],
                                           'result'  =>  $data['project_result'],
-                                      ]),
+                                      ),
                                      
-                                  ]),
-        ]); 
+                                  ),
+        ); 
       }
       
       $datas['mission_id'] = $mission_id;
