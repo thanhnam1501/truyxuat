@@ -45,7 +45,6 @@ class AdminMissionScienceTechnologyController extends Controller
     public function index()
     { 
 
-      //dd(Entrust::can('assign-council'));
         if (!Entrust::can('mission-science-technology-menu')) {
             abort(404);
         }
@@ -184,9 +183,6 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
           }
 
-
-          $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
-
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
             $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs'><i class='fa fa-undo'></i></a>";
@@ -200,7 +196,7 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
           }
 
-          if ($topic->is_valid && empty($topic->council_id) && Entrust::can(['assign-council'])) {
+          if ($topic->is_valid && Entrust::can(['assign-council'])) {
             $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
           }
 
