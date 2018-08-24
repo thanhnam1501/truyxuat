@@ -43,7 +43,9 @@ class AdminMissionScienceTechnologyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    { 
+
+      //dd(Entrust::can('assign-council'));
         if (!Entrust::can('mission-science-technology-menu')) {
             abort(404);
         }
