@@ -153,5 +153,37 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'assign-council',
             'display_name'=>'Chọn hội đồng đánh giá',
         ]);
+        Permission::create([
+            'name'=>'evaluation-doc',
+            'display_name'=>'Đánh giá hồ sơ',
+        ]);
+        Permission::create([
+            'name'=>'account-profile-menu',
+            'display_name'=>'Hiển thị menu quản lý cá nhân/tổ chức',
+        ]);
+        Permission::create([
+            'name'=>'mission-topics-menu',
+            'display_name'=>'Hiển thị menu quản lý đề tài/đề án',
+        ]);
+        Permission::create([
+            'name'=>'mission-science-technology-menu',
+            'display_name'=>'Hiển thị menu quản lý dự án khoa học và công nghệ',
+        ]);
+        Permission::create([
+            'name'=>'council-menu',
+            'display_name'=>'Hiển thị menu quản lý hội đồng',
+        ]);
+        Permission::create([
+            'name'=>'group-council-menu',
+            'display_name'=>'Hiển thị menu quản lý nhóm hội đồng',
+        ]);
+        Permission::create([
+            'name'=>'position-council-menu',
+            'display_name'=>'Hiển thị menu quản lý vị trí trong hội đồng',
+        ]);
+        Permission::create([
+            'name'=>'logs-menu',
+            'display_name'=>'Hiển thị menu quản lý log',
+        ]);
     }
 }
