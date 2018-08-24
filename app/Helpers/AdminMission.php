@@ -9,6 +9,9 @@ use App\Models\ApplyLog;
 use App\Models\MissionScienceTechnologyAttribute;
 use App\Models\MissionScienceTechnology;
 use App\Models\UserHandleFile;
+use App\Models\Email;
+use App\Models\Profile;
+use App\Models\EvaluationForm;
 use Crypt;
 
 
@@ -31,7 +34,9 @@ class AdminMission {
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic->get();	
+			$old_data = $topic->get()[0];
+			$id_profile = $old_data->profile_id;
+
 			if ($topic->exists()) {
 				
 				DB::beginTransaction();
@@ -45,7 +50,7 @@ class AdminMission {
 					//* Mã hồ sơ
 					$order = DB::table($data['table_name'])->select('order_submit_hard_copy')->orderBy('order_submit_hard_copy', 'desc')->limit(1)->first();
 					$order = intval($order->order_submit_hard_copy) + 1 ;
-			    $numb = str_pad($order, 4, '0', STR_PAD_LEFT);
+			    	$numb = str_pad($order, 4, '0', STR_PAD_LEFT);
 					$year = date('Y', strtotime(now()));
 
 					$code = $year.".".$data['form'].".".$numb;
@@ -56,20 +61,35 @@ class AdminMission {
 					]);
 					//* End
 
-					$new_data = $topic->get();
+					$new_data = $topic->get()[0];
 
 					//* Create logs *//
-		      $arr = [
-		          'admin_id' => Auth::guard('web')->user()->id,
-		          'content'    => 'Xác nhận thu hồ sơ bản cứng',
-		          'old_data'   => json_encode($old_data),
-		          'new_data'   => json_encode($new_data),
-		          'table_name' => 'mission_science_technologies',
-		          'record_id'  => $data['id']
-		        ];
-		      ApplyLog::createLog($arr);
+			        $arr = [
+			          'admin_id' => Auth::guard('web')->user()->id,
+			          'content'    => 'Xác nhận thu hồ sơ bản cứng',
+			          'old_data'   => json_encode($old_data),
+			          'new_data'   => json_encode($new_data),
+			          'table_name' => 'mission_science_technologies',
+			          'record_id'  => $data['id']
+			        ];
+			        ApplyLog::createLog($arr);
 					//* End
 
+			      	// send email to user
+			      	// $id = $topic->profile_id;
+			      	$profile = Profile::find($id_profile);
+			      	$to = $profile->email;
+			      	$subject = "Thông báo trạng thái thu hồ sơ bản cứng";
+			      	$view = "emails.status_file";
+			      	$parameter = [
+			      		'name'	=>	!empty($profile->representative) ? $profile->representative : "bạn",
+			      		'content'	=>	'Chúng tôi thông báo rằng hồ sơ bản cứng thuộc nhiệm vụ: " '.$data['mission_name'].' " đã được thu.'
+			      	];
+			      	$type = 2;
+			      	$status = 2;
+			      	$numb = 0;
+			      	Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
+			      	// end
 					DB::commit();
 
 			    return $result = [
@@ -108,7 +128,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic->get();
+			$old_data = $topic->get()[0];
 			//
 			if ($topic->exists()) {
 			//
@@ -133,23 +153,32 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic->get();
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
-			      $arr = [
-			          'admin_id' 	 => Auth::guard('web')->user()->id,
-			          'content'    => $action,
-			          'old_data'   => json_encode($old_data),
-			          'new_data'   => json_encode($new_data),
-			          'table_name' => $data['table_name'],
-			          'record_id'  => $data['id']
-			        ];
-			      ApplyLog::createLog($arr);
+					      $arr = [
+					          'admin_id' 	 => Auth::guard('web')->user()->id,
+					          'content'    => $action,
+					          'old_data'   => json_encode($old_data),
+					          'new_data'   => json_encode($new_data),
+					          'table_name' => $data['table_name'],
+					          'record_id'  => $data['id']
+					        ];
+					      ApplyLog::createLog($arr);
 						//* End
 
 						//* Send email
 						//* code send email here
 						//* End
+						//
+						
+						UserHandleFile::where('mission_table', $data['table_name'])
+							->where('mission_id', $data['id'])
+							->where('user_id', Auth::guard('web')->user()->id)
+							->update([
+								'is_handle' => 1
+							]);
+
 						DB::commit();
 
 				    return $result = [
@@ -188,7 +217,7 @@ class AdminMission {
 	{
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get()[0];
 
 			if ($topic->exists()) {
 
@@ -224,7 +253,7 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
 			      $arr = [
@@ -276,7 +305,7 @@ class AdminMission {
 
 		if (!empty($data['id']) && !empty($data['table_name'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
-			$old_data = $topic;
+			$old_data = $topic->get()[0];
 			//
 			if ($topic->exists()) {
 			//
@@ -301,7 +330,7 @@ class AdminMission {
 
 						}
 
-						$new_data = $topic;
+						$new_data = $topic->get()[0];
 
 						//* Create logs *//
 			      $arr = [
@@ -375,6 +404,63 @@ class AdminMission {
 		return $data;
 	}
 
+
+	public static function addCouncil($data) {
+
+		if ($data['council_id'] == null || $data['mission_id'] == null) {
+          return $result = [
+            'error' =>  true,
+            'message' =>  'Vui lòng chọn đầy đủ thông tin',
+          ]; 
+      }
+      else {
+        try {
+          DB::beginTransaction();
+
+          $mission_council = $data['mission_council']::where('mission_id', $data['mission_id'])->get();
+
+          if ($mission_council->count() >= 1) {
+
+          	$mission_council = $mission_council->first();
+
+          	$mission_council->council_id = $data['council_id'];
+
+          	$mission_council->save();
+
+          	DB::commit();
+
+          	return $result = [
+              'error' =>  false,
+              'message' =>  'Cập nhật thành công',
+          ];
+
+          }
+          else {
+          		$data['mission_council']::create([
+	            'council_id' => $data['council_id'], 'mission_id' => $data['mission_id']
+	          ]);
+
+          		DB::commit();
+
+          		return $result = [
+	              'error' =>  false,
+	              'message' =>  'Thêm hội đồng thành công',
+	          ];
+          }
+
+        }
+
+         catch(Exception $e) {
+            DB::rollback();
+
+          return $result = [
+            'error' =>  true,
+            'message'   =>  $e->getMessage()
+          ];
+         }
+      }
+    }
+
 	public static function submitAssign($data) {
 		DB::beginTransaction();
 
@@ -388,7 +474,7 @@ class AdminMission {
 	          'note'  =>  $data['note']
 	        ]);
 
-	        $mission = MissionScienceTechnology::find($data['mission_id']);
+	        $mission = $data['model']::find($data['mission_id']);
 	        $old_data = $mission;
 
 	        $mission->update([
@@ -413,6 +499,103 @@ class AdminMission {
 	        return response()->json([
 	          'error' =>  false,
 	          'msg'   =>  'Giao thành công !'
+	        ]);
+      	} catch (Exception $e) {
+	        DB::rollback();
+
+	        return response()->json([
+	          'error' =>  true,
+	          'msg'   =>  $e->getMessage()
+	        ]);
+      	}
+
+	}
+
+
+	public static function evaluationDoc($data) {
+
+		$evaluation_form = EvaluationForm::where('user_id', $data['user_id'])
+										->where('mission_id', $data['mission_id'])
+										->where('table_name', $data['table_name'])->orderBy('id', 'Desc')->get();
+
+
+		DB::beginTransaction();
+	      try {
+
+	      	if ($evaluation_form->count() >= 1) {
+	      		$evaluation_form = $evaluation_form->first();
+	      		$evaluation_form->content = $data['content'];
+	      		$evaluation_form->save();
+	      		DB::commit();
+
+	      		return $result = [
+	      			'status'	=>	1,
+		          'error' =>  false,
+		          'message' =>  'Cập nhật phiếu đánh giá thành công',
+		        ];
+	      	}
+	      	else {
+	      		$evaluation_form = EvaluationForm::create(['user_id'  => $data['user_id'], 'mission_id' => $data['mission_id'], 'table_name'  =>  $data['table_name']]);
+
+		        $evaluation_form->content = $data['content'];
+		        $evaluation_form->save();
+
+
+		        DB::commit();
+
+		        return $result = [
+		        	'status'	=>	2,
+		          'error' =>  false,
+		          'message' =>  'Đánh giá thành công',
+		        ];
+	      	}
+	        
+	      }
+	      catch(Exception $e) {
+	        // Log::info('Can not update hard Copy submit: Council = ' .$result->id );
+	        DB::rollack();
+	        return $result = [
+	          'error' => true,
+	          'message' => 'Internal Server Error:'. $e->getMessage() . 'OK'
+	        ];
+	    }
+	}
+
+
+	public static function giveBackHardCopy($data){
+
+		DB::beginTransaction();
+
+      	try {
+
+	        $mission = $data['model']::find($data['id']);
+	        $old_data = $mission;
+
+	        $mission->update([
+	          'is_submit_hard_copy' =>  0,
+	          'time_submit_hard_copy'	=>	null,
+	          'code'					=>	null,
+	          'order_submit_hard_copy'	=>	0
+	        ]);
+
+	        $new_data = $mission;
+
+	        $arr = [
+	           'content'  =>  'Trả lại bản cứng',
+	           'admin_id' =>  Auth::guard('web')->user()->id,
+	           'old_data' =>  json_encode($old_data),
+	           'new_data' =>  json_encode($new_data),
+	           'table_name' =>  $data['mission_table'],
+	           'record_id'  =>  $data['id']
+	         ];
+	      
+	        ApplyLog::createLog($arr);
+
+	        DB::commit();
+
+	        return response()->json([
+	          'error' =>  false,
+	          'msg'   =>  'Trả bản cứng thành công !'
 	        ]);
       	} catch (Exception $e) {
 	        DB::rollback();

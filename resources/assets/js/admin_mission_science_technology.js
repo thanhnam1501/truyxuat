@@ -5,7 +5,7 @@ $(document).ready(function() {
       serverSide: true,
       ajax: {
         url: app_url + 'admin/mission-science-technologies/get-list',
-        type: 'post',
+        type: 'POST',
       },
       ordering: false,
       columns: [
@@ -41,6 +41,7 @@ $(document).ready(function() {
             url:  app_url + "admin/mission-science-technologies/submit-hard-copy",
             data: {
               id: $(this).data('id'),
+              mission_name: $(this).data('name')
             },
             success: function(res)
             {
@@ -329,15 +330,20 @@ $(document).ready(function() {
     e.preventDefault();
     
    $('#addCouncilModal').modal('show'); 
+
    var id = $(this).data('id');
+
+   $('#add_council_mission_id').val(id);
    $.ajax({
      url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
      type: 'GET',
      success: function(res) {
+
         $('#add-council-submit-btn').attr('data-mission_id', id);
         $('#round_collection').html(res.year + ' - ' + res.name);
         $('#year_round_collection').html(res.year);
-        $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        // $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        $('#round_collection_id').val(res.id);
 
         $('#list-council-tbl').DataTable().destroy();
         $('#list-council-tbl').DataTable({
@@ -348,6 +354,7 @@ $(document).ready(function() {
             url: app_url + 'admin/mission-science-technologys/get-list-council',
             type: 'post',
             data: {
+              mission_id : id,
               round_collection_id : res.id,
               group_council_id: $('#group_council').val(),
             }
@@ -371,7 +378,7 @@ $(document).ready(function() {
   $('#group_council').on('change', function() {
     var group_council_id = $(this).val();
 
-    var round_collection_id = $('#list-council-tbl').data('round_colection_id');
+    var round_collection_id = $('#round_collection_id').val();
 
     $('#list-council-tbl').DataTable().destroy();
 
@@ -504,4 +511,122 @@ $(document).ready(function() {
     }
 
   })
+
+  $('#evaluation-science-technology-btn').on('click', function() {
+    var data = $('#evalution-form').serialize();
+
+    $.ajax({
+      url: app_url + '/admin/mission-science-technologys/evaluation/store',
+      type: 'post',
+      data: data,
+      success:function(res) {
+      
+        if (!res.error) {
+          toastr.success(res.message);
+          setTimeout(function () {
+              window.location.href = app_url + 'admin/mission-science-technologies';
+          }, 1000);    
+
+        
+        }
+        else {
+          toastr.error(res.message);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+
+    });
+
+  })
+
+  $('.suggest_perform').on('click', function() {
+    var suggest_perform = $('input[name=suggest_perform]:checked').val();
+    if (suggest_perform == 2) {
+      $('#project_name').removeAttr('disabled');
+      $('#project_result').removeAttr('disabled');
+      $('#project_target').removeAttr('disabled');
+    }
+    else {
+      $('#project_name').attr('disabled','true');
+      $('#project_result').attr('disabled','true');
+      $('#project_target').attr('disabled','true');
+    }
+  })
+
+
+  $('#btn-search-mission').on('click', function(event) {
+    event.preventDefault();
+
+    $('#science-technology-tbl').DataTable().destroy();
+
+    $('#science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list',
+        type: 'POST',
+        data: {
+          data: $('#search-mission-frm').serialize(),
+          filter: true
+        }
+      },
+      ordering: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'values', name: 'values.value', width: '228px'},
+        {data: 'profile', name: 'profile.email', width: '110px'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+        {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
+        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+        {data: 'is_assign', name: 'is_assign', 'class':'text-center', width: '80px'},
+        {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
+        {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
+        {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+      ]
+    });
+
+  });
+
+  $('#science-technology-tbl').on('click', '.btn-give-back-hard-copy', function(event){
+    event.preventDefault();
+
+    swal({
+      title: "Bạn có chắc chắn muốn trả lại bản cứng?",
+      icon: "warning",
+      buttons: ['Hủy','Đồng ý'],
+      confirmButtonColor: "#1caf9a",
+      })
+      .then((willDelete) => {
+      if (willDelete) {
+        $.ajax({
+            type: "POST",
+            url:  app_url + "admin/mission-science-technologies/give-back-hard-copy",
+            data: {
+              id: $(this).data('id'),
+            },
+            success: function(res)
+            {
+              // console.log(res);
+              if (!res.error) {
+
+                toastr.success(res.msg);
+
+                $('#science-technology-tbl').DataTable().ajax.reload();
+
+              } else {
+
+                toastr.error(res.msg);
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              toastr.error(thrownError);
+            }
+        });
+      }
+    });
+  });
+
 });

@@ -41,4 +41,14 @@ class MissionTopic extends Model
     {
       return $this->belongsTo('App\Models\Profile','profile_id');
     }
+
+    public function judgeCouncil()
+    {
+        return $this->belongsToMany('App\Models\Council','council_mission_topics','mission_id','council_id')->wherePivot('group_council_id',1);
+    }
+
+    public function evaluationForm()
+    {
+        return $this->hasMany('App\Models\EvaluationForm','mission_id');
+    }
 }

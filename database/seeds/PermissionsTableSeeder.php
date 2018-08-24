@@ -154,6 +154,10 @@ class PermissionsTableSeeder extends Seeder
             'display_name'=>'Chọn hội đồng đánh giá',
         ]);
         Permission::create([
+            'name'=>'evaluation-doc',
+            'display_name'=>'Đánh giá hồ sơ',
+        ]);
+        Permission::create([
             'name'=>'account-profile-menu',
             'display_name'=>'Hiển thị menu quản lý cá nhân/tổ chức',
         ]);
