@@ -86,6 +86,9 @@ class AdminMissionTopicController extends Controller
                           if ($search['status_submit_is_valid'] == 0) {
                             $query->where('is_invalid', 1);
                           }
+                          if ($search['status_submit_is_valid'] == -2) {
+                            $query->where('is_valid', 0)->where('is_invalid', 0);
+                          }
                         }
 
                         if ($search['status_submit_is_judged'] != -1) {
@@ -95,6 +98,9 @@ class AdminMissionTopicController extends Controller
                           if ($search['status_submit_is_judged'] == 0) {
                             $query->where('is_denied', 1);
                           }
+                          if ($search['status_submit_is_judged'] == -2) {
+                            $query->where('is_judged', 0)->where('is_denied', 0);
+                          }
                         }
 
                         if ($search['status_submit_is_performed'] != -1) {
@@ -103,6 +109,9 @@ class AdminMissionTopicController extends Controller
                           }
                           if ($search['status_submit_is_performed'] == 0) {
                             $query->where('is_unperformed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == -2) {
+                            $query->where('is_performed', 0)->where('is_unperformed', 0);
                           }
                         }
 
@@ -180,17 +189,15 @@ class AdminMissionTopicController extends Controller
             return $str;
         })
         ->addColumn('valid_status', function(MissionTopic $topic) {
-            $str = "<label class='label label-default'>Chưa cập nhập</label>";
-
             if ($topic->is_valid == 1) {
-                $str = "<label class='label label-info'>Hợp lệ</label>";
+                return "<label class='label label-info'>Hợp lệ</label>";
             }
 
             if ($topic->is_invalid == 1) {
-                $str = "<label class='label label-danger'>Không hợp lệ</label>";
+                return "<label class='label label-danger'>Không hợp lệ</label>";
             }
 
-            return $str;
+                return "<label class='label label-default'>Chưa cập nhập</label>"; 
         })
         ->addColumn('is_assign', function(MissionTopic $topic) {
 
@@ -201,35 +208,33 @@ class AdminMissionTopicController extends Controller
             }
         })
         ->addColumn('is_judged', function(MissionTopic $topic) {
-            $str = "<label class='label label-default'>Chưa cập nhập</label>";
+            // $str = "<label class='label label-default'>Chưa cập nhập</label>";
 
-            $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
+            // $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
 
-            if ($check == 1) {
-              $str = "<label class='label label-default'>Đã chọn hội đồng</label>";
-            }
+            // if ($check == 1) {
+            //   $str = "<label class='label label-default'>Đã chọn hội đồng</label>";
+            // }
             if ($topic->is_judged == 1) {
-                $str = "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
+              return "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
             }
 
             if ($topic->is_denied == 1) {
-                $str = "<label class='label label-danger'>Không được đưa vào HĐ</label>";
+              return "<label class='label label-danger'>Không được đưa vào HĐ</label>";
             }
 
-            return $str;
+            return "<label class='label label-default'>Chưa cập nhập</label>";
         })
         ->addColumn('is_perform', function(MissionTopic $topic) {
-            $str = "<label class='label label-default'>Chưa cập nhập</label>";
-            
             if ($topic->is_performed == 1) {
-                $str = "<label class='label label-info'>Được thực hiện</label>";
+                return "<label class='label label-info'>Được thực hiện</label>";
             }
 
             if ($topic->is_unperformed == 1) {
-                $str = "<label class='label label-danger'>Không được thực hiện</label>";
+                return "<label class='label label-danger'>Không được thực hiện</label>";
             }
 
-            return $str;
+            return "<label class='label label-default'>Chưa cập nhập</label>";
         })
         ->editColumn('roundCollection', function(MissionTopic $topic) {
 
