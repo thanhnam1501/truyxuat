@@ -64,7 +64,11 @@ class CouncilController extends Controller
 		->addColumn('round_collection_id', function($council) {
 
 			$round_collection_id = RoundCollection::find($council->round_collection_id);
-			return $round_collection_id->year.' - '.$round_collection_id->name;
+			if (!empty($round_collection_id->year) && !empty($round_collection_id->name)) {
+				return $round_collection_id->year.' - '.$round_collection_id->name;
+			}
+			
+			return "Chưa cập nhật";
 		})
 		->addColumn('status', function($council) {
 
