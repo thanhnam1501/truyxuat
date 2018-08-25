@@ -51,14 +51,27 @@
         <h4 class="modal-title">Thêm nhóm hội đồng</h4>
       </div>
       <div class="modal-body">
-				<form role="form" enctype="multipart/form-data" id="create-group-frm">
-						<div class="form-group">
-								<label>Tên nhóm hội đồng <span class='error'>(*)</span></label>
-								<textarea  id="name" name="name" class="form-control" required="required"></textarea>
-								{{-- <input type="text" id="name" name="name" class="form-control"/> --}}
-								<span class='control-label red-noti' id="name-error-custom"></span>
-						</div>
-				</form>
+			<form role="form" enctype="multipart/form-data" id="create-group-frm">
+				<div class="form-group">
+					<label>Tên nhóm hội đồng <span class='error'>(*)</span></label>
+					<textarea  id="name" name="name" class="form-control" required="required"></textarea>
+					{{-- <input type="text" id="name" name="name" class="form-control"/> --}}
+					<span class='control-label red-noti' id="name-error-custom"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="">Chức năng <span class='error'>(*)</span></label>
+					<select class="form-control" name="type" id="type">
+		                <option value="-1">--Vui lòng chọn chức năng--</option>
+		                @if ($optionValues != null)
+		                	@foreach ($optionValues as $optionValue)
+		                		<option value="{{$optionValue->value}}">{{$optionValue->name}}</option>
+		                	@endforeach
+		                @endif
+		            </select>
+				</div>
+
+			</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
@@ -76,14 +89,28 @@
         <h4 class="modal-title">Sửa nhóm hội đồng</h4>
       </div>
       <div class="modal-body">
-				<form role="form" enctype="multipart/form-data" id="edit-group-frm">
-						<div class="form-group">
-								<label>Đợt thu hồ sơ <span class='error'>(*)</span></label>
-								<textarea  id="edit-name" name="edit-name" class="form-control" required="required"></textarea>
-								{{-- <input type="text" id="name" name="name" class="form-control"/> --}}
-								<span class='control-label red-noti' id="edit-name-error-custom"></span>
-						</div>
-				</form>
+			<form role="form" enctype="multipart/form-data" id="edit-group-frm">
+
+				<div class="form-group">
+					<label>Đợt thu hồ sơ <span class='error'>(*)</span></label>
+					<textarea  id="edit-name" name="edit-name" class="form-control" required="required"></textarea>
+					{{-- <input type="text" id="name" name="name" class="form-control"/> --}}
+					<span class='control-label red-noti' id="edit-name-error-custom"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="">Chức năng <span class='error'>(*)</span></label>
+					<select class="form-control" name="edit-type" id="edit-type">
+		                <option value="-1">--Vui lòng chọn chức năng--</option>
+		                @if ($optionValues != null)
+		                	@foreach ($optionValues as $optionValue)
+		                		<option value="{{$optionValue->value}}">{{$optionValue->name}}</option>
+		                	@endforeach
+		                @endif
+		            </select>
+				</div>
+
+			</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
@@ -116,6 +143,13 @@
 					<div class="input-group input-group-lg">
 							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 							<span class='form-control' id="detail-created_at"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group input-group-lg">
+							<span class="input-group-addon"><i class="fa fa-cog"></i></span>
+							<span class='form-control' id="detail-type"></span>
 					</div>
 				</div>
       </div>

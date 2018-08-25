@@ -8,5 +8,5 @@ class CouncilMissionScienceTechnology extends Model
 {
     protected $table = 'council_mission_science_technologies';
 
-    protected $fillable = ['council_id', 'mission_id'];
+    protected $fillable = ['council_id', 'mission_id', 'group_council_id'];
 }

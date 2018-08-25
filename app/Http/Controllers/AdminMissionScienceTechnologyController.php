@@ -292,19 +292,43 @@ class AdminMissionScienceTechnologyController extends Controller
             
           }
 
+          $flag_1 = false;
+          $flag_2 = false;
+          
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
+              }
+          }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc')) {
+                $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+              }
+
           // $flag = $topic->judgeCouncil->first();
 
           // if (!empty($flag)) {
-          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
-          //       $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
-          //     }
-// =======
-          if (Entrust::can(['evaluation-doc'])) {
 
-              $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+          //       $string .= "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
+          // }
+// =======
+          // if (Entrust::can(['evaluation-doc'])) {
+
+          //     $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
             
 
-          }
+          // }
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
@@ -527,6 +551,7 @@ class AdminMissionScienceTechnologyController extends Controller
       
       $data['mission_council']  = 'App\Models\CouncilMissionScienceTechnology';
 
+      $data['group_council_id'] = $request->get('group_council_id');
       $result = AdminMission::addCouncil($data);
 
       return response()->json($result);

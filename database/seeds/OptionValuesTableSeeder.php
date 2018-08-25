@@ -81,5 +81,15 @@ class OptionValuesTableSeeder extends Seeder
        	]);
 
        	///ENd chức vụ
+        //Phân loại nhóm hội đồng
+        $id_option_group_council = Option::where('code', 'GROUP-COUNCIL-FUNC')->first()->id;
+
+        OptionValue::create([
+          'option_id' =>  $id_option_group_council,
+          'value'   =>  0,
+          'name'    =>  'Đánh giá hồ sơ',
+          'note'    =>  'có chức năng đánh giá hồ sơ'
+        ]);
+  
     }
 }

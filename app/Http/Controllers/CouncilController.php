@@ -24,8 +24,8 @@ class CouncilController extends Controller
 		$round_collections = RoundCollection::where('status', 1)->get();
 		$groupCouncils = GroupCouncil::where('status', 1)->get();
 		$position_councils = PositionCouncil::where('status', 1)->get();
-		$users = User::where('type','<>' ,'1')->get();
-		$count_user = User::where('type','<>' ,'1')->count();
+		$users = User::where('type',9)->get();
+		$count_user = User::where('type', 9)->count();
 		// dd($count_user);
 		return view('backend.council.index',[
 			'round_collections' => $round_collections,
