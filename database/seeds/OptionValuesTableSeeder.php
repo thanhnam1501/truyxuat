@@ -79,6 +79,12 @@ class OptionValuesTableSeeder extends Seeder
        		'name'		=>	'Hội đồng',
        		'note'		=> 	'Có nhiệm vụ đánh giá hồ sơ trên hệ thống qua các form B1, B2, B3'
        	]);
+        OptionValue::create([
+          'option_id' =>  $id,
+          'value'   =>  10,
+          'name'    =>  'Chuyên viên cập nhật phê duyệt hồ sơ',
+          'note'    =>  'Có nhiệm vụ dựa theo quyết định phê duyệt hồ sơ từ cá nhân có quyền hạn, cập nhật trạng thái phê duyệt cho hồ sơ, nếu hồ sơ bị từ chối phê duyệt thì phải có lý do'
+        ]);
 
        	///ENd chức vụ
         //Phân loại nhóm hội đồng
