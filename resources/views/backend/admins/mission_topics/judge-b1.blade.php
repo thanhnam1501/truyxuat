@@ -14,7 +14,7 @@
 
 @section('breadcrumb')
 <li class="">Danh sách nhiệm vụ</li>
-<li><a href="{{ route('admin.mission-topics.index') }}">Đề tài hoặc đề án</a></li>
+<li><a href="{{ route('admin.mission-topics.index') }}">Đề tài/Dự án</a></li>
 <li class="active">Đánh giá nhiệm vụ</li>
 @endsection
 
