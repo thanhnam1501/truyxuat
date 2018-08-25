@@ -73,5 +73,10 @@ class RolesTableSeeder extends Seeder
           'description' =>  'Có nhiệm vụ đánh giá hồ sơ trên hệ thống qua các form B1, B2, B3'
       ]);
 
+      Role::create([
+          'name' => 'chuyen-vien-cap-nhat-phe-duyet-ho-so',
+          'display_name' => 'Chuyên viên cập nhật phê duyệt hồ sơ',
+          'description' =>  'Có nhiệm vụ dựa theo quyết định phê duyệt hồ sơ từ cá nhân có quyền hạn, cập nhật trạng thái phê duyệt cho hồ sơ, nếu hồ sơ bị từ chối phê duyệt thì phải có lý do'
+      ]);
     }
 }
