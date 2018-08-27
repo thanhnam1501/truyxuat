@@ -322,7 +322,7 @@
 
                     @if ($value['order'] != 12)
                       @if (!in_array($value['order'], $files))
-                        <h5>{{ $value['value'] }}</h5>
+                        <h5 style="text-align: justify;">{!! nl2br(e($value["value"])) !!}</h5>
                       @endif
                       <br>
                     @endif

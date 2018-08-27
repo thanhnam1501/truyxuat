@@ -35,7 +35,7 @@
           <div class="col-md-12">
             <center>
               <br>
-              <h3>PHIẾU ĐỀ XUẤT ĐẶT HÀNG NHIỆM VỤ</h3>
+              <h3>PHIẾU ĐỀ XUẤT ĐẶT HÀNG NHIỆM VỤaaa</h3>
               <h3>KHOA HỌC VÀ CÔNG NGHỆ CẤP QUỐC GIA</h3>
               <h4><i>(Dùng cho đề tài hoặc đề án)</i></h4>
             </center>
@@ -49,7 +49,7 @@
                      <h5><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></h5>
                    @elseif ($value['column'] != "evaluation_form_01" && $value['column'] != "evaluation_form_02")
                      <h5><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></h5>
-                     <h5 class='text_value'>{{ $value["value"] }}</h5>
+                     <h5 class='text_value'>{!! $value["label"] !!}</h5>
                      <br>
                    @endif
                  </div>
