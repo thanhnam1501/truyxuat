@@ -39,7 +39,7 @@
                      <h5><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></h5>
                    @elseif ($value['column'] != "evaluation_form_01" && $value['column'] != "evaluation_form_02")
                      <h5><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></h5>
-                     <h5 class='text_value'>{{ $value["value"] }}</h5>
+                     <h5 class='text_value' style="text-align: justify;">{!! nl2br(e($value["value"])) !!}</h5>
                      <br>
                    @endif
                  </div>
