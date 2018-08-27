@@ -173,7 +173,9 @@ class MissionScienceTechnologyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($key)
-    {   $st_key = $key;
+    {
+ 
+      $st_key = $key;
 
         $result = MissionScienceTechnology::where('key', $key)->first();
 
@@ -445,8 +447,10 @@ class MissionScienceTechnologyController extends Controller
 
                   foreach ($mission->values as $key => $value) {
                       if ($value->mission_science_technology_attribute_id == $attr_id) {
+
                         if (strlen($value->value) >= 300) {
                           return ("<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>");
+
                         } else {
                           return ("<span>".$value->value."</span>");
                         }
