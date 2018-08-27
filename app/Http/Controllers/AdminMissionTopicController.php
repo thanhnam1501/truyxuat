@@ -551,6 +551,12 @@ class AdminMissionTopicController extends Controller
     if (!empty($topic)) {
       
       $name = $topic->values()->where('mission_topic_attribute_id',1)->first()->value;
+
+      if ($topic->type) {
+        $view = "judge-b2";
+      } else {
+        $view = "judge-b1";
+      }
     } 
 
     $comment_evaluation = '';
@@ -559,25 +565,32 @@ class AdminMissionTopicController extends Controller
     if (!empty($topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first())) {
         
         $data = $topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first()->content;
-    
 
       $comment_evaluation = $data['comment_evaluation'];
 
       $expert_opinions = $data['expert_opinions'];
-  }
-  
+    }
+
     $date = array();
 
     $date['d'] = date('d',time());
     $date['m'] = date('m',time());
     $date['y'] = date('Y',time());
 
-    return view('backend.admins.mission_topics.judge-b1', compact('name','date','topic','comment_evaluation','expert_opinions'));
+    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions'));
   }
 
   public function judgeCouncilStore(Request $request)
   {
-    $data = $request->only('id','necessity_note','important_note','unique_note','natinal_resources_note','fund_note','perform_name','perform_target','perform_result','necessity_qualified','important_qualified','unique_qualified','natinal_resources_qualified','fund_qualified','is_perform');
+    $type = MissionTopic::find($request->id)->type;
+
+    if ($type) {
+
+      $data = $request->only('id','necessity_note','afftect_note','necessary_note','perform_name','perform_target','perform_result','necessity_qualified','afftect_qualified','necessary_qualified','is_perform');
+    } else {
+
+      $data = $request->only('id','necessity_note','important_note','unique_note','natinal_resources_note','fund_note','perform_name','perform_target','perform_result','necessity_qualified','important_qualified','unique_qualified','natinal_resources_qualified','fund_qualified','is_perform');
+    }
 
     $is_unperform = "0";
 
@@ -603,7 +616,30 @@ class AdminMissionTopicController extends Controller
       'table_name'  => 'mission_topics',
     ];
 
-    $dataStore['content'] = [
+    if ($type) {
+      $dataStore['content'] = [
+      'comment_evaluation'  => [
+        'necessity' => [
+          'note'  => $data['necessity_note'],
+          'qualified'  => $data['necessity_qualified'],
+        ],
+        'afftect' => [
+          'note'  => $data['afftect_note'],
+          'qualified'  => $data['afftect_qualified'],
+        ],
+        'necessary' => [
+          'note'  => $data['necessary_note'],
+          'qualified'  => $data['necessary_qualified'],
+        ],
+      ],
+      'expert_opinions' => [
+        'is_perform'  => $data['is_perform'],
+        'is_unperform'  => $is_unperform,
+        'is_perform_with_cond'  => $is_perform_with_cond,
+      ]
+    ];
+    } else {
+      $dataStore['content'] = [
       'comment_evaluation'  => [
         'necessity' => [
           'note'  => $data['necessity_note'],
@@ -632,6 +668,7 @@ class AdminMissionTopicController extends Controller
         'is_perform_with_cond'  => $is_perform_with_cond,
       ]
     ];
+    }
 
     $result = AdminMission::evaluationDoc($dataStore);
 

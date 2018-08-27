@@ -14,7 +14,7 @@
 
 @section('breadcrumb')
 <li class="">Danh sách nhiệm vụ</li>
-<li><a href="{{ route('admin.mission-topics.index') }}">Đề tài hoặc đề án</a></li>
+<li><a href="{{ route('admin.mission-topics.index') }}">Đề tài/Dự án</a></li>
 <li class="active">Đánh giá nhiệm vụ</li>
 @endsection
 
@@ -138,7 +138,7 @@
                 <div class="col-md-12 indent-15 form-group">
                     <div class="radio">
                       <label>
-                        <input type="radio" name="is_perform" value="0" {{(isset($expert_opinions['is_unperform']) && $expert_opinions['is_unperform'])?"checked":""}} {{(!isset($expert_opinions))?"checked":""}}>
+                        <input type="radio" name="is_perform" value="0" {{(isset($expert_opinions['is_unperform']) && $expert_opinions['is_unperform'])?"checked":""}} {{(empty($expert_opinions))?"checked":""}}>
                         Đề nghị không thực hiện
                       </label>
                     </div>

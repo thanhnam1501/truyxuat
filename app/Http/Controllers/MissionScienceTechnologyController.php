@@ -445,10 +445,12 @@ class MissionScienceTechnologyController extends Controller
 
                   foreach ($mission->values as $key => $value) {
                       if ($value->mission_science_technology_attribute_id == $attr_id) {
-                        if (strlen($value->value) >= 150) {
-                          return (substr($value->value, 0, 149))."...";
+
+                        if (strlen($value->value) >= 300) {
+                          return ("<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>");
+
                         } else {
-                          return $value->value;
+                          return ("<span>".$value->value."</span>");
                         }
                       }
                   }
