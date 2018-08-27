@@ -52,7 +52,7 @@
              <p><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></p>
            @elseif ($value['column'] != "evaluation_form_01" && $value['column'] != "evaluation_form_02")
              <p><b>{{ $value["order"] }}. {!! $value["label"] !!}</b></p>
-             <p class='text_value'>{{ $value["value"] }}</p>
+             <p class='text_value' style="text-align: justify;">{!! nl2br(e($value["value"])) !!}</p>
            @endif
          </div>
        @endforeach

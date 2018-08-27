@@ -36,7 +36,7 @@
 <b> <br>
     1. Tên dự án khoa học và công nghệ (KH&amp;CN):
 </b>
-<p class="style-value"> {{ $data['name'] }}</p>
+<p class="style-value" style="text-align: justify;"> {!! nl2br(e($data['name'])) !!}</p>
 <p><br>
   <b>2. Xuất xứ hình thành:</b>
 
@@ -45,21 +45,21 @@
         xuất, các quyết định phê duyệt liên quan ...)
     </em>
 </p>
-<p  class="style-value">
-  {{ $data['provenance_originate'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['provenance_originate'])) !!}
 </p>
 <b><br>
     3. Tính cấp thiết; tầm quan trọng phải thực hiện ở tầm quốc gia; tác động
     và ảnh hưởng đến đời sống kinh tế - xã hội của đất nước v.v...:
 </b>
-<p  class="style-value">
-  {{ $data['importance'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['importance'])) !!}
 </p>
 <b><br>
     4. Mục tiêu:
 </b>
-<p  class="style-value">
-  {{ $data['target'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['target'])) !!}
 </p>
 <p><br>
     <b>5. Nội dung KH&amp;CN chủ yếu:</b><strong> </strong>
@@ -69,39 +69,39 @@
     </em>
     <em> </em>
 </p>
-<p  class="style-value">
-  {{ $data['content'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['content'])) !!}
 </p>
 <b><br>
     6. Yêu cầu đối với kết quả (công nghệ, thiết bị) và các chỉ tiêu kinh tế -
     kỹ thuật cần đạt:
 </b>
-<p  class="style-value">
-  {{ $data['request_result'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['request_result'])) !!}
 </p>
 <b><br>
     7. Dự kiến tổ chức, cơ quan hoặc địa chỉ ứng dụng các kết quả tạo ra:
 </b>
-<p  class="style-value">
-  {{ $data['application_address'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['application_address'])) !!}
 </p>
 <b><br>
     8. Yêu cầu đối với thời gian thực hiện:
 </b>
-<p  class="style-value">
-  {{ $data['request_time'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['request_time'])) !!}
 </p>
 <b><br>
     9. Năng lực của tổ chức, cơ quan dự kiến ứng dụng kết quả:
 </b>
-<p  class="style-value">
-  {{ $data['qualification'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['qualification'])) !!}
 </p>
 <b><br>
     10.Dự kiến nhu cầu kinh phí:
 </b>
-<p  class="style-value">
-  {{ $data['expected_fund'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['expected_fund'])) !!}
 </p>
 <p><br>
     <b>11. Phương án huy động các nguồn lực của cơ tổ chức, cơ quan dự kiến ứng
@@ -112,8 +112,8 @@
     </em>
     <em>)</em>
 </p>
-<p  class="style-value">
-  {{ $data['plan_mobilize'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['plan_mobilize'])) !!}
 </p>
 <b><br>
     12.Dự kiến hiệu quả của dự án KH&amp;CN:
@@ -126,8 +126,8 @@
         khác...
     </em>
 </p>
-<p  class="style-value">
-  {{ $data['economic_efficiency'] }}
+<p  class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['economic_efficiency'])) !!}
 </p>
 <p><br>
     <b>12.2. Hiệu quả về khoa học và công nghệ:</b><strong> </strong>
@@ -136,8 +136,8 @@
         dưỡng đội ngũ cán bộ, tăng cường năng lực nội sinh...)
     </em>
 </p>
-<p class="style-value">
-  {{ $data['science_technology_efficiency'] }}
+<p class="style-value" style="text-align: justify;">
+  {!! nl2br(e($data['science_technology_efficiency'])) !!}
 </p>
 <p>
     <strong><em></em></strong>
