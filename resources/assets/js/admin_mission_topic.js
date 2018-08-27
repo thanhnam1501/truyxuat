@@ -11,6 +11,7 @@ $(document).ready(function() {
       searching: false,
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
           {data: 'values', name: 'values.value', width: '228px'},
           {data: 'profile', name: 'profile.email', width: '110px'},
           {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
@@ -20,7 +21,7 @@ $(document).ready(function() {
           {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
           {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
           {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
-          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          
       ]
   });
 

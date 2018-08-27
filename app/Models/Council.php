@@ -39,4 +39,8 @@ class Council extends Model
         return $this->belongsToMany('App\Models\User','council_users','council_id','user_id')
                 ->wherePivot('user_id',$user_id);
     }
+
+    public function users() {
+        return $this->belongsToMany('App\Models\User', 'council_users', 'council_id', 'user_id')->withPivot('position_council_id');
+    }
 }

@@ -24,8 +24,9 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        // return view('backend.profile.dashboard');
-        return view('backend.profile.list-missions');
+        $round_collections = RoundCollection::where('status', 1)->orderBy('id', 'DESC')->get();
+
+        return view('backend.profile.list-missions', ['round_collections'   =>  $round_collections]);
     }
 
 
@@ -87,7 +88,7 @@ class ProfileController extends Controller
  }
 
  public function listMissions() {
-    $round_collections = RoundCollection::where('status', 1)->get();
+    $round_collections = RoundCollection::where('status', 1)->orderBy('id', 'DESC')->get();
 
     return view('backend.profile.list-missions', ['round_collections'   =>  $round_collections]);
 }

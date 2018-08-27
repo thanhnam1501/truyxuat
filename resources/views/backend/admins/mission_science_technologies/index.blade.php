@@ -56,7 +56,7 @@
                   <label for="">Tên nhiệm vụ</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="mission_name" value="">
+                  <input type="text" class="form-control" placeholder="" name="mission_name" value="" placeholder="Tên nhiệm vụ">
                 </div>
               </div>
 
@@ -65,7 +65,7 @@
                   <label for="">Đơn vị</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="organization" value="">
+                  <input type="text" class="form-control" placeholder="" name="organization" value="" placeholder="Đơn vị">
                 </div>
               </div>
 
@@ -170,6 +170,7 @@
                     <thead>
                       <tr>
                         <th style="width: 4%">STT</th>
+                        <th style="width: 10%">Hành động</th>
                         <th style="width: 11%">Tên nhiệm vụ</th>
                         <th style="width: 5%">Đơn vị</th>
                         <th style="width: 10%">Đợt gọi hồ sơ</th>
@@ -179,7 +180,7 @@
                         <th style="width: 10%">Trạng thái hồ sơ</th>
                         <th style="width: 10%">Trạng thái xét duyệt BCN</th>
                         <th style="width: 10%">Trạng thái đưa vào đánh giá HĐ</th>
-                        <th style="width: 10%">Hành động</th>
+                        
                       </tr>
                     </thead>
                   </table>
