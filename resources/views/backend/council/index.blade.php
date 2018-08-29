@@ -98,7 +98,7 @@
             <select id="group_council_id" name="group_council_id" class="form-control">
 
               @if (!empty($groupCouncils) && $groupCouncils != null)
-              <option value="-1">--Lựa chọn đợt gọi hồ sơ--</option>
+              <option value="-1">--Lựa chọn nhóm hội đồng--</option>
               @foreach ($groupCouncils as $group_council)
 
               <option value="{{$group_council->id}}">{{$group_council->name}}</option>
