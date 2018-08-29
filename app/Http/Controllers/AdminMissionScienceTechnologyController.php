@@ -87,7 +87,7 @@ class AdminMissionScienceTechnologyController extends Controller
 
             if ($value->mission_science_technology_attribute_id == $attr_id) {
               if (strlen($value->value) > 300) {
-                  return "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
+                  return "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
               } else {
                   return $value->value;
               }
