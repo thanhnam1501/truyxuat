@@ -139,7 +139,7 @@ class AdminMissionScienceTechnologyController extends Controller
           foreach ($topic->values as $value) {
             if ($value->mission_science_technology_attribute_id == $attr_id) {
               if (strlen($value->value) > 300) {
-                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
+                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
               } else {
                   $topic['mission_name'] = $value->value;
               }
