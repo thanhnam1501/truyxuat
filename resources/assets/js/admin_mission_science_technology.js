@@ -378,6 +378,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection','class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
 
@@ -413,6 +414,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection', 'class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
     
@@ -557,11 +559,9 @@ $(document).ready(function() {
   })
 
   $(function() {
-    // if ($('input[name=suggest_perform]:checked').val() == 2) {
-    //   $('#project_name').removeAttr('disabled');
-    //   $('#project_result').removeAttr('disabled');
-    //   $('#project_target').removeAttr('disabled');
-    // }
+    if ($('input[name=suggest_perform]:checked').val() == 2) {
+      $('.request_change').css('display', 'block');
+    }
   })
 
   $('.suggest_perform').on('click', function() {
@@ -575,11 +575,11 @@ $(document).ready(function() {
     }
     else {
       // $('#project_name').attr('disabled','true');
-      // $('#project_name').val('');
+      $('#project_name').val('');
       // $('#project_result').attr('disabled','true');
-      // $('#project_result').val('');
+      $('#project_result').val('');
       // $('#project_target').attr('disabled','true');
-      // $('#project_target').val('');
+      $('#project_target').val('');
       $('.request_change').css('display', 'none');
     }
   })
@@ -658,4 +658,26 @@ $(document).ready(function() {
     });
   });
 
+  $('body').on('click', '#viewListMember', function() {
+    var id = $(this).data('id');
+
+    $('#list-member-council-tbl').DataTable().destroy();
+
+    $('#list-member-council-tbl').DataTable({
+      searching: false,
+      paginate: false,
+      ordering: false,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/list-member-council/' + id,
+        type: 'GET',
+      },
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'name', name: 'name', width: '70px'},
+        {data: 'mobile', name: 'mobile'},
+        {data: 'email', name: 'email', 'class':'text-center'},
+        {data: 'position', name: 'position', 'class':'text-center', width: '50px'},
+      ]
+    });
+  })
 });

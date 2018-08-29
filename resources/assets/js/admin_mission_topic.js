@@ -446,6 +446,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection','class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
 
@@ -481,6 +482,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection', 'class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
     
@@ -558,4 +560,27 @@ $(document).ready(function() {
     });
 
   });
+
+  $('body').on('click', '#viewListMember', function() {
+    var id = $(this).data('id');
+
+    $('#list-member-council-tbl').DataTable().destroy();
+
+    $('#list-member-council-tbl').DataTable({
+      searching: false,
+      paginate: false,
+      ordering: false,
+      ajax: {
+        url: app_url + 'admin/mission-topics/list-member-council/' + id,
+        type: 'GET',
+      },
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center',width: '15px'},
+        {data: 'name', name: 'name', width: '70px'},
+        {data: 'mobile', name: 'mobile' },
+        {data: 'email', name: 'email', 'class':'text-center'},
+        {data: 'position', name: 'position', 'class':'text-center', width: '50px'},
+      ]
+    });
+  })
 });

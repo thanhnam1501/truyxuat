@@ -12,6 +12,7 @@ use App\Models\UserHandleFile;
 use App\Models\Email;
 use App\Models\Profile;
 use App\Models\EvaluationForm;
+use App\Models\CouncilUser;
 use Crypt;
 
 
@@ -487,8 +488,11 @@ class AdminMission {
           }
           else {
           		$data['mission_council']::create([
-	            'council_id' => $data['council_id'], 'mission_id' => $data['mission_id'], 'group_council_id' => $data['group_council_id']
-	          ]);
+		            'council_id' => $data['council_id'], 
+		            'mission_id' => $data['mission_id'], 
+		            'group_council_id' => $data['group_council_id'], 
+		            'type'	=>	0
+		        ]);
 
           		DB::commit();
 
@@ -655,5 +659,24 @@ class AdminMission {
 	          'msg'   =>  $e->getMessage()
 	        ]);
       	}
+	}
+
+
+	public static function checkEvaluationDone($data) {
+		$flag = false;
+		$council_mission = $data['mission']::where('type', 0)->where('mission_id', $data['mission_id'])->first();
+
+		$evaluation_form = EvaluationForm::where('table_name', $data['table_name'])->where('mission_id', $data['mission_id'])->count();
+		if ($council_mission != null) {
+			$council_id = $council_mission->council_id;
+			$council_users = CouncilUser::where('council_id', $council_id)->count();
+			if ($evaluation_form == $council_users) {
+				$flag = true;
+			}
+
+
+		}
+
+		return $flag;
 	}
 }

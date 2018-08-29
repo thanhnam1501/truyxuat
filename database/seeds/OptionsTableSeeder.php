@@ -23,5 +23,10 @@ class OptionsTableSeeder extends Seeder
             'code'  => 'GROUP-COUNCIL-FUNC',
             'name'  => "Chức năng của nhóm hội đồng",
         ]);
+
+        // Option::create([
+        //     'code'  => 'POSITION-COUNCIL',
+        //     'name'  => "Vị trí trong hội đồng",
+        // ]);
     }
 }
