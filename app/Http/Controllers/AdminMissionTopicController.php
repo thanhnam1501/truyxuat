@@ -138,7 +138,7 @@ class AdminMissionTopicController extends Controller
           foreach ($topic->values as $value) {
             if ($value->mission_topic_attribute_id == $attr_id) {
               if (strlen($value->value) > 300) {
-                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>";
+                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
               } else {
                   $topic['mission_name'] = $value->value;
               }
@@ -274,16 +274,16 @@ class AdminMissionTopicController extends Controller
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
-            $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
+            $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Thu bản cứng" class="btn btn-warning btn-xs submit-hard-copy-btn"><i class="fa fa-bookmark"></i></a>';
           }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
-            $string .= "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs btn-give-back-hard-copy'><i class='fa fa-undo'></i></a>";
+            $string .= '<a data-id="'.$topic->id.'" data-tooltip="tooltip" title="Trả lại bản cứng" class="btn btn-danger btn-xs btn-give-back-hard-copy"><i class="fa fa-undo"></i></a>';
           }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['assign-doc'])) {
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Giao hồ sơ cho cán bộ xử lý' class='btn btn-warning btn-xs assign-doc'><i class='fa fa-paperclip'></i></a>";
+            $string .=  '<a data-id="'.$topic->id.'" data-tooltip="tooltip" title="Giao hồ sơ cho cán bộ xử lý" class="btn btn-warning btn-xs assign-doc"><i class="fa fa-paperclip"></i></a>';
           }
 
           if ($topic->is_assign && Entrust::can(['valid-doc','invalid-doc']) && !$topic->is_valid && !$topic->is_invalid ) {
@@ -295,7 +295,7 @@ class AdminMissionTopicController extends Controller
                     ->count();
 
             if ($check > 0) {      
-              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+              $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận tính hợp lệ" class="btn btn-info btn-xs submit-valid"><i class="fa fa-check-circle-o"></i></a>';
             } 
           }
 
@@ -304,7 +304,7 @@ class AdminMissionTopicController extends Controller
             $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
 
             if ($check == 0) { // chua dc add hoi dong
-              $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs add-council-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
+              $string .=  '<a data-id="'.$topic->id.'" data-tooltip="tooltip" title="Chọn hội đồng đánh giá" class="btn btn-brown btn-xs add-council-btn"><i class="fa fa-users" aria-hidden="true"></i></a>';
             }
             
           }
@@ -318,13 +318,13 @@ class AdminMissionTopicController extends Controller
             $check_3  = AdminMission::checkEvaluationDone($data);
 
             if ($check == 1 && $check_3) {
-              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
+              $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận được đánh giá" class="btn btn-violet btn-xs submit-judged"><i class="fa fa-check-square-o"></i></a>';
             }
             
           }        
 
           if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
-          $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
+          $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-toggle="modal" href="#approve-mdl" data-tooltip="tooltip" title="Xác nhận được phê duyệt" class="btn btn-blue btn-xs approve-btn"><i class="fa fa-check-square"></i></a>';
           }
 
           $flag_1 = false;
