@@ -52,7 +52,7 @@ class MissionTopicController extends Controller
 
         if ($value->mission_topic_attribute_id == $attr_id) {
           if (strlen($value->value) >= 300) {
-            return ("<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".substr($value->value, 0, 300)."..."."</span>");
+            return ("<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>");
           } else {
             return ("<span>".$value->value."</span>");
           }
