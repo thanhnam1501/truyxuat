@@ -96,6 +96,31 @@ class OptionValuesTableSeeder extends Seeder
           'name'    =>  'Đánh giá hồ sơ',
           'note'    =>  'có chức năng đánh giá hồ sơ'
         ]);
+
+        // //Vị trí trong hội đồng
+        // $id_position_council = Option::where('code', 'POSITION-COUNCIL')->first()->id;
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  0,
+        //   'name'    =>  'Chủ tịch hội đồng',
+        //   'note'    =>  'Chủ tịch hội đồng'
+        // ]);
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  1,
+        //   'name'    =>  'Phó chủ tịch hội đồng',
+        //   'note'    =>  'Phó chủ tịch hội đồng'
+        // ]);
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  2,
+        //   'name'    =>  'Uỷ viên phản biện',
+        //   'note'    =>  'Uỷ viên phản biện'
+        // ]);
+
   
     }
 }

@@ -24,6 +24,7 @@ use App\Models\UserHandleFile;
 use App\Models\ApplyLog;
 use App\Models\CouncilMissionScienceTechnology;
 use App\Models\EvaluationForm;
+use App\Models\PositionCouncil;
 
 use Auth;
 use DB;
@@ -257,12 +258,12 @@ class AdminMissionScienceTechnologyController extends Controller
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
-            $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Thu bản cứng' class='btn btn-warning btn-xs submit-hard-copy-btn'><i class='fa fa-bookmark'></i></a>";
+            $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Thu bản cứng" class="btn btn-warning btn-xs submit-hard-copy-btn"><i class="fa fa-bookmark"></i></a>';
           }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['return-hard-copy'])) {
 
-            $string .= "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Trả lại bản cứng' class='btn btn-danger btn-xs btn-give-back-hard-copy'><i class='fa fa-undo'></i></a>";
+            $string .= '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Trả lại bản cứng" class="btn btn-danger btn-xs btn-give-back-hard-copy"><i class="fa fa-undo"></i></a>';
           }
 
           if ($topic->is_submit_hard_copy && !$topic->is_assign && Entrust::can(['assign-doc'])) {
@@ -278,7 +279,7 @@ class AdminMissionScienceTechnologyController extends Controller
                     ->count();
 
             if ($check > 0) {      
-              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận tính hợp lệ' class='btn btn-info btn-xs submit-valid'><i class='fa fa-check-circle-o'></i></a>";
+              $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận tính hợp lệ" class="btn btn-info btn-xs submit-valid"><i class="fa fa-check-circle-o"></i></a>';
             } 
           }
 
@@ -310,7 +311,7 @@ class AdminMissionScienceTechnologyController extends Controller
               }
           }
 
-          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc')) {
+          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0) {
                 $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
               }
 
@@ -332,15 +333,19 @@ class AdminMissionScienceTechnologyController extends Controller
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
+            $data['mission_id'] = $topic->id;
+            $data['mission']  = 'App\Models\CouncilMissionScienceTechnology';
+            $data['table_name'] = 'mission_science_technologies';
+            $check_3  = AdminMission::checkEvaluationDone($data);
 
-            if ($check == 1) {
-              $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-tooltip='tooltip' title='Xác nhận được đánh giá' class='btn btn-violet btn-xs submit-judged'><i class='fa fa-check-square-o'></i></a>";
+            if ($check == 1 && $check_3) {
+              $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận được đánh giá" class="btn btn-violet btn-xs submit-judged"><i class="fa fa-check-square-o"></i></a>';
             }
             
           }    
 
           if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
-          $string .=  "<a data-name='".$topic->mission_name."' data-id='".$topic->id."' data-toggle='modal' href='#approve-mdl' data-tooltip='tooltip' title='Xác nhận được phê duyệt' class='btn btn-blue btn-xs approve-btn'><i class='fa fa-check-square'></i></a>";
+          $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-toggle="modal" href="#approve-mdl" data-tooltip="tooltip" title="Xác nhận được phê duyệt" class="btn btn-blue btn-xs approve-btn"><i class="fa fa-check-square"></i></a>';
           }
 
           return $string;
@@ -518,14 +523,13 @@ class AdminMissionScienceTechnologyController extends Controller
 
           return $round_collection->year . '-' . $round_collection->name;
         })
-        ->addColumn('action', function($council) use ($mission) {
-          // $council_mission = $mission->council->first();
-          // if ($council_mission != null) {
-          //   $id_council = $council_mission->council_id;
-          //   if ($council->id == $id_council) {
-          //     return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'" checked>';
-          //   }
-          // }
+        ->addColumn('action', function($council) {
+
+          return "<a data-tooltip='tooltip' data-toggle='modal' title='Xem thành viên' id='viewListMember' class='btn btn-success btn-xs' href='#listMemberCouncil' data-id='".$council->id."'><i class='fa fa-eye'></i></a>";
+        })
+
+        ->addColumn('choose', function($council) use ($mission) {
+
           return '<input type="radio" name="council_id" id="council_id" value="'.$council->id.'">';
         })
         ->make(true);
@@ -726,5 +730,28 @@ class AdminMissionScienceTechnologyController extends Controller
 
     
        
+    }
+
+    public function listMemberCouncil($id) {
+
+      $council = Council::find($id);
+
+      $userCouncils = $council->users;
+
+      return Datatables::of($userCouncils)
+      ->addIndexColumn()
+      ->editColumn('name', function($userCouncil) {
+        return $userCouncil->name;
+      })
+      ->editColumn('email', function($userCouncil) {
+        return '<a href="mailto:'.$userCouncil->email.'">'.$userCouncil->email.'</a>';
+      })
+      ->addColumn('mobile', function($userCouncil) {
+        return '<a href="tel:'.$userCouncil->moblie.'">'.$userCouncil->mobile.'</a>';
+      })
+      ->addColumn('position', function($userCouncil) {
+        return PositionCouncil::find($userCouncil->pivot->position_council_id)->name;
+      })
+      ->make(true);
     }
 }

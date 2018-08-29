@@ -480,8 +480,9 @@
                         <th style="width: 30%">Tên hội đồng</th>
                         <th style="width: 20%">Chủ tịch hội đồng</th>
                         <th style="width: 25%">Nhóm</th>
-                        <th style="width: 15%">Đợt gọi hồ sơ</th>
-                        <th style="width: 7%">#</th>
+                        <th style="width: 12%">Đợt gọi hồ sơ</th>
+                        <th style="width: 5%">#</th>
+                        <th style="width: 5%"></th>
                       </tr>
                     </thead>
                   </table>
@@ -495,6 +496,38 @@
           <button type="button" class="btn btn-success" id="add-council-submit-btn">Lưu thông tin</button>
         </div>
     </div>
+  </div>
+
+  <div class="modal fade" id="listMemberCouncil" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+
+    <div class="modal-dialog" style="width: 60%">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <center><h4 class="modal-title" id="">DANH SÁCH THÀNH VIÊN TRONG HỘI ĐỒNG</h4> </center>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+              <table class="table table-bordered table-hover" id="list-member-council-tbl" width="100%">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">STT</th>
+                      <th>Họ và tên</th>
+                      <th>Số điện thoại</th>
+                      <th>Email</th>
+                      <th>Vị trí</th>
+                    </tr>
+                  </thead>
+              </table>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+          {{-- <button type="button" class="btn btn-success" id="add-council-submit-btn">Lưu thông tin</button> --}}
+        </div>
+    </div>
+  </div>
   </div>
 @endsection
 

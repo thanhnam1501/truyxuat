@@ -225,6 +225,8 @@ Route::middleware('revalidate')->group(function () {
 
             Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
             Route::post('/give-back-hard-copy', 'AdminMissionTopicController@giveBackHardCopy')->name('admin.mission-topics.giveBackHardCopy');
+
+            Route::get('/list-member-council/{id}', 'AdminMissionTopicController@listMemberCouncil')->name('missionTopic.listMemberCouncil');
         });
         //* End
 
@@ -240,6 +242,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/view-detail', 'AdminMissionScienceTechnologyController@viewDetail')->name('admin.mission-science-technologies.viewDetail');
             Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
             Route::post('/give-back-hard-copy', 'AdminMissionScienceTechnologyController@giveBackHardCopy')->name('admin.mission-science-technologies.giveBackHardCopy');
+            Route::get('/list-member-council/{id}', 'AdminMissionScienceTechnologyController@listMemberCouncil')->name('admin.mission-science-technologies.listMemberCouncil');
         });
         //* End
 
@@ -314,6 +317,7 @@ Route::middleware('revalidate')->group(function () {
         Route::get('/edit/{key}', 'MissionTopicController@edit')->name('missionTopic.edit');
         Route::get('/delete/{id}', 'MissionTopicController@destroy')->name('missionTopic.destroy');
         Route::get('/submit_ele_copy', 'MissionTopicController@submitEleCopy')->name('missionTopic.submitEleCopy');
+
     });
     //* End
 

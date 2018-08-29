@@ -272,11 +272,25 @@ class CouncilController extends Controller
 		->make(true);
 	}
 
+	public function countPositionCouncil($position_id, $council_id) {
+		return CouncilUser::where('position_council_id', $position_id)->where('council_id', $council_id)->count();
+	}
+
 	public function addMember(Request $request) {
 
 		$data = $request->only(['user_id', 'position_council_id', 'council_id']);
 
 		$council_users = CouncilUser::where('user_id', $data['user_id'])->where('council_id', $data['council_id'])->get();
+
+		$count_num = CouncilUser::where('council_id', $data['council_id'])->count();
+
+		if ($count_num == env('MAX_MEMBER')) {
+			
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Hội đồng không quá '.env('MAX_MEMBER').' thành viên',
+			]);
+		}
 
 		if ($council_users->count() > 0) {
 			return response()->json([
@@ -284,6 +298,28 @@ class CouncilController extends Controller
 				'message'	=>	'Thành viên đã có trong hội đồng',
 			]);
 		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) && $data['position_council_id'] == 1) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí chủ tịch hội đồng đã đủ',
+			]);
+		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) && $data['position_council_id'] == 2) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí phó chủ tịch hội đồng đã đủ',
+			]);
+		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) == 2 && $data['position_council_id'] == 3) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí uỷ viên phản biện đã đủ',
+			]);
+		}
+
 		DB::beginTransaction();
 
 		try {
