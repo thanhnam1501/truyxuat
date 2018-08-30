@@ -229,7 +229,7 @@
 	<center>&copy; 2018 Zent Software</center>
 </div>
 </div><!-- /.controls -->
-<div class="modal fade" id="guide-register-mdl" tabindex="-1">
+<div class="modal fade" id="guide-register-mdl" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
 	<div class="modal-dialog" style="width: 70%">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -237,7 +237,7 @@
 				<center><h4 class="modal-title">Video hướng dẫn đăng ký</h4></center>
 			</div>
 			<div class="modal-body">
-				<iframe width="966" height="543" src="https://www.youtube.com/embed/-kCaW9qFr74" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+				<iframe id="video-guide" width="966" height="543" src="https://www.youtube.com/embed/-kCaW9qFr74" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -245,4 +245,18 @@
 		</div>
 	</div>
 </div>
+@endsection
+
+@section('footer')
+	<script type="text/javascript">
+		$(function() {
+			$('#guide-register-mdl').on('hide.bs.modal', function (e) {
+				var iframe = document.getElementById('video-guide');
+    			iframe.src = iframe.src;
+
+			})
+		})
+
+		
+	</script>
 @endsection
