@@ -291,8 +291,8 @@ Route::middleware('revalidate')->group(function () {
         Route::get('login', 'AuthProfile\LoginController@showLoginForm')->name('profile.login');
         Route::post('login', 'AuthProfile\LoginController@login')->name('profile.login.submit');
         Route::post('logout', 'AuthProfile\LoginController@logout')->name('profile.logout');
-        Route::get('register', 'AuthProfile\RegisterController@showRegistrationForm')->name('profile.register');
-        Route::post('register', 'AuthProfile\RegisterController@register')->name('profile.register.submit');
+        // Route::get('register', 'AuthProfile\RegisterController@showRegistrationForm')->name('profile.register');
+        // Route::post('register', 'AuthProfile\RegisterController@register')->name('profile.register.submit');
         Route::get('password/reset', 'AuthProfile\ForgotPasswordController@showLinkRequestForm')->name('profile.password.request');
         Route::post('password/email', 'AuthProfile\ForgotPasswordController@sendResetLinkEmail')->name('profile.password.email');
         Route::get('password/reset/{token}', 'AuthProfile\ResetPasswordController@showResetForm')->name('profile.password.reset');

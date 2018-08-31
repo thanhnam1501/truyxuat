@@ -118,10 +118,10 @@
                         <div class="col-md-6 btn-fogot custom-col-left">
                             <a href="{{ route('profile.login') }}" class="btn-link">Đăng nhập</a>
                         </div>
-                        <div{{--  class="col-md-6 btn-register custom-col-right">
+                       {{--  <div class="col-md-6 btn-register custom-col-right">
                             <a data-toggle="modal" href='{{ route('profile.register') }}' class="btn-link">Đăng ký</a>
-                        </div>
-     --}}                </div>
+                        </div> --}}
+                    </div>
                 </div>
                 
             </form>

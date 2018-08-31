@@ -204,8 +204,8 @@
 			<br>
 			<div class="col-md-12">
 				
-				<h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6>
-
+				{{-- <h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6> --}}
+				<hr>
 				<div class="col-md-6 btn-fogot custom-col-left">
 					<a href="{{ route('profile.password.request') }}" class="btn-link">Quên mật khẩu?</a>
 				</div>
@@ -217,14 +217,46 @@
 			</div>
 
 			<div class="col-md-12" style="margin-top: 10px">
-				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6>
+				{{-- <h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6> --}}
+				{{-- <center><h5 class="guide_register"><a href="#guide-register-mdl" data-toggle="modal" style="color: white;">Hướng dẫn đăng ký</a></h5></center> --}}
 			</div>
 
 		</div>
 	</form>
 </div>
+
 <div class="login-footer">
 	<center>&copy; 2018 Zent Software</center>
 </div>
 </div><!-- /.controls -->
+<div class="modal fade" id="guide-register-mdl" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog" style="width: 70%">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<center><h4 class="modal-title">Video hướng dẫn đăng ký</h4></center>
+			</div>
+			<div class="modal-body">
+				<iframe id="video-guide" width="966" height="543" src="https://www.youtube.com/embed/-kCaW9qFr74" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+			</div>
+		</div>
+	</div>
+</div>
+@endsection
+
+@section('footer')
+	<script type="text/javascript">
+		$(function() {
+			$('#guide-register-mdl').on('hide.bs.modal', function (e) {
+				var iframe = document.getElementById('video-guide');
+    			iframe.src = iframe.src;
+
+			})
+		})
+
+		
+	</script>
 @endsection
