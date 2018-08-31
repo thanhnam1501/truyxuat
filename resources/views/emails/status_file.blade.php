@@ -316,24 +316,16 @@
 																	<tr>
 																		<td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
 
-																			Xin chào bạn, <br><br>
+																			Xin chào @if (isset($parameter['name']))
+																				{{ $parameter['name'] }}
+																			@endif, <br><br>
 
-																			Chúng tôi vừa nhận được một yêu cầu đăng ký tài khoản từ email của bạn. <br>
-																			Để hoàn tất quá trình đăng ký, vui lòng xác nhận: <br> <br>
-
-																			<center>
-																				<a href='@if (isset($parameter['link']))
-																					{{$parameter['link']}}
-																				@endif' class='m_5715491286458392283button m_5715491286458392283button-blue' style='font-family:Avenir,Helvetica,sans-serif;box-sizing:border-box;border-radius:3px;color:#fff;display:inline-block;text-decoration:none;background-color:#3097d1;border-top:10px solid #3097d1;border-right:18px solid #3097d1;border-bottom:10px solid #3097d1;border-left:18px solid #3097d1' target='_blank' >Kích hoạt tài khoản</a>
-																			</center> <br>
+																			@if (isset($parameter['content']))
+																				{{ $parameter['content'] }}
+																			@endif<br> <br>
 
 																			Cảm ơn !
 
-																			<br> <hr> <br>
-																			Nếu bạn gặp vấn đề trong việc nhấn nút "Kích hoạt tài khoản", sao chép đường link này và dán vào trình duyệt của bạn: <br>
-																			@if (isset($parameter['link']))
-																				{{$parameter['link']}}
-																			@endif
 																		</td>
 
 																	</tr>

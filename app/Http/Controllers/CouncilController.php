@@ -24,8 +24,8 @@ class CouncilController extends Controller
 		$round_collections = RoundCollection::where('status', 1)->get();
 		$groupCouncils = GroupCouncil::where('status', 1)->get();
 		$position_councils = PositionCouncil::where('status', 1)->get();
-		$users = User::where('type','<>' ,'1')->get();
-		$count_user = User::where('type','<>' ,'1')->count();
+		$users = User::where('type',9)->get();
+		$count_user = User::where('type', 9)->count();
 		// dd($count_user);
 		return view('backend.council.index',[
 			'round_collections' => $round_collections,
@@ -64,7 +64,11 @@ class CouncilController extends Controller
 		->addColumn('round_collection_id', function($council) {
 
 			$round_collection_id = RoundCollection::find($council->round_collection_id);
-			return $round_collection_id->year.' - '.$round_collection_id->name;
+			if (!empty($round_collection_id->year) && !empty($round_collection_id->name)) {
+				return $round_collection_id->year.' - '.$round_collection_id->name;
+			}
+			
+			return "Chưa cập nhật";
 		})
 		->addColumn('status', function($council) {
 
@@ -268,11 +272,25 @@ class CouncilController extends Controller
 		->make(true);
 	}
 
+	public function countPositionCouncil($position_id, $council_id) {
+		return CouncilUser::where('position_council_id', $position_id)->where('council_id', $council_id)->count();
+	}
+
 	public function addMember(Request $request) {
 
 		$data = $request->only(['user_id', 'position_council_id', 'council_id']);
 
 		$council_users = CouncilUser::where('user_id', $data['user_id'])->where('council_id', $data['council_id'])->get();
+
+		$count_num = CouncilUser::where('council_id', $data['council_id'])->count();
+
+		if ($count_num == env('MAX_MEMBER')) {
+			
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Hội đồng không quá '.env('MAX_MEMBER').' thành viên',
+			]);
+		}
 
 		if ($council_users->count() > 0) {
 			return response()->json([
@@ -280,6 +298,28 @@ class CouncilController extends Controller
 				'message'	=>	'Thành viên đã có trong hội đồng',
 			]);
 		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) && $data['position_council_id'] == 1) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí chủ tịch hội đồng đã đủ',
+			]);
+		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) && $data['position_council_id'] == 2) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí phó chủ tịch hội đồng đã đủ',
+			]);
+		}
+
+		if ($this->countPositionCouncil($data['position_council_id'], $data['council_id']) == 2 && $data['position_council_id'] == 3) {
+			return response()->json([
+				'error'	=>	true,
+				'message'	=>	'Vị trí uỷ viên phản biện đã đủ',
+			]);
+		}
+
 		DB::beginTransaction();
 
 		try {

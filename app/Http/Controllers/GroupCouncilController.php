@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\GroupCouncilRequest;
 use App\Models\GroupCouncil;
+use App\Models\OptionValue;
+use App\Models\Option;
 use DB;
 use Datatables;
 
@@ -21,7 +23,13 @@ class GroupCouncilController extends Controller
   
     public function index()
     {
-        return view('backend.group_council.index');
+        $option = Option::where('code', 'GROUP-COUNCIL-FUNC')->first();
+
+        if ($option != null) {
+          $option_id = $option->id;
+          $optionValues = OptionValue::where('option_id', $option_id)->get();
+        }
+        return view('backend.group_council.index', compact('optionValues'));
     }
 
     public function list()
@@ -85,8 +93,9 @@ class GroupCouncilController extends Controller
     public function store(GroupCouncilRequest $request)
     {
         $data=$request->all();
+
         $group=GroupCouncil::create($data);
-    
+        
         return response()->json(['data'=>$group],200);
     }
 
@@ -99,11 +108,19 @@ class GroupCouncilController extends Controller
     public function show($id)
     {
         $group=GroupCouncil::find($id);
-    
-        return response()->json(['data'=>$group],200);
+
+        $option = Option::where('code', 'GROUP-COUNCIL-FUNC')->first();
+
+        $optionValueName = '';
+        if ($option != null) {
+          $option_id = $option->id;
+          $optionValue = OptionValue::where('option_id', $option_id)->where('value', $group->type)->first();
+          $optionValueName = $optionValue->name;
+        }
+        return response()->json(['data'=>$group, 'optionValueName'=>$optionValueName],200);
     }
 
-    /**
+    /*
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

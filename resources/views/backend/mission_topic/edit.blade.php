@@ -310,9 +310,7 @@
                   <center>
                     <h3>TRẠNG THÁI HỒ SƠ</h3> <br>
                     <h4>
-                      <p class="error">
-                        Hồ sơ đang chờ xử lý
-                      </p>
+                      {!! $doc_status !!}
                     </h4>
                   </center>
         				</div>
