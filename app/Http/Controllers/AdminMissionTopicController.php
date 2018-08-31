@@ -300,17 +300,11 @@ class AdminMissionTopicController extends Controller
           }
 
           if ($topic->is_valid && Entrust::can(['assign-council'])) {
-<<<<<<< HEAD
-            $string .=  "<a data-id='".$topic->id."' data-tooltip='tooltip' title='Chọn hội đồng đánh giá' class='btn btn-brown btn-xs submit-hard-copy-btn'><i class='fa fa-users' aria-hidden='true'></i></a>";
-=======
-
             $check = CouncilMissionTopic::where('mission_id', $topic->id)->count();
 
             if ($check == 0) { // chua dc add hoi dong
               $string .=  '<a data-id="'.$topic->id.'" data-tooltip="tooltip" title="Chọn hội đồng đánh giá" class="btn btn-brown btn-xs add-council-btn"><i class="fa fa-users" aria-hidden="true"></i></a>';
             }
-            
->>>>>>> be7a07c2947e305528bdcbed32cb53a14e34f237
           }
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
