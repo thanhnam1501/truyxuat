@@ -243,6 +243,11 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
             Route::post('/give-back-hard-copy', 'AdminMissionScienceTechnologyController@giveBackHardCopy')->name('admin.mission-science-technologies.giveBackHardCopy');
             Route::get('/list-member-council/{id}', 'AdminMissionScienceTechnologyController@listMemberCouncil')->name('admin.mission-science-technologies.listMemberCouncil');
+
+            //danh sách hồ sơ được thêm của hội đồng
+            Route::get('/list-evaluation', 'AdminMissionScienceTechnologyController@listEvaluation')->name('admin.mission-science-technologies.listEvaluation');
+
+            Route::post('/get-list-evaluation', 'AdminMissionScienceTechnologyController@getListEvaluation')->name('admin.mission-science-technologies.getListEvaluation');
         });
         //* End
 
@@ -386,3 +391,4 @@ Route::middleware('revalidate')->group(function () {
     // });
 
         // Route::get('/', 'MissionScienceTechnologyController@index')->name('missionScienceTechnology.index');
+        // 
