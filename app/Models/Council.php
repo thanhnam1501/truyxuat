@@ -33,4 +33,14 @@ class Council extends Model
     public function getUsers() {
         return $this->belongsToMany('App\Models\User', 'council_users', 'council_id', 'user_id')->orderBy('id', 'DESC');
     }
+
+    public function getJudgeCouncilMembers($user_id)
+    {
+        return $this->belongsToMany('App\Models\User','council_users','council_id','user_id')
+                ->wherePivot('user_id',$user_id);
+    }
+
+    public function users() {
+        return $this->belongsToMany('App\Models\User', 'council_users', 'council_id', 'user_id')->withPivot('position_council_id');
+    }
 }

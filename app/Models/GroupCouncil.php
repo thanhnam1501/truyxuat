@@ -15,7 +15,7 @@ class GroupCouncil extends Model
     protected $table="group_councils";
 
     protected $fillable = [
-    	'name','status'
+    	'name','status', 'type'
     ];
 
     /**

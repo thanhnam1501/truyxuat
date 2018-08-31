@@ -5,11 +5,12 @@ $(document).ready(function() {
       serverSide: true,
       ajax: {
         url: app_url + 'admin/mission-science-technologies/get-list',
-        type: 'post',
+        type: 'POST',
       },
       ordering: false,
       columns: [
         {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
         {data: 'values', name: 'values.value', width: '228px'},
         {data: 'profile', name: 'profile.email', width: '110px'},
         {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
@@ -19,7 +20,6 @@ $(document).ready(function() {
         {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
         {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
         {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
-        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
       ]
   });
 
@@ -41,6 +41,7 @@ $(document).ready(function() {
             url:  app_url + "admin/mission-science-technologies/submit-hard-copy",
             data: {
               id: $(this).data('id'),
+              mission_name: $(this).data('name')
             },
             success: function(res)
             {
@@ -71,11 +72,14 @@ $(document).ready(function() {
     $('#modal-valid').modal('show');
     $('#status').val('-1');
     $('#invalid_reason').val('');
-    $('#checkbox-send-email').attr('checked', 'checked');
+    // $('#checkbox-send-email').attr('checked', 'checked');
     $('#invalid_reason').attr('disabled', 'disabled');
 
     var data_id = $(this).attr('data-id');
     $('#modal-valid .btn-success').attr('data_id', data_id);
+
+    var mission_name = $(this).data('name');
+    $('#modal-valid .btn-success').attr('mission_name', mission_name);
 
   });
 
@@ -86,6 +90,7 @@ $(document).ready(function() {
     var reason = $('#invalid_reason').val();
     var checkbox = $('#checkbox-send-email').is(':checked');
     var data_id = $('#modal-valid .btn-success').attr('data_id');
+    var mission_name = $('#modal-valid .btn-success').attr('mission_name');
 
     if (status == -1) {
       toastr.error('Vui lòng chọn trạng thái hồ sơ ! ');
@@ -100,8 +105,10 @@ $(document).ready(function() {
           status: status,
           reason: reason,
           checkbox: checkbox,
-          id: data_id
+          id: data_id,
+          mission_name: mission_name
         }, success: function(res){
+          // console.log(res);
           if (!res.error) {
 
             toastr.success(res.message);
@@ -135,6 +142,8 @@ $(document).ready(function() {
 
     $('#science-technology-tbl').on('click','.approve-btn', function() {
         $('#id').val($(this).data('id'));
+        var mission_name = $(this).data('name');
+        $('#mission_name').val(mission_name);
     });
 
     $('#approve-frm').validate({
@@ -228,12 +237,14 @@ $(document).ready(function() {
       $('#modal-judged').modal('show');
       $('#status_judged').val('-1');
       $('#denied_reason').val('');
-      $('#checkbox-send-email-judged').attr('checked', 'checked');
+      // $('#checkbox-send-email-judged').attr('checked', 'checked');
       $('#denied_reason').attr('disabled', 'disabled');
 
       var data_id = $(this).attr('data-id');
       $('#modal-judged .btn-success').attr('data_id', data_id);
 
+      var mission_name = $(this).data('name');
+      $('#modal-judged .btn-success').attr('mission_name', mission_name);
     });
 
     $('#modal-judged').on('click', '.btn-success', function(event) {
@@ -243,6 +254,7 @@ $(document).ready(function() {
       var reason = $('#denied_reason').val();
       var checkbox = $('#checkbox-send-email-judged').is(':checked');
       var data_id = $('#modal-judged .btn-success').attr('data_id');
+      var mission_name = $('#modal-judged .btn-success').attr('mission_name');
 
       if (status == -1) {
         toastr.error('Vui lòng chọn trạng thái xét duyệt ! ');
@@ -257,7 +269,8 @@ $(document).ready(function() {
             status: status,
             reason: reason,
             checkbox: checkbox,
-            id: data_id
+            id: data_id,
+            mission_name: mission_name
           }, success: function(res){
 
             if (!res.error) {
@@ -329,15 +342,20 @@ $(document).ready(function() {
     e.preventDefault();
     
    $('#addCouncilModal').modal('show'); 
+
    var id = $(this).data('id');
+
+   $('#add_council_mission_id').val(id);
    $.ajax({
      url: app_url + 'admin/mission-science-technologys/get-round-collection/' + id,
      type: 'GET',
      success: function(res) {
+        $('#round_collection_add_council').html(res.year + ' - ' + res.name);
         $('#add-council-submit-btn').attr('data-mission_id', id);
-        $('#round_collection').html(res.year + ' - ' + res.name);
+        
         $('#year_round_collection').html(res.year);
-        $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        // $('#list-council-tbl').attr('data-round_colection_id', res.id);
+        $('#round_collection_id').val(res.id);
 
         $('#list-council-tbl').DataTable().destroy();
         $('#list-council-tbl').DataTable({
@@ -348,6 +366,7 @@ $(document).ready(function() {
             url: app_url + 'admin/mission-science-technologys/get-list-council',
             type: 'post',
             data: {
+              mission_id : id,
               round_collection_id : res.id,
               group_council_id: $('#group_council').val(),
             }
@@ -359,6 +378,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection','class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
 
@@ -371,7 +391,7 @@ $(document).ready(function() {
   $('#group_council').on('change', function() {
     var group_council_id = $(this).val();
 
-    var round_collection_id = $('#list-council-tbl').data('round_colection_id');
+    var round_collection_id = $('#round_collection_id').val();
 
     $('#list-council-tbl').DataTable().destroy();
 
@@ -394,6 +414,7 @@ $(document).ready(function() {
           {data: 'group_council', name: 'group_council', 'class':'text-center'},
           {data: 'round_collection', name: 'round_collection', 'class':'text-center'},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'choose', name: 'choose', 'searchable':false, 'class':'text-center'},
         ]
         });        
     
@@ -478,12 +499,15 @@ $(document).ready(function() {
       var council_id = $('input[name=council_id]:checked').val();
       var mission_science_technology_id = $('#add-council-submit-btn').data('mission_id');
 
+      var group_council_id  = $('#group_council').val();
+      
       $.ajax({
         url: app_url + 'admin/mission-science-technologys/add-council',
         type: 'post',
         data: {
           council_id: council_id,
           mission_science_technology_id: mission_science_technology_id,
+          group_council_id: group_council_id,
         },
         success: function(res) {
           if (!res.error) {
@@ -503,5 +527,157 @@ $(document).ready(function() {
       
     }
 
+  })
+
+  $('#evaluation-science-technology-btn').on('click', function() {
+    var data = $('#evalution-form').serialize();
+
+    $.ajax({
+      url: app_url + '/admin/mission-science-technologys/evaluation/store',
+      type: 'post',
+      data: data,
+      success:function(res) {
+      
+        if (!res.error) {
+          toastr.success(res.message);
+          setTimeout(function () {
+              window.location.href = app_url + 'admin/mission-science-technologies';
+          }, 1000);    
+
+        
+        }
+        else {
+          toastr.error(res.message);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+
+    });
+
+  })
+
+  $(function() {
+    if ($('input[name=suggest_perform]:checked').val() == 2) {
+      $('.request_change').css('display', 'block');
+    }
+  })
+
+  $('.suggest_perform').on('click', function() {
+    var suggest_perform = $('input[name=suggest_perform]:checked').val();
+    if (suggest_perform == 2) {
+      
+      // $('#project_name').removeAttr('disabled');
+      // $('#project_result').removeAttr('disabled');
+      // $('#project_target').removeAttr('disabled');
+      $('.request_change').css('display', 'block');
+    }
+    else {
+      // $('#project_name').attr('disabled','true');
+      $('#project_name').val('');
+      // $('#project_result').attr('disabled','true');
+      $('#project_result').val('');
+      // $('#project_target').attr('disabled','true');
+      $('#project_target').val('');
+      $('.request_change').css('display', 'none');
+    }
+  })
+
+
+  $('#btn-search-mission').on('click', function(event) {
+    event.preventDefault();
+
+    $('#science-technology-tbl').DataTable().destroy();
+
+    $('#science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list',
+        type: 'POST',
+        data: {
+          data: $('#search-mission-frm').serialize(),
+          filter: true
+        }
+      },
+      ordering: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'values', name: 'values.value', width: '228px'},
+        {data: 'profile', name: 'profile.email', width: '110px'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+        {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
+        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+        {data: 'is_assign', name: 'is_assign', 'class':'text-center', width: '80px'},
+        {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
+        {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
+        {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+      ]
+    });
+
+  });
+
+  $('#science-technology-tbl').on('click', '.btn-give-back-hard-copy', function(event){
+    event.preventDefault();
+
+    swal({
+      title: "Bạn có chắc chắn muốn trả lại bản cứng?",
+      icon: "warning",
+      buttons: ['Hủy','Đồng ý'],
+      confirmButtonColor: "#1caf9a",
+      })
+      .then((willDelete) => {
+      if (willDelete) {
+        $.ajax({
+            type: "POST",
+            url:  app_url + "admin/mission-science-technologies/give-back-hard-copy",
+            data: {
+              id: $(this).data('id'),
+            },
+            success: function(res)
+            {
+              // console.log(res);
+              if (!res.error) {
+
+                toastr.success(res.msg);
+
+                $('#science-technology-tbl').DataTable().ajax.reload();
+
+              } else {
+
+                toastr.error(res.msg);
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              toastr.error(thrownError);
+            }
+        });
+      }
+    });
+  });
+
+  $('body').on('click', '#viewListMember', function() {
+    var id = $(this).data('id');
+
+    $('#list-member-council-tbl').DataTable().destroy();
+
+    $('#list-member-council-tbl').DataTable({
+      searching: false,
+      paginate: false,
+      ordering: false,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/list-member-council/' + id,
+        type: 'GET',
+      },
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'name', name: 'name', width: '70px'},
+        {data: 'mobile', name: 'mobile'},
+        {data: 'email', name: 'email', 'class':'text-center'},
+        {data: 'position', name: 'position', 'class':'text-center', width: '50px'},
+      ]
+    });
   })
 });

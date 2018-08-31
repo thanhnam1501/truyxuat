@@ -20,6 +20,63 @@ $(document).ready(function () {
       	});
   	});
 
+	$.validator.addMethod("valueNotEquals", function(value, element, arg){
+	  return arg !== value;
+	 }, "Value must not equal arg.");
+
+	$('#create-group-frm').validate({ // initialize the plugin
+      errorElement: "span",
+      rules: {
+        name : {
+          required : true,
+          minlength: 6,
+          maxlength: 255,
+          
+        },
+         type: { 
+           valueNotEquals: "-1" 
+       	},
+
+      },
+      messages: {
+        name : {
+          required : " Vui lòng nhập tên nhiệm vụ",
+          minlength: jQuery.validator.format("Tên nhiệm vụ phải lớn hơn {0} ký tự"),
+          maxlength: jQuery.validator.format("Tên nhiệm vụ phải nhỏ hơn {0} ký tự"),
+        },
+        type : {
+          valueNotEquals: ' Vui lòng chọn chức năng'
+        }
+      }
+    });
+
+    $('#edit-group-frm').validate({ // initialize the plugin
+      errorElement: "span",
+      rules: {
+        name : {
+          required : true,
+          minlength: 6,
+          maxlength: 255,
+          
+        },
+         type: { 
+           valueNotEquals: "-1" 
+       	},
+
+      },
+      messages: {
+        name : {
+          required : " Vui lòng nhập tên nhiệm vụ",
+          minlength: jQuery.validator.format("Tên nhiệm vụ phải lớn hơn {0} ký tự"),
+          maxlength: jQuery.validator.format("Tên nhiệm vụ phải nhỏ hơn {0} ký tự"),
+        },
+        type : {
+          valueNotEquals: ' Vui lòng chọn chức năng'
+        }
+      }
+    });
+
+
 	$('#btn-add').click(function (e) {
 		e.preventDefault();
 		$('#create-group-mdl').modal('show');
@@ -28,27 +85,33 @@ $(document).ready(function () {
 	})
 
 	$('#create-group-btn').click(function () {
+		var check = $('#create-group-frm').valid();
+		if (!check) { return ;}
 
-	    $.ajax({
-	      url: app_url + "admin/group-councils",
-	      type: 'POST',
-	      data: {
-	        'name': $('#name').val(),
-	      },
-	      success: function(res){
-	        if (res.err != true) {
-	          // console.log(res);
-	          groupTable.ajax.reload();
-	          $('#create-group-mdl').modal('hide');
-	          toastr.success('Đã tạo mới nhóm hội đồng');
-	        }
-	      },
-	      error: function (jqXHR, textStatus, errorThrown) {
-	        if (jqXHR.responseJSON.errors.name!==undefined) {
-	          $('#name-error-custom').text(jqXHR.responseJSON.errors.name[0]);
-	        }
-	      }
-	    });
+		else {
+			$.ajax({
+		      url: app_url + "admin/group-councils",
+		      type: 'POST',
+		      data: {
+		        'name': $('#name').val(),
+		        'type' : $('#type').val(),
+		      },
+		      success: function(res){
+		        if (res.err != true) {
+		          // console.log(res);
+		          groupTable.ajax.reload();
+		          $('#create-group-mdl').modal('hide');
+		          toastr.success('Đã tạo mới nhóm hội đồng');
+		        }
+		      },
+		      error: function (jqXHR, textStatus, errorThrown) {
+		        if (jqXHR.responseJSON.errors.name!==undefined) {
+		          $('#name-error-custom').text(jqXHR.responseJSON.errors.name[0]);
+		        }
+		      }
+		    });	
+		}
+	    
 	})
 
 	$(document).on('click', '.btn-edit' , function (e) {
@@ -59,11 +122,13 @@ $(document).ready(function () {
 	      type: 'get',
 	      success: function(res){
 	        if (res.err != true) {
-		        // console.log(res);
+		        // console.log(res.type);
 		        $('#edit-group-mdl').modal('show');
 		        $('#edit-group-btn').attr('data-id',id);
 		        $('#edit-name').val(res.data.name);
 				$('#edit-name-error-custom').text('');
+				$('#edit-type').val(res.data.type);
+				
 	        }
 	      },
 	      error: function (jqXHR, textStatus, errorThrown) {
@@ -148,6 +213,7 @@ $(document).ready(function () {
 		        $('#detail-name').text("Tên: "+res.data.name);
 		        $('#detail-status').text("Trạng thái: "+status);
 		        $('#detail-created_at').text("Ngày tạo: "+res.data.created_at);
+		        $('#detail-type').text("Chức năng: "+res.optionValueName);
 	        }
 	      },
 	      error: function (jqXHR, textStatus, errorThrown) {

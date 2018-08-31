@@ -79,7 +79,48 @@ class OptionValuesTableSeeder extends Seeder
        		'name'		=>	'Hội đồng',
        		'note'		=> 	'Có nhiệm vụ đánh giá hồ sơ trên hệ thống qua các form B1, B2, B3'
        	]);
+        OptionValue::create([
+          'option_id' =>  $id,
+          'value'   =>  10,
+          'name'    =>  'Chuyên viên cập nhật phê duyệt hồ sơ',
+          'note'    =>  'Có nhiệm vụ dựa theo quyết định phê duyệt hồ sơ từ cá nhân có quyền hạn, cập nhật trạng thái phê duyệt cho hồ sơ, nếu hồ sơ bị từ chối phê duyệt thì phải có lý do'
+        ]);
 
        	///ENd chức vụ
+        //Phân loại nhóm hội đồng
+        $id_option_group_council = Option::where('code', 'GROUP-COUNCIL-FUNC')->first()->id;
+
+        OptionValue::create([
+          'option_id' =>  $id_option_group_council,
+          'value'   =>  0,
+          'name'    =>  'Đánh giá hồ sơ',
+          'note'    =>  'có chức năng đánh giá hồ sơ'
+        ]);
+
+        // //Vị trí trong hội đồng
+        // $id_position_council = Option::where('code', 'POSITION-COUNCIL')->first()->id;
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  0,
+        //   'name'    =>  'Chủ tịch hội đồng',
+        //   'note'    =>  'Chủ tịch hội đồng'
+        // ]);
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  1,
+        //   'name'    =>  'Phó chủ tịch hội đồng',
+        //   'note'    =>  'Phó chủ tịch hội đồng'
+        // ]);
+
+        // OptionValue::create([
+        //   'option_id' =>  $id_option_group_council,
+        //   'value'   =>  2,
+        //   'name'    =>  'Uỷ viên phản biện',
+        //   'note'    =>  'Uỷ viên phản biện'
+        // ]);
+
+  
     }
 }
