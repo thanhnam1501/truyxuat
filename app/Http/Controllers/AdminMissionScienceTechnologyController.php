@@ -910,7 +910,7 @@ class AdminMissionScienceTechnologyController extends Controller
                   }
                   elseif($topic->is_judged == 1) {
                     if ($topic->is_performed == 0 && $topic->is_unperformed == 0) {
-                      return "<label class='label label-info'>Hồ sơ được đánnh giá</label>"; 
+                      return "<label class='label label-info'>Hồ sơ được đánh giá</label>"; 
                     }
                     elseif ($topic->is_unperformed == 1) {
                       return "<label class='label label-danger'>Không được thực hiện</label>";
@@ -966,6 +966,11 @@ class AdminMissionScienceTechnologyController extends Controller
           }
 
           $string = "";
+          if (Entrust::can('view-detail')) {
+
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-science-technologys.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
           if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0 && $topic->is_valid == 1) {
             $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
           }

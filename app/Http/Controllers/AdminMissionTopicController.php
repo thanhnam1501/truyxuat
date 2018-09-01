@@ -707,4 +707,256 @@ class AdminMissionTopicController extends Controller
       })
       ->make(true);
   }
+
+  public function listEvaluation() {
+    return view('backend.admins.evaluation.mission_topics.index');
+  }
+
+  public function getListEvaluation(Request $request)
+    {
+        $topics = MissionTopic::select('mission_topics.*', 'organizations.name as organization_name')
+                ->where('mission_topics.is_submit_ele_copy',1)
+                ->join('profiles', 'mission_topics.profile_id', '=', 'profiles.id')
+                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                ->where(function ($query) use ($request){
+                    if (isset($request->filter) && $request->filter == true) {
+
+                        parse_str($request->data, $search);
+
+                        if ($search['status_submit_hard_copy'] != -1) {
+                          $query->where('is_submit_hard_copy', $search['status_submit_hard_copy']);
+                        }
+
+                        if ($search['status_submit_is_valid'] != -1) {
+                          if ($search['status_submit_is_valid'] == 1) {
+                            $query->where('is_valid', 1);
+                          }
+                          if ($search['status_submit_is_valid'] == 0) {
+                            $query->where('is_invalid', 1);
+                          }
+                          if ($search['status_submit_is_valid'] == -2) {
+                            $query->where('is_valid', 0)->where('is_invalid', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_judged'] != -1) {
+                          if ($search['status_submit_is_judged'] == 1) {
+                            $query->where('is_judged', 1);
+                          }
+                          if ($search['status_submit_is_judged'] == 0) {
+                            $query->where('is_denied', 1);
+                          }
+                          if ($search['status_submit_is_judged'] == -2) {
+                            $query->where('is_judged', 0)->where('is_denied', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_performed'] != -1) {
+                          if ($search['status_submit_is_performed'] == 1) {
+                            $query->where('is_performed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == 0) {
+                            $query->where('is_unperformed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == -2) {
+                            $query->where('is_performed', 0)->where('is_unperformed', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_assign'] != -1) {
+                          $query->where('is_assign', $search['status_submit_is_assign']);
+                        }
+
+                        if ($search['round_collection'] != -1) {
+                          $query->where('round_collection_id', $search['round_collection']);
+                        }
+
+                        if ( !empty($search['organization']) ) {
+                          $query->where('organizations.name', 'LIKE', '%'.$search['organization'].'%');
+                        }
+                    }
+                })->orderBy('id','desc')->get();
+
+        foreach ($topics as $key => $topic) {
+          $topic['mission_name'] = null;
+
+          $attr_id = MissionTopicAttribute::where('column','name')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_topic_attribute_id == $attr_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['mission_name'] = $value->value;
+              }
+            }
+          }
+
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
+
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
+        }
+
+        foreach ($topics as $key => $topic) {
+          
+          
+          $flag_1 = false;
+          $flag_2 = false;
+          
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
+              }
+          }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          if (!($flag_1 && $flag_2)) {
+              $topics->forget($key);
+          }
+        }
+
+        return Datatables::of($topics)
+        ->addIndexColumn()
+        ->editColumn('values', function(MissionTopic $topic) {
+
+          if (!empty($topic->mission_name)) {
+            return $topic->mission_name;
+          }
+
+        })
+        ->addColumn('status', function(MissionTopic $topic) {
+
+            if ($topic->is_submit_hard_copy == 0) {
+              return "<label class='label label-default'>Chưa nộp bản cứng</label>";
+            }
+            else {
+              if ($topic->is_assign == 0) {
+                return "<label class='label label-info'>Đã nộp bản cứng</label>";
+              }
+              else{
+                if ($topic->is_valid == 0 && $topic->is_invalid == 0) {
+                  return "<label class='label label-info'>Đã giao</label>";
+                }
+                elseif ($topic->is_invalid == 1) {
+                  return "<label class='label label-danger'>Không hợp lệ</label>";
+                }
+                elseif($topic->is_valid == 1) {
+                  if ($topic->is_judged == 0 && $topic->is_denied == 0) {
+                    return "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
+                  }
+                  elseif($topic->is_judged == 1) {
+                    if ($topic->is_performed == 0 && $topic->is_unperformed == 0) {
+                      return "<label class='label label-info'>Hồ sơ được đánh giá</label>"; 
+                    }
+                    elseif ($topic->is_unperformed == 1) {
+                      return "<label class='label label-danger'>Không được thực hiện</label>";
+                    }
+                    elseif ($topic->is_performed == 1) {
+                      return "<label class='label label-info'>Được thực hiện</label> </br>";
+                    }
+                  }  
+                }
+              }
+            }
+        })
+        
+        ->editColumn('roundCollection', function(MissionTopic $topic) {
+
+          $str = "";
+          if (!empty($topic->roundCollection)) {
+            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
+          } else {
+            $str = "Chưa cập nhập";
+          }
+
+          return $str;
+        })
+        ->editColumn('profile', function(MissionTopic $topic) {
+
+          if (!empty($topic->organization_name)) {
+            return $topic->organization_name;
+          } else {
+            return "Chưa cập nhập";
+          }
+        })
+        ->editColumn('type', function(MissionTopic $topic) {
+
+          if ($topic->type == 0) {
+              return "Đề tài";
+          } else {
+             return "Đề án";
+          }
+        })
+        ->addColumn('action', function(MissionTopic $topic) {
+
+          $string = "";
+
+          if (Entrust::can('view-detail')) {
+
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-topics.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
+
+          $flag_1 = false;
+          $flag_2 = false;
+          
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
+              }
+          }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0) {
+            $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          }
+          //     
+          // $flag = $topic->judgeCouncil->first();
+
+          // if (!empty($flag)) {
+          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+          //       $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
+          // }
+
+          return $string;
+        })
+        ->make(true);
+    }
 }

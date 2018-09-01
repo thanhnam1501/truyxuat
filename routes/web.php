@@ -227,6 +227,11 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/give-back-hard-copy', 'AdminMissionTopicController@giveBackHardCopy')->name('admin.mission-topics.giveBackHardCopy');
 
             Route::get('/list-member-council/{id}', 'AdminMissionTopicController@listMemberCouncil')->name('missionTopic.listMemberCouncil');
+
+            //danh sách hồ sơ được thêm của hội đồng
+            Route::get('/list-evaluation', 'AdminMissionTopicController@listEvaluation')->name('missionTopic.listEvaluation');
+
+            Route::post('/get-list-evaluation', 'AdminMissionTopicController@getListEvaluation')->name('missionTopic.getListEvaluation');
         });
         //* End
 

@@ -190,7 +190,7 @@
                         <li class="xn-title">Đánh giá nhiệm vụ</li>
 
                         <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
-                            <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
+                            <a href="{{ route('missionTopic.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
 
                     
