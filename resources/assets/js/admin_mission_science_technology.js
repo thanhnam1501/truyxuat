@@ -680,4 +680,23 @@ $(document).ready(function() {
       ]
     });
   })
+
+
+  $('#evaluation-science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list-evaluation',
+        type: 'POST',
+      },
+      ordering: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'values', name: 'values.value', width: '228px'},
+        {data: 'profile', name: 'profile.email', width: '110px'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+      ]
+  });
 });

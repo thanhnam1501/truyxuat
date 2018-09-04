@@ -184,6 +184,25 @@
                     @endif
                     {{-- END menu chức năng hồ sơ --}}
 
+                    {{-- Menu chức năng đánh giá --}}
+                    @if (Entrust::can('evaluation-menu'))
+                    
+                        <li class="xn-title">Đánh giá nhiệm vụ</li>
+
+                        <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
+                            <a href="{{ route('missionTopic.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
+                        </li>
+
+                    
+                        <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
+                            <a href="{{ route('admin.mission-science-technologies.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
+                        </li>
+
+                    @endif
+                    
+                    {{-- END chức năng đánh giá --}}
+                    
+
                     <li class="xn-title">Cá nhân / Tổ chức</li>
                     @if (Entrust::can('account-profile-menu'))
                         <li class="@if(Request::is('*admin/account-profiles*')) active @endif">
@@ -243,11 +262,9 @@
                         </ul>
 
                     </li> --}}
-
-
-                    <li class="xn-title">Hệ thống</li>
-
+                    
                     @if (Entrust::can('user-view'))
+                    <li class="xn-title">Hệ thống</li>
                         <li class="@if(Request::is('*admin/account-users*')) active @endif">
                             <a href="{{ route('account-users.index') }}"><span class="fa fa-users"></span> <span class="xn-text">Tài khoản</span></a>
                         </li>

@@ -69,7 +69,7 @@ class SendEmail extends Command
 
                     $email->save();
 
-                    // sleep(20);
+                    sleep(15);
                 }
 
 
