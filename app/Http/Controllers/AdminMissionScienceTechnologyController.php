@@ -252,9 +252,14 @@ class AdminMissionScienceTechnologyController extends Controller
 
           $string = "";
 
+
           if (Entrust::can('view-detail')) {
 
             $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-science-technologys.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
+          if (Entrust::can('update-doc')) {
+            $string .=  "<a data-tooltip='tooltip' title='Chỉnh sửa' href='".route('missionScienceTechnology.edit',$topic->key)."' class='btn btn-info btn-xs'><i class='fa fa-pencil'></i></a>";
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
