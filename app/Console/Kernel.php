@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\SendEmail::class,
+        Commands\DeactiveRoundCoundlection::class,
     ];
 
     /**
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('send:email')->everyMinute();
+
+        $schedule->command('deactive:round-colection')->dailyAt('2:00');
     }
 
     /**
