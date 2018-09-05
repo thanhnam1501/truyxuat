@@ -70,10 +70,10 @@ class AdminMissionScienceTechnologyController extends Controller
 
     public function getSubmitEleList(Request $request)
     { 
-        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'profiles.organization_id')
                 ->where('mission_science_technologies.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -206,15 +206,9 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         
         ->editColumn('roundCollection', function(MissionScienceTechnology $topic){
-          
-          $str = "";
-          if (!empty($topic->roundCollection)) {
-            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
-          } else {
-            $str = "Chưa cập nhập";
-          }
+          $organization = Organization::find($topic->organization_id);
 
-          return $str;
+          return !is_null($organization) ? $organization->name : null;
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
@@ -948,10 +942,10 @@ class AdminMissionScienceTechnologyController extends Controller
     }
 
     public function getListEvaluation(Request $request) {
-        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'profiles.organization_id')
                 ->where('mission_science_technologies.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -1123,11 +1117,9 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
+          $organization = Organization::find($topic->organization_id);
+          return !is_null($organization) ? $organization->name : null;
+          
         })
 
         
