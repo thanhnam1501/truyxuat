@@ -172,13 +172,13 @@
                     <li class="xn-title">Danh sách nhiệm vụ</li>
 
                     @if (Entrust::can('mission-topics-menu'))
-                        <li class="@if(Request::is('*admin/mission-topics')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-topics') || Request::is('*admin/mission-topics/edit*') || Request::is('*admin/mission-topics/detail*')) active @endif">
                             <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
                     @endif
 
                     @if (Entrust::can('mission-science-technology-menu'))
-                        <li class="@if(Request::is('*admin/mission-science-technologies')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-science-technologies') || Request::is('*admin/mission-science-technologies/edit*') || Request::is('*admin/mission-science-technologies/detail*')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
                     @endif
@@ -189,12 +189,12 @@
                     
                         <li class="xn-title">Đánh giá nhiệm vụ</li>
 
-                        <li class="@if(Request::is('*admin/mission-topics/list-evaluation')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-topics/list-evalua*') || Request::is('admin/mission-topics/judge*')) active @endif">
                             <a href="{{ route('missionTopic.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
 
                     
-                        <li class="@if(Request::is('*admin/mission-science-technologies/list-evaluation')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-science-technologies/list-evalua*') || Request::is('admin/mission-science-technologys/evaluation*')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
 
@@ -469,15 +469,11 @@
 
 <!-- START THIS PAGE PLUGINS-->
 <script type='text/javascript' src='{{asset('js/plugins/icheck/icheck.min.js')}}'></script>
-
 <script type='text/javascript' src='{{asset('js/plugins/toastr.min.js')}}'></script>
-
 <script type='text/javascript' src='{{asset('js/plugins/jquery-validation/jquery.validate.js')}}'></script>
-
 <script type="text/javascript" src="{{asset('js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/plugins/scrolltotop/scrolltopcontrol.js')}}"></script>
 <script type='text/javascript' src='{{asset('js/plugins/toastr.min.js')}}'></script>
-
 <script type="text/javascript" src="{{asset('js/plugins/morris/raphael-min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/plugins/morris/morris.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/plugins/rickshaw/d3.v3.js')}}"></script>
@@ -487,7 +483,6 @@
 <script type='text/javascript' src='{{asset('js/plugins/bootstrap/bootstrap-datepicker.js')}}'></script>
 <script type='text/javascript' src='{{asset('js/plugins/bootstrap/bootstrap-select.js')}}'></script>
 <script type="text/javascript" src="{{asset('js/plugins/owl/owl.carousel.min.js')}}"></script>
-
 <script type="text/javascript" src="{{asset('js/plugins/moment.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/plugins/daterangepicker/daterangepicker.js')}}"></script>
 
@@ -520,7 +515,11 @@ $(document).ready(function () {
    }).ajaxStop(function () {
        $("#cover").hide();
    });
+
 });
+ 
+var max_file_size="{{env('MAX_FILE_SIZE')}}";
+
 </script>
 @yield('footer')
 </body>

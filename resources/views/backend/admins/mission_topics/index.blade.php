@@ -3,9 +3,10 @@
 @section('header')
   <style type="text/css">
     #topic-tbl .btn {
-      margin-bottom: 10px;
-      margin-right: 10px;
-    }
+        margin-bottom: 10px;
+        margin-right: 10px;
+        width: 25px;
+      }
   </style>
   <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/>
 @endsection

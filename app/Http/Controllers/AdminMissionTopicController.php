@@ -36,6 +36,166 @@ class AdminMissionTopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function edit($key) {
+      $topic = MissionTopic::where('key',$key)->first();
+
+    if (empty($topic) || $topic->count() < 0) {
+
+      abort(404);
+    }
+
+
+    $columns = MissionTopicAttribute::all();
+
+    $data = array();
+
+    if (true) {
+      foreach ($topic->values as $value) {
+        foreach ($columns as $column) {
+          if ($value->mission_topic_attribute_id == $column->id && !empty($value->value)) {
+            $data[$column->column] = $value->value;
+          }
+        }
+      }
+      
+      $data['expected_fund'] = (!empty($data['expected_fund']))?Crypt::decrypt($data['expected_fund']):"0";
+    } else {
+      foreach ($columns as $key => $column) {
+        foreach ($topic->values as $value) {
+          if ($value->mission_topic_attribute_id == $column->id) {
+            if ($column->column == "expected_fund") {
+              $value->value = number_format(Crypt::decrypt($value->value)) . " (VNĐ)";
+            }
+            $data[$key]["order"]  = $column->order;
+            $data[$key]["value"]  = $value->value;
+            $data[$key]["label"]  = $column->label;
+            $data[$key]["column"] = $column->column;
+          }
+        }
+      }
+    }
+
+    
+    if (!empty($topic)) {
+
+      $status_submit_ele_copy = $topic->is_submit_ele_copy == 1 ? "<p>Hồ sơ đã nộp bản mềm</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_ele_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản mềm</p>";
+      $status_submit_hard_copy = $topic->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($topic->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+
+      $doc_status = "";
+
+      if ($topic->is_assign) {
+          $doc_status = "<p>Hồ sơ đã được giao cho cán bộ xử lý</p>";
+      }
+
+      if ($topic->is_valid) {
+          
+          $doc_status = "<p>Hồ sơ hợp lệ</p>";
+      } else if ($topic->is_invalid) {
+
+          $doc_status = "<p class'error'>Hồ sơ không hợp lệ</p>";
+      }
+
+      if (CouncilMissionTopic::where('mission_id', $topic->id)->count() > 0) {
+          
+          $doc_status = "<p>Hồ sơ đã được giao cho hội đồng đánh giá</p>";
+      }
+
+      $is_submit_ele_copy = $topic->is_submit_ele_copy;
+      $is_submit_hard_copy = $topic->is_submit_hard_copy;
+
+      $date = array();
+
+      $date['d'] = date('d',time());
+      $date['m'] = date('m',time());
+      $date['y'] = date('Y',time());
+
+      return view('backend.admins.mission_topics.edit',[
+        'topic' => $topic,
+        'data' => $data,
+        'status_submit_ele_copy'  =>  $status_submit_ele_copy,
+        'status_submit_hard_copy' =>  $status_submit_hard_copy,
+        'is_submit_ele_copy'  =>  $is_submit_ele_copy,
+        'is_submit_hard_copy' =>  $is_submit_hard_copy,
+        'date'  => $date,
+        'doc_status'  => $doc_status,
+      ]);
+    }
+
+    }
+
+    public function update(Request $request) {
+
+    $data = $request->only('expected_fund','expected_main_content','expected_result_perform','id','key','name','propose_base','result_target_requirement','target','time_result_requirement','type','urgency');
+
+    $fund = Money::format($data['expected_fund'], 'VNĐ');
+
+    if ($fund < 100000) {
+      return response()->json(['error' => true, 'message' =>  'Dự kiến nhu cầu kinh phí phải lớn hơn 100,000 VNĐ']);
+    }
+
+    $data['expected_fund'] = Crypt::encrypt($fund);
+
+    // $data['evaluation_form_01'] = '';
+    // $data['evaluation_form_02'] = '';
+
+    DB::beginTransaction();
+    try {
+
+      $topic = MissionTopic::find($data['id']);
+
+      // $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
+
+      // $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
+
+      // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+      //     return response()->json([
+      //       'error' => true,
+      //       'message' => 'Vui lòng đính kèm file!'
+      //     ]);
+      // }
+
+      foreach ($topic->values as $key => $value) {
+
+        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)
+                                    ->first()
+                                    ->column;
+        if ($column == "evaluation_form_02" || $column == "evaluation_form_01") {
+          continue;
+        }
+
+        $value->value = $data[$column];
+
+        $value->save();
+      }
+
+      $topic->update([
+        'is_filled'  => 1,
+        'type'  => $data['type'],
+      ]);
+
+      DB::commit();
+
+      return response()->json([
+        'error' => false,
+        'message' => 'Lưu thông tin nhiệm vụ thành công!',
+        'key' => $topic->key,
+      ]);
+
+    } catch (Exception $e) {
+
+      DB::rollback();
+
+      Log::info($e->getMessage());
+
+      return response()->json([
+        'error' => true,
+        'message' => $e->getMessage()
+      ]);
+    }
+  }
+
+
     public function index()
     {
 
@@ -249,6 +409,12 @@ class AdminMissionTopicController extends Controller
           if (Entrust::can('view-detail')) {
 
             $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-topics.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
+          if (Entrust::can('update-doc')) {
+
+            $string .= "<a data-tooltip='tooltip' title='Chỉnh sửa' href='".route('admin.mission-topics.edit',$topic->key)."' class='btn btn-info  btn-xs'><i class='fa fa-pencil'></i></a>";
+
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
