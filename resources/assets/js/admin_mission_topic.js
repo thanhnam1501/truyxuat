@@ -12,15 +12,11 @@ $(document).ready(function() {
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
           {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
-          {data: 'values', name: 'values.value', width: '228px'},
-          {data: 'profile', name: 'profile.email', width: '110px'},
-          {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
-          {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
-          {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
-          {data: 'is_assign', name: 'is_assign', 'class':'text-center', width: '80px'},
-          {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
-          {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
-          {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
+          {data: 'values', name: 'values.value'},
+          {data: 'profile', name: 'profile.email'},
+          {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center'},
+          {data: 'type', name: 'type', 'class':'text-center'},
+          {data: 'status', name: 'status', 'class':'text-center'},
           
       ]
   });
@@ -567,16 +563,12 @@ $(document).ready(function() {
       ordering: false,
       columns: [
         {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
-        {data: 'values', name: 'values.value', width: '228px'},
-        {data: 'profile', name: 'profile.email', width: '110px'},
-        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
-        {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
-        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
-        {data: 'is_assign', name: 'is_assign', 'class':'text-center', width: '80px'},
-        {data: 'valid_status', name: 'valid_status', 'class':'text-center', width: '90px'},
-        {data: 'is_judged', name: 'is_judged', 'class':'text-center'},
-        {data: 'is_perform', name: 'is_perform', 'class':'text-center'},
         {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'values', name: 'values.value'},
+        {data: 'profile', name: 'profile.email'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center'},
+        {data: 'type', name: 'type', 'class':'text-center'},
+        {data: 'status', name: 'status', 'class':'text-center'},
       ]
     });
 
