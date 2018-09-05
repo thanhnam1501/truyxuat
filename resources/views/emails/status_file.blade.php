@@ -321,7 +321,7 @@
 																			@endif, <br><br>
 
 																			@if (isset($parameter['content']))
-																				{{ $parameter['content'] }}
+																				{!! $parameter['content'] !!}
 																			@endif<br> <br>
 
 																			Cảm ơn !

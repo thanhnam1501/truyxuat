@@ -146,7 +146,12 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::get('/detail/{key}', 'AdminMissionTopicController@detail')->name('admin.mission-topics.detail');
 
+                Route::get('/edit/{key}', 'AdminMissionTopicController@edit')->name('admin.mission-topics.edit');
+
+                Route::post('update', 'AdminMissionTopicController@update')->name('admin.mission-topics.update');
+                
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
+
             });
 
 
@@ -227,6 +232,12 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/give-back-hard-copy', 'AdminMissionTopicController@giveBackHardCopy')->name('admin.mission-topics.giveBackHardCopy');
 
             Route::get('/list-member-council/{id}', 'AdminMissionTopicController@listMemberCouncil')->name('missionTopic.listMemberCouncil');
+
+            //danh sách hồ sơ được thêm của hội đồng
+            Route::get('/list-evaluation', 'AdminMissionTopicController@listEvaluation')->name('missionTopic.listEvaluation');
+
+            Route::post('/get-list-evaluation', 'AdminMissionTopicController@getListEvaluation')->name('missionTopic.getListEvaluation');
+
         });
         //* End
 
@@ -243,6 +254,15 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/submit-assign', 'AdminMissionScienceTechnologyController@submitAssign')->name('admin.mission-science-technologies.submitAssign');
             Route::post('/give-back-hard-copy', 'AdminMissionScienceTechnologyController@giveBackHardCopy')->name('admin.mission-science-technologies.giveBackHardCopy');
             Route::get('/list-member-council/{id}', 'AdminMissionScienceTechnologyController@listMemberCouncil')->name('admin.mission-science-technologies.listMemberCouncil');
+
+            //danh sách hồ sơ được thêm của hội đồng
+            Route::get('/list-evaluation', 'AdminMissionScienceTechnologyController@listEvaluation')->name('admin.mission-science-technologies.listEvaluation');
+
+            Route::post('/get-list-evaluation', 'AdminMissionScienceTechnologyController@getListEvaluation')->name('admin.mission-science-technologies.getListEvaluation');
+
+            Route::get('/edit/{key}', 'AdminMissionScienceTechnologyController@edit')->name('adminMissionScienceTechnology.edit');
+
+            Route::post('update', 'AdminMissionScienceTechnologyController@update')->name('adminMissionScienceTechnology.update');
         });
         //* End
 
@@ -386,3 +406,4 @@ Route::middleware('revalidate')->group(function () {
     // });
 
         // Route::get('/', 'MissionScienceTechnologyController@index')->name('missionScienceTechnology.index');
+        // 

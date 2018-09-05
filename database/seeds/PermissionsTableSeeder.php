@@ -86,19 +86,19 @@ class PermissionsTableSeeder extends Seeder
         // Thu hồ sơ
         Permission::create([
             'name'=>'round-collection-view',
-            'display_name'=>'Xem danh sách thu hồ sơ',
+            'display_name'=>'Xem danh sách đợt thu hồ sơ',
         ]);
         Permission::create([
             'name'=>'round-collection-create',
-            'display_name'=>'Thêm danh sách thu hồ sơ',
+            'display_name'=>'Thêm danh sách đợt thu hồ sơ',
         ]);
         Permission::create([
             'name'=>'round-collection-edit',
-            'display_name'=>'Sửa danh sách thu hồ sơ',
+            'display_name'=>'Sửa danh sách đợt thu hồ sơ',
         ]);
         Permission::create([
             'name'=>'round-collection-delete',
-            'display_name'=>'Xoá danh sách thu hồ sơ',
+            'display_name'=>'Xoá danh sách đợt thu hồ sơ',
         ]);
 
         //Cập nhập trạng thái hồ sơ
@@ -181,9 +181,21 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'position-council-menu',
             'display_name'=>'Hiển thị menu quản lý vị trí trong hội đồng',
         ]);
+
         Permission::create([
             'name'=>'logs-menu',
             'display_name'=>'Hiển thị menu quản lý log',
+        ]);
+
+        Permission::create([
+
+            'name'=>'update-doc',
+            'display_name'=>'Sửa hồ sơ (đối với QTV)',
+        ]);
+
+        Permission::create([
+            'name'=>'evaluation-menu',
+            'display_name'=>'Hiển thị menu đánh giá hồ sơ',
         ]);
     }
 }

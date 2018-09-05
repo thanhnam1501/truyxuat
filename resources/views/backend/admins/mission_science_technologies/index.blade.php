@@ -2,9 +2,10 @@
 
 @section('header')
   <style type="text/css">
-      #topic-tbl .btn {
+      #science-technology-tbl .btn {
         margin-bottom: 10px;
         margin-right: 10px;
+        width: 25px;
       }
   </style>
 
@@ -169,17 +170,13 @@
                   <table class="table table-bordered table-hover table-responsive" id="science-technology-tbl">
                     <thead>
                       <tr>
-                        <th style="width: 4%">STT</th>
-                        <th style="width: 10%">Hành động</th>
-                        <th style="width: 11%">Tên nhiệm vụ</th>
-                        <th style="width: 5%">Đơn vị</th>
-                        <th style="width: 10%">Đợt gọi hồ sơ</th>
-                        <th style="width: 10%">Hình thức thực hiện</th>
-                        <th style="width: 10%">Trạng thái nộp HS</th>
-                        <th style="width: 10%">Trạng thái giao HS</th>
-                        <th style="width: 10%">Trạng thái hồ sơ</th>
-                        <th style="width: 10%">Trạng thái xét duyệt BCN</th>
-                        <th style="width: 10%">Trạng thái đưa vào đánh giá HĐ</th>
+                        <th style="width: 30px">STT</th>
+                        <th style="width: 100px">Hành động</th>
+                        <th style="">Tên nhiệm vụ</th>
+                        <th style="width: 150px">Đơn vị</th>
+                        <th style="width: 100px">Đợt gọi hồ sơ</th>
+                        <th style="width: 80px">Hình thức thực hiện</th>
+                        <th style="width: 90px">Trạng thái HS</th>
                         
                       </tr>
                     </thead>
