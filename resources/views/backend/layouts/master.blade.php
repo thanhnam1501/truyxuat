@@ -172,13 +172,13 @@
                     <li class="xn-title">Danh sách nhiệm vụ</li>
 
                     @if (Entrust::can('mission-topics-menu'))
-                        <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-topics')) active @endif">
                             <a href="{{ route('admin.mission-topics.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
                     @endif
 
                     @if (Entrust::can('mission-science-technology-menu'))
-                        <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-science-technologies')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.index') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
                     @endif
@@ -189,12 +189,12 @@
                     
                         <li class="xn-title">Đánh giá nhiệm vụ</li>
 
-                        <li class="@if(Request::is('*admin/mission-topics*')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-topics/list-evaluation')) active @endif">
                             <a href="{{ route('missionTopic.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Đề tài hoặc đề án</span></a>
                         </li>
 
                     
-                        <li class="@if(Request::is('*admin/mission-science-technolog*')) active @endif">
+                        <li class="@if(Request::is('*admin/mission-science-technologies/list-evaluation')) active @endif">
                             <a href="{{ route('admin.mission-science-technologies.listEvaluation') }}"><span class="fa fa-file-text"></span> <span class="xn-text">Dự án KH và CN</span></a>
                         </li>
 
