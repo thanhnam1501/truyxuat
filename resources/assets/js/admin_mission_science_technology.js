@@ -680,4 +680,197 @@ $(document).ready(function() {
       ]
     });
   })
+
+
+  $('#evaluation-science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list-evaluation',
+        type: 'POST',
+      },
+      ordering: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'values', name: 'values.value', width: '228px'},
+        {data: 'profile', name: 'profile.email', width: '110px'},
+        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+        {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+      ]
+  });
 });
+
+// form update
+  $('#frm-update-mission-science-technology').validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 10
+      },
+      provenance_originate: {
+        required: true,
+        minlength: 10
+      },
+      importance: {
+        required: true,
+        minlength: 10
+      },
+      target: {
+        required: true,
+        minlength: 10
+      },
+      content: {
+        required: true,
+        minlength: 10
+      },
+      request_result: {
+        required: true,
+        minlength: 10
+      },
+      application_address: {
+        required: true,
+        minlength: 10
+      },
+      request_time: {
+        required: true,
+        minlength: 10
+      },
+      qualification: {
+        required: true,
+        minlength: 10
+      },
+
+      expected_fund: {
+        required: true,
+        minCustom: '100,000 đ'
+      },
+      plan_mobilize: {
+        required: true,
+        minlength: 10
+      },
+      economic_efficiency: {
+        required: true,
+        minlength: 10
+      },
+      science_technology_efficiency: {
+        required: true,
+        minlength: 10
+      },
+      // evaluation_form_01 : {
+      //   requiredFile: true,
+      //   extension: 'pdf',
+      //   filesize: max_file_size,
+      // },
+      // evaluation_form_02 : {
+      //   requiredFile: true,
+      //   extension: 'pdf',
+      //   filesize: max_file_size,
+      // },
+    },
+    messages: {
+      name: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      provenance_originate: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      importance: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      target: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      content: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      request_result: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      application_address: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      request_time: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      expected_fund: {
+        required: "Dự kiến nhu cầu kinh phí không được bỏ trống",
+        minCustom: jQuery.validator.format("Dự kiến nhu cầu kinh phí phải lớn hơn {0}")
+      },
+      qualification: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      plan_mobilize: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      expected_effect: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      economic_efficiency: {
+        required: "Trường không được bỏ trống",
+        minlength: jQuery.validator.format("Trường phải lớn hơn {0} ký tự!")
+      },
+      science_technology_efficiency: {
+        required: "Dự kiến nhu cầu kinh phí không được bỏ trống",
+        minCustom: jQuery.validator.format("Dự kiến nhu cầu kinh phí phải lớn hơn {0}")
+      }
+      // ,evaluation_form_01 : {
+      //   requiredFile: '(*) Vui lòng đính kèm file',
+      //   extension: 'Chỉ file .pdf được chấp nhận',
+      //   filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
+      // }
+      // ,evaluation_form_02 : {
+      //   requiredFile: '(*) Vui lòng đính kèm file',
+      //   extension: 'Chỉ file .pdf được chấp nhận',
+      //   filesize: "Dung lượng file đính kèm không được lớn hơn {0} MB",
+      // },
+    }
+  });
+
+  $('#update-science-technology-btn').on('click', function() {
+
+    // if ($('#frm-update-mission-science-technology').length > 0) {
+    //   if (!$('#frm-update-mission-science-technology').valid()) {
+
+    //     return false;
+    //   }
+    // }
+
+    var formData = new FormData($('#frm-update-mission-science-technology')[0]);
+
+    $.ajax({
+      processData: false,
+      contentType: false,
+      type: "POST",
+      url: app_url + "/mission-science-technology/update",
+      data: formData,
+      success: function(res) {
+        // console.log(res);
+        if (!res.error) {
+          toastr.success(res.message);
+
+          setTimeout(function() {
+            location.href = app_url + 'admin/mission-science-technologies';
+          }, 1000)
+
+        } else {
+          toastr.error(res.message);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+    });
+
+  });

@@ -54,7 +54,7 @@ class MissionTopicController extends Controller
           if (strlen($value->value) >= 300) {
             return ("<span data-container='body' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>");
           } else {
-            return ("<span>".$value->value."</span>");
+            return $value->value;
           }
         }
       }

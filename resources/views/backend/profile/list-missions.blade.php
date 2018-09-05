@@ -34,9 +34,9 @@
 
         <div class="col-md-12"> <hr><br> <br>
             <ul class="nav nav-tabs" role="tablist">
-  			  	    <li class="active"><a href="#tab-a1" role="tab" data-toggle="tab"> Đề tài hoặc đề án</a></li>
-  	            <li class=""><a href="#tab-a3" role="tab" data-toggle="tab" id="btn-tab-a3"> Dự án khoa học và công nghệ</a></li>
-  			     </ul>
+                <li class="active"><a href="#tab-a1" role="tab" data-toggle="tab"> Đề tài hoặc đề án</a></li>
+                <li class=""><a href="#tab-a3" role="tab" data-toggle="tab" id="btn-tab-a3"> Dự án khoa học và công nghệ</a></li>
+             </ul>
         </div>
 
         <div class="col-md-12"> <br><br>
@@ -85,7 +85,7 @@
   <div class="modal fade" id="create-mission-mdl" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-      	<form role="form" enctype="multipart/form-data" id="create-mission-frm">
+        <form role="form" enctype="multipart/form-data" id="create-mission-frm">
         <div class="modal-header">
           <h4 class="modal-title">ĐĂNG KÝ NHIỆM VỤ MỚI</h4>
         </div>
@@ -103,7 +103,7 @@
               </div>
               <div class="form-group">
                   <label>Đợt gọi hồ sơ <span class='error'>(*)</span></label>
-  								<select class="form-control" name="round_collection_id" id="round_collection_id">
+                  <select class="form-control" name="round_collection_id" id="round_collection_id">
 
                     @if (!empty($round_collections))
                       <option value="-1">-- Lựa chọn đợt gọi hồ sơ --</option>
@@ -114,7 +114,7 @@
                       <option value="-1">(Chưa có đợt gọi hồ sơ nào)</option>
                     @endif
                   </select>
-  						</div>
+              </div>
 
         </div>
         <div class="modal-footer">
@@ -128,7 +128,7 @@
 @endsection
 
 @section('footer')
-	{{-- <script type="text/javascript" src="{{mix('build/js/mission_sxtns.js')}}"></script> --}}
+  {{-- <script type="text/javascript" src="{{mix('build/js/mission_sxtns.js')}}"></script> --}}
     <script type="text/javascript" src="{{mix('build/js/mission_topic.js')}}"></script>
     <script type="text/javascript" src="{{mix('build/js/mission_science_technology/mission_science_technology.js')}}"></script>
     <script type="text/javascript" src="{{mix('build/js/missions.js')}}"></script>

@@ -181,14 +181,21 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'position-council-menu',
             'display_name'=>'Hiển thị menu quản lý vị trí trong hội đồng',
         ]);
+
         Permission::create([
             'name'=>'logs-menu',
             'display_name'=>'Hiển thị menu quản lý log',
         ]);
 
         Permission::create([
+
             'name'=>'update-doc',
             'display_name'=>'Sửa hồ sơ (đối với QTV)',
+        ]);
+
+        Permission::create([
+            'name'=>'evaluation-menu',
+            'display_name'=>'Hiển thị menu đánh giá hồ sơ',
         ]);
     }
 }

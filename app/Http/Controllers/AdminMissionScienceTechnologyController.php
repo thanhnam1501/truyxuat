@@ -33,6 +33,8 @@ use Datatables;
 use Entrust;
 use AdminMission;
 use UploadFile;
+use Illuminate\Support\Collection;
+
 
 class AdminMissionScienceTechnologyController extends Controller
 {
@@ -259,7 +261,7 @@ class AdminMissionScienceTechnologyController extends Controller
           }
 
           if (Entrust::can('update-doc')) {
-            $string .=  "<a data-tooltip='tooltip' title='Chỉnh sửa' href='".route('missionScienceTechnology.edit',$topic->key)."' class='btn btn-info btn-xs'><i class='fa fa-pencil'></i></a>";
+            $string .=  "<a data-tooltip='tooltip' title='Chỉnh sửa' href='".route('adminMissionScienceTechnology.edit',$topic->key)."' class='btn btn-info btn-xs'><i class='fa fa-pencil'></i></a>";
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {
@@ -298,43 +300,43 @@ class AdminMissionScienceTechnologyController extends Controller
             
           }
 
-          $flag_1 = false;
-          $flag_2 = false;
+          // $flag_1 = false;
+          // $flag_2 = false;
           
-          foreach ($topic->council as $council) {
-              $users = $council->getUsers;
-              foreach ($users as $user) {
-                  if ($user->id == Auth::id()) {
-                      $flag_1 = true;
-                  }
-              }
-          }
-
-          foreach($topic->groupCouncil as $groupCouncil) {
-              if ($groupCouncil->type == 0) {
-                  $flag_2 = true;
-              }
-          }
-
-          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0) {
-                $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
-              }
-
-          // $flag = $topic->judgeCouncil->first();
-
-          // if (!empty($flag)) {
-
-          //     if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
-          //       $string .= "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          // foreach ($topic->council as $council) {
+          //     $users = $council->getUsers;
+          //     foreach ($users as $user) {
+          //         if ($user->id == Auth::id()) {
+          //             $flag_1 = true;
+          //         }
           //     }
           // }
-// =======
-          // if (Entrust::can(['evaluation-doc'])) {
 
-          //     $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          // foreach($topic->groupCouncil as $groupCouncil) {
+          //     if ($groupCouncil->type == 0) {
+          //         $flag_2 = true;
+          //     }
+          // }
+
+          // if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0) {
+          //       $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          //     }
+
+//           $flag = $topic->judgeCouncil->first();
+
+//           if (!empty($flag)) {
+
+//               if ($flag->getJudgeCouncilMembers(Auth::guard('web')->user()->id)->count() > 0 && Entrust::can('evaluation-doc')) {
+//                 $string .= "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+//               }
+//           }
+// =======
+//           if (Entrust::can(['evaluation-doc'])) {
+
+//               $string .=  "<a data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
             
 
-          // }
+//           }
 
           if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
             $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
@@ -386,9 +388,110 @@ class AdminMissionScienceTechnologyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($key)
     {
+ 
+      $st_key = $key;
+
+        $result = MissionScienceTechnology::where('key', $key)->first();
+
+        $id = $result->id;
+        $is_filled = $result->is_filled;
+
+        $stechs = MissionScienceTechnology::select([
+                    'mission_science_technology_attributes.column',
+                    'mission_science_technology_attribute_values.value'
+                  ])
+                  ->  where('mission_science_technologies.key', $key)
+                  ->  join('mission_science_technology_values', 'mission_science_technology_values.mission_science_technology_id', '=', 'mission_science_technologies.id')
+                  ->  join('mission_science_technology_attribute_values', 'mission_science_technology_attribute_values.id', '=', 'mission_science_technology_values.mission_science_technology_attribute_value_id')
+                  ->  join('mission_science_technology_attributes', 'mission_science_technology_attributes.id', 'mission_science_technology_attribute_values.mission_science_technology_attribute_id')
+                  ->  get();
+
+        $columns = MissionScienceTechnologyAttribute::all();
+
+        $data = array();
+
+        foreach ($columns as $key => $value) {
+          $data[$value->column] = null;
+        }
+
+        foreach ($stechs as $value) {
+          foreach ($columns as $key => $column) {
+            if ($value->column == $column->column && !empty($value->value)) {
+              $data[$column->column] = $value->value;
+            }
+          }
+        }
+
+        if (!empty($data['expected_fund'])) {
+          $data['expected_fund'] = Crypt::decrypt($data['expected_fund']);
+        }
+
+        $check_input_01 = $data['evaluation_form_01'] != null ? true : false;
+        $check_input_02 = $data['evaluation_form_02'] != null ? true : false;
+        $order_evaluation_form_01 = 15;
+        $order_evaluation_form_02 = 16;
+
+        $status_submit_ele_copy = $result->is_submit_ele_copy == 1 ? "<p>Hồ sơ đã nộp bản mềm</p>Thời gian nộp: ".date('d-m-Y', strtotime($result->time_submit_ele_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản mềm</p>";
+        $status_submit_hard_copy = $result->is_submit_hard_copy == 1 ? "<p>Hồ sơ đã nộp bản cứng</p>Thời gian nộp: ".date('d-m-Y', strtotime($result->time_submit_hard_copy)) : "<p class='text-red'>Hồ sơ chưa nộp bản cứng</p>";
+
+        $is_submit_ele_copy = $result->is_submit_ele_copy;
+        $is_submit_hard_copy = $result->is_submit_hard_copy;
+
+        $doc_status = "";
+
+        if ($result->is_assign) {
+            $doc_status = "<p>Hồ sơ đã được giao cho cán bộ xử lý</p>";
+        }
+
+        if ($result->is_valid) {
+            
+            $doc_status = "<p>Hồ sơ hợp lệ</p>";
+        } else if ($result->is_invalid) {
+
+            $doc_status = "<p class'error'>Hồ sơ không hợp lệ</p>";
+        }
+
+        if (CouncilMissionScienceTechnology::where('mission_id', $result->id)->count() > 0) {
+            
+            $doc_status = "<p>Hồ sơ đã được giao cho hội đồng đánh giá</p>";
+        }
+
         //
+        $mission = MissionScienceTechnology::where('key', $st_key)->first();
+
+        $columns = MissionScienceTechnologyAttribute::all();
+
+        $arr = array();
+
+        foreach ($columns as $key => $column) {
+          foreach ($mission->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $column->id) {
+              if ($column->column == 'expected_fund') {
+                // if (!empty($value->value)) {
+                    $value->value = (!empty($value->value))? number_format(Crypt::decrypt($value->value))." VNĐ" :"0 VNĐ";
+                // }
+
+              }
+              $arr[$key]['order']  = $column->order;
+              $arr[$key]['value']  = $value->value;
+              $arr[$key]['label']  = $column->label;
+              $arr[$key]['column'] = $column->column;
+              $arr[$key]['parent_attribute_id'] = $column->parent_attribute_id;
+            }
+          }
+        }
+
+        $date = array();
+
+        $date['d'] = date('d',strtotime(now()));
+        $date['m'] = date('m',strtotime(now()));
+        $date['y'] = date('Y',strtotime(now()));
+
+        if (!empty($data)) {
+          return view("backend.admins.mission_science_technologies.edit", compact('arr','data', 'st_key', 'id', 'is_filled', 'check_input_01', 'check_input_02', 'order_evaluation_form_01', 'order_evaluation_form_02', 'status_submit_ele_copy', 'status_submit_hard_copy','is_submit_ele_copy', 'is_submit_hard_copy', 'date', 'doc_status'));
+        }
     }
 
     /**
@@ -398,9 +501,102 @@ class AdminMissionScienceTechnologyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $data = $request->all();
+            $fund = Money::format($data['expected_fund'], 'VNĐ');
+            $data['expected_fund'] = Crypt::encrypt($fund);
+
+            $data['evaluation_form_01'] = '';
+            $data['evaluation_form_02'] = '';
+
+            $mission = MissionScienceTechnology::where('key', $request->get('key'))->first();
+
+            $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_01', 'mission_science_technologies');
+            $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionScienceTechnologyAttribute', $mission->id, 'evaluation_form_02', 'mission_science_technologies');
+
+            // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+            //     return response()->json([
+            //       'error' => true,
+            //       'message' => 'Vui lòng đính kèm file!'
+            //     ]);
+            // }
+
+            $stechs = MissionScienceTechnology::find($data['id']);
+            $columns = MissionScienceTechnologyAttribute::all();
+
+            $ids = [12];
+            $files = [15, 16];
+
+            $arr = array();
+
+            foreach ($stechs->values as $key => $row) {
+              foreach ($columns as $key => $column) {
+                if ($column->id == $row->mission_science_technology_attribute_id) {
+                  if (!in_array($row->mission_science_technology_attribute_id, $ids)) {
+                    $record = MissionScienceTechnologyAttributeValue::find($row->id)
+                                ->update(['value' => $data[$column->column]]);
+                  }
+
+                 // if ($row->mission_science_technology_attribute_id == 15) {
+                 //    $file_01 = $row->id;
+                 //  }
+                 //
+                 //  if ($row->mission_science_technology_attribute_id == 16) {
+                 //    $file_02 = $row->id;
+                 //  }
+                }
+              }
+            }
+
+            $stechs->update([
+                'is_filled'  => 1,
+            ]);
+
+            // upload file
+            // $round_collection = RoundCollection::find($stechs->round_collection_id);
+            // $round_collection_name = $round_collection->year .'_' . $round_collection->name;
+            // $uploadFile['round_collection_name']  = str_slug($round_collection_name);
+            //
+            // if ($request->hasFile('evaluation_form_01')) {
+            //   $uploadFile['number_input'] = 1;
+            //   $uploadFile['file'] = $request->file('evaluation_form_01');
+            //   $uploadFile['code_form']  = 'A3';
+            //   $uploadFile['parent_id']  = $stechs->id;
+            //   $path = UploadFile::storeFile($uploadFile);
+            //   MissionScienceTechnologyAttributeValue::find($file_01)
+            //   ->update(['value' => $path]);
+            // }
+            //
+            // if ($request->hasFile('evaluation_form_02')) {
+            //   $uploadFile['number_input'] = 2;
+            //   $uploadFile['file'] = $request->file('evaluation_form_02');
+            //   $uploadFile['code_form']  = 'A3';
+            //   $uploadFile['parent_id']  = $stechs->id;
+            //   $path = UploadFile::storeFile($uploadFile);
+            //   MissionScienceTechnologyAttributeValue::find($file_02)
+            //   ->update(['value' => $path]);
+            // }
+            // end
+
+            DB::commit();
+            return response()->json([
+                'error'   => false,
+                'message' => 'Lưu thông tin nhiệm vụ thành công !',
+            ]);
+
+        } catch (Exception $e) {
+
+            DB::rollback();
+            Log::info($e->getMessage());
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -561,6 +757,7 @@ class AdminMissionScienceTechnologyController extends Controller
       $data['mission_council']  = 'App\Models\CouncilMissionScienceTechnology';
 
       $data['group_council_id'] = $request->get('group_council_id');
+
       $result = AdminMission::addCouncil($data);
 
       return response()->json($result);
@@ -758,5 +955,229 @@ class AdminMissionScienceTechnologyController extends Controller
         return PositionCouncil::find($userCouncil->pivot->position_council_id)->name;
       })
       ->make(true);
+    }
+
+    public function listEvaluation() {
+      return view('backend.admins.evaluation.mission_science_technologies.index');
+    }
+
+    public function getListEvaluation(Request $request) {
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+                ->where('mission_science_technologies.is_submit_ele_copy',1)
+                ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
+                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                ->where(function ($query) use ($request){
+                    if (isset($request->filter) && $request->filter == true) {
+
+                        parse_str($request->data, $search);
+
+                        if ($search['status_submit_hard_copy'] != -1) {
+                          $query->where('is_submit_hard_copy', $search['status_submit_hard_copy']);
+                        }
+
+                        if ($search['status_submit_is_valid'] != -1) {
+                          if ($search['status_submit_is_valid'] == 1) {
+                            $query->where('is_valid', 1);
+                          }
+                          if ($search['status_submit_is_valid'] == 0) {
+                            $query->where('is_invalid', 1);
+                          }
+                          if ($search['status_submit_is_valid'] == -2) {
+                            $query->where('is_valid', 0)->where('is_invalid', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_judged'] != -1) {
+                          if ($search['status_submit_is_judged'] == 1) {
+                            $query->where('is_judged', 1);
+                          }
+                          if ($search['status_submit_is_judged'] == 0) {
+                            $query->where('is_denied', 1);
+                          }
+                          if ($search['status_submit_is_judged'] == -2) {
+                            $query->where('is_judged', 0)->where('is_denied', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_performed'] != -1) {
+                          if ($search['status_submit_is_performed'] == 1) {
+                            $query->where('is_performed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == 0) {
+                            $query->where('is_unperformed', 1);
+                          }
+                          if ($search['status_submit_is_performed'] == -2) {
+                            $query->where('is_performed', 0)->where('is_unperformed', 0);
+                          }
+                        }
+
+                        if ($search['status_submit_is_assign'] != -1) {
+                          $query->where('is_assign', $search['status_submit_is_assign']);
+                        }
+
+                        if ($search['round_collection'] != -1) {
+                          $query->where('round_collection_id', $search['round_collection']);
+                        }
+
+                        if ( !empty($search['organization']) ) {
+                          $query->where('organizations.name', 'LIKE', '%'.$search['organization'].'%');
+                        }
+                    }
+                })->orderBy('id','desc')->get();
+
+        foreach ($topics as $key => $topic) {
+          $topic['mission_name'] = null;
+
+          $attr_id = MissionScienceTechnologyAttribute::where('column','name')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $attr_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['mission_name'] = $value->value;
+              }
+            }
+          }
+
+          if (isset($request->filter) && $request->filter == true) {
+            parse_str($request->data, $search);
+
+            if (!empty($search['mission_name'])) {
+              $pos = strpos((string)$topic['mission_name'], (string)$search['mission_name']);
+
+              if ($pos === false) {
+                $topics->forget($key);
+              }
+            }
+          }
+
+        }
+
+        foreach ($topics as $key => $topic) {
+          
+          
+          $flag_1 = false;
+          $flag_2 = false;
+          
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
+              }
+          }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          if (!($flag_1 && $flag_2)) {
+              $topics->forget($key);
+          }
+        }
+
+        return Datatables::of($topics)
+        ->addIndexColumn()
+        ->editColumn('values', function(MissionScienceTechnology $topic){
+          if (!empty($topic->mission_name)) {
+            return $topic->mission_name;
+          }
+        })
+        ->addColumn('status', function(MissionScienceTechnology $topic) {
+
+            if ($topic->is_submit_hard_copy == 0) {
+              return "<label class='label label-default'>Chưa nộp bản cứng</label>";
+            }
+            else {
+              if ($topic->is_assign == 0) {
+                return "<label class='label label-info'>Đã nộp bản cứng</label>";
+              }
+              else{
+                if ($topic->is_valid == 0 && $topic->is_invalid == 0) {
+                  return "<label class='label label-info'>Đã giao</label>";
+                }
+                elseif ($topic->is_invalid == 1) {
+                  return "<label class='label label-danger'>Không hợp lệ</label>";
+                }
+                elseif($topic->is_valid == 1) {
+                  if ($topic->is_judged == 0 && $topic->is_denied == 0) {
+                    return "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
+                  }
+                  elseif($topic->is_judged == 1) {
+                    if ($topic->is_performed == 0 && $topic->is_unperformed == 0) {
+                      return "<label class='label label-info'>Hồ sơ được đánh giá</label>"; 
+                    }
+                    elseif ($topic->is_unperformed == 1) {
+                      return "<label class='label label-danger'>Không được thực hiện</label>";
+                    }
+                    elseif ($topic->is_performed == 1) {
+                      return "<label class='label label-info'>Được thực hiện</label> </br>";
+                    }
+                  }  
+                }
+              }
+            }
+     
+        })
+        
+        ->editColumn('roundCollection', function(MissionScienceTechnology $topic){
+          
+          $str = "";
+          if (!empty($topic->roundCollection)) {
+            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
+          } else {
+            $str = "Chưa cập nhập";
+          }
+
+          return $str;
+        })
+        ->editColumn('profile', function(MissionScienceTechnology $topic) {
+
+          if (!empty($topic->organization_name)) {
+            return $topic->organization_name;
+          } else {
+            return "Chưa cập nhập";
+          }
+        })
+
+        
+
+        ->addColumn('action', function(MissionScienceTechnology $topic) {
+          $flag_1 = false;
+          $flag_2 = false;
+          foreach ($topic->council as $council) {
+              $users = $council->getUsers;
+              foreach ($users as $user) {
+                  if ($user->id == Auth::id()) {
+                      $flag_1 = true;
+                  }
+              }
+          }
+
+          foreach($topic->groupCouncil as $groupCouncil) {
+              if ($groupCouncil->type == 0) {
+                  $flag_2 = true;
+              }
+          }
+
+          $string = "";
+          if (Entrust::can('view-detail')) {
+
+            $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-science-technologys.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
+          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0 && $topic->is_valid == 1) {
+            $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          }
+
+
+          return $string;
+        })
+        ->make(true);
+
     }
 }

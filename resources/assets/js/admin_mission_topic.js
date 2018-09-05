@@ -25,6 +25,27 @@ $(document).ready(function() {
       ]
   });
 
+    $('#evaluation-topic-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-topics/get-list-evaluation',
+        type: 'post',
+      },
+      ordering: false,
+      searching: false,
+      columns: [
+          {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'values', name: 'values.value', width: '228px'},
+          {data: 'profile', name: 'profile.email', width: '110px'},
+          {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center', width: '114px'},
+          {data: 'type', name: 'type', 'class':'text-center', width: '80px'},
+          {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+          
+      ]
+  });
+
   $('#topic-tbl').on('click','.submit-hard-copy-btn', function() {
 
     swal({
