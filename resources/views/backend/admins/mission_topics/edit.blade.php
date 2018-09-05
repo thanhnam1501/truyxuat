@@ -1,4 +1,4 @@
-@extends('backend.layouts.master-profile')
+@extends('backend.layouts.master')
 
 @section('header')
   <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/timeline.css')}}"/>
@@ -26,18 +26,18 @@
 
       <div class="panel panel-default tabs">
           <ul class="nav nav-tabs" role="tablist">
-            @if (!$topic->is_submit_ele_copy)
+            @if (true)
               <li class="active"><a href="#tab-form" id="tab-form-btn" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp; Form đăng ký</a></li>
             @endif
-            @if ($topic->is_submit_ele_copy)
+            {{-- @if ($topic->is_submit_ele_copy)
               <li class="active"><a href="#tab-review" id="tab-review-btn" role="tab" data-toggle="tab"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; Xem và in hồ sơ</a></li>
             @endif
-            <li><a href="#tab-timeline" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; Theo dõi hồ sơ</a></li>
+            <li><a href="#tab-timeline" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; Theo dõi hồ sơ</a></li> --}}
           </ul>
       </div>
 
       <div class="panel-body tab-content">
-        @if (!$topic->is_submit_ele_copy)
+        @if (true)
           <div class="tab-pane active" id="tab-form">
             <div class="col-md-12">
               <center>
@@ -145,12 +145,12 @@
               <div class="col-md-4" style="text-align: right"> <div class="col-md-12">
                 @if ($topic->is_filled)
 
-                  @if (!$topic->is_submit_ele_copy && !$topic->is_submit_hard_copy)
+                  @if (true)
 
-                    <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
+                    {{-- <button class="btn btn-info btn_submit_ele_copy" data-key="{{ $topic->key }}" data-is_submit_ele_copy="1">
 
                       <i class="fa fa-paper-plane" aria-hidden="true"></i> Nộp bản mềm
-                    </button>
+                    </button> --}}
 
                     <button class="btn btn-success"id="update-topic-btn"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu thông tin</button>
 
@@ -164,7 +164,7 @@
           </div>
         @endif
 
-        @if ($topic->is_submit_ele_copy)
+        {{-- @if ($topic->is_submit_ele_copy)
           <div class="tab-pane active" id="tab-review">
             <div class="col-md-12">
               <center>
@@ -320,7 +320,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 
   <div class="modal fade" id="null-field-mdl">
     <div class="modal-dialog">
@@ -345,5 +345,5 @@
 @endsection
 
 @section('footer')
-<script type="text/javascript" src="{{mix('build/js/mission_topic.js')}}"></script>
+<script type="text/javascript" src="{{mix('build/js/admin_mission_topic.js')}}"></script>
 @endsection

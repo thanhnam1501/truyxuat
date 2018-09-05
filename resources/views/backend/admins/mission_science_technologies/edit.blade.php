@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-  <li class=""><a href="{{ route('home.list-missions') }}">Danh sách nhiệm vụ</a></li>
+  <li class="">Danh sách nhiệm vụ</li>
   <li class="active">Dự án khoa học và công nghệ</li>
 @endsection
 

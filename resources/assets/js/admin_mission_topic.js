@@ -1,4 +1,11 @@
 $(document).ready(function() {
+  
+  $('#expected_fund').autoNumeric('init', {
+    aSign: ' VNĐ',
+    pSign: 's',
+    mDec: '0',
+    vMin: '0'
+  });
 
   $('#topic-tbl').DataTable({
       processing: true,
@@ -597,3 +604,136 @@ $(document).ready(function() {
     });
   })
 });
+
+$('#update-topic-frm').validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 10
+      },
+      propose_base: {
+        required: true,
+        minlength: 10
+      },
+      urgency: {
+        required: true,
+        minlength: 10
+      },
+      target: {
+        required: true,
+        minlength: 10
+      },
+      result_target_requirement: {
+        required: true,
+        minlength: 10
+      },
+      expected_main_content: {
+        required: true,
+        minlength: 10
+      },
+      expected_result_perform: {
+        required: true,
+        minlength: 10
+      },
+      time_result_requirement: {
+        required: true,
+        minlength: 10
+      },
+      expected_fund: {
+        required: true,
+        minCustom: '100,000 VNĐ'
+      },
+      evaluation_form_01 : {
+        extension: 'pdf',
+        filesize: max_file_size,
+        //requiredFile: true,
+      },
+      evaluation_form_02 : {
+        extension: 'pdf',
+        filesize: max_file_size,
+        //requiredFile: true,
+      },
+    },
+    messages: {
+      name: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      propose_base: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      urgency: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      target: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      result_target_requirement: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      expected_main_content: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      expected_result_perform: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      time_result_requirement: {
+        required: "Nội dung không được bỏ trống",
+        minlength: jQuery.validator.format("Nội dung phải lớn hơn {0} ký tự!")
+      },
+      expected_fund: {
+        required: "Dự kiến nhu cầu kinh phí không được bỏ trống",
+        minCustom: jQuery.validator.format("Dự kiến nhu cầu kinh phí phải lớn hơn {0}")
+      },
+      evaluation_form_01 : {
+        extension: '(*) Chỉ nhận định dạng PDF',
+        filesize: '(*) Dung lượng file không được lớn hơn 5Mb',
+        //requiredFile: '(*) Vui lòng đính kèm file',
+      },
+      evaluation_form_02 : {
+        extension: '(*) Chỉ nhận định dạng PDF',
+        filesize: '(*) Dung lượng file không được lớn hơn 5Mb',
+        //requiredFile: '(*) Vui lòng đính kèm file',
+      },
+    }
+  });
+
+  $('#update-topic-btn').on('click', function() {
+
+    // if ($('#update-topic-frm').length > 0) {
+    //   if (!$('#update-topic-frm').valid()) {
+
+    //     return false;
+    //   }
+    // }
+
+    $.ajax({
+      type: "POST",
+      url: app_url + "admin/mission-topics/update",
+      data: $('#update-topic-frm').serialize(),
+      success: function(res) {
+        if (!res.error) {
+
+          toastr.success(res.message);
+
+          setTimeout(function() {
+            location.href = app_url + 'admin/mission-topics';
+          }, 1000)
+
+        } else {
+
+          toastr.error(res.message);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+    });
+
+  });

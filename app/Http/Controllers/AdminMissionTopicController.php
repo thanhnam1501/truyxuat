@@ -38,18 +38,19 @@ class AdminMissionTopicController extends Controller
      */
     
     public function edit($key) {
-      $topic = MissionTopic::where('key',$key)->where('profile_id',Auth::guard('profile')->user()->id)->first();
+      $topic = MissionTopic::where('key',$key)->first();
 
     if (empty($topic) || $topic->count() < 0) {
 
       abort(404);
     }
 
+
     $columns = MissionTopicAttribute::all();
 
     $data = array();
 
-    if (!$topic->is_submit_ele_copy) {
+    if (true) {
       foreach ($topic->values as $value) {
         foreach ($columns as $column) {
           if ($value->mission_topic_attribute_id == $column->id && !empty($value->value)) {
@@ -109,7 +110,7 @@ class AdminMissionTopicController extends Controller
       $date['m'] = date('m',time());
       $date['y'] = date('Y',time());
 
-      return view('backend.admins.mission_topic.edit',[
+      return view('backend.admins.mission_topics.edit',[
         'topic' => $topic,
         'data' => $data,
         'status_submit_ele_copy'  =>  $status_submit_ele_copy,
@@ -122,6 +123,79 @@ class AdminMissionTopicController extends Controller
     }
 
     }
+
+    public function update(Request $request) {
+
+    $data = $request->only('expected_fund','expected_main_content','expected_result_perform','id','key','name','propose_base','result_target_requirement','target','time_result_requirement','type','urgency');
+
+    $fund = Money::format($data['expected_fund'], 'VNĐ');
+
+    if ($fund < 100000) {
+      return response()->json(['error' => true, 'message' =>  'Dự kiến nhu cầu kinh phí phải lớn hơn 100,000 VNĐ']);
+    }
+
+    $data['expected_fund'] = Crypt::encrypt($fund);
+
+    // $data['evaluation_form_01'] = '';
+    // $data['evaluation_form_02'] = '';
+
+    DB::beginTransaction();
+    try {
+
+      $topic = MissionTopic::find($data['id']);
+
+      // $data['evaluation_form_01']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_01', 'mission_topics');
+
+      // $data['evaluation_form_02']  =  UploadFile::getPath('App\Models\MissionTopicAttribute', $topic->id, 'evaluation_form_02', 'mission_topics');
+
+      // if (empty($data['evaluation_form_01']) || empty($data['evaluation_form_02'])) {
+      //     return response()->json([
+      //       'error' => true,
+      //       'message' => 'Vui lòng đính kèm file!'
+      //     ]);
+      // }
+
+      foreach ($topic->values as $key => $value) {
+
+        $column = MissionTopicAttribute::where('id',$value->mission_topic_attribute_id)
+                                    ->first()
+                                    ->column;
+        if ($column == "evaluation_form_02" || $column == "evaluation_form_01") {
+          continue;
+        }
+
+        $value->value = $data[$column];
+
+        $value->save();
+      }
+
+      $topic->update([
+        'is_filled'  => 1,
+        'type'  => $data['type'],
+      ]);
+
+      DB::commit();
+
+      return response()->json([
+        'error' => false,
+        'message' => 'Lưu thông tin nhiệm vụ thành công!',
+        'key' => $topic->key,
+      ]);
+
+    } catch (Exception $e) {
+
+      DB::rollback();
+
+      Log::info($e->getMessage());
+
+      return response()->json([
+        'error' => true,
+        'message' => $e->getMessage()
+      ]);
+    }
+  }
+
+
     public function index()
     {
 
@@ -335,6 +409,12 @@ class AdminMissionTopicController extends Controller
           if (Entrust::can('view-detail')) {
 
             $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-topics.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
+          }
+
+          if (Entrust::can('update-doc')) {
+
+            $string .= "<a data-tooltip='tooltip' title='Chỉnh sửa' href='".route('admin.mission-topics.edit',$topic->key)."' class='btn btn-info  btn-xs'><i class='fa fa-pencil'></i></a>";
+
           }
 
           if ($topic->is_submit_ele_copy && !$topic->is_submit_hard_copy && Entrust::can(['receive-hard-copy'])) {

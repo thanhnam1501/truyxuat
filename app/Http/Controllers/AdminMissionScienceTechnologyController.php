@@ -25,7 +25,7 @@ use App\Models\ApplyLog;
 use App\Models\CouncilMissionScienceTechnology;
 use App\Models\EvaluationForm;
 use App\Models\PositionCouncil;
-
+use Money;
 use Auth;
 use DB;
 use Crypt;
@@ -479,7 +479,16 @@ class AdminMissionScienceTechnologyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
-    {
+    {   
+        $data = $request->all();
+        $fund = Money::format($data['expected_fund'], 'VNĐ');
+
+        $data['expected_fund'] = Crypt::encrypt($fund);
+
+        if ($fund < 100000) {
+          return response()->json(['error' => true, 'message' =>  'Dự kiến nhu cầu kinh phí phải lớn hơn 100,000 VNĐ']);
+        }
+
         DB::beginTransaction();
 
         try {

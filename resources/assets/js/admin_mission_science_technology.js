@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+  $('#expected_fund').autoNumeric('init', {
+    aSign: ' VNĐ',
+    pSign: 's',
+    mDec: '0',
+    vMin: '0'
+  });
+
   $('#science-technology-tbl').DataTable({
       processing: true,
       serverSide: true,
@@ -845,7 +852,7 @@ $(document).ready(function() {
       processData: false,
       contentType: false,
       type: "POST",
-      url: app_url + "/mission-science-technology/update",
+      url: app_url + "admin/mission-science-technologies/update",
       data: formData,
       success: function(res) {
         // console.log(res);

@@ -2,9 +2,10 @@
 
 @section('header')
   <style type="text/css">
-      #topic-tbl .btn {
+      #science-technology-tbl .btn {
         margin-bottom: 10px;
         margin-right: 10px;
+        width: 25px;
       }
   </style>
 
