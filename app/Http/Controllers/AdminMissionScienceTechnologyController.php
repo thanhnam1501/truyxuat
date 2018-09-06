@@ -70,10 +70,10 @@ class AdminMissionScienceTechnologyController extends Controller
 
     public function getSubmitEleList(Request $request)
     { 
-        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'profiles.organization_id')
                 ->where('mission_science_technologies.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -136,15 +136,63 @@ class AdminMissionScienceTechnologyController extends Controller
         foreach ($topics as $key => $topic) {
           $topic['mission_name'] = null;
 
-          $attr_id = MissionScienceTechnologyAttribute::where('column','name')->first()->id;
+          $attr_name_id = MissionScienceTechnologyAttribute::where('column','name')->first()->id;
 
           foreach ($topic->values as $value) {
-            if ($value->mission_science_technology_attribute_id == $attr_id) {
+            if ($value->mission_science_technology_attribute_id == $attr_name_id) {
               if (strlen($value->value) > 300) {
                   $topic['mission_name'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
               } else {
                   $topic['mission_name'] = $value->value;
               }
+            }
+          }
+
+          $attr_request_time_id = MissionScienceTechnologyAttribute::where('column','request_time')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $attr_request_time_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['request_time'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['request_time'] = $value->value;
+              }
+            }
+          }
+
+          $attr_target_id = MissionScienceTechnologyAttribute::where('column','target')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $attr_target_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['target'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['target'] = $value->value;
+              }
+            }
+          }
+
+          $attr_request_result_id = MissionScienceTechnologyAttribute::where('column','request_result')->first()->id;
+
+          foreach ($topic->values as $value) {
+
+            if ($value->mission_science_technology_attribute_id == $attr_request_result_id) {
+
+              if (strlen($value->value) > 300) {
+                  $topic['request_result'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['request_result'] = $value->value;
+              }
+            }
+          }
+
+          $attr_expected_fund_id = MissionScienceTechnologyAttribute::where('column','expected_fund')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_science_technology_attribute_id == $attr_expected_fund_id) {
+              
+              $topic['expected_fund'] = $value->value;
+              
             }
           }
 
@@ -164,8 +212,10 @@ class AdminMissionScienceTechnologyController extends Controller
 
         return Datatables::of($topics)
         ->addIndexColumn()
+
         ->editColumn('values', function(MissionScienceTechnology $topic){
           if (!empty($topic->mission_name)) {
+
             return $topic->mission_name;
           }
         })
@@ -205,27 +255,30 @@ class AdminMissionScienceTechnologyController extends Controller
             }
         })
         
-        ->editColumn('roundCollection', function(MissionScienceTechnology $topic){
-          
-          $str = "";
-          if (!empty($topic->roundCollection)) {
-            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
-          } else {
-            $str = "Chưa cập nhập";
-          }
-
-          return $str;
+        ->addColumn('profile', function(MissionScienceTechnology $topic){                    
+          $profile = Profile::find($topic->profile_id);
+          return $profile->representative . '-' . $profile->mobile;
         })
-        ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
+        ->editColumn('organization', function(MissionScienceTechnology $topic) {
+
+          $organization = Organization::find($topic->organization_id);
+
+          return !is_null($organization) ? $organization->name : null;
         })
-        ->editColumn('type', function(MissionScienceTechnology $topic) {
-          return "Dự án KH&CN";
+
+        ->addColumn('request_time',function(MissionScienceTechnology $topic) {
+          return $topic->request_time;
+        })
+
+        ->addColumn('target', function(MissionScienceTechnology $topic) {
+          return $topic->target;
+        })
+        ->addColumn('expected_effect', function(MissionScienceTechnology $topic) {
+          return $topic->expected_effect;
+        })
+        ->addColumn('expected_fund', function(MissionScienceTechnology $topic) {
+          return number_format(Crypt::decrypt($topic->expected_fund)) . " VNĐ";
         })
         ->addColumn('action', function(MissionScienceTechnology $topic) {
 
@@ -948,10 +1001,10 @@ class AdminMissionScienceTechnologyController extends Controller
     }
 
     public function getListEvaluation(Request $request) {
-        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'organizations.name as organization_name')
+        $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'profiles.organization_id')
                 ->where('mission_science_technologies.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -1123,11 +1176,9 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
+          $organization = Organization::find($topic->organization_id);
+          return !is_null($organization) ? $organization->name : null;
+          
         })
 
         

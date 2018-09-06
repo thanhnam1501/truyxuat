@@ -16,6 +16,7 @@ use App\Models\CouncilMissionTopic;
 use App\Models\UserHandleFile;
 use App\Models\EvaluationForm;
 use App\Models\PositionCouncil;
+use App\Models\Organization;
 use Money;
 use Auth;
 use Entrust;
@@ -227,10 +228,10 @@ class AdminMissionTopicController extends Controller
 
     public function getSubmitEleList(Request $request)
     {
-        $topics = MissionTopic::select('mission_topics.*', 'organizations.name as organization_name')
+        $topics = MissionTopic::select('mission_topics.*', 'profiles.organization_id')
                 ->where('mission_topics.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_topics.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -388,12 +389,10 @@ class AdminMissionTopicController extends Controller
         })
         ->editColumn('profile', function(MissionTopic $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
+          $organization = Organization::find($topic->organization_id);
+          return !is_null($organization) ? $organization->name : null;
         })
+
         ->editColumn('type', function(MissionTopic $topic) {
 
           if ($topic->type == 0) {
@@ -858,10 +857,10 @@ class AdminMissionTopicController extends Controller
 
   public function getListEvaluation(Request $request)
     {
-        $topics = MissionTopic::select('mission_topics.*', 'organizations.name as organization_name')
+        $topics = MissionTopic::select('mission_topics.*', 'profiles.organization_id')
                 ->where('mission_topics.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_topics.profile_id', '=', 'profiles.id')
-                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 
@@ -1045,12 +1044,11 @@ class AdminMissionTopicController extends Controller
         })
         ->editColumn('profile', function(MissionTopic $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
+          $organization = Organization::find($topic->organization_id);
+          return !is_null($organization) ? $organization->name : null;
+
         })
+
         ->editColumn('type', function(MissionTopic $topic) {
 
           if ($topic->type == 0) {
