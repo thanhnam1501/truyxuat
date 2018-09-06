@@ -170,11 +170,14 @@
             <tr>
               <th style="width: 30px">STT</th>
               <th style="width: 100px">Hành động</th>
-              <th style="width:">Tên nhiệm vụ</th>
-              <th style="width: 150px">Đơn vị</th>
-              <th style="width: 100px">Đợt gọi hồ sơ</th>
-              <th style="width: 80px">Hình thức thực hiện</th>
-              <th style="width: 90px">Trạng thái HS</th>
+              <th style="">Tên nhiệm vụ</th>
+              <th style="width: 100px">Tên đơn vị</th>
+              <th>Người đăng ký - SĐT</th>
+              <th style="width: 100px">Thời gian</th>
+              <th style="width: 80px">Mục tiêu</th>
+              <th style="width: 90px">Kết quả dự kiến</th>
+              <th>Kinh phí</th>
+              <th>Trạng thái</th>
               
             </tr>
           </thead>

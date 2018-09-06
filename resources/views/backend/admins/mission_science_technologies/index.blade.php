@@ -167,20 +167,25 @@
                 <br>
 
                 <div class="col-md-12">
-                  <table class="table table-bordered table-hover table-responsive" id="science-technology-tbl">
-                    <thead>
-                      <tr>
-                        <th style="width: 30px">STT</th>
-                        <th style="width: 100px">Hành động</th>
-                        <th style="">Tên nhiệm vụ</th>
-                        <th style="width: 150px">Đơn vị</th>
-                        <th style="width: 100px">Đợt gọi hồ sơ</th>
-                        <th style="width: 80px">Hình thức thực hiện</th>
-                        <th style="width: 90px">Trạng thái HS</th>
-                        
-                      </tr>
-                    </thead>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="science-technology-tbl">
+                      <thead>
+                        <tr>
+                          <th style="width: 30px">STT</th>
+                          <th style="width: 100px">Hành động</th>
+                          <th style="">Tên nhiệm vụ</th>
+                          <th style="width: 100px">Tên đơn vị</th>
+                          <th>Người đăng ký - SĐT</th>
+                          <th style="width: 100px">Thời gian</th>
+                          <th style="width: 80px">Mục tiêu</th>
+                          <th style="width: 90px">Kết quả dự kiến</th>
+                          <th>Kinh phí</th>
+                          <th>Trạng thái</th>
+                          
+                        </tr>
+                      </thead>
+                    </table>
+                    </div>
                 </div>
               </div>
           </div>
