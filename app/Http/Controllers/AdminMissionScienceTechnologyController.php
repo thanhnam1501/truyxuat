@@ -206,18 +206,23 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         
         ->editColumn('roundCollection', function(MissionScienceTechnology $topic){
+                    $str = "";
+                  if (!empty($topic->roundCollection)) {
+                    $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
+                  } else {
+                    $str = "Chưa cập nhập";
+                  }
+
+                  return $str;
+        })
+
+        ->editColumn('profile', function(MissionScienceTechnology $topic) {
+
           $organization = Organization::find($topic->organization_id);
 
           return !is_null($organization) ? $organization->name : null;
         })
-        ->editColumn('profile', function(MissionScienceTechnology $topic) {
 
-          if (!empty($topic->organization_name)) {
-            return $topic->organization_name;
-          } else {
-            return "Chưa cập nhập";
-          }
-        })
         ->editColumn('type', function(MissionScienceTechnology $topic) {
           return "Dự án KH&CN";
         })
