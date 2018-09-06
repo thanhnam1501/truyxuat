@@ -17,6 +17,7 @@ use App\Models\UserHandleFile;
 use App\Models\EvaluationForm;
 use App\Models\PositionCouncil;
 use App\Models\Organization;
+use App\Models\Profile;
 use Money;
 use Auth;
 use Entrust;
@@ -306,6 +307,54 @@ class AdminMissionTopicController extends Controller
             }
           }
 
+          $attr_time_result_requirement_id = MissionTopicAttribute::where('column','time_result_requirement')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_topic_attribute_id == $attr_time_result_requirement_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['time_result_requirement'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['time_result_requirement'] = $value->value;
+              }
+            }
+          }
+
+          $attr_target_id = MissionTopicAttribute::where('column','target')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_topic_attribute_id == $attr_target_id) {
+              if (strlen($value->value) > 300) {
+                  $topic['target'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['target'] = $value->value;
+              }
+            }
+          }
+
+          $attr_result_target_requirement_id = MissionTopicAttribute::where('column','result_target_requirement')->first()->id;
+
+          foreach ($topic->values as $value) {
+
+            if ($value->mission_topic_attribute_id == $attr_result_target_requirement_id) {
+
+              if (strlen($value->value) > 300) {
+                  $topic['result_target_requirement'] = "<span data-placement='left' data-tooltip='tooltip' title='".$value->value."'>".mb_substr($value->value, 0, 300)."..."."</span>";
+              } else {
+                  $topic['result_target_requirement'] = $value->value;
+              }
+            }
+          }
+
+          $attr_expected_fund_id = MissionTopicAttribute::where('column','expected_fund')->first()->id;
+
+          foreach ($topic->values as $value) {
+            if ($value->mission_topic_attribute_id == $attr_expected_fund_id) {
+              
+              $topic['expected_fund'] = $value->value;
+              
+            }
+          }
+
           if (isset($request->filter) && $request->filter == true) {
             parse_str($request->data, $search);
 
@@ -376,30 +425,30 @@ class AdminMissionTopicController extends Controller
             }
         })
         
-        ->editColumn('roundCollection', function(MissionTopic $topic) {
-
-          $str = "";
-          if (!empty($topic->roundCollection)) {
-            $str = $topic->roundCollection->name." - ".$topic->roundCollection->year;
-          } else {
-            $str = "Chưa cập nhập";
-          }
-
-          return $str;
+        ->addColumn('profile', function(MissionTopic $topic){                    
+          $profile = Profile::find($topic->profile_id);
+          return $profile->representative . '-' . $profile->mobile;
         })
-        ->editColumn('profile', function(MissionTopic $topic) {
+
+        ->editColumn('organization', function(MissionTopic $topic) {
 
           $organization = Organization::find($topic->organization_id);
+
           return !is_null($organization) ? $organization->name : null;
         })
 
-        ->editColumn('type', function(MissionTopic $topic) {
+        ->addColumn('request_time',function(MissionTopic $topic) {
+          return $topic->time_result_requirement;
+        })
 
-          if ($topic->type == 0) {
-              return "Đề tài";
-          } else {
-             return "Đề án";
-          }
+        ->addColumn('target', function(MissionTopic $topic) {
+          return $topic->target;
+        })
+        ->addColumn('request_result', function(MissionTopic $topic) {
+          return $topic->result_target_requirement;
+        })
+        ->addColumn('expected_fund', function(MissionTopic $topic) {
+          return number_format(Crypt::decrypt($topic->expected_fund)) . " VNĐ";
         })
         ->addColumn('action', function(MissionTopic $topic) {
 

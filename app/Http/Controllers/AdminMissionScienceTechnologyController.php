@@ -274,8 +274,8 @@ class AdminMissionScienceTechnologyController extends Controller
         ->addColumn('target', function(MissionScienceTechnology $topic) {
           return $topic->target;
         })
-        ->addColumn('expected_effect', function(MissionScienceTechnology $topic) {
-          return $topic->expected_effect;
+        ->addColumn('request_result', function(MissionScienceTechnology $topic) {
+          return $topic->request_result;
         })
         ->addColumn('expected_fund', function(MissionScienceTechnology $topic) {
           return number_format(Crypt::decrypt($topic->expected_fund)) . " VNĐ";
