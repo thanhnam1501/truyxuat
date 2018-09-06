@@ -34,19 +34,19 @@ class OptionValuesTableSeeder extends Seeder
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	2,
-       		'name'		=>	'Chuyên viên (Văn thư)',
+       		'name'		=>	'Văn thư',
        		'note'		=> 	'Có nhiệm vụ thu hồ sơ bản cứng và chuyển trạng thái nộp hồ sơ bản cứng cho đơn vị'
        	]);
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	3,
-       		'name'		=>	'Chuyên viên (Trưởng phòng)',
+       		'name'		=>	'Trưởng phòng',
        		'note'		=> 	'Có nhiệm vụ chọn hồ sơ và giao cho chuyên viên chuyên môn kiểm tra hồ sơ có hợp lệ hay không'
        	]);
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	4,
-       		'name'		=>	'Chuyên viên (Chuyên môn)',
+       		'name'		=>	'Chuyên viên chuyên môn',
        		'note'		=> 	'Có nhiệm vụ nhận hồ sơ từ Trưởng phòng, và kiểm tra xem hồ sơ có hợp lệ hay không, sau đó chuyển trạng thái cho hồ sơ đã được kiểm tra'
        	]);
        	OptionValue::create([
@@ -84,6 +84,13 @@ class OptionValuesTableSeeder extends Seeder
           'value'   =>  10,
           'name'    =>  'Chuyên viên cập nhật phê duyệt hồ sơ',
           'note'    =>  'Có nhiệm vụ dựa theo quyết định phê duyệt hồ sơ từ cá nhân có quyền hạn, cập nhật trạng thái phê duyệt cho hồ sơ, nếu hồ sơ bị từ chối phê duyệt thì phải có lý do'
+        ]);
+
+        OptionValue::create([
+          'option_id' =>  $id,
+          'value'   =>  11,
+          'name'    =>  'Phó trưởng phòng',
+          'note'    =>  ''
         ]);
 
        	///ENd chức vụ
