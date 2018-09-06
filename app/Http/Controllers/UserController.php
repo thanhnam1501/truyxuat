@@ -99,7 +99,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('name', 'email', 'type');
+        $data = $request->only('name', 'email', 'type', 'mobile');
 
         if (!$this->checkEmail($data['email'])) {
             return response()->json([
@@ -120,6 +120,7 @@ class UserController extends Controller
                 $user->update([
                 'name'    => $data['name'],
                 'password'    => $data['password'],
+                'mobile'    => $data['mobile'],
                 'status'  => 1,
               ]);
             } else {
@@ -186,7 +187,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->only('email', 'name', 'type');
+        $data = $request->only('email', 'name', 'type', 'mobile');
 
         $user = User::where('email', $data['email'])->first();
 
@@ -196,6 +197,7 @@ class UserController extends Controller
                 $user->update([
                 'name'  => $data['name'],
                 'type'  => $data['type'],
+                'mobile'  => $data['mobile'],
               ]);
 
                 DB::commit();
