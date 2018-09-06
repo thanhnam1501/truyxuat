@@ -204,8 +204,8 @@
 			<br>
 			<div class="col-md-12">
 				
-				<h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6>
-				
+				{{-- <h6 class="note-register">Nếu chưa có tài khoản, vui lòng <a class="btn-link" href="{{ route('profile.register') }}">Đăng ký tài khoản</a></h6> --}}
+				<hr>
 				<div class="col-md-6 btn-fogot custom-col-left">
 					<a href="{{ route('profile.password.request') }}" class="btn-link">Quên mật khẩu?</a>
 				</div>
