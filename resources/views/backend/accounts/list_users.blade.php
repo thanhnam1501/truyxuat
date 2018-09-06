@@ -33,6 +33,7 @@
 								<th>STT</th>
 								<th>Họ và tên</th>
 								<th>Email</th>
+								<th>Số điện thoại</th>
 								<th>Chức vụ</th>
 								<th>Trạng thái</th>
 								<th>Hành động</th>
@@ -59,6 +60,12 @@
 					<label class='control-label'>Email <span class='error'>(*)</span></label>
 					<input readonly type="email" id="email" name="email" class="form-control" placeholder="Vui lòng nhập email" />
 					<span class='control-label hide' id="email-error-custom"></span>
+				</div>
+
+				<div class="form-group">
+						<label class='control-label'>Số điện thoại <span style="color: red">(*)</span></label>
+						<input readonly type="mobile" id="mobile" name="mobile" class="form-control" placeholder="Vui lòng nhập số điện thoại" />
+						<span class='control-label hide' id="mobile-error-custom"></span>
 				</div>
 				<div class="form-group">
 					<label class='control-label'>Chức vụ <span class='error'>(*)</span></label>
@@ -144,6 +151,8 @@
 
 			$('#name').attr('readonly',false);
 
+			$('#mobile').attr('readonly',false);
+
 			$('#create-user-btn').attr('data-type',0);
 
 			$('#create-user-btn').data('type',0);
@@ -172,6 +181,10 @@
 
 							$('#name').val(res.user.name);
 
+							$('#mobile').val(res.user.mobile);
+
+							$('#mobile').attr('readonly', false);
+							
 							if (res.user.type == 0) {
 								res.user.type = "-1";
 							}
