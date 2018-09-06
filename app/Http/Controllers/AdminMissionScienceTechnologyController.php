@@ -73,7 +73,7 @@ class AdminMissionScienceTechnologyController extends Controller
         $topics = MissionScienceTechnology::select('mission_science_technologies.*', 'profiles.organization_id')
                 ->where('mission_science_technologies.is_submit_ele_copy',1)
                 ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
-                // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+                ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
                 ->where(function ($query) use ($request){
                     if (isset($request->filter) && $request->filter == true) {
 

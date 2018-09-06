@@ -15,18 +15,17 @@ $(document).ready(function() {
         type: 'post',
       },
       ordering: false,
-      searching: false,
       columns: [
-          {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
-          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
-          {data: 'mission_name', name: 'values.mission_name'},
-          {data: 'organization', name: 'organization.name'},
-          {data: 'profile', name: 'profile'},
-          {data: 'request_time', name: 'request_time', 'class':'text-center'},
-          {data: 'target', name: 'target', 'class':'text-center'},
-          {data: 'request_result', name: 'request_result', 'class':'text-center'},
-          {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
-          {data: 'status', name: 'status', 'class':'text-center'},
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'mission_name', name: 'values.mission_name'},
+        {data: 'organization', name: 'organization.name'},
+        {data: 'profile', name: 'profile'},
+        {data: 'request_time', name: 'request_time', 'class':'text-center'},
+        {data: 'target', name: 'target', 'class':'text-center'},
+        {data: 'request_result', name: 'request_result', 'class':'text-center'},
+        {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
+        {data: 'status', name: 'status', 'class':'text-center'},
           
       ]
   });
@@ -574,10 +573,13 @@ $(document).ready(function() {
       columns: [
         {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
         {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
-        {data: 'values', name: 'values.value'},
-        {data: 'profile', name: 'profile.email'},
-        {data: 'roundCollection', name: 'roundCollection.name', 'class':'text-center'},
-        {data: 'type', name: 'type', 'class':'text-center'},
+        {data: 'mission_name', name: 'values.mission_name'},
+        {data: 'organization', name: 'organization.name'},
+        {data: 'profile', name: 'profile'},
+        {data: 'request_time', name: 'request_time', 'class':'text-center'},
+        {data: 'target', name: 'target', 'class':'text-center'},
+        {data: 'request_result', name: 'request_result', 'class':'text-center'},
+        {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
         {data: 'status', name: 'status', 'class':'text-center'},
       ]
     });
