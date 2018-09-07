@@ -245,6 +245,9 @@ Route::middleware('revalidate')->group(function () {
         Route::group(['prefix' => 'mission-science-technologies'], function() {
             Route::get('/', 'AdminMissionScienceTechnologyController@index')->name('admin.mission-science-technologies.index');
             Route::post('/get-list', 'AdminMissionScienceTechnologyController@getSubmitEleList')->name('admin.mission-science-technologies.getSubmitEleList');
+
+            Route::post('/get-submit-hard-list', 'AdminMissionScienceTechnologyController@getSubmitHardList')->name('admin.mission-science-technologies.getSubmitHardList');
+
             Route::post('/submit-hard-copy', 'AdminMissionScienceTechnologyController@submitHardCopy')->name('admin.mission-science-technologies.submitHardCopy');
             Route::post('/submit-valid', 'AdminMissionScienceTechnologyController@submitValid')->name('admin.mission-science-technologies.submitValid');
             Route::post('/submit-judged', 'AdminMissionScienceTechnologyController@submitJudged')->name('admin.mission-science-technologies.submitJudged');

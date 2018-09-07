@@ -29,6 +29,30 @@ $(document).ready(function() {
       ]
   });
 
+  $('#approval-science-technology-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-submit-hard-list',
+        type: 'POST',
+      },
+      ordering: false,
+      // searching: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'mission_name', name: 'values.mission_name'},
+        {data: 'mission_type', name: 'mission_type'},
+        // {data: 'organization', name: 'organization.name'},
+        // {data: 'profile', name: 'profile'},
+        {data: 'request_time', name: 'request_time', 'class':'text-center'},
+        {data: 'target', name: 'target', 'class':'text-center'},
+        {data: 'request_result', name: 'request_result', 'class':'text-center'},
+        {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
+        {data: 'status', name: 'status', 'class':'text-center'},
+      ]
+  });
+
 // submit hard copy
   $('#science-technology-tbl').on('click','.submit-hard-copy-btn', function(event) {
     event.preventDefault();
