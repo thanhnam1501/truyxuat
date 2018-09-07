@@ -517,7 +517,9 @@ class AdminMission {
 
 	public static function submitAssign($data) {
 		DB::beginTransaction();
-
+		if (!isset($data['mission_type'])) {
+			$data['mission_type'] = null;
+		}
       	try {
 	        UserHandleFile::create([
 	          'admin_id'  =>  $data['admin_id'],
@@ -525,7 +527,8 @@ class AdminMission {
 	          'mission_id'  =>  $data['mission_id'],
 	          'mission_table' =>  $data['mission_table'],
 	          'deadline'  =>  $data['deadline'],
-	          'note'  =>  $data['note']
+	          'note'  =>  $data['note'],
+	          'mission_type'  =>  $data['mission_type']
 	        ]);
 
 	        $mission = $data['model']::find($data['mission_id']);
