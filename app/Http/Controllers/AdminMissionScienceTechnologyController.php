@@ -16,6 +16,8 @@ use App\Models\MissionTopicAttribute;
 use App\Models\GroupCouncil;
 use App\Models\Council;
 use App\Models\CouncilUser;
+use App\Models\Option;
+use App\Models\OptionValue;
 
 use App\Models\User;
 use App\Models\RoleUser;
@@ -64,7 +66,11 @@ class AdminMissionScienceTechnologyController extends Controller
 
         $role_user_handle_file  = User::where('type', 4)->get();
 
-        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file', 'group_councils'));
+        $option_misstion_type_id = Option::where('code', 'MISSION-TYPE')->first()->id;
+
+        $mission_types = OptionValue::where('option_id', $option_misstion_type_id)->get();
+
+        return view('backend.admins.mission_science_technologies.index', compact('round_collection', 'date', 'role_user_handle_file', 'role_user_devolve_file', 'group_councils', 'mission_types'));
 
     }
 
@@ -777,7 +783,7 @@ class AdminMissionScienceTechnologyController extends Controller
     }
     
     public function submitAssign(Request $request) {
-      $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id');
+      $data = $request->only('admin_id', 'user_id', 'deadline', 'note', 'mission_id', 'mission_type');
       $data['mission_table']  = 'mission_science_technologies';
       $data['model'] = 'App\Models\MissionScienceTechnology';
       $result = AdminMission::submitAssign($data);

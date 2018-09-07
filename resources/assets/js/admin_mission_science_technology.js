@@ -441,6 +441,7 @@ $(document).ready(function() {
     var user_devolve = $("#role_user_devolve_file").val();
     var user_hanle = $("#role_user_handle_file").val();
     var deadline = $('#deadline-group').find("input").val();
+    var mission_type = $("#mission_type").val();
     var note = $('#note').val();
 
     if (user_devolve == '-1') {
@@ -457,6 +458,13 @@ $(document).ready(function() {
       $("#role_user_handle_file").next().text("");
     }
 
+    if (mission_type == '-1') {
+      $("#mission_type").next().text("Vui lòng chọn loại hồ sơ");
+      return false;
+    }else {
+      $("#mission_type").next().text("");
+    }
+
     if (deadline == "") {
       $("#err-deadline").text("Vui lòng chọn hạn xử lý hồ sơ");
       return false;
@@ -471,6 +479,7 @@ $(document).ready(function() {
         admin_id : user_devolve,
         user_id : user_hanle,
         deadline: deadline,
+        mission_type: mission_type,
         note: note,
         mission_id : $('#mission_id').val()
       },
@@ -480,6 +489,7 @@ $(document).ready(function() {
             toastr.success(res.msg);
             $("#role_user_devolve_file").val("-1");
             $("#role_user_handle_file").val("-1");
+            $("#mission_type").val("-1");
             $('#deadline-group').find("input").val("");
             $('#note').val("");
 

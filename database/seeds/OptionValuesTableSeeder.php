@@ -128,6 +128,49 @@ class OptionValuesTableSeeder extends Seeder
         //   'note'    =>  'Uỷ viên phản biện'
         // ]);
 
-  
+        // Phân loại nhiệm vụ
+        $id_option_mission_type = Option::where('code', 'MISSION-TYPE')->first()->id;
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  0,
+            'name'  =>  'Dự án Xúc tiến phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Xúc tiến phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  1,
+            'name'  =>  'Dự án Thành lập, Phát triển hoạt động của Tổ chức trung gian',
+            'note'  =>  'Dự án Thành lập, Phát triển hoạt động của Tổ chức trung gian',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  2,
+            'name'  =>  'Dự án Tổ chức các khoá đào tạo, bồi dưỡng đội ngũ cán bộ, chuyên gia phục vụ phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Tổ chức các khoá đào tạo, bồi dưỡng đội ngũ cán bộ, chuyên gia phục vụ phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  3,
+            'name'  =>  'Dự án Truyền thông phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Truyền thông phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  4,
+            'name'  =>  'Dự án Đánh giá nhu cầu công nghệ, khả năng cung ứng công nghệ',
+            'note'  =>  'Dự án Đánh giá nhu cầu công nghệ, khả năng cung ứng công nghệ',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  5,
+            'name'  =>  'Dự án Hỗ trợ thương mại hoá kết quả nghiên cứu khoa học và phát triển công nghệ, tài sản trí tuệ',
+            'note'  =>  'Dự án Hỗ trợ thương mại hoá kết quả nghiên cứu khoa học và phát triển công nghệ, tài sản trí tuệ',
+        ]);
     }
 }
