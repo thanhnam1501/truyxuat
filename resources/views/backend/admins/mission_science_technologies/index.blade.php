@@ -177,7 +177,7 @@
                         
                      </ul>
                 </div>
-                  <br><br>
+                  
                   <div class="col-md-12">
                     <br>
                   <div class="tab-content">

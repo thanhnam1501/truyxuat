@@ -2,7 +2,7 @@
 
 @section('header')
   <style type="text/css">
-    #topic-tbl .btn {
+    .tab-content .btn {
         margin-bottom: 10px;
         margin-right: 10px;
         width: 25px;
@@ -158,31 +158,67 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <br>
-      <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+      <center><strong><h3>ĐỀ TÀI HOẶC ĐỀ ÁN</h3></strong></center>
     </div>
 
     <div class="panel-body">
-      <br>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="topic-tbl">
-          <thead>
-            <tr>
-              <th style="width: 30px">STT</th>
-              <th style="width: 100px">Hành động</th>
-              <th style="">Tên nhiệm vụ</th>
-              <th style="width: 100px">Tên đơn vị</th>
-              <th>Người đăng ký - SĐT</th>
-              <th style="width: 100px">Thời gian</th>
-              <th style="width: 80px">Mục tiêu</th>
-              <th style="width: 90px">Kết quả dự kiến</th>
-              <th>Kinh phí</th>
-              <th>Trạng thái</th>
+      <div class="col-md-12"> <br> <br>
+          <ul class="nav nav-tabs" role="tablist">
+            {{-- @if (Entrust::can('view-list')) --}}
+              <li class="active"><a href="#list-submit-ele" role="tab" data-toggle="tab"> Danh sách các nhiệm vụ</a></li>
+            {{-- @endif --}}
               
-            </tr>
-          </thead>
-        </table>
+            @if (Entrust::can(['valid-doc','invalid-doc']))
+              <li class=""><a href="#list-submit-hard" role="tab" data-toggle="tab" id="btn-tab-a3">Danh sách nhiệm vụ chờ duyệt</a></li>
+            @endif
+              
+           </ul>
       </div>
+      <div class="col-md-12">
+        <br>
+        <div class="tab-content">
+          <div class="tab-pane fade in active table-responsive" id="list-submit-ele">
+            <table class="table table-bordered table-hover" id="topic-tbl">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th>
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <div class="tab-pane fade table-responsive" id="list-submit-hard">
+            <table class="table table-bordered table-hover" id="approval-topic-tbl" width="100%">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                 {{--  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th> --}}
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 
