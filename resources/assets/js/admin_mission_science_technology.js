@@ -167,7 +167,7 @@ $(document).ready(function() {
 
             toastr.success(res.message);
             $('#modal-valid').modal('hide');
-            $('#science-technology-tbl').DataTable().ajax.reload();
+            $('#approval-science-technology-tbl').DataTable().ajax.reload();
 
           } else {
 
@@ -599,8 +599,11 @@ $(document).ready(function() {
 
   })
 
-  $('#evaluation-science-technology-btn').on('click', function() {
-    var data = $('#evalution-form').serialize();
+  $('.save-evaluation').on('click', function() {
+    var is_filled = $(this).data('is_filled');
+    var data = $('#evalution-form').serializeArray();
+    // var payload = $('#form1').serializeArray();
+    data.push({name: 'is_filled', value: is_filled});
 
     $.ajax({
       url: app_url + '/admin/mission-science-technologys/evaluation/store',
@@ -611,7 +614,7 @@ $(document).ready(function() {
         if (!res.error) {
           toastr.success(res.message);
           setTimeout(function () {
-              window.location.href = app_url + 'admin/mission-science-technologies';
+              window.location.href = app_url + 'admin/mission-science-technologies/list-evaluation';
           }, 1000);    
 
         

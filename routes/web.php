@@ -104,6 +104,10 @@ Route::middleware('revalidate')->group(function () {
 
             Route::get('mission-science-technologys/evaluation/{key}','AdminMissionScienceTechnologyController@evaluation')->name('mission-science-technologys.evaluation');
 
+            Route::get('mission-science-technologys/evaluation-detail/{key}','AdminMissionScienceTechnologyController@evaluationDetail')->name('mission-science-technologys.evaluation-detail');
+
+            Route::get('mission-science-technologys/evaluation-print/{key}','AdminMissionScienceTechnologyController@evaluationPrint')->name('mission-science-technologys.evaluation-print');
+
             Route::post('mission-science-technologys/evaluation/store','AdminMissionScienceTechnologyController@storeEvaluation')->name('mission-science-technologys.storeEvaluation');
 
 
