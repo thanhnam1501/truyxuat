@@ -28,5 +28,10 @@ class OptionsTableSeeder extends Seeder
         //     'code'  => 'POSITION-COUNCIL',
         //     'name'  => "Vị trí trong hội đồng",
         // ]);
+        // 
+        Option::create([
+            'code'  =>  'MISSION-TYPE',
+            'name'  =>  'Phân loại nhiệm vụ',
+        ]);
     }
 }

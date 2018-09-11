@@ -627,6 +627,25 @@
                 <span class="error" id="err-deadline"></span>
               </div>
             </div>
+
+            <div class="form-group col-md-12">
+              <div class="col-md-3 search-label">
+                <label for="">Loại hồ sơ <span class="error">(*)</span></label>
+              </div>
+              <div class="col-md-9">
+                <select class="form-control" id="mission_type">
+                    @if (!empty($mission_types) && $mission_types->count() != 0) 
+                      @foreach($mission_types as $mission_type)
+                        <option value="{{ $mission_type->value }}">{{ $mission_type->name }}</option>
+                      @endforeach 
+                    @else 
+                      <option value="-1">Không có chuyên viên nào</option>
+                    @endif
+                  </select>
+                  <span class="error"></span>
+              </div>
+            </div>
+
             <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
                   <label for="">Ghi chú</label>

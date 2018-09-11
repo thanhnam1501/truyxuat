@@ -34,19 +34,19 @@ class OptionValuesTableSeeder extends Seeder
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	2,
-       		'name'		=>	'Chuyên viên (Văn thư)',
+       		'name'		=>	'Văn thư',
        		'note'		=> 	'Có nhiệm vụ thu hồ sơ bản cứng và chuyển trạng thái nộp hồ sơ bản cứng cho đơn vị'
        	]);
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	3,
-       		'name'		=>	'Chuyên viên (Trưởng phòng)',
+       		'name'		=>	'Trưởng phòng',
        		'note'		=> 	'Có nhiệm vụ chọn hồ sơ và giao cho chuyên viên chuyên môn kiểm tra hồ sơ có hợp lệ hay không'
        	]);
        	OptionValue::create([
        		'option_id'	=> 	$id,
        		'value'		=> 	4,
-       		'name'		=>	'Chuyên viên (Chuyên môn)',
+       		'name'		=>	'Chuyên viên chuyên môn',
        		'note'		=> 	'Có nhiệm vụ nhận hồ sơ từ Trưởng phòng, và kiểm tra xem hồ sơ có hợp lệ hay không, sau đó chuyển trạng thái cho hồ sơ đã được kiểm tra'
        	]);
        	OptionValue::create([
@@ -86,6 +86,13 @@ class OptionValuesTableSeeder extends Seeder
           'note'    =>  'Có nhiệm vụ dựa theo quyết định phê duyệt hồ sơ từ cá nhân có quyền hạn, cập nhật trạng thái phê duyệt cho hồ sơ, nếu hồ sơ bị từ chối phê duyệt thì phải có lý do'
         ]);
 
+        OptionValue::create([
+          'option_id' =>  $id,
+          'value'   =>  11,
+          'name'    =>  'Phó trưởng phòng',
+          'note'    =>  ''
+        ]);
+
        	///ENd chức vụ
         //Phân loại nhóm hội đồng
         $id_option_group_council = Option::where('code', 'GROUP-COUNCIL-FUNC')->first()->id;
@@ -121,6 +128,49 @@ class OptionValuesTableSeeder extends Seeder
         //   'note'    =>  'Uỷ viên phản biện'
         // ]);
 
-  
+        // Phân loại nhiệm vụ
+        $id_option_mission_type = Option::where('code', 'MISSION-TYPE')->first()->id;
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  0,
+            'name'  =>  'Dự án Xúc tiến phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Xúc tiến phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  1,
+            'name'  =>  'Dự án Thành lập, Phát triển hoạt động của Tổ chức trung gian',
+            'note'  =>  'Dự án Thành lập, Phát triển hoạt động của Tổ chức trung gian',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  2,
+            'name'  =>  'Dự án Tổ chức các khoá đào tạo, bồi dưỡng đội ngũ cán bộ, chuyên gia phục vụ phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Tổ chức các khoá đào tạo, bồi dưỡng đội ngũ cán bộ, chuyên gia phục vụ phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  3,
+            'name'  =>  'Dự án Truyền thông phát triển thị trường KH & CN',
+            'note'  =>  'Dự án Truyền thông phát triển thị trường KH & CN',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  4,
+            'name'  =>  'Dự án Đánh giá nhu cầu công nghệ, khả năng cung ứng công nghệ',
+            'note'  =>  'Dự án Đánh giá nhu cầu công nghệ, khả năng cung ứng công nghệ',
+        ]);
+
+        OptionValue::create([
+            'option_id' =>  $id_option_mission_type,
+            'value' =>  5,
+            'name'  =>  'Dự án Hỗ trợ thương mại hoá kết quả nghiên cứu khoa học và phát triển công nghệ, tài sản trí tuệ',
+            'note'  =>  'Dự án Hỗ trợ thương mại hoá kết quả nghiên cứu khoa học và phát triển công nghệ, tài sản trí tuệ',
+        ]);
     }
 }

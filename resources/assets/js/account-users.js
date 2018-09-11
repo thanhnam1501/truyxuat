@@ -12,6 +12,10 @@ $(document).ready(function() {
         email: true,
         minlength: 6
       },
+      email: {
+        required: true,
+        minlength: 10
+      },
       type: {
         requiredSelectDyn: "-1",
       }
@@ -25,6 +29,10 @@ $(document).ready(function() {
         required: "Email không được bỏ trống",
         email: "Email không đúng định dạng ( example@gmail.com )",
         minlength: jQuery.validator.format("Email phải có ít nhất {0} ký tự!")
+      },
+      name: {
+        required: "Số điện thoại không được bỏ trống",
+        minlength: jQuery.validator.format("Số điện thoại không hợp lệ!")
       },
       type: {
         requiredSelectDyn: "Chức vụ không được bỏ trống",
@@ -112,6 +120,10 @@ $(document).ready(function() {
           data: 'email',
           name: 'email',
           width: '300px'
+        },
+        {
+          data: 'mobile',
+          name: 'mobile',
         },
         {
           data: 'type',
