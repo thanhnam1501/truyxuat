@@ -53,8 +53,32 @@ $(document).ready(function() {
       ]
   });
 
+  $('#list-invalid-doc-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-science-technologies/get-list-invalid-topic',
+        type: 'POST',
+      },
+      ordering: false,
+      // searching: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'mission_name', name: 'values.mission_name'},
+        {data: 'mission_type', name: 'mission_type'},
+        // {data: 'organization', name: 'organization.name'},
+        // {data: 'profile', name: 'profile'},
+        {data: 'request_time', name: 'request_time', 'class':'text-center'},
+        {data: 'target', name: 'target', 'class':'text-center'},
+        {data: 'request_result', name: 'request_result', 'class':'text-center'},
+        {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
+        {data: 'status', name: 'status', 'class':'text-center'},
+      ]
+  });
+
 // submit hard copy
-  $('#science-technology-tbl').on('click','.submit-hard-copy-btn', function(event) {
+  $('body').on('click','.submit-hard-copy-btn', function(event) {
     event.preventDefault();
     /* Act on the event */
 
@@ -96,7 +120,7 @@ $(document).ready(function() {
   });
 
 // submit valid
-  $('#science-technology-tbl').on('click','.submit-valid', function(event) {
+  $('body').on('click','.submit-valid', function(event) {
     event.preventDefault();
     /* Act on the event */
     $('#modal-valid').modal('show');
@@ -170,7 +194,7 @@ $(document).ready(function() {
 
   // approve-submit
 
-    $('#science-technology-tbl').on('click','.approve-btn', function() {
+    $('body').on('click','.approve-btn', function() {
         $('#id').val($(this).data('id'));
         var mission_name = $(this).data('name');
         $('#mission_name').val(mission_name);
@@ -261,7 +285,7 @@ $(document).ready(function() {
 
   // submit judged
 
-    $('#science-technology-tbl').on('click','.submit-judged', function(event) {
+    $('body').on('click','.submit-judged', function(event) {
       event.preventDefault();
       /* Act on the event */
       $('#modal-judged').modal('show');
@@ -280,34 +304,40 @@ $(document).ready(function() {
     $('#modal-judged').on('click', '.btn-success', function(event) {
       event.preventDefault();
       /* Act on the event */
+      var fd = new FormData();
+      fd.append('attachment_file_judged', $('#attachment_file_judged')[0].files[0]);
+
+      fd.append('status', $('#status_judged').val());
+      fd.append('reason', $('#denied_reason').val());
+      fd.append('checkbox', $('#checkbox-send-email-judged').is(':checked'));
+      fd.append('id', $('#modal-judged .btn-success').attr('data_id'));
+      fd.append('mission_name', $('#modal-judged .btn-success').attr('mission_name'));
+
       var status = $('#status_judged').val();
-      var reason = $('#denied_reason').val();
-      var checkbox = $('#checkbox-send-email-judged').is(':checked');
-      var data_id = $('#modal-judged .btn-success').attr('data_id');
-      var mission_name = $('#modal-judged .btn-success').attr('mission_name');
 
       if (status == -1) {
         toastr.error('Vui lòng chọn trạng thái xét duyệt ! ');
       }
-      else if (status == 'denied' && reason == "") {
+      else if (status == 'denied' && $('#denied_reason').val() == "") {
         toastr.error('Vui lòng nhập lý do từ chối hồ sơ ! ');
-      } else {
+      }
+      else if ($('#attachment_file_judged')[0].files[0].size > 5000000) {
+        toastr.error('Dung lượng file không được phép lớn hơn 5 Mb ! ');
+      }
+      else {
         $.ajax({
           url: app_url + 'admin/mission-science-technologies/submit-judged',
           type: 'POST',
-          data: {
-            status: status,
-            reason: reason,
-            checkbox: checkbox,
-            id: data_id,
-            mission_name: mission_name
-          }, success: function(res){
+          data: fd,
+          contentType: false,
+          processData: false,
+          success: function(res){
 
             if (!res.error) {
 
               toastr.success(res.message);
               $('#modal-judged').modal('hide');
-              $('#science-technology-tbl').DataTable().ajax.reload();
+              $('#list-invalid-doc-tbl').DataTable().ajax.reload();
 
             } else {
 
@@ -333,7 +363,7 @@ $(document).ready(function() {
     });
 
   // view detail
-  $('#science-technology-tbl').on('click','.btn-view-detail', function(event) {
+  $('body').on('click','.btn-view-detail', function(event) {
     event.preventDefault();
     /* Act on the event */
     $('#modal-view-detail').modal('show');
@@ -368,7 +398,7 @@ $(document).ready(function() {
   });
 
 
-  $('#science-technology-tbl').on('click', '.add-council-btn', function(e) {
+  $('body').on('click', '.add-council-btn', function(e) {
     e.preventDefault();
     
    $('#addCouncilModal').modal('show'); 
@@ -450,7 +480,7 @@ $(document).ready(function() {
     
   })
 
-  $('#science-technology-tbl').on('click',' .assign-doc', function(){
+  $('body').on('click',' .assign-doc', function(){
     $('#modal-assign').modal('show');
 
     var data_id = $(this).attr('data-id');
@@ -658,7 +688,7 @@ $(document).ready(function() {
 
   });
 
-  $('#science-technology-tbl').on('click', '.btn-give-back-hard-copy', function(event){
+  $('body').on('click', '.btn-give-back-hard-copy', function(event){
     event.preventDefault();
 
     swal({

@@ -174,7 +174,11 @@
                       @if (Entrust::can(['valid-doc','invalid-doc']))
                         <li class=""><a href="#list-submit-hard" role="tab" data-toggle="tab" id="btn-tab-a3">Danh sách nhiệm vụ chờ duyệt</a></li>
                       @endif
-                        
+                      
+                      @if (Entrust::can(['list-invalid-doc']))
+                        <li class=""><a href="#list-invalid-doc" role="tab" data-toggle="tab" id="">Danh sách nhiệm vụ hợp lệ</a></li>
+                      @endif
+
                      </ul>
                 </div>
                   
@@ -221,6 +225,27 @@
                         </thead>
                       </table>
                     </div>
+
+                    <div class="tab-pane fade table-responsive" id="list-invalid-doc">
+                      <table class="table table-bordered table-hover" id="list-invalid-doc-tbl" width="100%">
+                        <thead>
+                          <tr>
+                            <th style="width: 30px">STT</th>
+                            <th style="width: 100px">Hành động</th>
+                            <th style="">Tên nhiệm vụ</th>
+                            <th style="width: 200px">Loại nhiệm vụ</th>
+                           {{--  <th style="width: 100px">Tên đơn vị</th>
+                            <th>Người đăng ký - SĐT</th> --}}
+                            <th style="width: 100px">Thời gian</th>
+                            <th style="width: 80px">Mục tiêu</th>
+                            <th style="width: 90px">Kết quả dự kiến</th>
+                            <th>Kinh phí</th>
+                            <th>Trạng thái</th>
+                            
+                          </tr>
+                        </thead>
+                      </table>
+                     </div>
                   </div>
                 </div>
               </div>
@@ -377,6 +402,16 @@
                   <textarea disabled id="denied_reason" class='form-control' placeholder='Trường hợp hồ sơ bị từ chối, vui lòng nhập lý do đầy đủ' rows="5"></textarea>
                 </div>
             </div>
+
+            <div class="form-group col-md-12">
+                <div class="col-md-3 search-label">
+                  <label for="">Tài liệu đính kèm</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="file" class="" placeholder="Tài liệu đính kèm" id="attachment_file_judged">
+                </div>
+            </div>
+            
             <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
                   {{-- <label for="">Lý do</label> --}}

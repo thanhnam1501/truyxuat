@@ -125,7 +125,6 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::post('/submit-hard-copy', 'AdminMissionTopicController@submitHardCopy')->name('admin.mission-topics.submitHardCopy');
 
-
                 Route::post('/approve-mission', 'AdminMissionTopicController@approveMission')->name('admin.mission-topics.approveMission');
 
                 Route::post('/upload-list-categories', 'AdminMissionTopicController@uploadListCategories')->name('admin.mission-topics.uploadListCategories');
@@ -224,6 +223,8 @@ Route::middleware('revalidate')->group(function () {
             
             Route::post('/submit-hard-copy', 'AdminMissionTopicController@submitHardCopy')->name('admin.mission-topics.submitHardCopy');
 
+            Route::post('/get-list-invalid-topic', 'AdminMissionTopicController@getInvalidTopic')->name('admin.mission-topics.getInvalidTopic');
+
             Route::post('/approve-mission', 'AdminMissionTopicController@approveMission')->name('admin.mission-topics.approveMission');
 
             Route::post('/upload-list-categories', 'AdminMissionTopicController@uploadListCategories')->name('admin.mission-topics.uploadListCategories');
@@ -249,6 +250,8 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/get-list', 'AdminMissionScienceTechnologyController@getSubmitEleList')->name('admin.mission-science-technologies.getSubmitEleList');
 
             Route::post('/get-submit-hard-list', 'AdminMissionScienceTechnologyController@getSubmitHardList')->name('admin.mission-science-technologies.getSubmitHardList');
+
+            Route::post('/get-list-invalid-topic', 'AdminMissionScienceTechnologyController@getInvalidTopic')->name('admin.mission-science-technologies.getInvalidTopic');
 
             Route::post('/submit-hard-copy', 'AdminMissionScienceTechnologyController@submitHardCopy')->name('admin.mission-science-technologies.submitHardCopy');
             Route::post('/submit-valid', 'AdminMissionScienceTechnologyController@submitValid')->name('admin.mission-science-technologies.submitValid');
