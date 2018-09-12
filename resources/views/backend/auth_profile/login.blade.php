@@ -211,14 +211,17 @@
 				</div>
 				<div class="col-md-6 btn-register custom-col-right">
 					{{-- <a href="{{ route('profile.register') }}" class="btn-link">Đăng ký tài khoản</a> --}}
+					
 				</div>
 				<br>
-				
+				<div class="col-md-12">
+					<center><h5 class="guide_register"><a href="#guide-register-mdl" data-toggle="modal" style="color: white;">Hướng dẫn đăng ký</a></h5></center>
+				</div>
 			</div>
 
-			<div class="col-md-12" style="margin-top: 10px">
-				{{-- <h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">0918010473</a> (Mr. Hiệp)</h6> --}}
-				<center><h5 class="guide_register"><a href="#guide-register-mdl" data-toggle="modal" style="color: white;">Hướng dẫn đăng ký</a></h5></center>
+			<div class="col-md-12" style="margin-top: 5px">
+				<h6 class="" style="color: white;">Hotline hỗ trợ kỹ thuật: <a href="tel:0918010473" style="font-size: 14px">{{env('HOTLINE')}}</a> ({{env('HOTLINE_NAME')}})</h6>
+				
 			</div>
 
 		</div>
