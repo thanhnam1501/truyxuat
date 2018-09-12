@@ -194,7 +194,7 @@ $(document).ready(function() {
 
                 $('#approve-frm').trigger('reset');
 
-                $('#topic-tbl').DataTable().ajax.reload();
+                $('#list-invalid-doc-tbl').DataTable().ajax.reload();
 
               } else {
 
@@ -276,7 +276,7 @@ $(document).ready(function() {
 
             toastr.success(res.message);
             $('#modal-valid').modal('hide');
-            $('#topic-tbl').DataTable().ajax.reload();
+            $('#approval-topic-tbl').DataTable().ajax.reload();
 
           } else {
 

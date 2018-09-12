@@ -361,18 +361,18 @@ class AdminMissionScienceTechnologyController extends Controller
 
 //           }
 
-          // if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
-          //   $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
-          //   $data['mission_id'] = $topic->id;
-          //   $data['mission']  = 'App\Models\CouncilMissionScienceTechnology';
-          //   $data['table_name'] = 'mission_science_technologies';
-          //   $check_3  = AdminMission::checkEvaluationDone($data);
+          if (!$topic->is_denied && !$topic->is_judged && Entrust::can(['judged-doc','denied-doc'])) {
+            $check = CouncilMissionScienceTechnology::where('mission_id', $topic->id)->count();
+            $data['mission_id'] = $topic->id;
+            $data['mission']  = 'App\Models\CouncilMissionScienceTechnology';
+            $data['table_name'] = 'mission_science_technologies';
+            $check_3  = AdminMission::checkEvaluationDone($data);
 
-          //   if ($check == 1 && $check_3) {
-          //     $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận được đánh giá" class="btn btn-violet btn-xs submit-judged"><i class="fa fa-check-square-o"></i></a>';
-          //   }
+            if ($check == 1 && $check_3) {
+              $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-tooltip="tooltip" title="Xác nhận được đánh giá" class="btn btn-violet btn-xs submit-judged"><i class="fa fa-check-square-o"></i></a>';
+            }
             
-          // }    
+          }    
 
           if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-toggle="modal" href="#approve-mdl" data-tooltip="tooltip" title="Xác nhận được phê duyệt" class="btn btn-blue btn-xs approve-btn"><i class="fa fa-check-square"></i></a>';
@@ -1397,6 +1397,76 @@ class AdminMissionScienceTechnologyController extends Controller
        return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name', 'content'));
     }
 
+    public function evaluationDetail($key){
+        $mission = MissionScienceTechnology::where('key', $key)->first();
+
+        $date['d'] = date('d',strtotime(now()));
+        $date['m'] = date('m',strtotime(now()));
+        $date['y'] = date('Y',strtotime(now()));
+
+        $stechs = MissionScienceTechnology::select(['mission_science_technologies.key',
+                    'mission_science_technology_attributes.column',
+                    'mission_science_technology_attribute_values.value'
+                  ])
+                  ->  where('mission_science_technologies.key', $key)
+                  ->  where('mission_science_technology_attributes.column', 'name')
+                  ->  join('mission_science_technology_values', 'mission_science_technology_values.mission_science_technology_id', '=', 'mission_science_technologies.id')
+                  ->  join('mission_science_technology_attribute_values', 'mission_science_technology_attribute_values.id', '=', 'mission_science_technology_values.mission_science_technology_attribute_value_id')
+                  ->  join('mission_science_technology_attributes', 'mission_science_technology_attributes.id', 'mission_science_technology_attribute_values.mission_science_technology_attribute_id')
+                  ->  get()->first();
+
+        $mission_name = $stechs->value;
+
+        $key = $stechs->key;
+        
+        $content = "";
+      $evaluation_form = EvaluationForm::where('user_id', Auth::id())
+                    ->where('mission_id', $mission->id)
+                    ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->first();
+
+      if ($evaluation_form !== null && $evaluation_form->count() >= 1) {
+        $content = $evaluation_form->content;
+      }
+
+        // dd($content);
+
+       return view('backend.admins.mission_science_technologies.evaluation-form-detail', compact('mission', 'date', 'mission_name', 'content', 'key'));
+    }
+
+    public function evaluationPrint($key){
+        $mission = MissionScienceTechnology::where('key', $key)->first();
+
+        $date['d'] = date('d',strtotime(now()));
+        $date['m'] = date('m',strtotime(now()));
+        $date['y'] = date('Y',strtotime(now()));
+
+        $stechs = MissionScienceTechnology::select([
+                    'mission_science_technology_attributes.column',
+                    'mission_science_technology_attribute_values.value'
+                  ])
+                  ->  where('mission_science_technologies.key', $key)
+                  ->  where('mission_science_technology_attributes.column', 'name')
+                  ->  join('mission_science_technology_values', 'mission_science_technology_values.mission_science_technology_id', '=', 'mission_science_technologies.id')
+                  ->  join('mission_science_technology_attribute_values', 'mission_science_technology_attribute_values.id', '=', 'mission_science_technology_values.mission_science_technology_attribute_value_id')
+                  ->  join('mission_science_technology_attributes', 'mission_science_technology_attributes.id', 'mission_science_technology_attribute_values.mission_science_technology_attribute_id')
+                  ->  get()->first();
+
+        $mission_name = $stechs->value;
+
+        $content = "";
+      $evaluation_form = EvaluationForm::where('user_id', Auth::id())
+                    ->where('mission_id', $mission->id)
+                    ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->first();
+
+      if ($evaluation_form !== null && $evaluation_form->count() >= 1) {
+        $content = $evaluation_form->content;
+      }
+
+        // dd($content);
+
+       return view('backend.admins.mission_science_technologies.evaluation-form-print', compact('mission', 'date', 'mission_name', 'content'));
+    }
+
     public function storeEvaluation(Request $request) {
 
       $mission_id = $request->get('mission_id');
@@ -1407,13 +1477,8 @@ class AdminMissionScienceTechnologyController extends Controller
 
       $data = $request->all();
 
-      if ($data['urgency_target_note'] == null || $data['urgency_target_rate'] == null || $data['necessity_note'] == null || $data['necessity_rate'] == null || $data['possibility_note'] == null || $data['urgency_target_note'] == null || $data['suggest_perform'] == null) {
-        return response()->json([
-            'error' =>  true,
-            'message' =>  'Vui lòng nhập đầy đủ thông tin',
-        ]);
-      }
-      else {
+
+      
         $is_perform = 0;
         $is_unperform = 0;
         $data['project_name'] = "";
@@ -1469,13 +1534,13 @@ class AdminMissionScienceTechnologyController extends Controller
                                      
                                   ),
         ); 
-      }
+      
       
       $datas['mission_id'] = $mission_id;
       $datas['table_name']  = $table_name;
       $datas['user_id'] = $user_id;
       $datas['content'] = $content;
-
+      $datas['is_filled'] = $data['is_filled'];
       $result = AdminMission::evaluationDoc($datas);
 
       return response()->json($result);
@@ -1655,11 +1720,11 @@ class AdminMissionScienceTechnologyController extends Controller
                 }
                 elseif($topic->is_valid == 1) {
                   if ($topic->is_judged == 0 && $topic->is_denied == 0) {
-                    return "<label class='label label-info'>Được đưa vào HĐ đánh giá</label>";
+                    return "<label class='label label-info'>Hồ sơ hợp lệ</label>";
                   }
                   elseif($topic->is_judged == 1) {
                     if ($topic->is_performed == 0 && $topic->is_unperformed == 0) {
-                      return "<label class='label label-info'>Hồ sơ được đánh giá</label>"; 
+                      return "<label class='label label-info'>Hồ sơ được đưa vào HĐ đánh giá</label>"; 
                     }
                     elseif ($topic->is_unperformed == 1) {
                       return "<label class='label label-danger'>Không được thực hiện</label>";
@@ -1718,8 +1783,23 @@ class AdminMissionScienceTechnologyController extends Controller
             $string .=  "<a data-tooltip='tooltip' title='Xem chi tiết' class='btn btn-success btn-xs' target='_blank' href='".route('admin.mission-science-technologys.detail',$topic->key)."'><i class='fa fa-eye'></i></a>";
           }
 
-          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0 && $topic->is_valid == 1) {
+          $is_filled = false;
+          $evaluation_form = EvaluationForm::where('user_id', Auth::user()->id)
+                    ->where('mission_id', $topic->id)
+                    ->where('table_name', 'mission_science_technologies')->orderBy('id', 'Desc')->get(); 
+
+          if ($evaluation_form->count() > 0) {
+            $evaluation_form = $evaluation_form->first();
+            if ($evaluation_form->is_filled == 1) {
+              $is_filled = true;
+            }
+          }
+          if ($flag_1 && $flag_2 && $is_filled == false && Entrust::can('evaluation-doc') && $topic->is_judged == 1 && $topic->is_valid == 1) {
             $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
+          }
+
+          if ($flag_1 && $flag_2 && $is_filled && Entrust::can('view-evaluation-doc') && $topic->is_judged == 1 && $topic->is_valid == 1) {
+            $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('mission-science-technologys.evaluation-detail', $topic->key)."' data-tooltip='tooltip' title='Xem phiếu đánh giá' class='btn btn-warning btn-xs'><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
           }
 
 

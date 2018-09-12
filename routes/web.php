@@ -104,6 +104,10 @@ Route::middleware('revalidate')->group(function () {
 
             Route::get('mission-science-technologys/evaluation/{key}','AdminMissionScienceTechnologyController@evaluation')->name('mission-science-technologys.evaluation');
 
+            Route::get('mission-science-technologys/evaluation-detail/{key}','AdminMissionScienceTechnologyController@evaluationDetail')->name('mission-science-technologys.evaluation-detail');
+
+            Route::get('mission-science-technologys/evaluation-print/{key}','AdminMissionScienceTechnologyController@evaluationPrint')->name('mission-science-technologys.evaluation-print');
+
             Route::post('mission-science-technologys/evaluation/store','AdminMissionScienceTechnologyController@storeEvaluation')->name('mission-science-technologys.storeEvaluation');
 
 
@@ -136,6 +140,10 @@ Route::middleware('revalidate')->group(function () {
                 Route::post('/judge', 'AdminMissionTopicController@judgeCouncilStore');
 
                 Route::get('/judge/{key}', 'AdminMissionTopicController@judgeCouncilView')->name('admin.mission-topics.judged');
+
+                Route::get('/judge-detail/{key}', 'AdminMissionTopicController@judgeCouncilDetail')->name('admin.mission-topics.judged-detail');
+
+                Route::get('/judge-print/{key}', 'AdminMissionTopicController@judgeCouncilPrint')->name('admin.mission-topics.judged-print');
 
                 Route::post('/get-list-council','AdminMissionTopicController@getListCouncil')->name('admin.mission-topics.getListCouncil');
 

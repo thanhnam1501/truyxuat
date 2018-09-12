@@ -586,30 +586,33 @@ class AdminMission {
 	      	if ($evaluation_form->count() >= 1) {
 	      		$evaluation_form = $evaluation_form->first();
 	      		$evaluation_form->content = $data['content'];
-	      		$evaluation_form->save();
-	      		DB::commit();
+      			$evaluation_form->is_filled = $data['is_filled'];
+      			$evaluation_form->save();
 
-	      		return $result = [
-	      			'status'	=>	1,
-		          'error' =>  false,
-		          'message' =>  'Cập nhật phiếu đánh giá thành công',
-		        ];
 	      	}
 	      	else {
 	      		$evaluation_form = EvaluationForm::create(['user_id'  => $data['user_id'], 'mission_id' => $data['mission_id'], 'table_name'  =>  $data['table_name']]);
 
 		        $evaluation_form->content = $data['content'];
+		        $evaluation_form->is_filled = $data['is_filled'];
 		        $evaluation_form->save();
 
 
-		        DB::commit();
-
-		        return $result = [
-		        	'status'	=>	2,
-		          'error' =>  false,
-		          'message' =>  'Đánh giá thành công',
-		        ];
 	      	}
+	      	
+	      	DB::commit();
+
+	        if ($data['is_filled'] == 1) {
+	        	$msg = 'Đã gửi phiếu đánh giá';
+	        }
+	        else {
+	        	$msg = 'Đã lưu phiếu đánh giá';
+	        }
+	        return $result = [
+	          'status'	=>	2,
+	          'error' =>  false,
+	          'message' =>  $msg,
+	        ];
 	        
 	      }
 	      catch(Exception $e) {
@@ -673,7 +676,7 @@ class AdminMission {
 		$flag = false;
 		$council_mission = $data['mission']::where('type', 0)->where('mission_id', $data['mission_id'])->first();
 
-		$evaluation_form = EvaluationForm::where('table_name', $data['table_name'])->where('mission_id', $data['mission_id'])->count();
+		$evaluation_form = EvaluationForm::where('table_name', $data['table_name'])->where('is_filled', 1)->where('mission_id', $data['mission_id'])->count();
 		if ($council_mission != null) {
 			$council_id = $council_mission->council_id;
 			$council_users = CouncilUser::where('council_id', $council_id)->count();

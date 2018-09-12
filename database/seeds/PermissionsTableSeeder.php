@@ -202,5 +202,10 @@ class PermissionsTableSeeder extends Seeder
             'name'=>'list-invalid-doc',
             'display_name'=>'Danh sách hồ sơ hợp lệ',
         ]);
+
+        Permission::create([
+            'name'=>'view-evaluation-doc',
+            'display_name'=>'Xem chi tiết phiếu đánh giá',
+        ]);
     }
 }
