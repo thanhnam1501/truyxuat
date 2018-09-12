@@ -2,7 +2,7 @@
 
 @section('header')
   <style type="text/css">
-    #topic-tbl .btn {
+    .tab-content .btn {
         margin-bottom: 10px;
         margin-right: 10px;
         width: 25px;
@@ -158,31 +158,91 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <br>
-      <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+      <center><strong><h3>ĐỀ TÀI HOẶC ĐỀ ÁN</h3></strong></center>
     </div>
 
     <div class="panel-body">
-      <br>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="topic-tbl">
-          <thead>
-            <tr>
-              <th style="width: 30px">STT</th>
-              <th style="width: 100px">Hành động</th>
-              <th style="">Tên nhiệm vụ</th>
-              <th style="width: 100px">Tên đơn vị</th>
-              <th>Người đăng ký - SĐT</th>
-              <th style="width: 100px">Thời gian</th>
-              <th style="width: 80px">Mục tiêu</th>
-              <th style="width: 90px">Kết quả dự kiến</th>
-              <th>Kinh phí</th>
-              <th>Trạng thái</th>
+      <div class="col-md-12"> <br> <br>
+          <ul class="nav nav-tabs" role="tablist">
+            {{-- @if (Entrust::can('view-list')) --}}
+              <li class="active"><a href="#list-submit-ele" role="tab" data-toggle="tab"> Danh sách các nhiệm vụ</a></li>
+            {{-- @endif --}}
               
-            </tr>
-          </thead>
-        </table>
+            @if (Entrust::can(['valid-doc','invalid-doc']))
+              <li class=""><a href="#list-submit-hard" role="tab" data-toggle="tab" id="">Danh sách nhiệm vụ chờ duyệt</a></li>
+            @endif
+
+            @if (Entrust::can(['list-invalid-doc']))
+              <li class=""><a href="#list-invalid-doc" role="tab" data-toggle="tab" id="">Danh sách nhiệm vụ hợp lệ</a></li>
+            @endif
+              
+           </ul>
       </div>
+      <div class="col-md-12">
+        <br>
+        <div class="tab-content">
+          <div class="tab-pane fade in active table-responsive" id="list-submit-ele">
+            <table class="table table-bordered table-hover" id="topic-tbl">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th>
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <div class="tab-pane fade table-responsive" id="list-submit-hard">
+            <table class="table table-bordered table-hover" id="approval-topic-tbl" width="100%">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                 {{--  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th> --}}
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <div class="tab-pane fade table-responsive" id="list-invalid-doc">
+            <table class="table table-bordered table-hover" id="list-invalid-doc-tbl" width="100%">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                 {{--  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th> --}}
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th style="width: 90px">Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 
@@ -203,7 +263,7 @@
               </div>
               <div class="col-md-9">
                 <select class="form-control" name="is_performed" id="is_performed">
-                  <option value="-1">Chưa cập nhập</option>
+                  <option value="-1">Chưa cập nhật</option>
                   <option value="1">Được phê duyệt thực hiện</option>
                   <option value="0">Không được phê duyệt thực hiện</option>
                 </select>
@@ -234,7 +294,7 @@
             <div class="form-group col-md-12">
                 <div class="col-md-8">
                   <label for="">Quyết định danh mục nhiệm vụ được thực hiện <span class="error">(*)</span></label>
-                  <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhập</span></i>
+                  <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhận</span></i>
                 </div>
                 <div class="col-md-4">
                   <input type="file" name="list_categories" id="list_categories" accept="application/pdf, application/msword">
@@ -334,6 +394,17 @@
                   <textarea disabled id="denied_reason" class='form-control' placeholder='Trường hợp hồ sơ bị từ chối, vui lòng nhập lý do đầy đủ' rows="5"></textarea>
                 </div>
             </div>
+
+            <div class="form-group col-md-12">
+                <div class="col-md-3 search-label">
+                  <label for="">Tài liệu đính kèm</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="file" class="" placeholder="Tài liệu đính kèm" id="attachment_file_judged">
+                </div>
+                <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhận</span></i>
+            </div>
+
             <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
                   {{-- <label for="">Lý do</label> --}}
@@ -342,6 +413,7 @@
                   <input type='checkbox' name='' value=''id="checkbox-send-email-judged" > &nbsp;Gửi email thông báo
                 </div>
             </div>
+            
 
             <br>
           </div>

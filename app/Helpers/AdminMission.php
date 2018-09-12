@@ -338,10 +338,12 @@ class AdminMission {
 
 	public static function submitJudged($data){
 
-		if (!empty($data['id']) && !empty($data['table_name'])) {
+		if (!empty($data['id']) && !empty($data['table_name']) && isset($data['attachment_file_judged'])) {
 			$topic = DB::table($data['table_name'])->where('id',$data['id']);
 			$old_data = $topic->get()[0];
 			$id_profile = $old_data->profile_id;
+
+			$path = $data['attachment_file_judged']->store('/uploads');
 
 			if ($topic->exists()) {
 			//
@@ -349,7 +351,8 @@ class AdminMission {
 				try {
 						if ($data['status'] == 'judged') { // judged
 							$topic->update([
-								'is_judged'	=> 1
+								'is_judged'	=> 1,
+								'attachment_file_judged'	=>	$path
 							]);
 
 							$action = "Xác nhận hồ sơ được đánh giá trong hội đồng";
@@ -358,6 +361,7 @@ class AdminMission {
 						} else if ($data['status'] == 'denied') { // invalid
 							$topic->update([
 								'is_denied'	=> 1,
+								'attachment_file_judged'	=>	$path,
 								'is_denied_reason'	=>	$data['reason']
 							]);
 
