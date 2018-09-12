@@ -1295,16 +1295,91 @@ class AdminMissionTopicController extends Controller
     return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions'));
   }
 
+  public function judgeCouncilDetail($key)
+  {
+    $topic = MissionTopic::where('key', $key)->first();
+
+    if (!empty($topic)) {
+      
+      $name = $topic->values()->where('mission_topic_attribute_id',1)->first()->value;
+
+      if ($topic->type) {
+        $view = "judge-b2-detail";
+      } else {
+        $view = "judge-b1-detail";
+      }
+    } 
+
+    $comment_evaluation = '';
+    $expert_opinions = '';
+
+    if (!empty($topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first())) {
+        
+        $data = $topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first()->content;
+
+      $comment_evaluation = $data['comment_evaluation'];
+
+      $expert_opinions = $data['expert_opinions'];
+    }
+
+    $date = array();
+
+    $key= $topic->key;
+    $date['d'] = date('d',time());
+    $date['m'] = date('m',time());
+    $date['y'] = date('Y',time());
+
+    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions', 'key'));
+  }
+
+  public function judgeCouncilPrint($key)
+  {
+
+    $topic = MissionTopic::where('key', $key)->first();
+
+    if (!empty($topic)) {
+      
+      $name = $topic->values()->where('mission_topic_attribute_id',1)->first()->value;
+
+      if ($topic->type) {
+        $view = "judge-b2-print";
+      } else {
+        $view = "judge-b1-print";
+      }
+    } 
+
+    $comment_evaluation = '';
+    $expert_opinions = '';
+
+    if (!empty($topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first())) {
+        
+        $data = $topic->evaluationForm()->where('user_id',Auth::guard('web')->user()->id)->first()->content;
+
+      $comment_evaluation = $data['comment_evaluation'];
+
+      $expert_opinions = $data['expert_opinions'];
+    }
+
+    $date = array();
+
+    $date['d'] = date('d',time());
+    $date['m'] = date('m',time());
+    $date['y'] = date('Y',time());
+
+    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions', 'key'));
+  }
+
+
   public function judgeCouncilStore(Request $request)
   {
     $type = MissionTopic::find($request->id)->type;
 
     if ($type) {
 
-      $data = $request->only('id','necessity_note','afftect_note','necessary_note','perform_name','perform_target','perform_result','necessity_qualified','afftect_qualified','necessary_qualified','is_perform');
+      $data = $request->only('id','necessity_note','afftect_note','necessary_note','perform_name','perform_target','perform_result','necessity_qualified','afftect_qualified','necessary_qualified','is_perform', 'is_filled');
     } else {
 
-      $data = $request->only('id','necessity_note','important_note','unique_note','natinal_resources_note','fund_note','perform_name','perform_target','perform_result','necessity_qualified','important_qualified','unique_qualified','natinal_resources_qualified','fund_qualified','is_perform');
+      $data = $request->only('id','necessity_note','important_note','unique_note','natinal_resources_note','fund_note','perform_name','perform_target','perform_result','necessity_qualified','important_qualified','unique_qualified','natinal_resources_qualified','fund_qualified','is_perform', 'is_filled');
     }
 
     $is_unperform = "0";
@@ -1384,6 +1459,8 @@ class AdminMissionTopicController extends Controller
       ]
     ];
     }
+
+    $dataStore['is_filled'] = $data['is_filled'];
 
     $result = AdminMission::evaluationDoc($dataStore);
 
@@ -1655,10 +1732,26 @@ class AdminMissionTopicController extends Controller
               }
           }
 
-          if ($flag_1 && $flag_2 && Entrust::can('evaluation-doc') && $topic->is_judged == 0) {
+          $is_filled = false;
+          $evaluation_form = EvaluationForm::where('user_id', Auth::user()->id)
+                    ->where('mission_id', $topic->id)
+                    ->where('table_name', 'mission_topics')->orderBy('id', 'Desc')->get(); 
+
+          if ($evaluation_form->count() > 0) {
+            $evaluation_form = $evaluation_form->first();
+            if ($evaluation_form->is_filled == 1) {
+              $is_filled = true;
+            }
+          }
+
+          if ($flag_1 && $flag_2 && $is_filled == false && Entrust::can('evaluation-doc') && $topic->is_judged == 1 && $topic->is_valid == 1) {
             $string .=  "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged', $topic->key)."' data-tooltip='tooltip' title='Đánh giá hồ sơ' class='btn btn-primary btn-xs'><i class='fa fa-comments-o' aria-hidden='true'></i></a>";
           }
-          //     
+          
+          if ($flag_1 && $flag_2 && $is_filled && Entrust::can('view-evaluation-doc') && $topic->is_judged == 1 && $topic->is_valid == 1) {
+            $string .= "<a target='_blank' data-id='".$topic->id."' href='".route('admin.mission-topics.judged-detail', $topic->key)."' data-tooltip='tooltip' title='Xem phiếu đánh giá' class='btn btn-warning btn-xs'><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
+          }
+
           // $flag = $topic->judgeCouncil->first();
 
           // if (!empty($flag)) {

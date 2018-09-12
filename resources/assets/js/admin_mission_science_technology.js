@@ -602,7 +602,6 @@ $(document).ready(function() {
   $('.save-evaluation').on('click', function() {
     var is_filled = $(this).data('is_filled');
     var data = $('#evalution-form').serializeArray();
-    // var payload = $('#form1').serializeArray();
     data.push({name: 'is_filled', value: is_filled});
 
     $.ajax({

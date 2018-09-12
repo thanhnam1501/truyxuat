@@ -2,24 +2,17 @@
 
 @section('header')
   <style type="text/css">
-      #evaluation-science-technology-tbl .btn {
-        margin-bottom: 10px;
-        margin-right: 10px;
-      }
-
-      .label {
-        margin-bottom: 5px; 
-      }
+    #evaluation-science-technology-tbl .btn {
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
   </style>
-
-  {{-- <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/> --}}
-  {{-- <link rel="stylesheet" type="text/css" id="theme" href="{{asset('css/A4style.css')}}"/> --}}
-
+  <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/>
 @endsection
 
 @section('breadcrumb')
   <li class="">Danh sách nhiệm vụ</li>
-  <li class="active">Dự án khoa học và công nghệ</li>
+  <li class="active">Đề tài hoặc đề án</li>
 @endsection
 
 @section('page-title')
@@ -27,7 +20,8 @@
 @endsection
 
 @section('content')
-        <div class="panel panel-default">
+
+  <div class="panel panel-default">
           <form role="form" enctype="multipart/form-data" id="search-mission-frm">
           
           <div class="panel-heading">
@@ -160,34 +154,35 @@
           </form>
           </div>
 
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <br>
-                <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
-            </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <br>
+      <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+    </div>
 
-              <div class="panel-body">
-                <br>
+    <div class="panel-body">
+      <br>
 
-                <div class="col-md-12">
-                  <table class="table table-bordered table-hover table-responsive" id="evaluation-science-technology-tbl">
-                    <thead>
-                      <tr>
-                        <th style="width: 5%">STT</th>
-                        <th style="width: 15%">Hành động</th>
-                        <th style="width: 30%">Tên nhiệm vụ</th>
-                        <th style="width: 10%">Đơn vị</th>
-                        <th style="width: 20%">Đợt gọi hồ sơ</th>
-                        <th style="width: 20%">Trạng thái HS</th>
-                        
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
+      <div class="table-responsive">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover table-responsive" id="evaluation-science-technology-tbl">
+              <thead>
+                <tr>
+                  <th style="width: 5%">STT</th>
+                  <th style="width: 15%">Hành động</th>
+                  <th style="width: 30%">Tên nhiệm vụ</th>
+                  <th style="width: 10%">Đơn vị</th>
+                  <th style="width: 20%">Đợt gọi hồ sơ</th>
+                  <th style="width: 20%">Trạng thái HS</th>
+                  
+                </tr>
+              </thead>
+            </table>
           </div>
+      </div>
+    </div>
+  </div>
 
-          <div class="clearfix"></div>
 @endsection
 
 @section('footer')

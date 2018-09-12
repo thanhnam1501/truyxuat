@@ -141,6 +141,10 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::get('/judge/{key}', 'AdminMissionTopicController@judgeCouncilView')->name('admin.mission-topics.judged');
 
+                Route::get('/judge-detail/{key}', 'AdminMissionTopicController@judgeCouncilDetail')->name('admin.mission-topics.judged-detail');
+
+                Route::get('/judge-print/{key}', 'AdminMissionTopicController@judgeCouncilPrint')->name('admin.mission-topics.judged-print');
+
                 Route::post('/get-list-council','AdminMissionTopicController@getListCouncil')->name('admin.mission-topics.getListCouncil');
 
                 Route::post('/add-council','AdminMissionTopicController@addCouncil')->name('admin.mission-topics.addCouncil');
