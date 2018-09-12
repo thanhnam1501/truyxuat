@@ -373,8 +373,12 @@ class AdminMissionScienceTechnologyController extends Controller
             }
             
           }    
+          $data['mission_id'] = $topic->id;
+          $data['mission']  = 'App\Models\CouncilMissionTopic';
+          $data['table_name'] = 'mission_science_technologies';
+          $check  = AdminMission::checkEvaluationDone($data);
 
-          if ($topic->is_judged && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
+          if ($topic->is_judged && $check && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-toggle="modal" href="#approve-mdl" data-tooltip="tooltip" title="Xác nhận được phê duyệt" class="btn btn-blue btn-xs approve-btn"><i class="fa fa-check-square"></i></a>';
           }
 
