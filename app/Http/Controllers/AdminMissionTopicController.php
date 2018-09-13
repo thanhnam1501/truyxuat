@@ -38,7 +38,15 @@ class AdminMissionTopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+      
+    public function getNameMissions() {
+      $missionsValue = MissionTopicAttributeValue::where('mission_topic_attribute_id', 1)->where('value', '<>', null)->orderBy('id','DESC')->get();
+      foreach ($missionsValue as $value) {
+        $arr_results[] = $value->value;
+      }
+      return response()->json(['arr_results' => $arr_results]);
+    }
+
     public function edit($key) {
       $topic = MissionTopic::where('key',$key)->first();
 
@@ -500,9 +508,9 @@ class AdminMissionTopicController extends Controller
           }
      
           $data['mission_id'] = $topic->id;
-            $data['mission']  = 'App\Models\CouncilMissionTopic';
-            $data['table_name'] = 'mission_topics';
-            $check  = AdminMission::checkEvaluationDone($data);
+          $data['mission']  = 'App\Models\CouncilMissionTopic';
+          $data['table_name'] = 'mission_topics';
+          $check  = AdminMission::checkEvaluationDone($data);
 
           if ($topic->is_judged && $check && $topic->is_valid && !$topic->is_denied && !$topic->is_performed && !$topic->is_unperformed && Entrust::can(['approve-doc','unapprove-doc'])) {
           $string .=  '<a data-name="'.$topic->mission_name.'" data-id="'.$topic->id.'" data-toggle="modal" href="#approve-mdl" data-tooltip="tooltip" title="Xác nhận được phê duyệt" class="btn btn-blue btn-xs approve-btn"><i class="fa fa-check-square"></i></a>';

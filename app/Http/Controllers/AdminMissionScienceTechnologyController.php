@@ -48,6 +48,15 @@ class AdminMissionScienceTechnologyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function getNameMissions() {
+      $missionsValue = MissionScienceTechnologyAttributeValue::where('mission_science_technology_attribute_id', 1)->where('value', '<>', null)->orderBy('id','DESC')->get();
+      foreach ($missionsValue as $value) {
+        $arr_results[] = $value->value;
+      }
+      return response()->json(['arr_results' => $arr_results]);
+    }
+
     public function index()
     {
         if (!Entrust::can('mission-science-technology-menu')) {

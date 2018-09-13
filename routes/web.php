@@ -159,6 +159,8 @@ Route::middleware('revalidate')->group(function () {
                 
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
 
+                Route::get('/get-name-missions', 'AdminMissionTopicController@getNameMissions')->name('admin.mission-topics.getNameMissions');
+
             });
 
 
@@ -191,6 +193,10 @@ Route::middleware('revalidate')->group(function () {
             });
             /* END COUNCILS */
 
+            Route::get('/get-profile-name', function() {
+                $arr_name = \app\Helpers\AdminMission::getProfileName();
+                return response()->json(['arr_name' =>  $arr_name]);
+            });
         });
 
         Auth::routes();
@@ -279,6 +285,8 @@ Route::middleware('revalidate')->group(function () {
             Route::get('/edit/{key}', 'AdminMissionScienceTechnologyController@edit')->name('adminMissionScienceTechnology.edit');
 
             Route::post('update', 'AdminMissionScienceTechnologyController@update')->name('adminMissionScienceTechnology.update');
+
+            Route::get('/get-name-missions', 'AdminMissionScienceTechnologyController@getNameMissions')->name('adminMissionScienceTechnology.getNameMissions');
         });
         //* End
 

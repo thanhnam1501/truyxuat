@@ -26,19 +26,19 @@
             </center>
             <br>
             <div class="row" style="padding-right: 4%">
-			<div class="col-md-12">
-		        <table align="right" width="45%" border="1">
-		        	<tr>
-		        		<td width="80%" style="padding-left: 5px"><strong>Chuyên gia/Ủy viên phản biện</strong></td>
-		        		<td></td>
-		        	</tr>
-		        	<tr>
-		        		<td style="padding-left: 5px"><strong>Ủy viên hội đồng</strong></td>
-		        		<td></td>
-		        	</tr>
-		        </table>
-		    </div>
-		</div>
+				<div class="col-md-12">
+			        <table align="right" width="45%" border="1">
+			        	<tr>
+			        		<td width="80%" style="padding-left: 5px"><strong>Chuyên gia/Ủy viên phản biện</strong></td>
+			        		<td></td>
+			        	</tr>
+			        	<tr>
+			        		<td style="padding-left: 5px"><strong>Ủy viên hội đồng</strong></td>
+			        		<td></td>
+			        	</tr>
+			        </table>
+			    </div>
+			</div>
           </div>
           <div class="col-md-12">
             <h5><strong>Họ và tên chuyên gia:</strong> {{Auth::user()->name}}</h5>
