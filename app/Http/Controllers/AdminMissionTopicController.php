@@ -28,6 +28,7 @@ use UploadFile;
 use Datatables;
 use Excel;
 use ExportExcel;
+use Closure;
 
 class AdminMissionTopicController extends Controller
 {
@@ -1782,7 +1783,7 @@ class AdminMissionTopicController extends Controller
         ->make(true);
     }
 
-    public function exportExcelGetData()
+    public function exportExcelGetData(Request $request)
     {
       $topics = MissionTopic::select('mission_topics.id','mission_topics.profile_id', 'profiles.organization_id','profiles.representative','profiles.mobile')
               ->where('mission_topics.is_submit_ele_copy',1)
@@ -1825,8 +1826,8 @@ class AdminMissionTopicController extends Controller
 
       $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
 
-      $export = ExportExcel::exportExcel($topics, $attributes, $properties);
+      $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
 
-      return true;
+      return response()->download($file)->deleteFileAfterSend(true);
     }
 }

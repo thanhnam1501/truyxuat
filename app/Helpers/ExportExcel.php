@@ -40,9 +40,9 @@ class ExportExcel {
           $sheet->getStyle('A1:'.$properties['lastColumn'].$properties['lastRow'])->getAlignment()->setWrapText(true);
       });
 
-    })->download('xlsx');
+    })->store('xlsx', storage_path('app\public\excel\exports'), true);
 
-    return $export;
+    return $export['full'];
   }
 }
 ?>
