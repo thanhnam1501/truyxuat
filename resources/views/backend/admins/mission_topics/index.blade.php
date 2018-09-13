@@ -159,6 +159,7 @@
     <div class="panel-heading">
       <br>
       <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+      <a href="{{ route('admin.mission-topics.exportExcel') }}" class='btn btn-lg btn-success pull-right' id="export-excel"><i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;&nbsp;Xuất excel</a>
     </div>
 
     <div class="panel-body">

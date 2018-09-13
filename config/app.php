@@ -153,7 +153,7 @@ return [
          */
         Zizaco\Entrust\EntrustServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -165,6 +165,7 @@ return [
         App\Providers\MoneyServiceProvider::class,
         App\Providers\UploadFileServiceProvider::class,
         App\Providers\AdminMissionServiceProvider::class,
+        App\Providers\ExportExcelServiceProvider::class,
         
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
@@ -221,6 +222,8 @@ return [
         'UploadFile'  =>  App\Helpers\UploadFile::class,
         'AdminMission'  =>  App\Helpers\AdminMission::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'ExportExcel'  =>  App\Helpers\ExportExcel::class,
     ],
 
 ];
