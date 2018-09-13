@@ -1236,6 +1236,13 @@ class AdminMissionScienceTechnologyController extends Controller
 
       $attributes = MissionScienceTechnologyAttribute::select('id','label','column')->where('status',1)->whereNotIn('id',[15,16,12])->get();
 
+      if ($topics->isEmpty()) {
+        
+        session()->flash('msg', '<script>toastr.error("Không có dữ liệu để xuất Excel")</script>');
+
+        return redirect()->back();
+      }
+      
       foreach ($topics as $key => $topic) {
 
         $organization = Organization::find($topic->organization_id);
@@ -1270,8 +1277,8 @@ class AdminMissionScienceTechnologyController extends Controller
 
       $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
 
-      $export = ExportExcel::exportExcel($topics, $attributes, $properties);
+      $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
 
-      return true;
+      return response()->download($file)->deleteFileAfterSend(true);
     }
 }
