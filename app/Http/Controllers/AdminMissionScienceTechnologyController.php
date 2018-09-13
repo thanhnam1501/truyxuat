@@ -1406,8 +1406,9 @@ class AdminMissionScienceTechnologyController extends Controller
       }
 
         // dd($content);
+      $user_name = Auth::user()->name;
 
-       return view('backend.admins.mission_science_technologies.evaluation-form', compact('mission', 'date', 'mission_name', 'content'));
+       return view('backend.admins.mission_science_technologies.evaluation-form', compact('user_name', 'mission', 'date', 'mission_name', 'content'));
     }
 
     public function evaluationDetail($key){
@@ -1442,8 +1443,9 @@ class AdminMissionScienceTechnologyController extends Controller
       }
 
         // dd($content);
+      $user_name = Auth::user()->name;
 
-       return view('backend.admins.mission_science_technologies.evaluation-form-detail', compact('mission', 'date', 'mission_name', 'content', 'key'));
+       return view('backend.admins.mission_science_technologies.evaluation-form-detail', compact('user_name', 'mission', 'date', 'mission_name', 'content', 'key'));
     }
 
     public function evaluationPrint($key){
@@ -1477,7 +1479,9 @@ class AdminMissionScienceTechnologyController extends Controller
 
         // dd($content);
 
-       return view('backend.admins.mission_science_technologies.evaluation-form-print', compact('mission', 'date', 'mission_name', 'content'));
+        $user_name = Auth::user()->name;
+
+       return view('backend.admins.mission_science_technologies.evaluation-form-print', compact('user_name', 'mission', 'date', 'mission_name', 'content'));
     }
 
     public function storeEvaluation(Request $request) {

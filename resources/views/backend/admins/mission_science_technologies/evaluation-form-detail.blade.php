@@ -57,7 +57,7 @@
 			<div class="content" style="font-size: 14px;">
 
 		        <div class="col-md-12" style="margin-top: 20px;">
-		        	<p><strong>Họ và tên chuyên gia: </strong> {{Auth::user()->name}}</p>
+		        	<p><strong>Họ và tên chuyên gia: </strong> {{$user_name}}</p>
 		        </div>
 				
 		        <div class="col-md-12">
