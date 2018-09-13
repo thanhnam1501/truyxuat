@@ -38,7 +38,15 @@ class AdminMissionTopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+      
+    public function getNameMissions() {
+      $missionsValue = MissionTopicAttributeValue::where('mission_topic_attribute_id', 1)->where('value', '<>', null)->orderBy('id','DESC')->get();
+      foreach ($missionsValue as $value) {
+        $arr_results[] = $value->value;
+      }
+      return response()->json(['arr_results' => $arr_results]);
+    }
+
     public function edit($key) {
       $topic = MissionTopic::where('key',$key)->first();
 

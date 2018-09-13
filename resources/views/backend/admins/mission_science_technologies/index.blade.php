@@ -1,11 +1,19 @@
 @extends('backend.layouts.master')
 
 @section('header')
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <style type="text/css">
       .tab-content .btn {
         margin-bottom: 10px;
         margin-right: 10px;
         width: 25px;
+      }
+      .ui-draggable, .ui-droppable {
+        background-position: top;
+      }
+
+      #ui-id-1 {
+        width: 50% !important; 
       }
   </style>
 
@@ -52,12 +60,12 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
+              <div class="form-group col-md-12 ui-widget">
                 <div class="col-md-3 search-label">
                   <label for="">Tên nhiệm vụ</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="mission_name" value="" placeholder="Tên nhiệm vụ">
+                  <input type="text" class="form-control" placeholder="" id="search_mission_name" name="mission_name" value="" placeholder="Tên nhiệm vụ">
                 </div>
               </div>
 
@@ -787,4 +795,19 @@
 @section('footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="{{mix('build/js/admin_mission_science_technology.js')}}"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $.ajax({
+      url: app_url + '/admin/mission-science-technologies/get-name-missions',
+      type: 'get',
+      success: function(res) {
+        var availableNames = res.arr_results;
+        $( "#search_mission_name" ).autocomplete({
+          source: availableNames
+        });
+      }
+    });
+  });
+  </script>
 @endsection
