@@ -26,6 +26,8 @@ use Crypt;
 use AdminMission;
 use UploadFile;
 use Datatables;
+use Excel;
+use ExportExcel;
 
 class AdminMissionTopicController extends Controller
 {
@@ -1775,5 +1777,53 @@ class AdminMissionTopicController extends Controller
           return $string;
         })
         ->make(true);
+    }
+
+    public function exportExcelGetData()
+    {
+      $topics = MissionTopic::select('mission_topics.id','mission_topics.profile_id', 'profiles.organization_id','profiles.representative','profiles.mobile')
+              ->where('mission_topics.is_submit_ele_copy',1)
+              ->join('profiles', 'mission_topics.profile_id', '=', 'profiles.id')
+              // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+              ->orderBy('id','desc')->get();
+
+      $attributes = MissionTopicAttribute::select('id','label','column')->where('status',1)->whereNotIn('id',[10,11])->get();
+
+      foreach ($topics as $key => $topic) {
+
+        $organization = Organization::find($topic->organization_id);
+        
+        $topic->organization = !is_null($organization) ? $organization->name : null;
+
+        $topic->register = $topic->representative . " - " . $topic->mobile;
+
+        foreach ($attributes as $attribute) {
+          foreach ($topic->values as $value) {
+            if ($attribute->id == $value->mission_topic_attribute_id) {
+              if ($attribute->column == 'expected_fund' && !empty($value->value)) {
+                $topic[$attribute->column] = number_format(Crypt::decrypt($value->value)) . " VNĐ";
+              } else {
+                $topic[$attribute->column] = $value->value;
+              }
+            }
+          }
+        }
+      }
+      
+      $now = date('Ymd_Hi', strtotime(now()));
+
+      $properties['filename'] = "2075_Natec_ĐTĐA_$now";
+
+      $properties['view'] = 'mission_topics';
+
+      $properties['sheet'] = 'Đề tài hoặc đề án';
+
+      $properties['lastRow'] = $topics->count() + 1;
+
+      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
+
+      $export = ExportExcel::exportExcel($topics, $attributes, $properties);
+
+      return true;
     }
 }
