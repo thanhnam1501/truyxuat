@@ -169,6 +169,7 @@
             <div class="panel-heading">
                 <br>
                 <center><strong><h3>DỰ ÁN KHOA HỌC VÀ CÔNG NGHỆ</h3></strong></center>
+                <a href="{{ route('admin.mission-science-technologys.exportExcel') }}" class='btn btn-lg btn-success pull-right' id="export-excel"><i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;&nbsp;Xuất excel</a>
             </div>
 
               <div class="panel-body">
