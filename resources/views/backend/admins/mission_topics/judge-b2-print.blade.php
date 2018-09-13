@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="col-md-12">
-            <h5><strong>Họ và tên chuyên gia:</strong> {{Auth::user()->name}}</h5>
+            <h5><strong>Họ và tên chuyên gia:</strong> {{$user_name}}</h5>
             <h5><strong>Tên đề tài/dự án đề xuất:</strong> {{(isset($name))?$name:""}}</h5>
           </div>
           <div class="clearfix"></div>

@@ -1306,7 +1306,8 @@ class AdminMissionTopicController extends Controller
     $date['m'] = date('m',time());
     $date['y'] = date('Y',time());
 
-    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions'));
+    $user_name = Auth::user()->name;
+    return view('backend.admins.mission_topics.'.$view, compact('user_name','name','date','topic','comment_evaluation','expert_opinions'));
   }
 
   public function judgeCouncilDetail($key)
@@ -1342,8 +1343,9 @@ class AdminMissionTopicController extends Controller
     $date['d'] = date('d',time());
     $date['m'] = date('m',time());
     $date['y'] = date('Y',time());
+    $user_name = Auth::user()->name;
 
-    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions', 'key'));
+    return view('backend.admins.mission_topics.'.$view, compact('user_name', 'name','date','topic','comment_evaluation','expert_opinions', 'key'));
   }
 
   public function judgeCouncilPrint($key)
@@ -1379,8 +1381,9 @@ class AdminMissionTopicController extends Controller
     $date['d'] = date('d',time());
     $date['m'] = date('m',time());
     $date['y'] = date('Y',time());
+    $user_name = Auth::user()->name;
 
-    return view('backend.admins.mission_topics.'.$view, compact('name','date','topic','comment_evaluation','expert_opinions', 'key'));
+    return view('backend.admins.mission_topics.'.$view, compact('user_name', 'name','date','topic','comment_evaluation','expert_opinions', 'key'));
   }
 
 
