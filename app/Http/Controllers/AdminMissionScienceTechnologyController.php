@@ -134,7 +134,7 @@ class AdminMissionScienceTechnologyController extends Controller
                         }
 
                         if ( !empty($search['organization']) ) {
-                          $query->where('organizations.name', 'LIKE', '%'.$search['organization'].'%');
+                          $query->where('profiles.representative', 'LIKE', '%'.$search['organization'].'%');
                         }
                     }
                 })->orderBy('id','desc')->get();
