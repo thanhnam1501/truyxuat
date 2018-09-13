@@ -71,7 +71,7 @@
 
               <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
-                  <label for="">Đơn vị</label>
+                  <label for="">Người Đ.ký (SĐT)</label>
                 </div>
                 <div class="col-md-9">
                   <input type="text" class="form-control" placeholder="" name="organization" value="" placeholder="Đơn vị">
