@@ -717,4 +717,7 @@
 @section('footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="{{mix('build/js/admin_mission_science_technology.js')}}"></script>
+  @if (!empty(session('msg')))
+    {!! session()->get('msg') !!}
+  @endif
 @endsection
