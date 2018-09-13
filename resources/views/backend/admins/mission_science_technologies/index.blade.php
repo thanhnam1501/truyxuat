@@ -161,6 +161,7 @@
             <div class="panel-heading">
                 <br>
                 <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+                <a href="{{ route('admin.mission-science-technologys.exportExcel') }}" class='btn btn-lg btn-success pull-right' id="export-excel"><i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;&nbsp;Xuất excel</a>
             </div>
 
               <div class="panel-body">
@@ -716,4 +717,7 @@
 @section('footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="{{mix('build/js/admin_mission_science_technology.js')}}"></script>
+  @if (!empty(session('msg')))
+    {!! session()->get('msg') !!}
+  @endif
 @endsection

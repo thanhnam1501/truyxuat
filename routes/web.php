@@ -10,7 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::middleware('auth')->group(function() {
+    Route::group(['prefix' => 'admin'], function() {
+        Route::get('mission-science-technologys/export-excel', 'AdminMissionScienceTechnologyController@exportExcelGetData')->name('admin.mission-science-technologys.exportExcel');
+        Route::get('mission-topics/export-excel', 'AdminMissionTopicController@exportExcelGetData')->name('admin.mission-topics.exportExcel');
+    });
+});
 Route::middleware('revalidate')->group(function () {
 
     //* Admin
@@ -93,6 +98,7 @@ Route::middleware('revalidate')->group(function () {
             //Quản lý dự án khoa học công nghệ
             Route::resource('mission-science-technologys', 'AdminMissionScienceTechnologyController');
             Route::post('mission-science-technologys/get-list','AdminMissionScienceTechnologyController@list')->name('mission-science-technologys.getList');
+
             Route::get('mission-science-technologys/detail/{key}', 'AdminMissionScienceTechnologyController@show')->name('admin.mission-science-technologys.detail');
 
             Route::get('mission-science-technologys/get-round-collection/{id}','AdminMissionScienceTechnologyController@getRoundCollection')->name('mission-science-technologys.getRoundCollection');
@@ -105,8 +111,7 @@ Route::middleware('revalidate')->group(function () {
             Route::get('mission-science-technologys/evaluation/{key}','AdminMissionScienceTechnologyController@evaluation')->name('mission-science-technologys.evaluation');
 
             Route::post('mission-science-technologys/evaluation/store','AdminMissionScienceTechnologyController@storeEvaluation')->name('mission-science-technologys.storeEvaluation');
-
-
+            
             Route::get('position-councils/get-list', 'PositionCouncilController@getList')->name('position-councils.get-list');
 
             Route::resource('position-councils', 'PositionCouncilController');
@@ -149,7 +154,7 @@ Route::middleware('revalidate')->group(function () {
                 Route::get('/edit/{key}', 'AdminMissionTopicController@edit')->name('admin.mission-topics.edit');
 
                 Route::post('update', 'AdminMissionTopicController@update')->name('admin.mission-topics.update');
-                
+
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
 
             });
@@ -407,3 +412,4 @@ Route::middleware('revalidate')->group(function () {
 
         // Route::get('/', 'MissionScienceTechnologyController@index')->name('missionScienceTechnology.index');
         // 
+

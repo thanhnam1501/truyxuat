@@ -36,6 +36,8 @@ use Entrust;
 use AdminMission;
 use UploadFile;
 use Illuminate\Support\Collection;
+use Excel;
+use ExportExcel;
 
 
 class AdminMissionScienceTechnologyController extends Controller
@@ -1222,5 +1224,61 @@ class AdminMissionScienceTechnologyController extends Controller
         })
         ->make(true);
 
+    }
+
+    public function exportExcelGetData()
+    {
+      $topics = MissionScienceTechnology::select('mission_science_technologies.id','mission_science_technologies.profile_id', 'profiles.organization_id','profiles.representative','profiles.mobile')
+              ->where('mission_science_technologies.is_submit_ele_copy',1)
+              ->join('profiles', 'mission_science_technologies.profile_id', '=', 'profiles.id')
+              // ->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
+              ->orderBy('id','desc')->get();
+
+      $attributes = MissionScienceTechnologyAttribute::select('id','label','column')->where('status',1)->whereNotIn('id',[15,16,12])->get();
+
+      if ($topics->isEmpty()) {
+        
+        session()->flash('msg', '<script>toastr.error("Không có dữ liệu để xuất Excel")</script>');
+
+        return redirect()->back();
+      }
+      
+      foreach ($topics as $key => $topic) {
+
+        $organization = Organization::find($topic->organization_id);
+        
+        $topic->organization = !is_null($organization) ? $organization->name : null;
+
+        $topic->register = $topic->representative . " - " . $topic->mobile;
+
+        foreach ($attributes as $attribute) {
+          foreach ($topic->values as $value) {
+
+            if ($attribute->id == $value->mission_science_technology_attribute_id) {
+              if ($attribute->column == 'expected_fund' && !empty($value->value)) {
+                $topic[$attribute->column] = number_format(Crypt::decrypt($value->value)) . " VNĐ";
+              } else {
+                $topic[$attribute->column] = $value->value;
+              }
+            }
+          }
+        }
+      }
+      
+      $now = date('Ymd_Hi', strtotime(now()));
+
+      $properties['filename'] = "2075_Natec_DAKHCN_$now";
+
+      $properties['view'] = 'mission_science_technologies';
+
+      $properties['sheet'] = 'Dự án KH và CN';
+
+      $properties['lastRow'] = $topics->count() + 1;
+
+      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
+
+      $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
+
+      return response()->download($file)->deleteFileAfterSend(true);
     }
 }
