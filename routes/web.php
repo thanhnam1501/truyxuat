@@ -10,7 +10,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::middleware('auth')->group(function () {
+    Route::group(['prefix' => 'admin'], function() {
+        Route::get('mission-science-technologys/export-excel', 'AdminMissionScienceTechnologyController@exportExcelGetData')->name('admin.mission-science-technologys.exportExcel');
 
+    Route::get('mission-topics/export-excel', 'AdminMissionTopicController@exportExcelGetData')->name('admin.mission-topics.exportExcel');
+    });
+});
 Route::middleware('revalidate')->group(function () {
 
     //* Admin
@@ -436,10 +442,3 @@ Route::middleware('revalidate')->group(function () {
         // 
         // 
 
-Route::middleware('auth')->group(function () {
-    Route::group(['prefix' => 'admin'], function() {
-        Route::get('mission-science-technologys/export-excel', 'AdminMissionScienceTechnologyController@exportExcelGetData')->name('admin.mission-science-technologys.exportExcel');
-
-    Route::get('mission-topics/export-excel', 'AdminMissionTopicController@exportExcelGetData')->name('admin.mission-topics.exportExcel');
-    });
-});
