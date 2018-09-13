@@ -193,6 +193,10 @@ Route::middleware('revalidate')->group(function () {
             });
             /* END COUNCILS */
 
+            Route::get('/get-profile-name', function() {
+                $arr_name = \app\Helpers\AdminMission::getProfileName();
+                return response()->json(['arr_name' =>  $arr_name]);
+            });
         });
 
         Auth::routes();

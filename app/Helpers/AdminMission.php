@@ -30,6 +30,16 @@ class AdminMission {
 	 * @return array
 	 * @author
 	 **/
+	public static function getProfileName() {
+		$profiles = Profile::where('status', 1)->orderBy('id', 'Desc')->get();
+		if ($profiles->count() > 0) {
+			foreach ($profiles as $profile) {
+				$arr_name[] = $profile->representative;
+			}
+		}
+		return $arr_name;
+	}
+	
 	public static function submitHardCopy($data)
 	{
 		if (!empty($data['id']) && !empty($data['table_name'])) {

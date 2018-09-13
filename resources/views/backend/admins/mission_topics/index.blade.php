@@ -69,12 +69,12 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
+              <div class="form-group col-md-12 ui-widget">
                 <div class="col-md-3 search-label">
-                  <label for="">Người Đ.ký (SĐT)</label>
+                  <label for="">Người Đ.ký</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="organization" value="" placeholder="Đơn vị">
+                  <input type="text" class="form-control" placeholder="" id="search_profile_name" name="organization" value="" placeholder="Đơn vị">
                 </div>
               </div>
 
@@ -627,6 +627,17 @@
         var availableNames = res.arr_results;
         $( "#search_mission_name" ).autocomplete({
           source: availableNames
+        });
+      }
+    });
+
+    $.ajax({
+      url: app_url + '/admin/get-profile-name',
+      type: 'get',
+      success: function(res) {
+        var availableProfileNames = res.arr_name;
+        $( "#search_profile_name" ).autocomplete({
+          source: availableProfileNames
         });
       }
     });
