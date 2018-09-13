@@ -1868,8 +1868,8 @@ class AdminMissionScienceTechnologyController extends Controller
 
       $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
 
-      $export = ExportExcel::exportExcel($topics, $attributes, $properties);
+      $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
 
-      return true;
+      return response()->download($file)->deleteFileAfterSend(true);
     }
 }

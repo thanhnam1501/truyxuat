@@ -91,7 +91,7 @@ Route::middleware('revalidate')->group(function () {
             Route::post('/mission-sxtns/edit', 'AdminMissionSxtnController@update')->name('admin-mission-sxtns.update');
 
             //Quản lý dự án khoa học công nghệ
-            Route::get('mission-science-technologys/export-excel', 'AdminMissionScienceTechnologyController@exportExcelGetData')->name('admin.mission-science-technologys.exportExcel');
+            
             Route::resource('mission-science-technologys', 'AdminMissionScienceTechnologyController');
             Route::post('mission-science-technologys/get-list','AdminMissionScienceTechnologyController@list')->name('mission-science-technologys.getList');
 
@@ -158,7 +158,7 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::post('update', 'AdminMissionTopicController@update')->name('admin.mission-topics.update');
                 
-                Route::get('/export-excel', 'AdminMissionTopicController@exportExcelGetData')->name('admin.mission-topics.exportExcel');
+                
 
                 Route::get('/', 'AdminMissionTopicController@index')->name('admin.mission-topics.index');
 
@@ -434,3 +434,12 @@ Route::middleware('revalidate')->group(function () {
 
         // Route::get('/', 'MissionScienceTechnologyController@index')->name('missionScienceTechnology.index');
         // 
+        // 
+
+Route::middleware('auth')->group(function () {
+    Route::group(['prefix' => 'admin'], function() {
+        Route::get('mission-science-technologys/export-excel', 'AdminMissionScienceTechnologyController@exportExcelGetData')->name('admin.mission-science-technologys.exportExcel');
+
+    Route::get('mission-topics/export-excel', 'AdminMissionTopicController@exportExcelGetData')->name('admin.mission-topics.exportExcel');
+    });
+});
