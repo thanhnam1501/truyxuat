@@ -1249,8 +1249,6 @@ class AdminMissionScienceTechnologyController extends Controller
         
         $topic->organization = !is_null($organization) ? $organization->name : null;
 
-        $topic->register = $topic->representative . " - " . $topic->mobile;
-
         foreach ($attributes as $attribute) {
           foreach ($topic->values as $value) {
 

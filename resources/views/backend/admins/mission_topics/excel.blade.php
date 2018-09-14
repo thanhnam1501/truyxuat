@@ -28,7 +28,8 @@
 			<tr>
 				<th>STT</th>
 				<th>Tên đơn vị</th>
-				<th>Người đăng ký - SĐT</th>
+				<th>Người đăng ký</th>
+				<th>Số điện thoại</th>
 				@if (isset($attributes))
 					@if ($attributes->count() > 0)
 						@foreach ($attributes as $attr)
@@ -45,7 +46,8 @@
 						<tr>
 							<td align="center" width="5">{{$key + 1}}</td>
 							<td align="center" width="25">{!! $topic->organization !!}</td>
-							<td align="center" width="25">{!! $topic->register !!}</td>
+							<td align="center" width="20">{!! $topic->representative !!}</td>
+							<td align="center" width="20">{!! $topic->mobile !!}</td>
 							<td align="left" width="40">{!! $topic->name !!}</td>
 							<td align="left" width="60">{!! $topic->propose_base !!}</td>
 							<td align="left" width="60">{!! $topic->urgency !!}</td>
