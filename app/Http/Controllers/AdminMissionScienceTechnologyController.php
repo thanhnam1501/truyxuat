@@ -1273,7 +1273,7 @@ class AdminMissionScienceTechnologyController extends Controller
 
       $properties['lastRow'] = $topics->count() + 1;
 
-      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
+      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 3);
 
       $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
 
