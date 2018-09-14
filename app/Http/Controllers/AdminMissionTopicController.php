@@ -1176,8 +1176,6 @@ class AdminMissionTopicController extends Controller
         
         $topic->organization = !is_null($organization) ? $organization->name : null;
 
-        $topic->register = $topic->representative . " - " . $topic->mobile;
-
         foreach ($attributes as $attribute) {
           foreach ($topic->values as $value) {
             if ($attribute->id == $value->mission_topic_attribute_id) {
@@ -1201,7 +1199,7 @@ class AdminMissionTopicController extends Controller
 
       $properties['lastRow'] = $topics->count() + 1;
 
-      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 2);
+      $properties['lastColumn'] = chr(ord('A') + $attributes->count() + 3);
 
       $file =  ExportExcel::exportExcel($topics, $attributes, $properties);
 
