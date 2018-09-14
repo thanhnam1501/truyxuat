@@ -43,7 +43,11 @@ class AdminMissionTopicController extends Controller
      */
       
     public function getNameMissions() {
-      $missionsValue = MissionTopicAttributeValue::where('mission_topic_attribute_id', 1)->where('value', '<>', null)->orderBy('id','DESC')->get();
+      $missionsValue = MissionTopicAttributeValue::where('mission_topic_attribute_id', 1)->where('value', '<>', null)
+      ->join('mission_topic_values', 'mission_topic_values.mission_topic_attribute_value_id', '=', 'mission_topic_attribute_values.id')
+      ->join('mission_topics', 'mission_topics.id', '=', 'mission_topic_values.mission_topic_id')
+      ->where('mission_topics.is_submit_ele_copy', 1)
+      ->orderBy('mission_topic_attribute_values.id','DESC')->get();
       foreach ($missionsValue as $value) {
         $arr_results[] = $value->value;
       }
