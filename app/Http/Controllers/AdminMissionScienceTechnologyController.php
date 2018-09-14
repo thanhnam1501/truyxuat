@@ -52,7 +52,13 @@ class AdminMissionScienceTechnologyController extends Controller
      */
     
     public function getNameMissions() {
-      $missionsValue = MissionScienceTechnologyAttributeValue::where('mission_science_technology_attribute_id', 1)->where('value', '<>', null)->orderBy('id','DESC')->get();
+      $missionsValue = MissionScienceTechnologyAttributeValue::where('mission_science_technology_attribute_id', 1)
+      ->where('value', '<>', null)
+      ->join('mission_science_technology_values', 'mission_science_technology_values.mission_science_technology_attribute_value_id', '=', 'mission_science_technology_attribute_values.id')
+      ->join('mission_science_technologies', 'mission_science_technologies.id', '=', 'mission_science_technology_values.mission_science_technology_id')
+      ->where('mission_science_technologies.is_submit_ele_copy', 1)
+      ->orderBy('mission_science_technology_attribute_values.id','DESC')->get();
+
       foreach ($missionsValue as $value) {
         $arr_results[] = $value->value;
       }
