@@ -57,7 +57,7 @@
 			<div class="content" style="font-size: 14px;">
 
 		        <div class="col-md-12" style="margin-top: 20px;">
-		        	<p><strong>Họ và tên chuyên gia: </strong> {{Auth::user()->name}}</p>
+		        	<p><strong>Họ và tên chuyên gia: </strong> {{$user_name}}</p>
 		        </div>
 				
 		        <div class="col-md-12">
@@ -71,53 +71,53 @@
 						<strong style="">I. NHẬN XÉT VÀ ĐÁNH GIÁ CHUNG ĐỀ XUẤT ĐẶT HÀNG</strong><br><br>
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">1.1 Tính cấp thiết và mục tiêu của đề xuất đặt hàng so với dự án đầu tư sản xuất các sản phẩm trọng điểm chủ lực của bộ, ngành địa phương và của quốc gia (được nêu tại mục 2 của Phiếu đề xuất nhiệm vụ)</label>
-							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="urgency_target_note" name="urgency_target_note" placeholder="Tính cấp thiết và mục tiêu của đề xuất đặt hàng so với dự án đầu tư sản xuất các sản phẩm trọng điểm chủ lực của bộ, ngành địa phương và của quốc gia (được nêu tại mục 2 của Phiếu đề xuất nhiệm vụ)">{{($content != null)? $content['comment_evaluation']['urgency_target']['note']: ''}}</textarea>
+							<span><i>Nhận xét:</i></span><br><br>
+							<p>{{($content != null)? $content['comment_evaluation']['urgency_target']['note']: ''}}</p>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="1" @if ($content == null)
+							<label class="radio-inline"><input disabled type="checkbox" @if ($content == null)
 								checked
 							@elseif($content != null && $content['comment_evaluation']['urgency_target']['rate'] == 1)
 								checked
 							
-							@endif>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="urgency_target_rate" value="0" {{($content != null && $content['comment_evaluation']['urgency_target']['rate'] == 0 ) ? 'checked' : ''}}>Không đạt yêu cầu</label>
+							@endif> Đạt yêu cầu</label>
+							<label class="radio-inline"><input disabled type="checkbox" name="urgency_target_rate" value="0" {{($content != null && $content['comment_evaluation']['urgency_target']['rate'] == 0 ) ? 'checked' : ''}}> Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">1.2 Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng</label><br>
-							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="necessity_note" name="necessity_note" placeholder="Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng">{{($content != null) ? $content['comment_evaluation']['necessity']['note'] : ''}}</textarea>
+							<span><i>Nhận xét:</i></span><br><br>
+							<p>{{($content != null) ? $content['comment_evaluation']['necessity']['note'] : ''}}</p>
 							{{-- <textarea class="form-control" rows="5" id="necessity_note" name="necessity_note" placeholder="Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề xuất đặt hàng"> {{($content != null) ? $content['comment_evaluation']['necessity']['note'] : ''}}</textarea> --}}
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="necessity_rate" value="1" @if ($content == null)
+							<label class="radio-inline"><input type="checkbox" disabled name="necessity_rate" value="1" @if ($content == null)
 								checked
 							@elseif($content != null && $content['comment_evaluation']['necessity']['rate'] == 1)
 								checked
 							
 							@endif>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="necessity_rate" value="0" {{($content != null && $content['comment_evaluation']['necessity']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="checkbox" disabled name="necessity_rate" value="0" {{($content != null && $content['comment_evaluation']['necessity']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
 
 						</div>
 
 						<div class="form-group"  style="padding-left: 3%">
 							<label for="" class="">	1.3 Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì</label><br>
-							<span><i>Nhận xét:</i></span>
-							<textarea class="form-control" rows="5" id="possibility_note" name="possibility_note" placeholder="Tính khả thi thể hiện qua nội dung đặt ra trong đề xuất đặt hàng; phương án huy động nguồn lực của tổ chức chủ trì">{{($content != null) ? $content['comment_evaluation']['possibility']['note'] : ''}}</textarea>
+							<span><i>Nhận xét:</i></span><br><br>
+							<p>{{($content != null) ? $content['comment_evaluation']['possibility']['note'] : ''}}</p>
 							<br>
 							<span><i>Đánh giá:</i></span>&nbsp;&nbsp;
 							
-							<label class="radio-inline"><input type="radio" name="possibility_rate" value="1" @if ($content == null)
+							<label class="radio-inline"><input type="checkbox" disabled name="possibility_rate" value="1" @if ($content == null)
 								checked
 							@elseif($content != null && $content['comment_evaluation']['possibility']['rate'] == 1)
 								checked
 							
 							@endif>Đạt yêu cầu</label>
-							<label class="radio-inline"><input type="radio" name="possibility_rate" value="0" {{($content != null && $content['comment_evaluation']['possibility']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
+							<label class="radio-inline"><input type="checkbox" disabled name="possibility_rate" value="0" {{($content != null && $content['comment_evaluation']['possibility']['rate'] == 0) ? 'checked' : ''}}>Không đạt yêu cầu</label>
 
 						</div>
 					
@@ -125,7 +125,7 @@
 						<strong style="">II. Ý KIẾN CHUYÊN GIA </strong><span>(đánh dấu <strong>X</strong> vào 1 trong 3 ô dưới đây)</span><br><br>
 						<div class="form-group" style="padding-left: 3%">
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="1" @if ($content == null)
+								<label><input type="checkbox" disabled name="suggest_perform" class="suggest_perform" value="1" @if ($content == null)
 								checked
 							@elseif($content != null && $content['expert_opinions']['is_perform']['rate'] == 1)
 								checked
@@ -133,35 +133,32 @@
 							@endif>Đề nghị thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="0" {{($content != null && $content['expert_opinions']['is_unperform'] == 1) ? 'checked' : ''}}>Đề nghị không thực hiện</label>
+								<label><input type="checkbox" disabled name="suggest_perform" class="suggest_perform" value="0" {{($content != null && $content['expert_opinions']['is_unperform'] == 1) ? 'checked' : ''}}>Đề nghị không thực hiện</label>
 							</div>
 							<div class="radio">
-								<label><input type="radio" name="suggest_perform" class="suggest_perform" value="2" {{($content != null && $content['expert_opinions']['is_perform'] == 0 && $content['expert_opinions']['is_unperform'] == 0) ? 'checked' : ''}}>Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
+								<label><input type="checkbox" disabled name="suggest_perform" class="suggest_perform" value="2" {{($content != null && $content['expert_opinions']['is_perform'] == 0 && $content['expert_opinions']['is_unperform'] == 0) ? 'checked' : ''}}>Đề nghị thực hiện với các điều chỉnh nêu dưới đây: </label>
 							</div> 
 							
 							<div class="request_change" style="display: none">
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.1 Tên dự án KH&CN:</label>
-				
-									<textarea class="form-control" rows="5" name="project_name" id="project_name">{{($content != null) ? $content['expert_opinions']['request']['name'] :''}}</textarea>
-									<br>
-									
+									<br><br>
+									<p>{{($content != null) ? $content['expert_opinions']['request']['name'] :''}}</p>
+
 								</div>
 
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.2 Mục tiêu:</label>
-				
-									<textarea class="form-control" rows="5" name="project_target" id="project_target">{{($content != null) ? $content['expert_opinions']['request']['target'] : ''}}</textarea>
-									<br>
-									
+									<br><br>
+									<p>{{($content != null) ? $content['expert_opinions']['request']['target'] : ''}}</p>
+												
 								</div>
 
 								<div class="form-group"  style="padding-left: 3%">
 									<label for="" class="">	2.3 Yêu cầu đối với kết quả:</label>
-				
-									<textarea class="form-control" rows="5" name="project_result" id="project_result">{{($content != null) ? $content['expert_opinions']['request']['result'] :''}}</textarea>
-									<br>
-									
+									<br><br>
+									<p>{{($content != null) ? $content['expert_opinions']['request']['result'] :''}}</p>
+
 								</div>
 
 							</div>
@@ -190,8 +187,7 @@
 			<hr>
 	        <div class="col-md-12" style="text-align: right;">
 
-	        	<button class="btn btn-primary save-evaluation" id="save-evaluation-science-technology-btn" data-is_filled='0'><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu</button>
-	        	<button class="btn btn-success save-evaluation" id="evaluation-science-technology-btn" data-is_filled='1'><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Gửi</button>
+	        	<a href="{{ route('mission-science-technologys.evaluation-print', $key) }}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu</a>
 	        </div>
 	    </div>
     </div>

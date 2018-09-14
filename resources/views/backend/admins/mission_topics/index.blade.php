@@ -1,14 +1,24 @@
 @extends('backend.layouts.master')
 
 @section('header')
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <style type="text/css">
-    #topic-tbl .btn {
+    .tab-content .btn {
         margin-bottom: 10px;
         margin-right: 10px;
         width: 25px;
       }
+
+    .ui-draggable, .ui-droppable {
+        background-position: top;
+      }
+
+    #ui-id-1 {
+      width: 50% !important; 
+    }
   </style>
-  <link rel="stylesheet" type="text/css" id="theme" href="{{mix('build/css/admin_mission_science_technology.css')}}"/>
 @endsection
 
 @section('breadcrumb')
@@ -50,21 +60,21 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
+              <div class="form-group col-md-12 ui-widget">
                 <div class="col-md-3 search-label">
                   <label for="">Tên nhiệm vụ</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="mission_name" value="" placeholder="Tên nhiệm vụ">
+                  <input type="text" class="form-control" id="search_mission_name" placeholder="" name="mission_name" value="" placeholder="Tên nhiệm vụ">
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
+              <div class="form-group col-md-12 ui-widget">
                 <div class="col-md-3 search-label">
-                  <label for="">Người Đ.ký (SĐT)</label>
+                  <label for="">Người Đ.ký</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" placeholder="" name="organization" value="" placeholder="Đơn vị">
+                  <input type="text" class="form-control" placeholder="" id="search_profile_name" name="organization" value="" placeholder="Đơn vị">
                 </div>
               </div>
 
@@ -158,32 +168,92 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <br>
-      <center><strong><h3>DANH SÁCH CÁC NHIỆM VỤ</h3></strong></center>
+      <center><strong><h3>ĐỀ TÀI HOẶC ĐỀ ÁN</h3></strong></center>
       <a href="{{ route('admin.mission-topics.exportExcel') }}" class='btn btn-lg btn-success pull-right' id="export-excel"><i class="fa fa-file-excel-o"></i>&nbsp;&nbsp;&nbsp;Xuất excel</a>
     </div>
 
     <div class="panel-body">
-      <br>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="topic-tbl">
-          <thead>
-            <tr>
-              <th style="width: 30px">STT</th>
-              <th style="width: 100px">Hành động</th>
-              <th style="">Tên nhiệm vụ</th>
-              <th style="width: 100px">Tên đơn vị</th>
-              <th>Người đăng ký - SĐT</th>
-              <th style="width: 100px">Thời gian</th>
-              <th style="width: 80px">Mục tiêu</th>
-              <th style="width: 90px">Kết quả dự kiến</th>
-              <th>Kinh phí</th>
-              <th>Trạng thái</th>
+      <div class="col-md-12"> <br> <br>
+          <ul class="nav nav-tabs" role="tablist">
+            {{-- @if (Entrust::can('view-list')) --}}
+              <li class="active"><a href="#list-submit-ele" role="tab" data-toggle="tab"> Danh sách các nhiệm vụ</a></li>
+            {{-- @endif --}}
               
-            </tr>
-          </thead>
-        </table>
+            @if (Entrust::can(['valid-doc','invalid-doc']))
+              <li class=""><a href="#list-submit-hard" role="tab" data-toggle="tab" id="">Danh sách nhiệm vụ chờ duyệt</a></li>
+            @endif
+
+            @if (Entrust::can(['list-invalid-doc']))
+              <li class=""><a href="#list-invalid-doc" role="tab" data-toggle="tab" id="">Danh sách nhiệm vụ hợp lệ</a></li>
+            @endif
+              
+           </ul>
       </div>
+      <div class="col-md-12">
+        <br>
+        <div class="tab-content">
+          <div class="tab-pane fade in active table-responsive" id="list-submit-ele">
+            <table class="table table-bordered table-hover" id="topic-tbl">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th>
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <div class="tab-pane fade table-responsive" id="list-submit-hard">
+            <table class="table table-bordered table-hover" id="approval-topic-tbl" width="100%">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                 {{--  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th> --}}
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th>Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <div class="tab-pane fade table-responsive" id="list-invalid-doc">
+            <table class="table table-bordered table-hover" id="list-invalid-doc-tbl" width="100%">
+              <thead>
+                <tr>
+                  <th style="width: 30px">STT</th>
+                  <th style="width: 100px">Hành động</th>
+                  <th style="">Tên nhiệm vụ</th>
+                 {{--  <th style="width: 100px">Tên đơn vị</th>
+                  <th>Người đăng ký - SĐT</th> --}}
+                  <th style="width: 100px">Thời gian</th>
+                  <th style="width: 80px">Mục tiêu</th>
+                  <th style="width: 90px">Kết quả dự kiến</th>
+                  <th>Kinh phí</th>
+                  <th style="width: 90px">Trạng thái</th>
+                  
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 
@@ -204,7 +274,7 @@
               </div>
               <div class="col-md-9">
                 <select class="form-control" name="is_performed" id="is_performed">
-                  <option value="-1">Chưa cập nhập</option>
+                  <option value="-1">Chưa cập nhật</option>
                   <option value="1">Được phê duyệt thực hiện</option>
                   <option value="0">Không được phê duyệt thực hiện</option>
                 </select>
@@ -235,7 +305,7 @@
             <div class="form-group col-md-12">
                 <div class="col-md-8">
                   <label for="">Quyết định danh mục nhiệm vụ được thực hiện <span class="error">(*)</span></label>
-                  <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhập</span></i>
+                  <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhận</span></i>
                 </div>
                 <div class="col-md-4">
                   <input type="file" name="list_categories" id="list_categories" accept="application/pdf, application/msword">
@@ -335,6 +405,17 @@
                   <textarea disabled id="denied_reason" class='form-control' placeholder='Trường hợp hồ sơ bị từ chối, vui lòng nhập lý do đầy đủ' rows="5"></textarea>
                 </div>
             </div>
+
+            <div class="form-group col-md-12">
+                <div class="col-md-3 search-label">
+                  <label for="">Tài liệu đính kèm</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="file" class="" placeholder="Tài liệu đính kèm" id="attachment_file_judged">
+                </div>
+                <br><i><span class="error">Chỉ file *.doc, *.docx, *.pdf và file dưới 5Mb được chấp nhận</span></i>
+            </div>
+
             <div class="form-group col-md-12">
                 <div class="col-md-3 search-label">
                   {{-- <label for="">Lý do</label> --}}
@@ -343,6 +424,7 @@
                   <input type='checkbox' name='' value=''id="checkbox-send-email-judged" > &nbsp;Gửi email thông báo
                 </div>
             </div>
+            
 
             <br>
           </div>
@@ -536,7 +618,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="{{mix('build/js/admin_mission_topic.js')}}"></script>
 
+
   @if (!empty(session('msg')))
     {!! session()->get('msg') !!}
   @endif
+
+  {{-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> --}}
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $.ajax({
+      url: app_url + '/admin/mission-topics/get-name-missions',
+      type: 'get',
+      success: function(res) {
+        var availableNames = res.arr_results;
+        $( "#search_mission_name" ).autocomplete({
+          source: availableNames
+        });
+      }
+    });
+
+    $.ajax({
+      url: app_url + '/admin/get-profile-name',
+      type: 'get',
+      success: function(res) {
+        var availableProfileNames = res.arr_name;
+        $( "#search_profile_name" ).autocomplete({
+          source: availableProfileNames
+        });
+      }
+    });
+  });
+  </script>
+
 @endsection
