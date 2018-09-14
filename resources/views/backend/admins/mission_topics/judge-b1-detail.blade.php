@@ -1,3 +1,4 @@
+
 @extends('backend.layouts.master')
 
 @section('header')
@@ -39,7 +40,7 @@
             <br>
           </div>
           <div class="col-md-12">
-            <h5><strong>Họ và tên chuyên gia:</strong> {{Auth::user()->name}}</h5>
+            <h5><strong>Họ và tên chuyên gia:</strong> {{$user_name}}</h5>
             <h5><strong>Tên đề tài/dự án đề xuất:</strong> {{(isset($name))?$name:""}}</h5>
           </div>
           <div class="clearfix"></div>
@@ -48,87 +49,87 @@
             <div class="col-md-12">
                 <h4><strong>I. NHẬN XÉT VÀ ĐÁNH GIÁ ĐỀ XUẤT ĐẶT HÀNG</strong></h4>
                 <div class="col-md-12 block">
-                    <p>1.1   Tính cấp thiết của việc thực hiện đề tài/dự án</p>
+                    <label>1.1   Tính cấp thiết của việc thực hiện đề tài/dự án</label>
                     <div class="col-md-12 indent-15 form-group">
                       <p>Nhận xét: <span class='error'>(*)</span></p>
-                      <textarea name="necessity_note" id="necessity_note" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($comment_evaluation['necessity'])?$comment_evaluation['necessity']['note']:""}}</textarea>
+                      <p>{{isset($comment_evaluation['necessity'])?$comment_evaluation['necessity']['note']:""}}</p>
                     </div>
 
                     <div class="col-md-12 indent-15 form-group">
                       <span>Đánh giá: <span class='error'>(*)</span></span>
                       <label class="radio-inline">
-                        <input type="radio" name="necessity_qualified" value="1" {{isset($comment_evaluation['necessity']) && $comment_evaluation['necessity']['qualified']?"checked":""}}>Đạt yêu cầu
+                        <input type="checkbox" disabled name="necessity_qualified" value="1" {{isset($comment_evaluation['necessity']) && $comment_evaluation['necessity']['qualified']?"checked":""}}>Đạt yêu cầu
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="necessity_qualified" value="0" {{isset($comment_evaluation['necessity']) && !$comment_evaluation['necessity']['qualified']?"checked":""}} {{(!isset($comment_evaluation['necessity']))?"checked":""}}>Không đạt yêu cầu
+                        <input type="checkbox" disabled name="necessity_qualified" value="0" {{isset($comment_evaluation['necessity']) && !$comment_evaluation['necessity']['qualified']?"checked":""}} {{(!isset($comment_evaluation['necessity']))?"checked":""}}>Không đạt yêu cầu
                       </label>
                     </div>
                 </div>
                 <div class="col-md-12 block">
-                    <p>1.2   Tính liên ngành, liên vùng và tầm quan trọng của vấn đề khoa học đặt ra trong đề xuất đặt hàng</p>
+                    <label>1.2   Tính liên ngành, liên vùng và tầm quan trọng của vấn đề khoa học đặt ra trong đề xuất đặt hàng</label>
                     <div class="col-md-12 indent-15 form-group">
                       <p>Nhận xét: <span class='error'>(*)</span></p>
-                      <textarea name="important_note" id="important_note" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($comment_evaluation['important'])?$comment_evaluation['important']['note']:""}}</textarea>
+                      <p>{{isset($comment_evaluation['important'])?$comment_evaluation['important']['note']:""}}</p>
                     </div>
 
                     <div class="col-md-12 indent-15 form-group">
                       <span>Đánh giá: <span class='error'>(*)</span></span>
                       <label class="radio-inline">
-                        <input type="radio" name="important_qualified" value="1" {{isset($comment_evaluation['important']) && $comment_evaluation['important']['qualified']?"checked":""}}>Đạt yêu cầu
+                        <input type="checkbox" disabled name="important_qualified" value="1" {{isset($comment_evaluation['important']) && $comment_evaluation['important']['qualified']?"checked":""}}>Đạt yêu cầu
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="important_qualified" value="0" {{isset($comment_evaluation['important']) && !$comment_evaluation['important']['qualified']?"checked":""}} {{(!isset($comment_evaluation['important']))?"checked":""}}>Không đạt yêu cầu
+                        <input type="checkbox" disabled name="important_qualified" value="0" {{isset($comment_evaluation['important']) && !$comment_evaluation['important']['qualified']?"checked":""}} {{(!isset($comment_evaluation['important']))?"checked":""}}>Không đạt yêu cầu
                       </label>
                     </div>
                 </div>
                 <div class="col-md-12 block">
-                    <p>1.3   Khả năng không trùng lắp của đề tài, dự án với các nhiệm vụ khoa học và công nghệ đã và đang thực hiện</p>
+                    <label>1.3   Khả năng không trùng lắp của đề tài, dự án với các nhiệm vụ khoa học và công nghệ đã và đang thực hiện</label>
                     <div class="col-md-12 indent-15 form-group">
                       <p>Nhận xét: <span class='error'>(*)</span></p>
-                      <textarea name="unique_note" id="unique_note" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($comment_evaluation['unique'])?$comment_evaluation['unique']['note']:""}}</textarea>
+                      <p>{{isset($comment_evaluation['unique'])?$comment_evaluation['unique']['note']:""}}</p>
                     </div>
 
                     <div class="col-md-12 indent-15 form-group">
                       <span>Đánh giá: <span class='error'>(*)</span></span>
                       <label class="radio-inline">
-                        <input type="radio" name="unique_qualified" value="1" {{isset($comment_evaluation['unique']) && $comment_evaluation['unique']['qualified']?"checked":""}}>Đạt yêu cầu
+                        <input type="checkbox" disabled name="unique_qualified" value="1" {{isset($comment_evaluation['unique']) && $comment_evaluation['unique']['qualified']?"checked":""}}>Đạt yêu cầu
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="unique_qualified" value="0" {{isset($comment_evaluation['unique']) && !$comment_evaluation['unique']['qualified']?"checked":""}} {{(!isset($comment_evaluation['unique']))?"checked":""}}>Không đạt yêu cầu
+                        <input type="checkbox" disabled name="unique_qualified" value="0" {{isset($comment_evaluation['unique']) && !$comment_evaluation['unique']['qualified']?"checked":""}} {{(!isset($comment_evaluation['unique']))?"checked":""}}>Không đạt yêu cầu
                       </label>
                     </div>
                 </div>
                 <div class="col-md-12 block">
-                    <p>1.4   Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề tài, dự án</p>
+                    <label>1.4   Nhu cầu cần thiết phải huy động nguồn lực quốc gia cho việc thực hiện đề tài, dự án</label>
                     <div class="col-md-12 indent-15 form-group">
                       <p>Nhận xét: <span class='error'>(*)</span></p>
-                      <textarea name="natinal_resources_note" id="natinal_resources_note" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($comment_evaluation['natinal_resources'])?$comment_evaluation['natinal_resources']['note']:""}}</textarea>
+                      <p>{{isset($comment_evaluation['natinal_resources'])?$comment_evaluation['natinal_resources']['note']:""}}</p>
                     </div>
 
                     <div class="col-md-12 indent-15 form-group">
                       <span>Đánh giá: <span class='error'>(*)</span></span>
                       <label class="radio-inline">
-                        <input type="radio" name="natinal_resources_qualified" value="1" {{isset($comment_evaluation['natinal_resources']) && $comment_evaluation['natinal_resources']['qualified']?"checked":""}}>Đạt yêu cầu
+                        <input type="checkbox" disabled name="natinal_resources_qualified" value="1" {{isset($comment_evaluation['natinal_resources']) && $comment_evaluation['natinal_resources']['qualified']?"checked":""}}>Đạt yêu cầu
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="natinal_resources_qualified" value="0" {{isset($comment_evaluation['natinal_resources']) && !$comment_evaluation['natinal_resources']['qualified']?"checked":""}} {{(!isset($comment_evaluation['natinal_resources']))?"checked":""}}>Không đạt yêu cầu
+                        <input type="checkbox" disabled name="natinal_resources_qualified" value="0" {{isset($comment_evaluation['natinal_resources']) && !$comment_evaluation['natinal_resources']['qualified']?"checked":""}} {{(!isset($comment_evaluation['natinal_resources']))?"checked":""}}>Không đạt yêu cầu
                       </label>
                     </div>
                 </div>
                 <div class="col-md-12 block">
-                    <p>1.5   Khả năng huy động được nguồn kinh phí ngoài ngân sách để thực hiện (chỉ áp dụng đối với dự án)</p>
+                    <label>1.5   Khả năng huy động được nguồn kinh phí ngoài ngân sách để thực hiện (chỉ áp dụng đối với dự án)</label>
                     <div class="col-md-12 indent-15 form-group">
                       <p>Nhận xét: <span class='error'>(*)</span></p>
-                      <textarea name="fund_note" id="fund_note" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{isset($comment_evaluation['fund'])?$comment_evaluation['fund']['note']:""}}</textarea>
+                      <p>{{isset($comment_evaluation['fund'])?$comment_evaluation['fund']['note']:""}}</p>
                     </div>
 
                     <div class="col-md-12 indent-15 form-group">
                       <span>Đánh giá: <span class='error'>(*)</span></span>
                       <label class="radio-inline">
-                        <input type="radio" name="fund_qualified" value="1" {{isset($comment_evaluation['fund']) && $comment_evaluation['fund']['qualified']?"checked":""}}>Đạt yêu cầu
+                        <input type="checkbox" disabled name="fund_qualified" value="1" {{isset($comment_evaluation['fund']) && $comment_evaluation['fund']['qualified']?"checked":""}}>Đạt yêu cầu
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="fund_qualified" value="0" {{isset($comment_evaluation['fund']) && !$comment_evaluation['fund']['qualified']?"checked":""}} {{(!isset($comment_evaluation['fund']))?"checked":""}}>Không đạt yêu cầu
+                        <input type="checkbox" disabled name="fund_qualified" value="0" {{isset($comment_evaluation['fund']) && !$comment_evaluation['fund']['qualified']?"checked":""}} {{(!isset($comment_evaluation['fund']))?"checked":""}}>Không đạt yêu cầu
                       </label>
                     </div>
                 </div>
@@ -138,33 +139,33 @@
                 <div class="col-md-12 indent-15 form-group">
                     <div class="radio">
                       <label>
-                        <input type="radio" name="is_perform" value="0" {{(isset($expert_opinions['is_unperform']) && $expert_opinions['is_unperform'])?"checked":""}} {{(empty($expert_opinions))?"checked":""}}>
+                        <input type="checkbox" disabled name="is_perform" value="0" {{(isset($expert_opinions['is_unperform']) && $expert_opinions['is_unperform'])?"checked":""}} {{(empty($expert_opinions))?"checked":""}}>
                         Đề nghị không thực hiện
                       </label>
                     </div>
                     <div class="radio">
                       <label>
-                        <input type="radio" name="is_perform" value="1"  {{(isset($expert_opinions['is_perform']) && $expert_opinions['is_perform'])?"checked":""}}>
+                        <input type="checkbox" disabled name="is_perform" value="1"  {{(isset($expert_opinions['is_perform']) && $expert_opinions['is_perform'])?"checked":""}}>
                         Đề nghị thực hiện
                       </label>
                     </div>
                     <div class="radio">
                       <label>
-                        <input type="radio" name="is_perform" id="inputHide" value="2" {{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?"checked":""}}>
+                        <input type="checkbox" disabled name="is_perform" id="inputHide" value="2" {{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?"checked":""}}>
                         Đề nghị thực hiện với các điều chỉnh nêu dưới đây: 
                       </label>
                     </div>
                     <div class="form-group other-radio  {{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?"":"hide"}}">
-                      <p>2.1 Dự kiến tên đề tài/dự án:</span></p>
-                      <textarea name="perform_name" id="perform_name" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_name']:""}}</textarea>
+                      <label>2.1 Dự kiến tên đề tài/dự án:</span></label>
+                      <p>{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_name']:""}}</p>
                     </div>
                     <div class="form-group other-radio  {{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?"":"hide"}}">
-                      <p>2.2 Định hướng mục tiêu:</span></p>
-                      <textarea name="perform_target" id="perform_target" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_target']:""}}</textarea>
+                      <label>2.2 Định hướng mục tiêu:</span></label>
+                      <p>{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_target']:""}}</p>
                     </div>
                     <div class="form-group other-radio  {{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?"":"hide"}}">
-                      <p>2.3 Yêu cầu đối với kết quả:</span></p>
-                      <textarea name="perform_result" id="perform_result" class="form-control" rows="6" placeholder="Vui lòng nhập nhận xét">{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_result']:""}}</textarea>
+                      <label>2.3 Yêu cầu đối với kết quả:</span></label>
+                      <p>{{(isset($expert_opinions['is_perform_with_cond']) && !empty($expert_opinions['is_perform_with_cond']))?$expert_opinions['is_perform_with_cond']['perform_result']:""}}</p>
                     </div>
                   </div>
               </div>
@@ -198,8 +199,7 @@
             <hr>
           <div class="col-md-12" style="text-align: right;">
 
-            <button class="btn btn-primary save-evaluation" id="save-evaluation-science-technology-btn" data-is_filled='0'><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu</button>
-            <button class="btn btn-success save-evaluation" id="evaluation-science-technology-btn" data-is_filled='1'><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Gửi</button>
+            <a href="{{ route('admin.mission-topics.judged-print', $key) }}" class="btn btn-success" target="_blank"><i class='fa fa-print'></i> &nbsp; In phiếu</a>
           </div>
       </div>
 

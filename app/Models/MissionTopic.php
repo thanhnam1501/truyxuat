@@ -24,7 +24,7 @@ class MissionTopic extends Model
 
     protected $fillable = [
         'status','checked_status','process_status','time_submit_ele_copy','time_submit_hard_copy','report_time_submit_ele','report_time_submit_hard','profile_id','key','code','is_filled','round_collection_id','type','is_submit_ele_copy', 'is_submit_hard_copy', 'order_submit_hard_copy',
-        'is_assign', 'is_valid', 'is_invalid', 'is_judged', 'is_denied', 'is_invalid_reason', 'is_denied_reason', 'is_performed', 'is_unperformed','approve_type','is_unperformed_reason','list_categories','council_id'
+        'is_assign', 'is_valid', 'is_invalid', 'is_judged', 'is_denied', 'is_invalid_reason', 'is_denied_reason', 'is_performed', 'is_unperformed','approve_type','is_unperformed_reason','list_categories','council_id', 'attachment_file_judged'
     ];
 
     public function values()

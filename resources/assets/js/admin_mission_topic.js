@@ -30,6 +30,30 @@ $(document).ready(function() {
       ]
   });
 
+  $('#approval-topic-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-topics/get-submit-hard-list',
+        type: 'POST',
+      },
+      ordering: false,
+      // searching: false,
+      columns: [
+        {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+        {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+        {data: 'mission_name', name: 'values.mission_name'},
+        // {data: 'organization', name: 'organization.name'},
+        // {data: 'profile', name: 'profile'},
+        {data: 'request_time', name: 'request_time', 'class':'text-center'},
+        {data: 'target', name: 'target', 'class':'text-center'},
+        {data: 'request_result', name: 'request_result', 'class':'text-center'},
+        {data: 'expected_fund', name: 'expected_fund', 'class':'text-center'},
+        {data: 'status', name: 'status', 'class':'text-center'},
+      ]
+  });
+
+
     $('#evaluation-topic-tbl').DataTable({
       processing: true,
       serverSide: true,
@@ -49,6 +73,31 @@ $(document).ready(function() {
           {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
           
       ]
+  });
+
+
+    $('#list-invalid-doc-tbl').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: app_url + 'admin/mission-topics/get-list-invalid-topic',
+        type: 'post',
+      },
+      ordering: false,
+      searching: false,
+      columns: [
+          {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'text-center','searchable':false},
+          {data: 'action', name: 'action', 'searchable':false, 'class':'text-center'},
+          {data: 'mission_name', name: 'values.mission_name'},
+          // {data: 'organization', name: 'organization.name'},
+          // {data: 'profile', name: 'profile'},
+          {data: 'request_time', name: 'request_time', 'class':'text-center'},
+          {data: 'target', name: 'target', 'class':'text-center'},
+          {data: 'request_result', name: 'request_result', 'class':'text-center'},
+          {data: 'expected_fund', name: 'expected_fund', 'class':'text-center', width: '50px'},
+          {data: 'status', name: 'status', 'class':'text-center', width: '90px'},
+            
+        ]
   });
 
   $('#topic-tbl').on('click','.submit-hard-copy-btn', function() {
@@ -89,7 +138,9 @@ $(document).ready(function() {
     });
   });
 
-  $('#topic-tbl').on('click','.approve-btn', function() {
+
+  // 
+  $('body').on('click','.approve-btn', function() {
       $('#id').val($(this).data('id'));
       var mission_name = $(this).data('name');
       $('#mission_name').val(mission_name);
@@ -143,7 +194,7 @@ $(document).ready(function() {
 
                 $('#approve-frm').trigger('reset');
 
-                $('#topic-tbl').DataTable().ajax.reload();
+                $('#list-invalid-doc-tbl').DataTable().ajax.reload();
 
               } else {
 
@@ -179,7 +230,7 @@ $(document).ready(function() {
     });
 
 // submit valid
-  $('#topic-tbl').on('click','.submit-valid', function(event) {
+  $(document).on('click','.submit-valid', function(event) {
     event.preventDefault();
     /* Act on the event */
     $('#modal-valid').modal('show');
@@ -225,7 +276,7 @@ $(document).ready(function() {
 
             toastr.success(res.message);
             $('#modal-valid').modal('hide');
-            $('#topic-tbl').DataTable().ajax.reload();
+            $('#approval-topic-tbl').DataTable().ajax.reload();
 
           } else {
 
@@ -252,7 +303,7 @@ $(document).ready(function() {
 
   // submit judged
 
-    $('#topic-tbl').on('click','.submit-judged', function(event) {
+    $('body').on('click','.submit-judged', function(event) {
       event.preventDefault();
       /* Act on the event */
       $('#modal-judged').modal('show');
@@ -272,34 +323,44 @@ $(document).ready(function() {
     $('#modal-judged').on('click', '.btn-success', function(event) {
       event.preventDefault();
       /* Act on the event */
+      var fd = new FormData();
+      fd.append('attachment_file_judged', $('#attachment_file_judged')[0].files[0]);
+
+      fd.append('status', $('#status_judged').val());
+      fd.append('reason', $('#denied_reason').val());
+      fd.append('checkbox', $('#checkbox-send-email-judged').is(':checked'));
+      fd.append('id', $('#modal-judged .btn-success').attr('data_id'));
+      fd.append('mission_name', $('#modal-judged .btn-success').attr('mission_name'));
+
       var status = $('#status_judged').val();
-      var reason = $('#denied_reason').val();
-      var checkbox = $('#checkbox-send-email-judged').is(':checked');
-      var data_id = $('#modal-judged .btn-success').attr('data_id');
-      var mission_name = $('#modal-judged .btn-success').attr('mission_name');
+      // var reason = $('#denied_reason').val();
+      // var checkbox = $('#checkbox-send-email-judged').is(':checked');
+      // var data_id = $('#modal-judged .btn-success').attr('data_id');
+      // var mission_name = $('#modal-judged .btn-success').attr('mission_name');
 
       if (status == -1) {
         toastr.error('Vui lòng chọn trạng thái xét duyệt ! ');
       }
       else if (status == 'denied' && reason == "") {
         toastr.error('Vui lòng nhập lý do từ chối hồ sơ ! ');
+      }
+      else if ($('#attachment_file_judged')[0].files[0].size > 5000000) {
+        toastr.error('Dung lượng file không được phép lớn hơn 5 Mb ! ');
       } else {
         $.ajax({
           url: app_url + 'admin/mission-topics/submit-judged',
           type: 'POST',
-          data: {
-            status: status,
-            reason: reason,
-            checkbox: checkbox,
-            id: data_id,
-            mission_name: mission_name
-          }, success: function(res){
+          data: fd, 
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(res){
 
             if (!res.error) {
 
               toastr.success(res.message);
               $('#modal-judged').modal('hide');
-              $('#topic-tbl').DataTable().ajax.reload();
+              $('#list-invalid-doc-tbl').DataTable().ajax.reload();
 
             } else {
 
@@ -324,7 +385,7 @@ $(document).ready(function() {
       }
     });
 
-  $('#topic-tbl').on('click',' .assign-doc', function(){
+  $('body').on('click',' .assign-doc', function(){
     $('#modal-assign').modal('show');
 
     var data_id = $(this).attr('data-id');
@@ -432,7 +493,7 @@ $(document).ready(function() {
 
   })
 
-    $('#topic-tbl').on('click', '.add-council-btn', function(e) {
+    $('body').on('click', '.add-council-btn', function(e) {
     e.preventDefault();
     
    $('#addCouncilModal').modal('show'); 
@@ -514,7 +575,7 @@ $(document).ready(function() {
     
   });
 
-  $('#topic-tbl').on('click', '.btn-give-back-hard-copy', function(event){
+  $('body').on('click', '.btn-give-back-hard-copy', function(event){
     event.preventDefault();
 
     swal({
