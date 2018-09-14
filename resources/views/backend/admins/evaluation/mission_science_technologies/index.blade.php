@@ -21,7 +21,7 @@
 
 @section('content')
 
-  <div class="panel panel-default">
+  {{-- <div class="panel panel-default">
           <form role="form" enctype="multipart/form-data" id="search-mission-frm">
           
           <div class="panel-heading">
@@ -152,7 +152,7 @@
             </div>
 
           </form>
-          </div>
+          </div> --}}
 
   <div class="panel panel-default">
     <div class="panel-heading">

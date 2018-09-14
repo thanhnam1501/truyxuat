@@ -70,7 +70,7 @@ class AdminMissionScienceTechnologyController extends Controller
         if (!Entrust::can('mission-science-technology-menu')) {
             abort(404);
         }
-        $round_collection = RoundCollection::where('status', 1)->get();
+        $round_collection = RoundCollection::get();
         $group_councils = GroupCouncil::where('status', 1)->get();
 
         $date = [

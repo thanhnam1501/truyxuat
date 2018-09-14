@@ -21,7 +21,7 @@ class CouncilController extends Controller
 	}
 	public function index()
 	{
-		$round_collections = RoundCollection::where('status', 1)->get();
+		$round_collections = RoundCollection::get();
 		$groupCouncils = GroupCouncil::where('status', 1)->get();
 		$position_councils = PositionCouncil::where('status', 1)->get();
 		$users = User::where('type',9)->get();
