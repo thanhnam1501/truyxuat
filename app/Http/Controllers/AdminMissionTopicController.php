@@ -41,7 +41,51 @@ class AdminMissionTopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function print($key)
+  {
+
+    $topic = MissionTopic::where('key',$key)->first();
+
+    if (!empty($topic)) {
+
+      $columns = MissionTopicAttribute::all();
+
+      $data = array();
+      foreach ($columns as $key => $column) {
+        foreach ($topic->values as $value) {
+          if ($value->mission_topic_attribute_id == $column->id) {
+            if ($column->column == "expected_fund") {
+              $value->value = number_format(Crypt::decrypt($value->value)) . " (VNĐ)";
+            }
+            $data[$key]["order"]  = $column->order;
+            $data[$key]["value"]  = $value->value;
+            $data[$key]["label"]  = $column->label;
+            $data[$key]["column"] = $column->column;
+          }
+        }
+      }
+
+      $view = "print";
       
+
+      $date = array();
+
+      $date['d'] = date('d',time());
+      $date['m'] = date('m',time());
+      $date['y'] = date('Y',time());
+
+      return view('backend.mission_topic.'.$view,[
+        'data'  => $data,
+        'topic'  => $topic,
+        'date'  => $date,
+      ]);
+
+    } else {
+
+      abort(404);
+    }
+  }
+
     public function getNameMissions() {
       $missionsValue = MissionTopicAttributeValue::where('mission_topic_attribute_id', 1)->where('value', '<>', null)
       ->join('mission_topic_values', 'mission_topic_values.mission_topic_attribute_value_id', '=', 'mission_topic_attribute_values.id')

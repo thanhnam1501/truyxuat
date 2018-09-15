@@ -147,7 +147,7 @@
        <tbody>
          <tr>
            <td width="459" valign="top">
-             <p align="right">
+             <p align="right" style="margin-right: 45px">
                <em> </em>
                <em>..., ngày {{(!empty($date))?$date['d']:"....."}} tháng {{(!empty($date))?$date['m']:"....."}} năm {{(!empty($date))?$date['y']:"20..."}}</em>
                <strong></strong>
@@ -155,7 +155,7 @@
              <p align="right">
                <strong></strong>
              </p>
-             <p align="right">
+             <p align="right" style="margin-right: 25px">
                <strong>TỔ CHỨC, CÁ NHÂN ĐỀ XUẤT </strong>
              </p>
              <p align="right">

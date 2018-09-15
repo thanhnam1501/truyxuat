@@ -67,6 +67,7 @@
                 <br><br><br><br><br><br><br><br><br><br><br><br>
               </div>
             </div>
+            <a href="{{ route('adminMissionScienceTechnology.print', $mission->key) }}"class="btn btn-success" style="float: right;" target="_blank"><i class='fa fa-print'></i> In phiếu đề xuất</a>
         </div>
 
         </div>
