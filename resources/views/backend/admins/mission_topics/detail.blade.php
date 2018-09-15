@@ -55,10 +55,11 @@
                       <h4><i>(Họ, tên và chữ ký - đóng dấu đối với tổ chức)</i></h4>
                     </center>
                 </div>
-
+        
                 <br><br><br><br><br><br><br><br><br><br><br><br>
               </div>
             </div>
+            <a href="{{ route('admin.mission-topics.print', $topic->key) }}"class="btn btn-success" style="float: right;" target="_blank"><i class='fa fa-print'></i> In phiếu đề xuất</a>
         </div>
       </div>
     </div>

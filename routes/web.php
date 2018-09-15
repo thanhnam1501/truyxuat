@@ -170,6 +170,8 @@ Route::middleware('revalidate')->group(function () {
 
                 Route::get('/get-name-missions', 'AdminMissionTopicController@getNameMissions')->name('admin.mission-topics.getNameMissions');
 
+                Route::get('print/{key}', 'AdminMissionTopicController@print')->name('admin.mission-topics.print');
+
             });
 
 
@@ -296,6 +298,8 @@ Route::middleware('revalidate')->group(function () {
             Route::post('update', 'AdminMissionScienceTechnologyController@update')->name('adminMissionScienceTechnology.update');
 
             Route::get('/get-name-missions', 'AdminMissionScienceTechnologyController@getNameMissions')->name('adminMissionScienceTechnology.getNameMissions');
+
+            Route::get('print/{key}', 'AdminMissionScienceTechnologyController@print')->name('adminMissionScienceTechnology.print');
         });
         //* End
 

@@ -51,6 +51,34 @@ class AdminMissionScienceTechnologyController extends Controller
      * @return \Illuminate\Http\Response
      */
     
+    public function print($key){
+      $mission = MissionScienceTechnology::where('key', $key)->first();
+
+      $columns = MissionScienceTechnologyAttribute::all();
+
+      $data = array();
+
+      foreach ($columns as $key => $column) {
+        foreach ($mission->values as $value) {
+          if ($value->mission_science_technology_attribute_id == $column->id) {
+            if ($column->column == 'expected_fund') {
+              $value->value = (!empty($value->value))? number_format(Crypt::decrypt($value->value))." VNĐ" :"0 VNĐ";
+            }
+            $data[$column->column]  = $value->value;
+          }
+        }
+      }
+
+      $date = array();
+
+      $date['d'] = date('d',strtotime(now()));
+      $date['m'] = date('m',strtotime(now()));
+      $date['y'] = date('Y',strtotime(now()));
+
+      return view('backend.mission_science_technology.print', compact('data', 'key','date'));
+    }
+
+
     public function getNameMissions() {
       $missionsValue = MissionScienceTechnologyAttributeValue::where('mission_science_technology_attribute_id', 1)
       ->where('value', '<>', null)
@@ -1372,7 +1400,7 @@ class AdminMissionScienceTechnologyController extends Controller
         $is_submit_ele_copy = $mission->is_submit_ele_copy;
         $is_submit_hard_copy = $mission->is_submit_hard_copy;
 
-        return view('backend.admins.mission_science_technologies.detail', compact('is_submit_hard_copy', 'is_submit_ele_copy', 'data', 'key', 'st_key','date', 'is_filled'));
+        return view('backend.admins.mission_science_technologies.detail', compact('is_submit_hard_copy', 'is_submit_ele_copy', 'data', 'key', 'st_key','date', 'is_filled', 'mission'));
     }
 
     public function giveBackHardCopy(Request $request){
