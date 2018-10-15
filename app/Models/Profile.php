@@ -11,14 +11,15 @@ class Profile extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
-    protected $guard = 'profile';
+    protected $table = "profiles";
+   // protected $guard = 'profile';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar','type','status', 'verification_code', 'organization_id','representative','mobile'
+        'name', 'email', 'password', 'avatar','type','status', 'verification_code', 'company_id','representative','mobile'
     ];
 
     /**

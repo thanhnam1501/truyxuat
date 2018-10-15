@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
+use App\Models\Profile;
 
 class LoginController extends Controller
 {
@@ -30,7 +31,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/missions';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -46,9 +47,9 @@ class LoginController extends Controller
     public function showLoginForm()
     {   
         if (Auth::guard('profile')->check()) {
-            return redirect('/missions');
+            return redirect('/');
         }
-        return view('backend.auth_profile.login');
+        return view('user.auth.login');
     }
 
     protected function credentials(Request $request)
@@ -79,4 +80,5 @@ class LoginController extends Controller
         
         return $this->loggedOut($request) ?: redirect('/login');
     }
+
 }

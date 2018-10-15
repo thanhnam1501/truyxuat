@@ -8,365 +8,248 @@ use DB;
 use Datatables;
 use Entrust;
 use App\Models\Email;
+use App\Models\Company;
 
 class AdminProfileController extends Controller
 {
-  public function __construct(){
+ public function __construct(){
 
-      $this->middleware('revalidate');
-
-      $this->middleware('auth');
-
+    $this->middleware('auth');
   }
-
-  public function index()
-  {
-    if (!Entrust::can('account-profile-menu')) {
-        abort(404);
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    { 
+      return view('admin.user.index');
     }
-    return view('backend.accounts.list');
-  }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-      //
-  }
+    public function getFormCreate(){
+      $companies = Company::get();
+      return view('admin.user.AddUser', ['companies' => $companies]);
+    }
 
-  /**
-   * Get the list of scientist accounts.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function list()
-  {
-      $profiles = Profile::orderBy('id','desc')->with(['organization']);
+    /**
+     * Get the list of scientist accounts.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getlist()
+    {
+      $profiles = Profile::orderBy('id', 'desc');
 
-      return Datatables::eloquent($profiles)
-              ->addIndexColumn()
-              ->editColumn('status', function($profile) {
+      return Datatables::of($profiles)
+      ->addIndexColumn()           
+      ->addColumn('action', function($profiles) {
+        $string = "";
 
-                if ($profile->status == 0 && Entrust::can('account-unlock')) {
+        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-                  return '<label data-tooltip="tooltip" title="Mở khóa tài khoản" class="switch switch-small"><input type="checkbox" data-profile_id="'.$profile->id.'" class="lock-account"/><span></span></label>';
+        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
-                } else if ($profile->status == 1 && Entrust::can('account-lock')) {
+        return $string;
+      })
+      ->make(true);
+    }
 
-                  return '<label data-tooltip="tooltip" title="Khóa tài khoản" class="switch switch-small"><input type="checkbox" data-profile_id="'.$profile->id.'" checked class="lock-account"/><span></span></label>';
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+      $data = $request->only('name', 'email', 'mobile');
 
-                }
-              })
-              ->editColumn('organization', function($profile) {
-                  if ($profile->organization()->exists()) {
-                      return $profile->organization->name;
-                  } else {
-                      return "Chưa cập nhập";
-                  }
-              })
-              ->editColumn('email', function($profile){
-                $string = '<a href="javascript:;" onclick="sendEmail('.$profile->id.')">'.$profile->email.'</a>';
-                return $string;
-              })
-              ->editColumn('mobile', function($profile){
-                $string = '<a id="call-mobile" href="tel:'.$profile->mobile.'">'.$profile->mobile.'</a>';
-                return $string;
-              })
-              ->addColumn('action', function($profile) {
-
-                  $string = "";
-
-                  // if (Entrust::can('account-detail')) {
-                  //
-                  //   $string .= '<a onclick="detail('.$profile->id.')" data-tooltip="tooltip" title="Xem chi tiết" href="javascript:;" class="btn btn-info"><i class="fa fa-eye"></i></a>';
-                  // }
-
-                  if (Entrust::can('user-edit')) {
-
-                    $string .= '<a onclick="editModal('.$profile->id.')" data-tooltip="tooltip" title="Chỉnh sửa" href="javascript:;" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>';
-                  }
-
-                  if (Entrust::can('user-delete')) {
-
-                    $string .= '<a data-id="'.$profile->id.'" data-tooltip="tooltip" title="Xóa tài khoản" href="javascript:;" class="btn btn-danger delete-btn btn-xs"><i class="fa fa-trash-o"></i></a>';
-                  }
-
-                  return $string;
-              })
-              ->make(true);
-  }
-
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
-  {
-      $data = $request->only('name','email');
-
-      if (!$this->checkEmail($data['email'])) {
-
-        return response()->json([
-            'error' => true,
-            'message' => 'Email đã tồn tại, vui lòng sử dụng email khác'
-        ]);
-      }
+      $validatedData = $request->validate([
+        'name' => 'required',
+        'email' => 'required|string|unique:profiles,email',
+        'mobile' => 'required',     
+      ]);
 
       DB::beginTransaction();
       try {
-
         $data['password'] = bcrypt(123456);
 
-        $profile = Profile::create($data);
+        $user = Profile::withTrashed()->where('email', $data['email'])->first();
+
+        if (!empty($user)) {
+          $user->restore();
+
+          $user->update([
+            'name'    => $data['name'],
+            'password'    => $data['password'],
+            'mobile'    => $data['mobile'],
+            'status'  => 1,
+          ]);
+        } else {
+          $user = Profile::create($data);
+        }
 
         DB::commit();
+        \Session::flash('flash_message','Thêm quản trị viên thành công !');
+        return view('admin.user.index');
+      } catch (Exception $e) {
+        DB::rollback();
 
-          return response()->json([
-              'error' => false,
-              'message' => 'Tạo mới thành công tài khoản'
+        Log::info($e->getMessage());
+
+        return response()->json([
+          'error' => true,
+          'message' => $e->getMessage()
+        ]);
+      }
+    }
+
+    public function edit(Request $request)
+    {
+      $id = $request->id;
+      $data = Profile::find($id);
+      $companies = Company::get();
+      return view('admin.user.EditUser', [
+        'data' => $data,
+        'companies' => $companies,
+      ]);
+
+    }
+
+    public function update(Request $request, $id)
+    {
+      $data = $request->all;
+
+      $profile = Profile::where('email', $data['email'])->first();
+
+      if (!empty($profile) && $profile->id == $id) {
+        DB::beginTransaction();
+        try {
+          $user->update([
+            'name'  => $data['name'],
+            'type'  => $data['type'],
+            'mobile'  => $data['mobile'],
           ]);
 
-      } catch (Exception $e) {
+          DB::commit();
 
+          return response()->json([
+            'error' => false,
+            'message' => 'Cập nhập thành công tài khoản '.$profile->email,
+          ]);
+        } catch (Exception $e) {
           DB::rollback();
 
           Log::info($e->getMessage());
 
           return response()->json([
-              'error' => true,
-              'message' => $e->getMessage()
+            'error' => true,
+            'message' => $e->getMessage()
           ]);
+        }
+      } else {
+        return response()->json([
+          'error'     =>  true,
+          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+        ]);
       }
-  }
-
-  /**
-   * Display the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function show($id)
-  {
-
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function edit($id)
-  {
-      $profile = Profile::find($id);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+      $profile = Profile::find($request->id);
 
       if (!empty($profile)) {
-
-        return response()->json([
-            'error'     =>  false,
-            'profile' =>  $profile,
-        ]);
-      } else {
-
-        return response()->json([
-            'error'     =>  true,
-            'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-        ]);
-      }
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, $id)
-  {
-      $data = $request->only('email','name');
-
-      $profile = Profile::where('email',$data['email'])->first();
-
-      if (!empty($profile) && $profile->id == $id) {
-
-          DB::beginTransaction();
-          try {
-
-            $profile->update([
-              'name'  => $data['name'],
-            ]);
-
-            DB::commit();
-
-              return response()->json([
-                  'error' => false,
-                  'message' => 'Cập nhập thành công tài khoản '.$profile->email,
-              ]);
-
-          } catch (Exception $e) {
-
-              DB::rollback();
-
-              Log::info($e->getMessage());
-
-              return response()->json([
-                  'error' => true,
-                  'message' => $e->getMessage()
-              ]);
-          }
-      } else {
-
-        return response()->json([
-            'error'     =>  true,
-            'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-        ]);
-      }
-  }
-
-  /**
-   * Check email if exists.
-   *
-   * @param  string  $email
-   * @return boolean
-   */
-  public function checkEmail($email)
-  {
-      $profile = Profile::where('email',$email)->count();
-
-      if ($profile == 0) {
-
-          return response()->json([
-              'exists'  => false,
-          ]);
-      } else {
-
-          return response()->json([
-              'exists'  => true,
-          ]);
-      }
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy($id)
-  {
-
-      $profile = Profile::find($id);
-
-      if (!empty($profile)) {
-
         DB::beginTransaction();
         try {
-
           $profile->delete();
 
           DB::commit();
 
-            return response()->json([
-                'error' => false,
-                'message' => 'Tài khoản '.$profile->email.' đã bị xóa',
-            ]);
-
+          return response()->json([
+            'error' => false,
+            'message' => 'Tài khoản '.$profile->email.' đã bị xóa',
+          ]);
         } catch (Exception $e) {
+          DB::rollback();
 
-            DB::rollback();
+          Log::info($e->getMessage());
 
-            Log::info($e->getMessage());
-
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage()
-            ]);
+          return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
+          ]);
         }
       } else {
-
         return response()->json([
-            'error'     =>  true,
-            'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          'error'     =>  true,
+          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
         ]);
       }
-  }
+    }
 
-  public function lockAccount(Request $request)
-  {
-      $profile = Profile::find($request->profile_id);
+    public function postUpload(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+        'file' => 'max:1024',
+      ]);
 
-      if (!empty($profile)) {
+      if ($validator->fails()) {
 
-          DB::beginTransaction();
-          try {
-
-              $profile->update([
-                'status'  => $request->status,
-              ]);
-
-              if ($request->status == 1) {
-
-                  $msg = "Tài khoản $profile->email đã được kích hoạt";
-              } else {
-
-                  $msg = "Tài khoản $profile->email đã bị khóa";
-              }
-
-              DB::commit();
-
-              return response()->json([
-                  'error' => false,
-                  'message' => $msg,
-              ]);
-
-          } catch (Exception $e) {
-
-              DB::rollback();
-
-              Log::info($e->getMessage());
-
-              return response()->json([
-                  'error' => true,
-                  'message' => $e->getMessage()
-              ]);
-          }
-      } else {
         return response()->json([
-            'error'     =>  true,
-            'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          'status' => false,
+          'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
+        ], 200);
+      }else{
+
+        $avatar = $request->file('file')->store('img/avatar');
+        $id =  Auth::guard('profile')->user()->id;
+        $profile = Profile::where('id',$id)->update(['avatar' => $avatar]);
+        return response()->json([
+          'status' => true,
+          'data' => Auth::guard('profile')->user()->avatar,
+          'message' => 'Thay ảnh đại diện thành công !',
         ]);
       }
-  }
 
-  public function sendEmail(Request $request)
-  {
-    $to = $request->email;
+    }
 
-    $subject = $request->subject;
+    public function listMissions() {
+      $round_collections = RoundCollection::where('status', 1)->orderBy('id', 'DESC')->get();
 
-    $parameter['name'] = $request->name;
+      return view('backend.profile.list-missions', ['round_collections'   =>  $round_collections]);
+    }
 
-    $parameter['content'] = $request->content;
+    public  function showLinkChangePassword(){
+      return view('backend.profile.change-password');
+    }
 
-    $view = null;
-
-    $type = 0;
-
-    $status = null;
-
-    $numb = null;
-
-    Email::createEmailLog($to, $subject, $view, $parameter, $type, $status, $numb);
-
-     return response()->json([
-            'error'     =>  false,
-            'message' =>  'Đã gửi mail thành công !',
-        ]);
-  }
+    public function ChangePassword(Request $request){
+      $oldpassword = $request->oldpassword;
+      $password = $request->password;
+      $passwordconf = $request->password_confirmation;
+      if(Hash::check($request->oldpassword, Auth::guard('profile')->user()->password) == true && $password == $passwordconf){
+        $password = bcrypt($password);
+        Profile::find(Auth::guard('profile')->user()->id)->update(['password' => $password]);
+        $message = 'Thay đổi mật khẩu thành công !';
+        return view('backend.profile.change-password', ['messageSuccess'   =>  $message]);
+      }else{
+        $message = 'Nhập chưa đúng, Xin mời nhập lại !';
+        return view('backend.profile.change-password', ['messageError'   =>  $message]);
+      }
+    }
 }

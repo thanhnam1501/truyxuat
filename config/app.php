@@ -166,6 +166,11 @@ return [
         App\Providers\UploadFileServiceProvider::class,
         App\Providers\AdminMissionServiceProvider::class,
         App\Providers\ExportExcelServiceProvider::class,
+        Unisharp\Ckeditor\ServiceProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        Kamaln7\Toastr\ToastrServiceProvider::class,
+        // LaravelQRCode\Providers\QRCodeServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
@@ -224,6 +229,10 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'ExportExcel'  =>  App\Helpers\ExportExcel::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Toastr' => Kamaln7\Toastr\Facades\Toastr::class,
+        // 'QRCode' => LaravelQRCode\Facades\QRCode::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
     ],
 
 ];

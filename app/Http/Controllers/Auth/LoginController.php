@@ -32,6 +32,11 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/admin';
 
+      protected function guard()
+    {
+        return Auth::guard('web');
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -44,7 +49,7 @@ class LoginController extends Controller
 
     public function showLoginForm() {
 
-        return view('backend.auth_admin.login');
+        return view('admin.auth.login');
     }
 
     protected function credentials(Request $request)
@@ -75,9 +80,6 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\Auth\StatefulGuard
      */
-    protected function guard()
-    {
-        return Auth::guard('web');
-    }
+  
 
 }

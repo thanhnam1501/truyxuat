@@ -16,16 +16,16 @@ use Validator;
 use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('revalidate');
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');
+    $this->middleware('revalidate');
+  }
 
-    public function home()
-    {
-        return view('backend.admins.index');
-    }
+  public function home()
+  {   
+    return view('admin.index');
+  }
 
     /**
      * Display a listing of the resource.
@@ -33,11 +33,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-
-      $positions = Option::where('code','USER-POS')->first()->values;
-
-      return view('backend.accounts.list_users', compact('positions'));
+    { 
+      return view('admin.index');
     }
 
     /**
@@ -45,50 +42,26 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function list()
+    public function getlist()
     {
-        $profiles = User::orderBy('id', 'desc');
+      $profiles = User::orderBy('id', 'desc');
 
-        return Datatables::of($profiles)
-                ->addIndexColumn()
-                ->editColumn('status', function($user) {
-                    if ($user->status == 0) {
-                        return '<label data-tooltip="tooltip" title="Mở khóa tài khoản" class="switch switch-small"><input type="checkbox" data-user_id="'.$user->id.'" class="lock-account"/><span></span></label>';
-                    } elseif ($user->status == 1) {
-                        return '<label data-tooltip="tooltip" title="Khóa tài khoản" class="switch switch-small"><input type="checkbox" data-user_id="'.$user->id.'" checked class="lock-account"/><span></span></label>';
-                    }
-                })
-                ->editColumn('type', function($user) {
+      return Datatables::of($profiles)
+      ->addIndexColumn()           
+      ->addColumn('action', function($profiles) {
+        $string = "";
 
-                    $type = Option::where('code','USER-POS')->first()->values()->where('value',$user->type)->first()->name;
+        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('user.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-                    return $type;
-                })
-                ->addColumn('action', function($user) {
-                    $string = "";
+        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteAdmin('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
-                    // if (Entrust::can('account-detail')) {
-                    //
-                    //   $string .= '<a onclick="detail('.$user->id.')" data-tooltip="tooltip" title="Xem chi tiết" href="javascript:;" class="btn btn-info"><i class="fa fa-eye"></i></a>';
-                    // }
+        return $string;
+      })
+      ->make(true);
+    }
 
-                    if (Entrust::can('user-roles')) {
-                        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('user.roles', $user->id).'" class="btn btn-info btn-xs"><i class="fa fa-shield"></i></a>';
-                    }
-
-
-                    if (Entrust::can('user-edit')) {
-
-                        $string .= '<a onclick="editModal('.$user->id.')" data-tooltip="tooltip" title="Chỉnh sửa" href="javascript:;" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></a>';
-                    }
-
-                    if (Entrust::can('user-delete')) {
-                        $string .= '<a data-id="'.$user->id.'" data-tooltip="tooltip" title="Xóa tài khoản" href="javascript:;" class="btn btn-danger delete-btn btn-xs"><i class="fa fa-trash-o"></i></a>';
-                    }
-
-                    return $string;
-                })
-                ->make(true);
+    public static function getFormCreate(){
+      return view('admin.AddAdmin');
     }
 
     /**
@@ -99,50 +72,46 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('name', 'email', 'type', 'mobile');
+      $data = $request->all();
 
-        if (!$this->checkEmail($data['email'])) {
-            return response()->json([
-              'error' => true,
-              'message' => 'Email đã tồn tại, vui lòng sử dụng email khác'
+      $validatedData = $request->validate([
+        'name' => 'required',
+        'email' => 'required|string|unique:users,email',
+        'mobile' => 'required',     
+      ]);
+
+      DB::beginTransaction();
+      try {
+        $data['password'] = bcrypt(123456);
+
+        $user = User::withTrashed()->where('email', $data['email'])->first();
+
+        if (!empty($user)) {
+          $user->restore();
+
+          $user->update([
+            'name'    => $data['name'],
+            'password'    => $data['password'],
+            'mobile'    => $data['mobile'],
+            'status'  => 1,
           ]);
+        } else {
+          $user = User::create($data);
         }
 
-        DB::beginTransaction();
-        try {
-            $data['password'] = bcrypt(123456);
+        DB::commit();
+        \Session::flash('flash_message','Thêm quản trị viên thành công !');
+        return view('admin.index');
+      } catch (Exception $e) {
+        DB::rollback();
 
-            $user = User::withTrashed()->where('email', $data['email'])->first();
+        Log::info($e->getMessage());
 
-            if (!empty($user)) {
-                $user->restore();
-
-                $user->update([
-                'name'    => $data['name'],
-                'password'    => $data['password'],
-                'mobile'    => $data['mobile'],
-                'status'  => 1,
-              ]);
-            } else {
-                $user = User::create($data);
-            }
-
-            DB::commit();
-
-            return response()->json([
-                'error' => false,
-                'message' => 'Tạo mới thành công tài khoản'
-            ]);
-        } catch (Exception $e) {
-            DB::rollback();
-
-            Log::info($e->getMessage());
-
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage()
-            ]);
-        }
+        return response()->json([
+          'error' => true,
+          'message' => $e->getMessage()
+        ]);
+      }
     }
 
     /**
@@ -161,21 +130,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $user = User::find($id);
+      $id = $request->id;
+      $data = User::find($id);
+      return view('admin.EditAdmin', [
+        'data' => $data,
+      ]);
 
-        if (!empty($user)) {
-            return response()->json([
-              'error'     =>  false,
-              'user' =>  $user,
-          ]);
-        } else {
-            return response()->json([
-              'error'     =>  true,
-              'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-          ]);
-        }
     }
 
     /**
@@ -187,41 +149,41 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->only('email', 'name', 'type', 'mobile');
+      $data = $request->only('email', 'name', 'type', 'mobile');
 
-        $user = User::where('email', $data['email'])->first();
+      $user = User::where('email', $data['email'])->first();
 
-        if (!empty($user) && $user->id == $id) {
-            DB::beginTransaction();
-            try {
-                $user->update([
-                'name'  => $data['name'],
-                'type'  => $data['type'],
-                'mobile'  => $data['mobile'],
-              ]);
+      if (!empty($user) && $user->id == $id) {
+        DB::beginTransaction();
+        try {
+          $user->update([
+            'name'  => $data['name'],
+            'type'  => $data['type'],
+            'mobile'  => $data['mobile'],
+          ]);
 
-                DB::commit();
+          DB::commit();
 
-                return response()->json([
-                    'error' => false,
-                    'message' => 'Cập nhập thành công tài khoản '.$user->email,
-                ]);
-            } catch (Exception $e) {
-                DB::rollback();
+          return response()->json([
+            'error' => false,
+            'message' => 'Cập nhập thành công tài khoản '.$user->email,
+          ]);
+        } catch (Exception $e) {
+          DB::rollback();
 
-                Log::info($e->getMessage());
+          Log::info($e->getMessage());
 
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessage()
-                ]);
-            }
-        } else {
-            return response()->json([
-              'error'     =>  true,
-              'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
           ]);
         }
+      } else {
+        return response()->json([
+          'error'     =>  true,
+          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+        ]);
+      }
     }
 
     /**
@@ -232,17 +194,17 @@ class UserController extends Controller
      */
     public function checkEmail($email)
     {
-        $user = User::where('email', $email)->count();
+      $user = User::where('email', $email)->count();
 
-        if ($user == 0) {
-            return response()->json([
-                'exists'  => false,
-            ]);
-        } else {
-            return response()->json([
-                'exists'  => true,
-            ]);
-        }
+      if ($user == 0) {
+        return response()->json([
+          'exists'  => false,
+        ]);
+      } else {
+        return response()->json([
+          'exists'  => true,
+        ]);
+      }
     }
 
     /**
@@ -251,78 +213,78 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $user = User::find($id);
+      $user = User::find($request->id);
 
-        if (!empty($user)) {
-            DB::beginTransaction();
-            try {
-                $user->delete();
+      if (!empty($user)) {
+        DB::beginTransaction();
+        try {
+          $user->delete();
 
-                DB::commit();
+          DB::commit();
 
-                return response()->json([
-                  'error' => false,
-                  'message' => 'Tài khoản '.$user->email.' đã bị xóa',
-              ]);
-            } catch (Exception $e) {
-                DB::rollback();
+          return response()->json([
+            'error' => false,
+            'message' => 'Tài khoản '.$user->email.' đã bị xóa',
+          ]);
+        } catch (Exception $e) {
+          DB::rollback();
 
-                Log::info($e->getMessage());
+          Log::info($e->getMessage());
 
-                return response()->json([
-                  'error' => true,
-                  'message' => $e->getMessage()
-              ]);
-            }
-        } else {
-            return response()->json([
-              'error'     =>  true,
-              'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
           ]);
         }
+      } else {
+        return response()->json([
+          'error'     =>  true,
+          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+        ]);
+      }
     }
 
     public function lockAccount(Request $request)
     {
-        $user = User::find($request->user_id);
+      $user = User::find($request->user_id);
 
-        if (!empty($user)) {
-            DB::beginTransaction();
-            try {
-                $user->update([
-                  'status'  => $request->status,
-                ]);
+      if (!empty($user)) {
+        DB::beginTransaction();
+        try {
+          $user->update([
+            'status'  => $request->status,
+          ]);
 
-                if ($request->status == 1) {
-                    $msg = "Tài khoản $user->email đã được kích hoạt";
-                } else {
-                    $msg = "Tài khoản $user->email đã bị khóa";
-                }
+          if ($request->status == 1) {
+            $msg = "Tài khoản $user->email đã được kích hoạt";
+          } else {
+            $msg = "Tài khoản $user->email đã bị khóa";
+          }
 
-                DB::commit();
+          DB::commit();
 
-                return response()->json([
-                    'error' => false,
-                    'message' => $msg,
-                ]);
-            } catch (Exception $e) {
-                DB::rollback();
+          return response()->json([
+            'error' => false,
+            'message' => $msg,
+          ]);
+        } catch (Exception $e) {
+          DB::rollback();
 
-                Log::info($e->getMessage());
+          Log::info($e->getMessage());
 
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessage()
-                ]);
-            }
-        } else {
-            return response()->json([
-              'error'     =>  true,
-              'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
           ]);
         }
+      } else {
+        return response()->json([
+          'error'     =>  true,
+          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+        ]);
+      }
     }
 
     /**
@@ -332,23 +294,23 @@ class UserController extends Controller
      */
     public function getRoles($id)
     {
-        $user = User::find($id);
-        $roles = Role::orderBy('created_at', 'desc')->get();
+      $user = User::find($id);
+      $roles = Role::orderBy('created_at', 'desc')->get();
 
-        if (!empty($roles)) {
-            foreach ($roles as $key => &$role) {
-                $role->checked = 0;
-                $flag = RoleUser::where('user_id', $id)->where('role_id', $role->id)->first();
+      if (!empty($roles)) {
+        foreach ($roles as $key => &$role) {
+          $role->checked = 0;
+          $flag = RoleUser::where('user_id', $id)->where('role_id', $role->id)->first();
 
-                if (!empty($flag)) {
-                    $role->checked = 1;
-                }
-            }
+          if (!empty($flag)) {
+            $role->checked = 1;
+          }
         }
-        return view('backend.accounts.user_roles', [
-            'roles' => $roles,
-            'user' => $user
-        ]);
+      }
+      return view('backend.accounts.user_roles', [
+        'roles' => $roles,
+        'user' => $user
+      ]);
     }
 
     /**
@@ -357,67 +319,67 @@ class UserController extends Controller
      */
     public function postRoles(Request $request)
     {
-        $data = $request->all();
+      $data = $request->all();
 
-        if ($data['checked']) {
-            DB::delete('delete from role_users where user_id = ? and role_id = ?', [$data['user_id'], $data['role_id']]);
+      if ($data['checked']) {
+        DB::delete('delete from role_users where user_id = ? and role_id = ?', [$data['user_id'], $data['role_id']]);
 
-            return response()->json([
-                'error' => false,
-                'message' => 'deleted'
-            ], 200);
-        } else {
-            RoleUser::create($data);
+        return response()->json([
+          'error' => false,
+          'message' => 'deleted'
+        ], 200);
+      } else {
+        RoleUser::create($data);
 
-            return response()->json([
-                'error' => false,
-                'message' => 'added'
-            ], 200);
-        }
+        return response()->json([
+          'error' => false,
+          'message' => 'added'
+        ], 200);
+      }
     }
 
 
     public function postUpload(Request $request)
     {
       $validator = Validator::make($request->all(), [
-            'file' => 'max:1024',
-        ]);
+        'file' => 'max:1024',
+      ]);
 
-        if ($validator->fails()) {
+      if ($validator->fails()) {
 
-            return response()->json([
-                    'status' => false,
-                    'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
-                ], 200);
-        }
-        else{
-         $avatar = $request->file('file')->store('img/avatar');
-         $id =  Auth::user()->id;
-         $profile = User::where('id',$id)->update(['avatar' => $avatar]);
-         return response()->json([
-            'status' => true,
-            'data' => Auth::user()->avatar,
-            'message' => 'Thay ảnh đại diện thành công !',
-         ]);
+        return response()->json([
+          'status' => false,
+          'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
+        ], 200);
+      }
+      else{
+       $avatar = $request->file('file')->store('img/avatar');
+       $id =  Auth::user()->id;
+       $profile = User::where('id',$id)->update(['avatar' => $avatar]);
+       return response()->json([
+        'status' => true,
+        'data' => Auth::user()->avatar,
+        'message' => 'Thay ảnh đại diện thành công !',
+      ]);
      }
- }
+   }
 
- public  function showLinkChangePassword(){
+   public  function showLinkChangePassword(){
     return view('backend.admins.change-password');
-}
+  }
 
- public function ChangePassword(Request $request){
+  public function ChangePassword(Request $request){
     $oldpassword = $request->oldpassword;
     $password = $request->password;
     $passwordconf = $request->password_confirmation;
     if(Hash::check($request->oldpassword, Auth::user()->password) == true && $password == $passwordconf){
-        $password = bcrypt($password);
-        user::find(Auth::user()->id)->update(['password' => $password]);
-        $message = 'Thay đổi mật khẩu thành công !';
-        return view('backend.admins.change-password', ['messageSuccess'   =>  $message]);
+      $password = bcrypt($password);
+      user::find(Auth::user()->id)->update(['password' => $password]);
+      $message = 'Thay đổi mật khẩu thành công !';
+      return view('backend.admins.change-password', ['messageSuccess'   =>  $message]);
     }else{
-       $message = 'Nhập chưa đúng, Xin mời nhập lại !';
-       return view('backend.admins.change-password', ['messageError'   =>  $message]);
+     $message = 'Nhập chưa đúng, Xin mời nhập lại !';
+     return view('backend.admins.change-password', ['messageError'   =>  $message]);
    }
-}
+ }
 }

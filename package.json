@@ -13,6 +13,7 @@
         "laravel-mix": "^2.0"
     },
     "dependencies": {
-        "cross-env": "^5.2.0"
+        "cross-env": "^5.2.0",
+        "sweetalert2": "^7.28.4"
     }
 }

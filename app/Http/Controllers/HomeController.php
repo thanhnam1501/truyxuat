@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -11,21 +12,17 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-         $this->middleware('auth');
-        $this->middleware('revalidate');
-    }
 
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        // return view('backend.admins.index');
-        return redirect('/admin');
+    public function show($id)
+    {       
+        $product = Product::find($id);
+        return view('check',['product' => $product]);
     }
 
+    
 }
