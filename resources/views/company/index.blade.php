@@ -1,5 +1,20 @@
 @extends('layouts.master')
 @section('content')
+<div class="clearfix"></div>
+<div>
+   @if(isset($messageError))
+ <div class="alert alert-danger">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     {{ $messageError }}
+ </div>
+ @endif
+ @if(isset($messageSuccess))
+ <div class="alert alert-success">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     {{ $messageSuccess }}
+ </div>
+ @endif
+</div>
 
 <div class="">
     <table id="company-list" class="table table-striped responsive-utilities jambo_table">

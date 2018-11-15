@@ -22,7 +22,8 @@ class AdminProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { 
+    {  
+            
       return view('admin.user.index');
     }
 
@@ -38,7 +39,10 @@ class AdminProfileController extends Controller
      */
     public function getlist()
     {
-      $profiles = Profile::orderBy('id', 'desc');
+     $profiles = DB::table('profiles')
+            ->join('companies', 'companies.id', '=', 'profiles.company_id')
+            ->select('profiles.*','companies.name as company_name')
+            ->get();
 
       return Datatables::of($profiles)
       ->addIndexColumn()           
@@ -47,7 +51,7 @@ class AdminProfileController extends Controller
 
         $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
         return $string;
       })
@@ -61,7 +65,7 @@ class AdminProfileController extends Controller
      */
     public function store(Request $request)
     {
-      $data = $request->only('name', 'email', 'mobile');
+      $data = $request->all();
 
       $validatedData = $request->validate([
         'name' => 'required',
@@ -83,6 +87,7 @@ class AdminProfileController extends Controller
             'password'    => $data['password'],
             'mobile'    => $data['mobile'],
             'status'  => 1,
+            'company_id' => $data['company_id'] 
           ]);
         } else {
           $user = Profile::create($data);
@@ -115,42 +120,34 @@ class AdminProfileController extends Controller
 
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-      $data = $request->all;
+     $data = $request->all();
 
       $profile = Profile::where('email', $data['email'])->first();
 
-      if (!empty($profile) && $profile->id == $id) {
+      if (!empty($profile) ) {
         DB::beginTransaction();
         try {
-          $user->update([
+          $profile->update([
             'name'  => $data['name'],
-            'type'  => $data['type'],
-            'mobile'  => $data['mobile'],
+            'email'  => $data['email'],
+          
           ]);
-
+          $message = 'Cập nhập thành công tài khoản '. $profile->email;
           DB::commit();
+          return view('admin.user.index',['messageSuccess' => $message]);
 
-          return response()->json([
-            'error' => false,
-            'message' => 'Cập nhập thành công tài khoản '.$profile->email,
-          ]);
         } catch (Exception $e) {
           DB::rollback();
 
           Log::info($e->getMessage());
-
-          return response()->json([
-            'error' => true,
-            'message' => $e->getMessage()
-          ]);
+          $message = $e->getMessage();
+          return view('admin.user.index',['messageSuccess' => $message]);
         }
       } else {
-        return response()->json([
-          'error'     =>  true,
-          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-        ]);
+        $message =  'Không tìm thấy người dùng, vui lòng thử lại sau';
+        return view('admin.user.index',['messageError' => $message]);
       }
     }
     /**

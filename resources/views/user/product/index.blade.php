@@ -2,7 +2,18 @@
 @section('content')
 <div>
 	<a class="btn btn-primary" href='{{route('user.product.ShowFormCreate')}}'>Thêm sản phẩm mới</a>
-	
+	 @if(isset($messageError))
+             <div class="alert alert-danger">
+               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+               {{ $messageError }}
+           </div>
+           @endif
+                @if(isset($messageSuccess))
+             <div class="alert alert-success">
+               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+               {{ $messageSuccess }}
+           </div>
+           @endif
 <div class="">
     <table id="product-list" class="table table-striped responsive-utilities jambo_table">
         <thead>
@@ -10,11 +21,11 @@
                 <th>
                     #
                 </th>
-                <th>id</th>
-                <th>name</th>
-                <th>cập nhật</th>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Cập nhật</th>
                 <th>Ngày tạo</th>
-                <th>Action</th>
+                <th>Hành động</th>
             </tr>
         </thead>
 
@@ -34,12 +45,12 @@
             pageLength: 30,
             lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
             columns: [
-            {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center'},
+            {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
             {data: 'updated_at', name: 'updated_at'},
-            {data: 'created_at', name: 'created_at',orderable: false, searchable: false},
-            {data: 'action', name: 'action'},
+            {data: 'created_at', name: 'created_at',orderable: false,},
+            {data: 'action', name: 'action', searchable: false},
             ]
         });
 

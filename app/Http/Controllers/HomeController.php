@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Node;
+
 
 class HomeController extends Controller
 {
@@ -20,8 +22,9 @@ class HomeController extends Controller
      */
     public function show($id)
     {       
-        $product = Product::find($id);
-        return view('check',['product' => $product]);
+        $data = Product::find($id);
+         $nodes = Node::where('product_id', $data->id)->get();
+        return view('check',['data' => $data, 'nodes' => $nodes]);
     }
 
     

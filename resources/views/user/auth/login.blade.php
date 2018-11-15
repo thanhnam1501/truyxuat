@@ -38,13 +38,11 @@
                     <div class="clearfix"></div>
                     <div class="separator">
 
-                        <p class="change_link">New to site?
-                            <a href="#toregister" class="to_register"> Create Account </a>
-                        </p>
+                      
                         <div class="clearfix"></div>
                         <br />
                         <div>
-                            <h1><i class="fa fa-paw" style="font-size: 26px;"></i> Gentelella Alela!</h1>
+                            <h1><i class="fa fa-paw" style="font-size: 26px;"></i> <span style="color: red;font-size: bold;">S</span>mart<span style="color: red;font-size: bold;">C</span>heck</h1>
 
                             <p>©2015 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
                         </div>

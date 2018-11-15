@@ -1,3 +1,4 @@
+@include ( 'ckfinder::setup')
 @extends('layouts.master_user')
 @section('content')
 <div class="row">
@@ -16,7 +17,7 @@
 					<div class="form-group">
 						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
 							@if($data->image)
-							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="/{{$data->image}}" alt="">
+							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{asset($data->image)}}" alt="">
 							@else
 							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{ asset('image/noimage.png')}}" alt="">
 							@endif
@@ -27,7 +28,11 @@
 							<input type="text" class="form-control" id="name" name="name" value="{{$data->name}}" placeholder="Tên sản phẩm" required>
 							{{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 
-							<br>	
+							<br>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Các bước cập nhật</label>
+								<input type="number" class="form-control" id="node" name="node" value="{{$data->node}}" disabled>
+							</div>	
 							
 						</div>
 						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -37,7 +42,17 @@
 							
 						</div>
 					</div> 
-
+					
+					
+					{{-- <div class="form-group">
+						<label for="exampleInputEmail1">Nhân viên quản lý</label>
+						<select class="form-control" name="user_id" id="user_id" value="{{$data->user_id}}" required>
+							
+							@foreach($user as $user)
+							<option @if($data->user_id == $user->id) selected @endif value="{{$user->id}}">{{$user->name}}</option>
+							@endforeach
+						</select>
+					</div> --}}
 					<div class="form-group">
 						<div class="clearfix"></div>
 						<label>Mô tả ngắn sản phẩm</label>
@@ -45,7 +60,7 @@
 					</div> 
 					<div class="form-group">
 						<label>Mô tả</label>
-						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor1">{{$data->content}}</textarea>
+						<textarea name="content" value="{{$data->content}}" class="form-control  " id="editor2">{{$data->content}}</textarea>
 					</div> 
 					
 					<div class="form-group">

@@ -12,13 +12,14 @@ use Auth;
 use App\Models\RoundCollection;
 use App\Models\Company;
 use Validator;
+use App\Models\User_History;
 
 class ProfileController extends Controller
 {
-    public function __construct(){
-        
-        $this->middleware('auth.profile');
-    }
+  public function __construct(){
+
+    $this->middleware('auth.profile');
+  }
     /**
      * Display a listing of the resource.
      *
@@ -27,12 +28,19 @@ class ProfileController extends Controller
     public function index()
     { 
       return view('user.index');
-  }
+    }
 
-  public function getFormCreate(){
-    $companies = Company::get();
-    return view('user.AddUser', ['companies' => $companies]);
-}
+    public function getFormCreate(){
+      $limit = Profile::where('company_id',Auth::guard('profile')->user()->company_id)->count();
+      $company = Company::find(Auth::guard('profile')->user()->company_id);
+      if($limit >= $company->account_limit){
+        $message = 'Đã đặt mức giới hạn người dùng là: ' . $company->account_limit;
+        return view('user.index',['messageError' => $message]);
+      }else{
+
+        return view('user.AddUser');
+      }
+    }
 
     /**
      * Get the list of scientist accounts.
@@ -53,9 +61,9 @@ class ProfileController extends Controller
         $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
         return $string;
-    })
+      })
       ->make(true);
-  }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -64,37 +72,47 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+      $data = $request->all();
 
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|string|unique:profiles,email',    
-        ]);
+      $validatedData = $request->validate([
+        'name' => 'required',
+        'email' => 'required|string|unique:profiles,email',
+        'password' => 'required|confirmed|min:6',
+        'password_confirmation' => 'required',
+      ]);
 
-        DB::beginTransaction();
-        try {
-            $data['password'] = bcrypt(123456);
-            $data['company_id'] = Auth::guard('profile')->user()->company_id;
+      DB::beginTransaction();
+      try {
+        $data['password'] = bcrypt( $data['password']);
+        $data['company_id'] = Auth::guard('profile')->user()->company_id;
 
-            $user = Profile::withTrashed()->where('email', $data['email'])->first();
+        $user = Profile::withTrashed()->where('email', $data['email'])->first();
 
-            if (!empty($user)) {
-              $user->restore();
+        if (!empty($user)) {
+          $user->restore();
 
-              $user->update([
-                'name'    => $data['name'],
-                'password'    => $data['password'],
-                'company_id'    => $data['company_id'],
-                'status'  => 2,
-            ]);
-          } else {
-            $data['status'] = 2;
-              $user = Profile::create($data);
-          }
+          $user->update([
+            'name'    => $data['name'],
+            'password'    => $data['password'],
+            'company_id'    => $data['company_id'],
+            'status'  => 2,
+          ]);
 
-          DB::commit();
-          \Session::flash('flash_message','Thêm quản trị viên thành công !');
-          return view('user.index');
+        } else {
+          $data['status'] = 2;
+          $user = Profile::create($data);
+          $user_history = new User_History();
+          $user_history->user_id = Auth::guard('profile')->user()->id;
+          $user_history->company_id = Auth::guard('profile')->user()->company_id;
+          $user_history->content = 'Tạo mới người dùng: ' . $user->name . ' mã id = ' . $user->id;
+
+
+          $user_history->save();
+        }
+        $message = 'Thêm quản trị viên thành công !';
+        DB::commit();
+        \Session::flash('flash_message','Thêm quản trị viên thành công !');
+        return view('user.index',['messageSuccess'   =>  $message]);
       } catch (Exception $e) {
         DB::rollback();
 
@@ -103,60 +121,53 @@ class ProfileController extends Controller
         return response()->json([
           'error' => true,
           'message' => $e->getMessage()
-      ]);
+        ]);
+      }
     }
-}
 
-public function edit(Request $request)
-{
-  $id = $request->id;
-  $data = Profile::find($id);
-   $companies = Company::get();
-  return view('user.EditUser', [
-    'data' => $data,
-    'companies' => $companies,
-]);
+    public function edit(Request $request)
+    {
+      $id = $request->id;
+      $data = Profile::find($id);
+      $companies = Company::get();
+      return view('user.EditUser', [
+        'data' => $data,
+        'companies' => $companies,
+      ]);
 
-}
+    }
 
-public function update(Request $request, $id)
-{
-  $data = $request->all;
+    public function update(Request $request)
+    {
+      $data = $request->all();
 
-  $profile = Profile::where('email', $data['email'])->first();
+      $profile = Profile::where('email', $data['email'])->first();
 
-  if (!empty($profile) && $profile->id == $id) {
-    DB::beginTransaction();
-    try {
-      $user->update([
-        'name'  => $data['name'],
-        'type'  => $data['type'],
-        'mobile'  => $data['mobile'],
-    ]);
+      if (!empty($profile) ) {
+        DB::beginTransaction();
+        try {
+          $profile->update([
+            'name'  => $data['name'],
+            'email'  => $data['email'],
 
-      DB::commit();
+          ]);
+          $message = 'Cập nhập thành công tài khoản '. $profile->email;
+          DB::commit();
+          return view('user.index',['messageSuccess' => $message]);
 
-      return response()->json([
-        'error' => false,
-        'message' => 'Cập nhập thành công tài khoản '.$profile->email,
-    ]);
-  } catch (Exception $e) {
-      DB::rollback();
+        } catch (Exception $e) {
+          DB::rollback();
 
-      Log::info($e->getMessage());
+          Log::info($e->getMessage());
+          $message = $e->getMessage();
+          return view('user.index',['messageSuccess' => $message]);
+        }
+      } else {
+        $message =  'Không tìm thấy người dùng, vui lòng thử lại sau';
+        return view('user.index',['messageError' => $message]);
+      }
 
-      return response()->json([
-        'error' => true,
-        'message' => $e->getMessage()
-    ]);
-  }
-} else {
-    return response()->json([
-      'error'     =>  true,
-      'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-  ]);
-}
-}
+    }
     /**
      * Display the specified resource.
      *
@@ -175,50 +186,50 @@ public function update(Request $request, $id)
      */
     public function destroy(Request $request)
     {
-        $profile = Profile::find($request->id);
+      $profile = Profile::find($request->id);
 
-        if (!empty($profile)) {
-            DB::beginTransaction();
-            try {
-              $profile->delete();
+      if (!empty($profile)) {
+        DB::beginTransaction();
+        try {
+          $profile->delete();
 
-              DB::commit();
+          DB::commit();
 
-              return response()->json([
-                'error' => false,
-                'message' => 'Tài khoản '.$profile->email.' đã bị xóa',
-            ]);
-          } catch (Exception $e) {
-              DB::rollback();
+          return response()->json([
+            'error' => false,
+            'message' => 'Tài khoản '.$profile->email.' đã bị xóa',
+          ]);
+        } catch (Exception $e) {
+          DB::rollback();
 
-              Log::info($e->getMessage());
+          Log::info($e->getMessage());
 
-              return response()->json([
-                'error' => true,
-                'message' => $e->getMessage()
-            ]);
-          }
+          return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
+          ]);
+        }
       } else {
         return response()->json([
           'error'     =>  true,
           'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-      ]);
+        ]);
+      }
     }
-}
 
-public function postUpload(Request $request)
-{
-    $validator = Validator::make($request->all(), [
+    public function postUpload(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
         'file' => 'max:1024',
-    ]);
+      ]);
 
-    if ($validator->fails()) {
+      if ($validator->fails()) {
 
         return response()->json([
-            'status' => false,
-            'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
+          'status' => false,
+          'message' => 'Kích thước ảnh quá lớn, Xin mời chọn lại !',
         ], 200);
-    }else{
+      }else{
 
        $avatar = $request->file('file')->store('img/avatar');
        $id =  Auth::guard('profile')->user()->id;
@@ -227,29 +238,29 @@ public function postUpload(Request $request)
         'status' => true,
         'data' => Auth::guard('profile')->user()->avatar,
         'message' => 'Thay ảnh đại diện thành công !',
-    ]);
+      ]);
+     }
+
    }
 
-}
 
+   public  function ShowFormChangePassword(){
+    return view('change-password');
+  }
 
-public  function showLinkChangePassword(){
-    return view('backend.profile.change-password');
-}
-
-public function ChangePassword(Request $request){
+  public function ChangePassword(Request $request){
     $oldpassword = $request->oldpassword;
     $password = $request->password;
     $passwordconf = $request->password_confirmation;
-    if(Hash::check($request->oldpassword, Auth::guard('profile')->user()->password) == true && $password == $passwordconf){
-        $password = bcrypt($password);
-        Profile::find(Auth::guard('profile')->user()->id)->update(['password' => $password]);
-        $message = 'Thay đổi mật khẩu thành công !';
-        return view('backend.profile.change-password', ['messageSuccess'   =>  $message]);
-    }else{
-     $message = 'Nhập chưa đúng, Xin mời nhập lại !';
-     return view('backend.profile.change-password', ['messageError'   =>  $message]);
- }
-}
 
+    if(Hash::check($request->oldpassword, Auth::guard('profile')->user()->password) == true && $password == $passwordconf){
+      $password = bcrypt($password);
+      Profile::find(Auth::guard('profile')->user()->id)->update(['password' => $password]);
+      $message = 'Thay đổi mật khẩu thành công !';
+      return view('user.product.index', ['messageSuccess'   =>  $message]);
+    }else{
+     $message = 'Thay đổi mật khẩu không thành công ! Nhập chưa đúng, Xin mời nhập lại !';
+     return view('user.product.index', ['messageError'   =>  $message]);
+   }
+ }
 }

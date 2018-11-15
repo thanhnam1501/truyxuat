@@ -3,7 +3,7 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">						
 	<div class="card mb-3">
 		<div class="card-header">
-			<h3><i class="fa fa-check-square-o"></i> Thêm quản trị viên</h3>
+			<h3><i class="fa fa-check-square-o"></i> Cập nhật quản trị viên</h3>
 			
 		</div>
 		@if ($errors->any())
@@ -12,7 +12,7 @@
 		<br>
 		<div class="clearfix"></div>
 		<div class="card-body">
-			<form action="{{route('user.create')}}" method="POST">
+			<form action="{{route('user.update')}}" method="POST">
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 					<input type="text" class="form-control has-feedback-left" id="name" name="name" value="{{$data->name}}" placeholder="Họ và Tên" required>
@@ -20,7 +20,7 @@
 				</div>
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" required>
+					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" readonly>
 					<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 				</div>
 
@@ -30,7 +30,7 @@
 				</div>
 				{{ csrf_field() }}
 
-				<button type="submit" class="btn btn-primary">Tạo mới</button>
+				<button type="submit" class="btn btn-primary">Cập nhật</button>
 			</form>
 
 		</div>

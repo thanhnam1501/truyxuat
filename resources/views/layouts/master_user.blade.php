@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+  <!DOCTYPE html>
+  <html lang="en">
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <!-- Meta, title, CSS, favicons, etc. -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>Smartcheck- Portal </title>
+    <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
-  <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
 
-  <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
 
-  <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
-  <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+    <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
 
-  <!-- Custom styling plus plugins -->
-  <link href="{{asset('css/custom.css')}}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{asset('css/maps/jquery-jvectormap-2.0.1.css')}}" />
-  <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
-  <link href="{{asset('css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
-  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <!-- Custom styling plus plugins -->
+    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/maps/jquery-jvectormap-2.0.1.css')}}" />
+    <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
+    <link href="{{asset('css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
 
 
@@ -42,10 +42,9 @@
 
       </head>
 
-      @include('sweetalert::alert')
       <body class="nav-md">
 
-        <div class="container body">
+        <div class="container body" >
 
 
           <div class="main_container">
@@ -54,9 +53,10 @@
               <div class="left_col scroll-view">
 
                 <div class="navbar nav_title" style="border: 0;">
-                  <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Smartcheck</span></a>
+                  <a href="{{route('user.index')}}" class="site_title"><i class="fa fa-paw"></i> <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></a>
                 </div>
                 <div class="clearfix"></div>
+
 
                 <!-- menu prile quick info -->
                 <div class="profile">
@@ -78,8 +78,8 @@
                   <div class="menu_section">
                     <div class="clearfix"></div>
                     <ul class="nav side-menu">
-                 
-                      <li><a><i class="fa fa-bar-chart-o"></i>SẢN PHẨM<span class="fa fa-chevron-down"></span></a>
+
+                      <li><a><i class="fa fa-cubes"></i>SẢN PHẨM<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                           <li><a href="{{route('user.product.index')}}">Tất cả sản phẩm</a>
                           </li>
@@ -88,13 +88,7 @@
                         </ul>
                       </li>
 
-                      <li><a><i class="fa fa-qrcode"></i>IN MÃ QRCODE<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="chartjs.html">Tùy chọn</a>
-                          </li>
-                        
-                        </ul>
-                      </li>
+
                       <li class="@if(Auth::guard('profile')->user()->status != 1) hidden @endif"><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                           <li><a href="{{route('user.profile.index')}}">Người dùng</a>
@@ -102,45 +96,26 @@
 
                         </ul>
                       </li>
+                      <li ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                          <li><a href="{{route('user.history.index')}}">Tất cả lịch sử</a>
+                          </li>
 
+                        </ul>
+                      </li>
 
+                      <li ><a><i class="fa fa-edit"></i>CÁC BƯỚC CẬP NHÂT<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                          <li><a href="{{route('user.node.index')}}">DS các bước cập nhật</a>
+                          </li>
+
+                        </ul>
+                      </li>
                     </ul>
                   </div>
                   <div class="menu_section">
-                    <h3>Live On</h3>
-                    <ul class="nav side-menu">
-                      <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="e_commerce.html">E-commerce</a>
-                          </li>
-                          <li><a href="projects.html">Projects</a>
-                          </li>
-                          <li><a href="project_detail.html">Project Detail</a>
-                          </li>
-                          <li><a href="contacts.html">Contacts</a>
-                          </li>
-                          <li><a href="profile.html">Profile</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="page_404.html">404 Error</a>
-                          </li>
-                          <li><a href="page_500.html">500 Error</a>
-                          </li>
-                          <li><a href="plain_page.html">Plain Page</a>
-                          </li>
-                          <li><a href="login.html">Login Page</a>
-                          </li>
-                          <li><a href="pricing_tables.html">Pricing Tables</a>
-                          </li>
+                    <img src="{{asset('image/smc.gif')}}" width="100%" alt="">
 
-                        </ul>
-                      </li>
-                      <li><a><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a>
-                      </li>
-                    </ul>
                   </div>
 
                 </div>
@@ -177,11 +152,11 @@
                   <ul class="nav navbar-nav navbar-right">
                     <li class="">
                       <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                       {{--  <img src="images/img.jpg" alt=""> --}}John Doe
-                        <span class=" fa fa-angle-down"></span>
-                      </a>
-                      <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-                        <li><a href="javascript:;">  Profile</a>
+                       {{--  <img src="images/img.jpg" alt=""> --}}{{Auth::guard('profile')->user()->name}}
+                       <span class=" fa fa-angle-down"></span>
+                     </a>
+                     <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+                      {{--   <li><a href="javascript:;">  Profile</a>
                         </li>
                         <li>
                           <a href="javascript:;">
@@ -189,155 +164,164 @@
                             <span>Settings</span>
                           </a>
                         </li>
+                        --}}                        
                         <li>
-                          <a href="javascript:;">Help</a>
-                        </li>
-                        <li><a href="{{route('profile.logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                         <a href='{{route('user.profile.ShowFormChangePassword')}}'>Đổi mật khẩu</a>
+                       </li>
+                       <li><a href="{{route('profile.logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                       </li>
+                     </ul>
+                   </li>
+
+                   <li role="presentation" class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-envelope-o"></i>
+                      <span class="badge bg-green">6</span>
+                    </a>
+                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
+                      <li>
+                        <a>
+                          <span class="image">
+                          </span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where... 
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a>
+                          <span class="image">
+                          </span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where... 
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a>
+                          <span class="image">
+                          </span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where... 
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a>
+                          <span class="image">
+                          </span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where... 
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <div class="text-center">
+                          <a>
+                            <strong><a href="inbox.html">See All Alerts</strong>
+                              <i class="fa fa-angle-right"></i>
+                            </a>
+                          </div>
                         </li>
                       </ul>
                     </li>
 
-                    <li role="presentation" class="dropdown">
-                      <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-envelope-o"></i>
-                        <span class="badge bg-green">6</span>
-                      </a>
-                      <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
-                        <li>
-                          <a>
-                            <span class="image">
-                            </span>
-                            <span>
-                              <span>John Smith</span>
-                              <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                              Film festivals used to be do-or-die moments for movie makers. They were where... 
-                            </span>
-                          </a>
-                        </li>
-                        <li>
-                          <a>
-                            <span class="image">
-                            </span>
-                            <span>
-                              <span>John Smith</span>
-                              <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                              Film festivals used to be do-or-die moments for movie makers. They were where... 
-                            </span>
-                          </a>
-                        </li>
-                        <li>
-                          <a>
-                            <span class="image">
-                            </span>
-                            <span>
-                              <span>John Smith</span>
-                              <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                              Film festivals used to be do-or-die moments for movie makers. They were where... 
-                            </span>
-                          </a>
-                        </li>
-                        <li>
-                          <a>
-                            <span class="image">
-                            </span>
-                            <span>
-                              <span>John Smith</span>
-                              <span class="time">3 mins ago</span>
-                            </span>
-                            <span class="message">
-                              Film festivals used to be do-or-die moments for movie makers. They were where... 
-                            </span>
-                          </a>
-                        </li>
-                        <li>
-                          <div class="text-center">
-                            <a>
-                              <strong><a href="inbox.html">See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                              </a>
-                            </div>
-                          </li>
-                        </ul>
-                      </li>
-
-                    </ul>
-                  </nav>
-                </div>
-
+                  </ul>
+                </nav>
               </div>
-              <!-- /top navigation -->
-
-
-              <!-- page content -->
-              <div class="right_col" style="height: auto" >
-                @yield('content')
-              </div>
-              <!-- /page content -->
 
             </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" style="height: auto !important" >
+              @yield('content')
+              <footer>
+                <div class="">
+                  <p class="pull-right">Công ty Cổ phần Giải pháp Chống giả An Hà – AnHaCorp <a>NamLemon</a>. |
+                    <span class="lead"> <i class="fa fa-paw"></i> <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></span>
+                  </p>
+                </div>
+
+              </footer>
+            </div>
+
+            
+
 
           </div>
+          <!-- /page content -->
+        </div>
 
-          <div id="custom_notifications" class="custom-notifications dsp_none">
-            <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
-            </ul>
-            <div class="clearfix"></div>
-            <div id="notif-group" class="tabbed_notifications"></div>
-          </div>
-          <script src="{{asset('js/jquery.min.js')}}"></script>
-          <script src="{{asset('js/nprogress.js')}}"></script>
-          <script>
-            NProgress.start();
-          </script> 
-          <script src="{{asset('js/bootstrap.min.js')}}"></script>
+      </div>
 
-          <!-- gauge js -->
-          <script type="text/javascript" src="{{asset('js/gauge/gauge.min.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/gauge/gauge_demo.js')}}"></script>
-          <!-- chart js -->
-          <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
-          <!-- bootstrap progress js -->
-          <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-          <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
-          <!-- icheck -->
-          <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
-          <!-- daterangepicker -->
-          <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/datepicker/daterangepicker.js')}}"></script>
 
-          <script src="{{asset('js/custom.js')}}"></script>
 
-          <!-- flot js -->
-          <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.pie.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.orderBars.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.time.min.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/date.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.spline.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.stack.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/curvedLines.js')}}"></script>
-          <script type="text/javascript" src="{{asset('js/flot/jquery.flot.resize.js')}}"></script>
-          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
-          <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-          {!! Toastr::render() !!}
+      <!-- /footer content -->
+      <script src="{{asset('js/jquery.min.js')}}"></script>
+      <script src="{{asset('js/nprogress.js')}}"></script>
+      <script>
+        NProgress.start();
+      </script> 
+      <script src="{{asset('js/bootstrap.min.js')}}"></script>
 
-          <script type="text/javascript" src="{{asset('js/datatables.min.js')}}"></script>
-          <script>
-           $.ajaxSetup({
-             headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-             }
-           });
-         </script>
-         <script>
-          $(document).ready(function () {
+      <!-- gauge js -->
+      <script type="text/javascript" src="{{asset('js/gauge/gauge.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/gauge/gauge_demo.js')}}"></script>
+      <!-- chart js -->
+      <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+      <!-- bootstrap progress js -->
+      <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+      <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+      <!-- icheck -->
+      <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+      <!-- daterangepicker -->
+      <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/datepicker/daterangepicker.js')}}"></script>
+
+      <script src="{{asset('js/custom.js')}}"></script>
+
+      <!-- flot js -->
+      <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.pie.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.orderBars.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.time.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/date.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.spline.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.stack.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/curvedLines.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.resize.js')}}"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+      {!! Toastr::render() !!}
+
+      <script type="text/javascript" src="{{asset('js/datatables.min.js')}}"></script>
+      <script>
+       $.ajaxSetup({
+         headers: {
+           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         }
+       });
+     </script>
+     <script>
+      $(document).ready(function () {
             // [17, 74, 6, 39, 20, 85, 7]
             //[82, 23, 66, 9, 99, 6, 2]
             var data1 = [[gd(2012, 1, 1), 17], [gd(2012, 1, 2), 74], [gd(2012, 1, 3), 6], [gd(2012, 1, 4), 39], [gd(2012, 1, 5), 20], [gd(2012, 1, 6), 85], [gd(2012, 1, 7), 7]];
@@ -404,17 +388,60 @@
         <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
         
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src = " /vendor/unisharp/laravel-ckeditor/ckeditor.js "></script> 
-        <script src = " /vendor/unisharp/laravel-ckeditor/adapters/jquery.js " > </script> 
+        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
+        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script> 
         <script > 
-          $ ( 'textarea' ). ckeditor ();
-        // $ ('. textarea'). ckeditor (); // nếu lớp được ưa thích. 
-      </script>
-      {{-- <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
-      <script>
+
+        </script>
+       {{--  <script  type = " text / javascript "  src = " /js/ckfinder/ckfinder.js "> </script> --}}
+        // <script>  
+        CKEDITOR.replace('editor1', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        
+        } );
+
+        CKEDITOR.replace( 'editor2', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor3', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor4', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor5', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );</script>
+    {{--   <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script> --}}
+      {{-- <script>
         CKEDITOR.replace( 'article-ckeditor' );
-      </script>
-      --}}
+      </script> --}}
+     
       @yield('script') 
       <script>
         $(function () {

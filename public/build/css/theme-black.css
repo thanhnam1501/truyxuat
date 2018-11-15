@@ -682,7 +682,7 @@ background: #000;
   position: absolute;
   pointer-events: none;
   border-color: rgba(0, 0, 0, 0);
-  border-right-color: #2f323a;
+  border-right-color: #e0384f;
   border-width: 5px;
   margin-top: -5px;
 }
@@ -2980,7 +2980,7 @@ blockquote.pull-right {
 }
 .nav-tabs > li > a:hover {
   border-color: transparent;
-  background: #FFF;
+  background: red;
 }
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,

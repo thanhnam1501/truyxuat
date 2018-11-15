@@ -15,13 +15,25 @@
 			<form action="{{route('user.profile.create')}}" method="POST">
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<input type="text" class="form-control has-feedback-left" id="name" name="name" placeholder="Họ và Tên" required>
+					<input type="text" class="form-control has-feedback-left" id="name" name="name" placeholder="Họ và Tên" value="{{ old('name') }}" required>
 					<span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 				</div>
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<input type="email" class="form-control has-feedback-left" id="email" name="email" placeholder="Email" required>
+					<input type="email" class="form-control has-feedback-left" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
 					<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="number" class="form-control has-feedback-left" id="mobile" name="mobile" placeholder="Số điện thoại" value="{{ old('mobile') }}" required>
+					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="password" class="form-control has-feedback-left" id="password" name="password" placeholder="Mật khẩu" required>
+					<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="password" class="form-control has-feedback-left" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu" required>
+					<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
 				</div>
 
 				{{ csrf_field() }}

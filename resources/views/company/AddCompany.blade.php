@@ -43,7 +43,16 @@
 
 					<div class="form-group">
 						<label for="exampleInputEmail1">Giới hạn sản phẩm</label>
-						<input type="number" class="form-control" id="product_limit" name="product_limit" placeholder="Giới hạn sản phẩm" required>
+						
+						<select class="form-control" name="product_limit" id="product_limit" required>
+
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="100">100</option>
+							<option value="1000">không giới hạn</option>
+							
+						</select>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
 

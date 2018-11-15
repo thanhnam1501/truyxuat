@@ -1,4 +1,4 @@
-# NATEC SYSTEM
+# Smartcheck
 Project is management about profifle's scientist.
 #Framework
 - Laravel
@@ -11,7 +11,7 @@ Project is management about profifle's scientist.
 - Tokenizer PHP Extension
 # Useage
 ```
-git clone git@bitbucket.org:zentgroup/natec.git
+git clone git@github.com:thanhnam1501/truyxuat.git
 ```
 After that. Change .env.example to .env and run command in terminal
 ```

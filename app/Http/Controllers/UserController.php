@@ -77,12 +77,14 @@ class UserController extends Controller
       $validatedData = $request->validate([
         'name' => 'required',
         'email' => 'required|string|unique:users,email',
-        'mobile' => 'required',     
+        'mobile' => 'required',
+        'password' => 'required|confirmed|min:6',
+        'password_confirmation' => 'required',     
       ]);
 
       DB::beginTransaction();
       try {
-        $data['password'] = bcrypt(123456);
+         $data['password'] = bcrypt( $data['password']);
 
         $user = User::withTrashed()->where('email', $data['email'])->first();
 
@@ -100,17 +102,15 @@ class UserController extends Controller
         }
 
         DB::commit();
+        $message = 'Tài khoản ' . $data['name'] . ' đã được tạo thành công !'; 
         \Session::flash('flash_message','Thêm quản trị viên thành công !');
-        return view('admin.index');
+        return view('admin.index',['messageSuccess' => $message]);
       } catch (Exception $e) {
         DB::rollback();
 
         Log::info($e->getMessage());
-
-        return response()->json([
-          'error' => true,
-          'message' => $e->getMessage()
-        ]);
+        $message = $e->getMessage();
+        return view('admin.index',['messageSuccess' => $message]);
       }
     }
 
@@ -147,42 +147,34 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-      $data = $request->only('email', 'name', 'type', 'mobile');
+      $data = $request->all();
 
-      $user = User::where('email', $data['email'])->first();
+      $profile = User::where('email', $data['email'])->first();
 
-      if (!empty($user) && $user->id == $id) {
+      if (!empty($profile) ) {
         DB::beginTransaction();
         try {
-          $user->update([
+          $profile->update([
             'name'  => $data['name'],
-            'type'  => $data['type'],
-            'mobile'  => $data['mobile'],
+            'email'  => $data['email'],
+          
           ]);
-
+          $message = 'Cập nhập thành công tài khoản '. $profile->email;
           DB::commit();
+          return view('admin.index',['messageSuccess' => $message]);
 
-          return response()->json([
-            'error' => false,
-            'message' => 'Cập nhập thành công tài khoản '.$user->email,
-          ]);
         } catch (Exception $e) {
           DB::rollback();
 
           Log::info($e->getMessage());
-
-          return response()->json([
-            'error' => true,
-            'message' => $e->getMessage()
-          ]);
+          $message = $e->getMessage();
+          return view('admin.index',['messageSuccess' => $message]);
         }
       } else {
-        return response()->json([
-          'error'     =>  true,
-          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-        ]);
+        $message =  'Không tìm thấy người dùng, vui lòng thử lại sau';
+        return view('admin.index',['messageError' => $message]);
       }
     }
 
@@ -365,21 +357,21 @@ class UserController extends Controller
    }
 
    public  function showLinkChangePassword(){
-    return view('backend.admins.change-password');
+    return view('admin-change-password');
   }
 
   public function ChangePassword(Request $request){
     $oldpassword = $request->oldpassword;
     $password = $request->password;
     $passwordconf = $request->password_confirmation;
-    if(Hash::check($request->oldpassword, Auth::user()->password) == true && $password == $passwordconf){
+    if(Hash::check($request->oldpassword, Auth::user('web')->password) == true && $password == $passwordconf){
       $password = bcrypt($password);
-      user::find(Auth::user()->id)->update(['password' => $password]);
+      user::find(Auth::user('web')->id)->update(['password' => $password]);
       $message = 'Thay đổi mật khẩu thành công !';
-      return view('backend.admins.change-password', ['messageSuccess'   =>  $message]);
+      return view('user.product.index', ['messageSuccess'   =>  $message]);
     }else{
      $message = 'Nhập chưa đúng, Xin mời nhập lại !';
-     return view('backend.admins.change-password', ['messageError'   =>  $message]);
+     return view('user.product.index', ['messageError'   =>  $message]);
    }
  }
 }

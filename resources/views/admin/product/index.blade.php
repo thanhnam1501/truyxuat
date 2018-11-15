@@ -10,9 +10,9 @@
                     <th>
                         #
                     </th>
-                    <th>id</th>
                     <th>Tên sản phẩm</th>
-                    <th>Cập nhật</th>
+                    <th>Tên công ty</th>
+                    <th>Cập nhật</th>                  
                     <th>Ngày tạo</th>
                     <th>Action</th>
                 </tr>
@@ -25,35 +25,36 @@
     @endsection
     @section('script')
 
-  <script>
-    $(function() {
-        $('#product-list').DataTable({
-            processing: false,
-            serverSide: true,
-            
-            order: [],
-            ajax: '{!! route('product.getList') !!}',
-            pageLength: 30,
-            lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
-            ordering: false,
-            columns: [
-            {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'name', name: 'name'},
-            {data: 'updated_at', name: 'updated_at'},
-            {data: 'created_at', name: 'created_at',orderable: false, searchable: false},
-            {data: 'action', name: 'action',searchable: false},
-            ]
+    <script>
+        $(function() {
+            $('#product-list').DataTable({
+                processing: false,
+                serverSide: true,
+
+                order: [],
+                ajax: '{!! route('product.getList') !!}',
+                pageLength: 30,
+                lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
+                ordering: false,
+                columns: [
+                {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
+
+                {data: 'name', name: 'name'},
+                {data: 'company_name', name: 'company_name'},
+                {data: 'updated_at', name: 'updated_at'},
+                {data: 'created_at', name: 'created_at',orderable: false, searchable: false},
+                {data: 'action', name: 'action',searchable: false},
+                ]
+            });
+
         });
 
-    });
 
 
-
-</script>
-<script>    
-    function delete(id){
-        $('.btn_delete').click(function(){
+    </script>
+    <script>    
+        function delete(id){
+            $('.btn_delete').click(function(){
             // alert('aaa');
             swal({
                 title: "Bạn có chắc muốn xóa?",
@@ -90,7 +91,7 @@
             });
 
         });
-    }
-</script>
+        }
+    </script>
 
-@endsection
+    @endsection

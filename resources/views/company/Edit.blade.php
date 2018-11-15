@@ -35,10 +35,25 @@
 						<input type="text" class="form-control" id="address" value="{{$data->address}}" name="address" placeholder="Địa chỉ" required>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
+
+					<div class="form-group">
+						<label for="exampleInputEmail1">Giới hạn tài khoản</label>
+						<input type="number" class="form-control" id="account_limit" name="account_limit" value="{{$data->account_limit}}" placeholder="Giới hạn tài khoản" required>
+						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+					</div>
+
+					<div class="form-group">
+						<label for="exampleInputEmail1">Giới hạn sản phẩm</label>
+						<input type="number" class="form-control" id="product_limit" name="product_limit" value="{{$data->product_limit}}" placeholder="Giới hạn sản phẩm" required>
+						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+					</div>
+
 					<div class="form-group">
 						<label>Mô tả</label>
 						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor1"></textarea>
 					</div> 
+
+
 					  {{ csrf_field() }}
 
 					<button type="submit" class="btn btn-primary">Cập nhật</button>

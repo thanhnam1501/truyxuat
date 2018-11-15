@@ -35,6 +35,7 @@ public static function getFormCreate(){
 
 public static function create(Request $request){
   $data = $request->all();
+
   $create = Company::create($data);
   $message = 'Thêm mới thành công !';
   return redirect()->route('company.index',['message' => $message]);
@@ -51,7 +52,9 @@ public static function edit(Request $request){
 public static function update(Request $request){
   $data = $request->all();
   Company::find($data['id'])->update($data);
-  return view('company.index');
+  $company = Company::find($data['id']);
+  $message = 'Cập nhật công ty ' . $company->name . 'thành công !';
+  return view('company.index',['messageSuccess' => $message]);
 }
 
 public static function delete(Request $request){

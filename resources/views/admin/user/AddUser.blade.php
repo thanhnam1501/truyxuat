@@ -39,6 +39,15 @@
 					{{-- <input type="s" class="form-control has-feedback-left" id="company_id" name="company_id" placeholder="Số điện thoại" required>
 					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> --}}
 				</div>
+
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="password" class="form-control has-feedback-left" id="password" name="password" placeholder="Mật khẩu" required>
+					<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="password" class="form-control has-feedback-left" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu" required>
+					<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+				</div>
 				{{ csrf_field() }}
 
 				<button type="submit" class="btn btn-primary">Tạo mới</button>

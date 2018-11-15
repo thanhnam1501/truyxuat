@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
+use App\Models\Node;
+
 use DB;
 use Datatables;
-use QRCode;
+use QrCode;
+use Auth;
+use App\Models\Imageupload;
 
 
 class AdminProductController extends Controller
 {
-    public function getFormCreate (){
+  public function getFormCreate (){
     $companies = Company::get();
     return view('admin.product.AddProduct',['companies' => $companies]);
   }
@@ -22,6 +26,14 @@ class AdminProductController extends Controller
     return view('admin.product.index');
   }
 
+  public function show($id)
+{ 
+  $product = Product::find($id);
+  $nodes = Node::where('product_id', $product->id)->get();
+  
+  return view('admin.product.showProduct', ['product' => $product, 'nodes' => $nodes]);
+}
+
     /**
      * Get the list of scientist accounts.
      *
@@ -29,7 +41,10 @@ class AdminProductController extends Controller
      */
     public function getlist()
     {
-      $products = Product::orderBy('id', 'desc');
+      $products = DB::table('products')
+      ->join('companies', 'companies.id', '=', 'products.company_id')
+      ->select('products.*', 'companies.name as company_name')
+      ->get();
 
       return Datatables::of($products)
       ->addIndexColumn()
@@ -37,9 +52,13 @@ class AdminProductController extends Controller
       ->addColumn('action', function($products) {
         $string = "";
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('product.edit', $products->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" href="'.route('product.show', $products->id).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="delete('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+
+        $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('product.edit', $products->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+
+
+        $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="delete('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
         return $string;
       })
@@ -56,35 +75,36 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
-      $data = $request->all();
+     $data = $request->all();
 
-      $product = Product::create($data);
+     if($request->hasFile('image')){
+      $path = $request->file('image')->store('image');
+      $data['image'] = $path;
+    };
 
-      // $validatedData = $request->validate([
-      //   'name' => 'required',
-      //   'email' => 'required|string|unique:users,email',
-      //   'mobile' => 'required',     
-      // ]);
+    $product = Product::create($data);
 
-      DB::beginTransaction();
-      try { 
+    $data['slug'] = str_slug($data['name']);
 
-        $product = Product::create($data);
-
-        DB::commit();
-        \Session::flash('flash_message','Thêm sản phẩm mới thành công !');
-        return redirect()->route('product.edit',['id' => $product['id']]);
-      } catch (Exception $e) {
-        DB::rollback();
-
-        Log::info($e->getMessage());
-
-        return response()->json([
-          'error' => true,
-          'message' => $e->getMessage()
-        ]);
-      }
+    if(Product::where('slug', $data['slug'])){
+      $data['slug'] = $data['slug'] .'-'. $product->id;
     }
+    Product::find($product->id)->update(['slug' => $data['slug']]);
+    if($request->hasFile('image')){
+      $image = new Imageupload();
+      $image->content_id = $product->id;
+      $image->path = $data['image'];
+      $image->save();
+    };
+
+    if($data['node'] == 0){
+    return redirect()->route('product.edit',['id' => $product['id']]);
+  } 
+    else{
+      return redirect()->route('node.ShowFormCreate', ['node' => $data['node'], 'product_id' =>  $product['id'], 'company_id' => $product['company_id'],]);
+    }
+
+  }
 
     /**
      * Update the specified resource in storage.
@@ -120,4 +140,4 @@ class AdminProductController extends Controller
      }
    }
 
-}
+ }

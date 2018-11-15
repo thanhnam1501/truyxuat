@@ -12,7 +12,7 @@
 		<br>
 		<div class="clearfix"></div>
 		<div class="card-body">
-			<form action="{{route('profile.update')}}" method="POST">
+			<form action="{{route('user.profile.update')}}" method="POST">
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 					<input type="text" class="form-control has-feedback-left" id="name" name="name" value="{{$data->name}}" placeholder="Họ và Tên" required>
@@ -20,13 +20,19 @@
 				</div>
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" required>
+					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" readonly>
 					<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 				</div>
 
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<input type="number" class="form-control has-feedback-left" id="mobile" name="mobile" value="{{$data->mobile}}" placeholder="Số điện thoại" required>
+					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+				</div>
+
+
 				{{ csrf_field() }}
 
-				<button type="submit" class="btn btn-primary">Tạo mới</button>
+				<button type="submit" class="btn btn-primary">Cập nhật</button>
 			</form>
 
 

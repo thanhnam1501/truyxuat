@@ -1,5 +1,19 @@
 @extends('layouts.master')
 @section('content')
+<div>
+   @if(isset($messageError))
+ <div class="alert alert-danger">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     {{ $messageError }}
+ </div>
+ @endif
+ @if(isset($messageSuccess))
+ <div class="alert alert-success">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     {{ $messageSuccess }}
+ </div>
+ @endif
+</div>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">						
 	<div class="card mb-3">
 		<div class="card-header">
@@ -20,7 +34,7 @@
 				</div>
 
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" required>
+					<input type="email" class="form-control has-feedback-left" id="email" name="email" value="{{$data->email}}" placeholder="Email" readonly>
 					<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 				</div>
 
@@ -29,9 +43,9 @@
 					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-					<select class="form-control has-feedback-left" name="company_id" id="company_id" value="{{$data->company_id}}">
+					<select class="form-control has-feedback-left" name="company_id" id="company_id" readonly>
 						@foreach($companies as $company)
-						<option value="{{$company->id}}">{{$company->name}}</option>
+						<option @if($data->company_id == $company->id) selected @endif value="{{$company->id}}">{{$company->name}}</option>
 						@endforeach
 					</select>
 					<span class="fa fa-university form-control-feedback left" aria-hidden="true"></span>
@@ -40,7 +54,7 @@
 				</div>
 				{{ csrf_field() }}
 
-				<button type="submit" class="btn btn-primary">Tạo mới</button>
+				<button type="submit" class="btn btn-primary">Cập nhật</button>
 			</form>
 
 
