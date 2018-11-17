@@ -35,270 +35,104 @@
         <![endif]-->
         <style type="text/css">
         .imageProduct{
-          width: 100%;
-          height: 300px; 
-          margin: 0 auto;
+          width: 50%;
+          height: 50%; 
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
         }
-        .tab-content img{
-          max-width: 100%;
-          height: 300px;
-        }
-      </style>
-    </head>
-
-
-    <body class="nav-md">
-     <div >
-      <div class="x_panel">
-        <h3 style="color: red; font-weight: bold; text-align: center" align="justify">{{$data->name}}</h3>
-      </div>
-    </div>
-
-    <div class="clearfix"></div>
-    <div class="">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2><i class="fa fa-bars"></i> Thông tin</h2>
-
-          <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-
-          <div class="col-md-6 col-xs-12" style="margin-bottom: 10%;">
-            <!-- required for floating -->
-            <!-- Nav tabs -->
-            @if($data->image)
-            <img class="imageProduct" src="{{asset($data->image)}}" alt="">
-            @else
-            <img style="width: 100%;" src="{{ asset('image/noimage.png')}}" alt="">
-            @endif
-
-          </div>
-          <div class="clearfix"></div>
-          <div class="col-md-6 col-xs-12">
-            <!-- Tab panes -->
-            <div class="tab-content">
-             {!!$data->sort_content!!}
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
-
-   <div class="">
-    <div class="x_panel">
-      <div class="x_title">
-        <h2><i class="fa fa-bars"></i> Mô tả</h2>
-
-        <div class="clearfix"></div>
-      </div>
-      <div class="x_content">
-
-        <div class=" col-xs-12">
-          <!-- Tab panes -->
-          <div class="tab-content">
-
-            <p>{!!$data->content!!}</p>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <div>
-    <div class="x_panel">
-      <div class="x_title">
-        <h2><i class="fa fa-bars"></i> Quy trình</h2>
-
-        <div class="clearfix"></div>
-      </div>
-      <div class="x_content">
-
-        <div class="col-md-3 col-xs-12">
-          <!-- required for floating -->
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs tabs-left">
-            @for($i= 0; $i < $data->node ; $i++)
-            @foreach($nodes as $key => $value)
-            @if($key == $i)
-            <li  role="presentation" class="@if($i==0)active @endif col-xs-12"><a href="#tab_content{{$i}}" role="tab" id="profile-tab" data-toggle="tab"  aria-expanded="false">{{$value->name}}</a>
-
-            </li>
-            @endif
-            @endforeach
-            @endfor
-          </ul>
-        </div>
-
-        <div>
-          <!-- Tab panes -->
-          <div class="tab-content">
-           @for($i= 0; $i < $data->node ; $i++)
-           @foreach($nodes as $key => $value)
-           @if($key === $i)
-           <div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
-            <p style="max-width: auto;overflow: auto;">{!!$value->content!!}</p>
-          </div>
-          @endif
-          @endforeach
-          @endfor
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-      {{-- <div class="container body">
-        <style>
-        li {
-          list-style: none;
-          float: left;
-        }
-        .imageProduct{
+        .content img{
          max-width: 100%;
-         max-height: 400px;
-
-       </style>
-
-       <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="page-title">
-          <div class="title_left">
-            <h3>General Elements</h3>
-          </div>
-
-
-        </div>
-        <div >
-          <div class="x_panel">
-            <div class="x_title">
-              <h2><i class="fa fa-bars"></i> Thông tin sản phẩm</h2>
-
-              <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-
-              <div class="col-xs-12">
-                <!-- required for floating -->
-                <!-- Nav tabs -->
-                <img class="imageProduct" src="{{asset($data->image)}}" alt="">
-              </div>
-
-              <div class="col-xs-12">
-                <!-- Tab panes -->
-                <div class="tab-content">
-                  <div class="tab-pane active" id="home">
-                    <p>
-                      {!!$data->sort_content!!}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="clearfix"></div>
-
-            </div>
-          </div>
-        </div>
-
-
-  <div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="x_panel">
-      <div class="x_title">
-        <h2><i class="fa fa-bars"></i> Mô tả</h2>
-
-        <div class="clearfix"></div>
-      </div>
-      <div class="x_content">
-
+         max-height: 300px;
+       }
+       body{
+        background-color: white;
+        max-width: 100%;
+        margin: 0 auto;
+        text-align: justify;
+      }
+      .row {
+        max-width: 100%;
+      }
       
 
-        <div class="col-xs-12">
-          <!-- Tab panes -->
-          <div class="" role="tabpanel" data-example-id="togglable-tabs">
-            <p>{!!$data->content!!}</p>
-          </div>
-      </div>
+    </style>
+  </head>
 
-      <div class="clearfix"></div>
 
-    </div>
-  </div>
+  <body class="nav-md">
 
-  <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
-      <div class="x_title">
-        <h2><i class="fa fa-bars"></i> Quy trình</h2>
+      @if($data->image)
+      <img class="imageProduct" src="{{asset($data->image)}}" alt="">
+      @else
+      <img class="imageProduct" src="{{ asset('image/noimage.png')}}" alt="">
+      @endif
+    </div>
 
-        <div class="clearfix"></div>
+
+    <div class="x_panel">
+      <h3 style="color: red;text-align: center;"><strong>{{$data->name}}</strong></h3>
+    </div>
+
+    <div class="row">
+      <legend class="panel-heading" style="background-color: red;">
+       <a href="#sort-content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN SẢN PHẨM</strong><i class="fa fa-chevron-up" style="float: right;"></i></span>
+       </a>
+     </legend>
+     <div class="panel-body panel-collapse fade collapse in" id="sort-content" aria-expanded="true" style="">
+      <div id="sort-content" class="btn-group ">
+        {!!$data->sort_content!!}
       </div>
-      <div class="x_content">
-
-        <div class="col-md-3 col-xs-12">
-          <!-- required for floating -->
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs tabs-left">
-            @for($i= 0; $i < $data->node ; $i++)
-            @foreach($nodes as $key => $value)
-            @if($key == $i)
-            <li role="presentation" class="@if($i==0)active @endif col-xs-12"><a href="#tab_content{{$i}}" role="tab" id="profile-tab" data-toggle="tab"  aria-expanded="false">{{$value->name}}</a>
-
-            </li>
-            @endif
-            @endforeach
-            @endfor
-          </ul>
-        </div>
-
-        <div class="col-md-9 col-xs-12">
-          <!-- Tab panes -->
-          <div class="tab-content">
-           @for($i= 0; $i < $data->node ; $i++)
-           @foreach($nodes as $key => $value)
-           @if($key === $i)
-           <div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
-            <p>{{$value->content}}</p>
-          </div>
-          @endif
-          @endforeach
-          @endfor
-        </div>
-      </div>
-
-      <div class="clearfix"></div>
-
     </div>
   </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-</div> --}}
-<!-- /page content -->
 
 
+  <div class="row">
 
-<script src="{{asset('js/bootstrap.min.js')}}"></script>
+    <legend class="panel-heading" style="background-color: red;">
+      <a href="#content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN CHI TIẾT</strong><i class="fa fa-chevron-up" style="float: right;"></i></span>
+      </a>
+    </legend>
+    <div class="panel-body panel-collapse fade collapse in" id="content" aria-expanded="true" style="">
+      <div id="content" class="btn-group content ">
+        {!!$data->content!!}
+      </div>
+    </div>
+  </div>
 
-<!-- chart js -->
-<script src="{{asset('js/chartjs/chart.min.js')}}"></script>
-<!-- bootstrap progress js -->
-<script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-<script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
-<!-- icheck -->
-<script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+  @for($i= 0; $i < $data->node ; $i++)
+  @foreach($nodes as $key => $value)
+  @if($key == $i)
+  <div class="row">
+    <legend class="panel-heading" style="background-color: red;">
+      <a href="#content{{$i}}" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="fa fa-chevron-up" style="float: right;"></i></span>
+      </a>
+    </legend>
+    <div class="panel-body panel-collapse fade collapse in" id="content{{$i}}" aria-expanded="true" style="">
+      <div id="content" class="btn-group content">
+        {!!$value->content!!}
+      </div>
+    </div>
+  </div>
+  @endif
+  @endforeach
+  @endfor
 
-<script src="{{asset('js/custom.js')}}"></script>
 
-<!-- /footer content -->
+  <script src="{{asset('js/bootstrap.min.js')}}"></script>
+
+  <!-- chart js -->
+  <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+  <!-- bootstrap progress js -->
+  <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+  <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+  <!-- icheck -->
+  <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+
+  <script src="{{asset('js/custom.js')}}"></script>
+
+  <!-- /footer content -->
 </body>
 
 </html>

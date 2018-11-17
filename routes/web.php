@@ -11,6 +11,98 @@
 |
 */
 
+Route::get('test/{tps}', function ($tps){
+  $tps = str_split($tps);
+  $rs = "";
+  $max = sizeof($tps);
+  try {
+   $i= 0;
+   while ($i < $max)
+   {
+    $trs = $tps[$i] ."". $tps[$i + 1];
+    if ($trs == "l2")
+    {
+      $rs = $rs . "0";
+    }
+    if ($trs == "x8")
+    {
+      $rs = $rs . "1";
+    }
+    if ($trs == "n4")
+    {
+      $rs = $rs. "2";
+    }
+    if ($trs == "k9")
+    {
+      $rs = $rs . "3";
+    }
+    if ($trs == "o7")
+    {
+      $rs = $rs . "4";
+    }
+    if ($trs == "p1")
+    {
+      $rs = $rs . "5";
+    }
+    if ($trs == "y3")
+    {
+      $rs = $rs . "6";
+    }
+    if ($trs == "z0")
+    {
+      $rs = $rs . "7";
+    }
+    if ($trs == "a5")
+    {
+      $rs = $rs . "8";
+    }
+    if ($trs == "c6")
+    {
+      $rs = $rs . "9";
+    }
+    $i = $i + 2;
+  }
+} catch (Exception $e) {
+  return "0";
+}
+  // $str = str_split($numbers);
+  // $max = sizeof($str);
+  //   $rs = "";
+  // for ($i = 0; $i < $max; $i++) {
+  //   if ($str[$i] == 0) {
+  //     $rs = $rs . "l2";
+  //   }
+  //   if ($str[$i] == 1) {
+  //     $rs = $rs . "x8";
+  //   }
+  //   if ($str[$i] == 2) {
+  //     $rs = $rs . "n4";
+  //   }
+  //   if ($str[$i] == 3) {
+  //     $rs = $rs . "k9";
+  //   }
+  //   if ($str[$i] == 4) {
+  //     $rs = $rs . "o7";
+  //   }
+  //   if ($str[$i] == 5) {
+  //     $rs = $rs . "p1";
+  //   }
+  //   if ($str[$i] == 6) {
+  //     $rs = $rs . "y3";
+  //   }
+  //   if ($str[$i] == 7) {
+  //     $rs = $rs . "z0";
+  //   }
+  //   if ($str[$i] == 8) {
+  //     $rs = $rs . "a5";
+  //   }
+  //   if ($str[$i] == 9) {
+  //     $rs = $rs . "c6";
+  //   }           
+  // }
+return($rs);
+});
+
 Route::middleware('revalidate')->group(function () {
 
     //* Admin
@@ -66,7 +158,7 @@ Route::middleware('revalidate')->group(function () {
       Route::get('cap-nhat-thong-tin-san-pham/{id}', 'AdminProductController@edit')->name('product.edit');
       Route::post('update-thong-tin-san-pham', 'AdminProductController@update')->name('product.update');
       Route::post('xoa-san-pham','AdminProductController@destroy')->name('product.delete');
-       Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
+      Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
     });
             //* End
 
@@ -88,32 +180,32 @@ Route::middleware('revalidate')->group(function () {
         //* End Quản lý doanh nghiệp
 
         //* Quản lý logs hệ thống
-    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin.log');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin.log');
         //* End
 
 
 
       //* Auth Admin
-    Auth::routes();
-    Route::post('login', 'Auth\LoginController@login')->name('admin.login.submit');
-    Route::post('logout', 'Auth\LoginController@logout')->name('admin.logout');
-    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-    Route::get('change-password', 'UserController@showLinkChangePassword')->name('user.change-password');
-    Route::post('change-password', 'UserController@ChangePassword')->name('user.post.change-password');
+Auth::routes();
+Route::post('login', 'Auth\LoginController@login')->name('admin.login.submit');
+Route::post('logout', 'Auth\LoginController@logout')->name('admin.logout');
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::get('change-password', 'UserController@showLinkChangePassword')->name('user.change-password');
+Route::post('change-password', 'UserController@ChangePassword')->name('user.post.change-password');
       //* End
 
       //* Quản lý lịch sử
-    Route::group(['prefix' => 'lịch-su-nguoi-dung'], function () {
-      Route::get('get-list', 'User_HistoryController@getlist')->name('history.getList');
-      Route::get('/', 'User_HistoryController@index')->name('admin.history.index');
+Route::group(['prefix' => 'lịch-su-nguoi-dung'], function () {
+  Route::get('get-list', 'User_HistoryController@getlist')->name('history.getList');
+  Route::get('/', 'User_HistoryController@index')->name('admin.history.index');
 
-    });
+});
             //* End
 
-  });
+});
     //* End Prefix Admin
 
     // ========================================================================== //
