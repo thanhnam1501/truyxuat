@@ -251,6 +251,14 @@ Route::get('profile', 'ProfileController@index')->name('profile');
 Route::post('get-info-profile', 'OrganizationController@getDetail');
     //* End
 
+        //* Quản lý lịch sử
+Route::group(['prefix' => 'lich-su-nguoi-dung'], function () {
+  Route::get('get-list', 'User_HistoryController@getlist')->name('user.history.getList');
+  Route::get('/', 'User_HistoryController@index')->name('user.history.index');
+
+});
+            //* End
+
 //* Quản lý người dùng
 Route::group(['prefix' => 'nguoi-dung'], function () {
   Route::get('get-list', 'ProfileController@getlist')->name('user.profile.getList');
@@ -277,13 +285,6 @@ Route::group(['prefix' => 'san-pham'], function () {
 });
             //* End
 
-        //* Quản lý lịch sử
-Route::group(['prefix' => 'lich-su-nguoi-dung'], function () {
-  Route::get('get-list', 'User_HistoryController@getlist')->name('user.history.getList');
-  Route::get('/', 'User_HistoryController@index')->name('user.history.index');
-
-});
-            //* End
 
        //* Quản lý các node
 Route::group(['prefix' => 'node'], function () {

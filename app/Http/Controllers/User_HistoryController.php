@@ -7,13 +7,18 @@ use App\Models\Profile;
 use App\Models\User_History;
 use Datatables;
 use Auth;
+use DB;
 
 
 class User_HistoryController extends Controller
 {
+    public function __construct(){
+
+    $this->middleware('auth.profile');
+  }
 	public function index()
 	{ 
-		return view('admin.history');
+		return view('user.index_history');
 	}
 
     /**
@@ -22,16 +27,17 @@ class User_HistoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getlist()
-    {
-    	$history = User_History::where('company_id',Auth::guard('profile')->user()->company_id)->orderBy('id', 'desc');
+    {   
+        $history =  DB::table('user_histories')
+            ->join('profiles', 'user_histories.user_id', '=', 'profiles.id')       
+            ->select('user_histories.*', 'profiles.name as user_name')
+            ->orderBy('user_histories.created_at', 'desc')
+            ->get();
+    	
 
     	return Datatables::of($history)
     	->addIndexColumn()
       // ->addColumn()           
-    	->addColumn('name', function($history) {
-    		$name = Profile::find($history['user_id'])->name;
-    		return $name;
-    	})
     	->make(true);
     }
 }
