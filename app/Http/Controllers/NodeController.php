@@ -170,6 +170,23 @@ Public function create(Request $request){
      }
    }
 
+   public function activated(Request $request){
+      $id = $request->id;
+      $node = Node::find($id);
+      if($node->status == 1){
+        $data = Node::where('id', $id)->update(['status' => 0]);
+      }
+      else{
+          $data = Node::where('id', $id)->update(['status' => 1]);
+      }
+
+      return response()->json([
+        'status' => true,
+        'message' => 'Thay đổi trạng thái thành công !',
+      ]);
+   }
+
+
    public function destroy(Request $request)
    {
     $node = Node::find($request->id);

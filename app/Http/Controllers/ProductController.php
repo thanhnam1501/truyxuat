@@ -54,9 +54,19 @@ public function show($id)
      */
     public function getlist()
     {
-      $products = Product::where('company_id', Auth::guard('profile')->user()->company_id)->orderBy('id', 'desc');
+      $products = Product::where('company_id', Auth::guard('profile')->user()->company_id)->orderBy('id', 'desc');    
 
       return Datatables::of($products)
+      ->editColumn('status', function($products){
+        $string = "";
+        if($products->status == 1){
+              $string = '<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activated('. $products->id .')" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>';
+        }
+        else{
+              $string = '<a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>';
+        }
+        return $string;      
+      })
       ->addIndexColumn()
       // ->addColumn()           
       ->addColumn('action', function($products) {
@@ -64,6 +74,11 @@ public function show($id)
         $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" href="'.route('user.product.show', $products->id).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
 
         $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('user.product.edit', $products->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+
+        $string .= '<a href="javascript:;" title="In mã QR-Code" class="btn btn-warning btn-xs" onclick="PrintImage('. "'".
+        base64_encode(QrCode::format('png')
+          ->size(200)
+          ->generate(url("/check/{$products->id}")))."'".'); return false;"><i class="fa fa-print"></i></a></a>';
 
         $string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteProduct('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
@@ -153,7 +168,7 @@ public function show($id)
       if (!empty($product)) {
         DB::beginTransaction();
         try {
-          
+
           $product->update($data);
           $user_history = new User_History();
           $user_history->user_id = Auth::guard('profile')->user()->id;
@@ -175,6 +190,24 @@ public function show($id)
        return redirect()->route('user.product.edit',['id' => $product['id']]);
      }
    }
+
+   public function activated(Request $request){
+    $id = $request->id;
+      $products = Product::find($id);
+      if($products->status == 1){
+        $data = Product::find($id)->update(['status' => 0]);
+      }
+      else{
+        $data = Product::find($id)->update(['status' => 1]);
+      }
+
+      return response()->json([
+        'status' => true,
+        'message' => 'Thay đổi trạng thái thành công !',
+      ]);
+   }
+
+
 
    public function destroy(Request $request)
    {

@@ -58,81 +58,108 @@
 
     </style>
   </head>
+  
+  <a href="#" onclick="PrintImage('{!! base64_encode(QrCode::format('png')
+    ->size(200)
+    ->generate(url("/check/{$data->id}"))) !!}' ); return false;">PRINT</a>
+    
+    <body class="nav-md">
+
+      <div class="x_panel">
+        @if($data->image)
+        <img class="imageProduct" src="{{asset($data->image)}}" alt="">
+        @else
+        <img class="imageProduct" src="{{ asset('image/noimage.png')}}" alt="">
+        @endif
+      </div>
 
 
-  <body class="nav-md">
+      <div class="x_panel">
+        <h3 style="color: red;text-align: center;"><strong>{{$data->name}}</strong></h3>
+      </div>
 
-    <div class="x_panel">
-      @if($data->image)
-      <img class="imageProduct" src="{{asset($data->image)}}" alt="">
-      @else
-      <img class="imageProduct" src="{{ asset('image/noimage.png')}}" alt="">
-      @endif
+      <div class="row">
+        <legend class="panel-heading" style="background-color: red;">
+         <a href="#sort-content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN SẢN PHẨM</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
+         </a>
+       </legend>
+       <div class="panel-body panel-collapse fade collapse " id="sort-content" aria-expanded="true" style="">
+        <div id="sort-content" class="btn-group ">
+          {!!$data->sort_content!!}
+        </div>
+      </div>
     </div>
 
-
-    <div class="x_panel">
-      <h3 style="color: red;text-align: center;"><strong>{{$data->name}}</strong></h3>
-    </div>
 
     <div class="row">
+
       <legend class="panel-heading" style="background-color: red;">
-       <a href="#sort-content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN SẢN PHẨM</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
-       </a>
-     </legend>
-     <div class="panel-body panel-collapse fade collapse " id="sort-content" aria-expanded="true" style="">
-      <div id="sort-content" class="btn-group ">
-        {!!$data->sort_content!!}
+        <a href="#content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN CHI TIẾT</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
+        </a>
+      </legend>
+      <div class="panel-body panel-collapse fade collapse" id="content" aria-expanded="true" style="">
+        <div id="content" class="btn-group content ">
+          {!!$data->content!!}
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <div class="row">
-
-    <legend class="panel-heading" style="background-color: red;">
-      <a href="#content" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">THÔNG TIN CHI TIẾT</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
-      </a>
-    </legend>
-    <div class="panel-body panel-collapse fade collapse" id="content" aria-expanded="true" style="">
-      <div id="content" class="btn-group content ">
-        {!!$data->content!!}
+    @for($i= 0; $i < $data->node ; $i++)
+    @foreach($nodes as $key => $value)
+    @if($key == $i)
+    <div class="row">
+      <legend class="panel-heading" style="background-color: red;">
+        <a href="#content{{$i}}" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
+        </a>
+      </legend>
+      <div class="panel-body panel-collapse fade collapse " id="content{{$i}}" aria-expanded="true" style="">
+        <div id="content" class="btn-group content">
+          {!!$value->content!!}
+        </div>
       </div>
     </div>
-  </div>
-
-  @for($i= 0; $i < $data->node ; $i++)
-  @foreach($nodes as $key => $value)
-  @if($key == $i)
-  <div class="row">
-    <legend class="panel-heading" style="background-color: red;">
-      <a href="#content{{$i}}" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
-      </a>
-    </legend>
-    <div class="panel-body panel-collapse fade collapse " id="content{{$i}}" aria-expanded="true" style="">
-      <div id="content" class="btn-group content">
-        {!!$value->content!!}
-      </div>
-    </div>
-  </div>
-  @endif
-  @endforeach
-  @endfor
+    @endif
+    @endforeach
+    @endfor
 
 
-  <script src="{{asset('js/bootstrap.min.js')}}"></script>
 
-  <!-- chart js -->
-  <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
-  <!-- bootstrap progress js -->
-  <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-  <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
-  <!-- icheck -->
-  <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
 
-  <script src="{{asset('js/custom.js')}}"></script>
+    <script>
 
-  <!-- /footer content -->
-</body>
+      function ImagetoPrint(source)
+      {
+        return "<html><head><script>function step1(){\n" +
+        "setTimeout('step2()', 10);}\n" +
+        "function step2(){window.print();window.close()}\n" +
+        "</scri" + "pt></head><body onload='step1()'>\n" +
+        "<img src='data:image/png;base64," + source + "' /></body></html>";
+      }
 
-</html>
+      function PrintImage(source)
+      {
+        Pagelink = "about:blank";
+        var pwa = window.open(Pagelink, "_new");
+        pwa.document.open();
+        pwa.document.write(ImagetoPrint(source));
+        pwa.document.close();
+      }
+
+    </script>
+
+
+
+    <!-- chart js -->
+    <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+    <!-- bootstrap progress js -->
+    <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+    <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+    <!-- icheck -->
+    <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+
+    <script src="{{asset('js/custom.js')}}"></script>
+
+    <!-- /footer content -->
+  </body>
+
+  </html>

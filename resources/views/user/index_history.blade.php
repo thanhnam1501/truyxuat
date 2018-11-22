@@ -39,6 +39,7 @@
             processing: false,
             serverSide: true,
             order: [],
+            searching: true,
             ajax: '{!! route('user.history.getList') !!}',
             pageLength: 30,
             lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
@@ -46,6 +47,7 @@
             {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
             {data: 'user_name', name: 'user_name',},
             {data: 'content', name: 'content'},
+            {data: 'status', name: 'status'},
             {data: 'created_at', name: 'created_at',},
             ]
         });

@@ -47,6 +47,20 @@
 						<input type="number" class="form-control" id="product_limit" name="product_limit" value="{{$data->product_limit}}" placeholder="Giới hạn sản phẩm" required>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Giới hạn thời gian: <span style="color: red; font-size: 20px;">{{$data->time_limit}} Tháng từ ngày {{$data->created_at->toDateString()}}</span></label>
+					</div>
+
+					<div class="form-group">
+						<label for="exampleInputEmail1">Gian hạn thêm thời gian</label>
+						<select class="form-control" name="add_time_limit" id="add_time_limit" >
+							<option value="0">Gia hạn hợp đồng</option>
+							<option value="3">3 Tháng</option>
+							<option value="6">6 Tháng</option>
+							<option value="9">9 Tháng</option>
+							<option value="12">12 Tháng</option>							
+						</select>
+					</div>
 
 					<div class="form-group">
 						<label>Mô tả</label>

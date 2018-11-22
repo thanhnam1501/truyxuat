@@ -14,6 +14,7 @@
                     <th>Tên công ty</th>
                     <th>Cập nhật</th>                  
                     <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -25,73 +26,121 @@
     @endsection
     @section('script')
 
-    <script>
-        $(function() {
-            $('#product-list').DataTable({
-                processing: false,
-                serverSide: true,
+   <script>
+  $(function() {
+    $('#product-list').DataTable({
+      aaSorting: [[5, 'desc']],
+      bPaginate: false,
+      bFilter: false,
+      bInfo: false,
+      order: [],
+      searching: true,
+      bSortable: true,
+      bRetrieve: true,
+      ajax: '{!! route('product.getList') !!}',
+      pageLength: 30,
+      lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
+      columns: [
+      {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
+      {data: 'id', name: 'id'},
+      {data: 'name', name: 'name'},
+      {data: 'updated_at', name: 'updated_at'},
+      {data: 'created_at', name: 'created_at',},
+      {data: 'status', name: 'status'},
+      {data: 'action', name: 'action', searchable: false},
+      ]
+    });
 
-                order: [],
-                ajax: '{!! route('product.getList') !!}',
-                pageLength: 30,
-                lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
-                ordering: false,
-                columns: [
-                {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
+  });
 
-                {data: 'name', name: 'name'},
-                {data: 'company_name', name: 'company_name'},
-                {data: 'updated_at', name: 'updated_at'},
-                {data: 'created_at', name: 'created_at',orderable: false, searchable: false},
-                {data: 'action', name: 'action',searchable: false},
-                ]
-            });
+</script>
+   <script>    
+  function deleteProduct(id){
+   swal({
+    title: "Bạn có chắc muốn xóa?",
+    text: "Bạn sẽ không thể khôi phục dữ liệu này!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+   .then((willDelete) => {
+    if (willDelete) {
 
-        });
+     $.ajax({
+      url: '{{ route('product.delete') }}',
+      type: 'POST',
+      data: {id: id},
 
+      success: function success(res) {
 
+        if (!res.error) {
 
-    </script>
-    <script>    
-        function delete(id){
-            $('.btn_delete').click(function(){
-            // alert('aaa');
-            swal({
-                title: "Bạn có chắc muốn xóa?",
-                text: "Bạn sẽ không thể khôi phục lại bản ghi này !",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                cancelButtonText: "Không",
-                confirmButtonText: "Có",
-                closeOnConfirm: true,
-            },
-            function(isConfirm){
-                if (isConfirm) {
-                    $.ajax({
-                        url: '{{ route('company.delete') }}',
-                        type: 'POST',
-                        data: {id: id},
+          toastr.error(res.message);
+          $('#product-list').DataTable().ajax.reload();
+        } else {
 
-                        success : function(res) {
-                            console.log(res);
-                            if (res.status) {
-                                $('#supplier_'+id).remove();
-                                toastr.success('Xoá thành công!', '',{timeOut: 1000});
-                            }
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            toastr.error('Xoá thất bại!', '',{timeOut: 1000});
-                        }
-                    });
-
-                }else{
-                    toastr.error('Thao tác bị huỷ!', '',{timeOut: 1000});
-                }
-            });
-
-        });
+          toastr.error(res.message);
         }
-    </script>
+      },
+      error: function error(xhr, ajaxOptions, thrownError) {
+       
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
 
-    @endsection
+    });
+   } 
+ });
+ }
+</script>
+
+    <script>
+
+      function ImagetoPrint(source)
+      {
+        return "<html><head><script>function step1(){\n" +
+        "setTimeout('step2()', 10);}\n" +
+        "function step2(){window.print();window.close()}\n" +
+        "</scri" + "pt></head><body onload='step1()'>\n" +
+        "<img src='data:image/png;base64," + source + "' /></body></html>";
+    }
+
+    function PrintImage(source)
+    {
+        Pagelink = "about:blank";
+        var pwa = window.open(Pagelink, "_new");
+        pwa.document.open();
+        pwa.document.write(ImagetoPrint(source));
+        pwa.document.close();
+    }
+
+</script>
+
+<script>
+  function activated(id){
+     $.ajax({
+        url: '{{ route('product.activated') }}',
+        type: 'POST',
+        data: {id: id},
+
+        success: function success(res) {
+
+          if (res.status == true) {
+
+            toastr.success(res.message);
+            $('#product-list').DataTable().ajax.reload();
+        } else {
+
+            toastr.success(res.message);
+        }
+    },
+    error: function error(xhr, ajaxOptions, thrownError) {
+
+      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+  }
+
+});
+ }
+</script>
+
+
+@endsection

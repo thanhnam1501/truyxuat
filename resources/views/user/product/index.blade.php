@@ -25,6 +25,7 @@
         <th>Tên sản phẩm</th>
         <th>Cập nhật</th>
         <th>Ngày tạo</th>
+        <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -42,6 +43,8 @@
       bPaginate: false,
       bFilter: false,
       bInfo: false,
+      order: [],
+      searching: true,
       bSortable: true,
       bRetrieve: true,
       ajax: '{!! route('user.product.getList') !!}',
@@ -53,6 +56,7 @@
       {data: 'name', name: 'name'},
       {data: 'updated_at', name: 'updated_at'},
       {data: 'created_at', name: 'created_at',},
+      {data: 'status', name: 'status'},
       {data: 'action', name: 'action', searchable: false},
       ]
     });
@@ -89,14 +93,60 @@
         }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
-                                        //toastr.error(thrownError);
-                                        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
-                                      }
+       
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
 
-                                    });
+    });
    } 
  });
  }
 </script>
+<script>
 
+  function ImagetoPrint(source)
+  {
+    return "<html><head><script>function step1(){\n" +
+    "setTimeout('step2()', 10);}\n" +
+    "function step2(){window.print();window.close()}\n" +
+    "</scri" + "pt></head><body onload='step1()'>\n" +
+    "<img src='data:image/png;base64," + source + "' /></body></html>";
+  }
+
+  function PrintImage(source)
+  {
+    Pagelink = "about:blank";
+    var pwa = window.open(Pagelink, "_new");
+    pwa.document.open();
+    pwa.document.write(ImagetoPrint(source));
+    pwa.document.close();
+  }
+
+</script>
+<script>
+  function activated(id){
+   $.ajax({
+    url: '{{ route('user.product.activated') }}',
+    type: 'POST',
+    data: {id: id},
+
+    success: function success(res) {
+
+      if (res.status == true) {
+
+        toastr.success(res.message);
+        $('#product-list').DataTable().ajax.reload();
+      } else {
+
+        toastr.success(res.message);
+      }
+    },
+    error: function error(xhr, ajaxOptions, thrownError) {
+
+      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+    }
+
+  });
+ }
+</script>
 @endsection

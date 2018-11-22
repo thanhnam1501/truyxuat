@@ -18,7 +18,7 @@ class AdminNodeController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth.profile');
+		 $this->middleware('auth');
 	}
 	public function getFormCreate (Request $request){
 
@@ -152,43 +152,60 @@ class AdminNodeController extends Controller
     	}
     }
 
-    public function destroy(Request $request)
-    {
-    	$node = Node::find($request->id);
-
-    	if (!empty($node)) {
-    		DB::beginTransaction();
-    		try {
-    			$node->delete();
-
-    			$node_history = new User_History();
-    			$node_history->user_id = Auth::guard('profile')->user()->id;
-    			$node_history->company_id = Auth::guard('profile')->user()->company_id;
-    			$node_history->content = 'đã xóa node: ' . $node->name ;
-    			$node_history->product_id = $node->product_id;
-    			$node_history->save();
-
-    			DB::commit();
-
-    			return response()->json([
-    				'error' => false,
-    				'message' => 'Bước cập nhật '.$node->name.' đã bị xóa',
-    			]);
-    		} catch (Exception $e) {
-    			DB::rollback();
-
-    			Log::info($e->getMessage());
-
-    			return response()->json([
-    				'error' => true,
-    				'message' => $e->getMessage()
-    			]);
-    		}
-    	} else {
-    		return response()->json([
-    			'error'     =>  true,
-    			'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
-    		]);
-    	}
+    public function activated(Request $request){
+      $id = $request->id;
+      $node = Node::find($id);
+      if($node->status == 1){
+        $data = Node::where('id', $id)->update(['status' => 0]);
     }
+    else{
+      $data = Node::where('id', $id)->update(['status' => 1]);
+  }
+
+  return response()->json([
+    'status' => true,
+    'message' => 'Thay đổi trạng thái thành công !',
+]);
+}
+
+
+public function destroy(Request $request)
+{
+ $node = Node::find($request->id);
+
+ if (!empty($node)) {
+  DB::beginTransaction();
+  try {
+   $node->delete();
+
+   $node_history = new User_History();
+   $node_history->user_id = Auth::guard('profile')->user()->id;
+   $node_history->company_id = Auth::guard('profile')->user()->company_id;
+   $node_history->content = 'đã xóa node: ' . $node->name ;
+   $node_history->product_id = $node->product_id;
+   $node_history->save();
+
+   DB::commit();
+
+   return response()->json([
+    'error' => false,
+    'message' => 'Bước cập nhật '.$node->name.' đã bị xóa',
+]);
+} catch (Exception $e) {
+   DB::rollback();
+
+   Log::info($e->getMessage());
+
+   return response()->json([
+    'error' => true,
+    'message' => $e->getMessage()
+]);
+}
+} else {
+  return response()->json([
+   'error'     =>  true,
+   'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
+]);
+}
+}
 }

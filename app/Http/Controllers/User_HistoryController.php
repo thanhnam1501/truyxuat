@@ -14,11 +14,11 @@ class User_HistoryController extends Controller
 {
     public function __construct(){
 
-    $this->middleware('auth.profile');
+     $this->middleware('auth');
   }
 	public function index()
 	{ 
-		return view('user.index_history');
+		return view('admin.history');
 	}
 
     /**
