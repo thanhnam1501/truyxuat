@@ -62,7 +62,7 @@ public static function update(Request $request){
   }
   Company::find($data['id'])->update($data);
   $company = Company::find($data['id']);
-  $message = 'Cập nhật công ty ' . $company->name . 'thành công !';
+  $message = 'Cập nhật công ty ' . $company->name . ' thành công !';
   return view('company.index',['messageSuccess' => $message]);
 }
 

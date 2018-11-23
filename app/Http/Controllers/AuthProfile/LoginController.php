@@ -54,6 +54,7 @@ class LoginController extends Controller
 
     protected function credentials(Request $request)
     {
+
         $data = $request->only($this->username(), 'password');
         $data['status'] =  1;
         return $data;
@@ -77,7 +78,6 @@ class LoginController extends Controller
     {   
         Auth::guard('profile')->logout();
         $request->session()->invalidate();
-        
         return $this->loggedOut($request) ?: redirect('/login');
     }
 

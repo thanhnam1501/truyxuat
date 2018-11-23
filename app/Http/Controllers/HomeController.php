@@ -23,7 +23,13 @@ class HomeController extends Controller
     public function show($id)
     {       
         $data = Product::find($id);
-         $nodes = Node::where('product_id', $data->id)->get();
+        if(!empty($data)){
+            $nodes = Node::where('product_id', $data->id)->get();
+        }else{
+            $nodes = null;
+        }
+
+        
         return view('check',['data' => $data, 'nodes' => $nodes]);
     }
 
