@@ -2,6 +2,7 @@
   <html lang="en">
 
   <head>
+    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
@@ -17,6 +18,7 @@
 
     <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+
 
     <!-- Custom styling plus plugins -->
     <link href="{{asset('css/custom.css')}}" rel="stylesheet">

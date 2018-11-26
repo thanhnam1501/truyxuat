@@ -27,12 +27,12 @@ class AdminProductController extends Controller
   }
 
   public function show($id)
-{ 
-  $product = Product::find($id);
-  $nodes = Node::where('product_id', $product->id)->get();
-  
-  return view('admin.product.showProduct', ['product' => $product, 'nodes' => $nodes]);
-}
+  { 
+    $product = Product::find($id);
+    $nodes = Node::where('product_id', $product->id)->get();
+    
+    return view('admin.product.showProduct', ['product' => $product, 'nodes' => $nodes]);
+  }
 
     /**
      * Get the list of scientist accounts.
@@ -44,21 +44,34 @@ class AdminProductController extends Controller
       $products = DB::table('products')
       ->join('companies', 'companies.id', '=', 'products.company_id')
       ->select('products.*', 'companies.name as company_name')
+      ->orderBy('id', 'desc')
       ->get();
 
       return Datatables::of($products)
+      ->editColumn('status', function($products){
+        $string = "";
+        if($products->status == 1){
+          $string = '<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activated('. $products->id .')" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>';
+        }
+        else{
+          $string = '<a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>';
+        }
+        return $string;      
+      })
       ->addIndexColumn()
       // ->addColumn()           
       ->addColumn('action', function($products) {
         $string = "";
-
         $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" href="'.route('product.show', $products->id).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
-
 
         $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('product.edit', $products->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
+        $string .= '<a href="javascript:;" title="In mã QR-Code" class="btn btn-warning btn-xs" onclick="PrintImage('. "'".
+        base64_encode(QrCode::format('png')
+          ->size(200)
+          ->generate(url("/check/{$products->id}")))."'".'); return false;"><i class="fa fa-print"></i></a></a>';
 
-        $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="delete('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteProduct('. $products->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
         return $string;
       })
@@ -98,8 +111,8 @@ class AdminProductController extends Controller
     };
 
     if($data['node'] == 0){
-    return redirect()->route('product.edit',['id' => $product['id']]);
-  } 
+      return redirect()->route('product.edit',['id' => $product['id']]);
+    } 
     else{
       return redirect()->route('node.ShowFormCreate', ['node' => $data['node'], 'product_id' =>  $product['id'], 'company_id' => $product['company_id'],]);
     }
@@ -140,4 +153,55 @@ class AdminProductController extends Controller
      }
    }
 
- }
+   public function activated(Request $request){
+    $id = $request->id;
+    $products = Product::find($id);
+    if($products->status == 1){
+      $data = Product::find($id)->update(['status' => 0]);
+    }
+    else{
+      $data = Product::find($id)->update(['status' => 1]);
+    }
+
+    return response()->json([
+      'status' => true,
+      'message' => 'Thay đổi trạng thái thành công !',
+    ]);
+  }
+
+
+
+  public function destroy(Request $request)
+  {
+    $product = Product::find($request->id);
+
+    if (!empty($product)) {
+      DB::beginTransaction();
+      try {
+        $product->delete();
+
+        DB::commit();
+
+        return response()->json([
+          'error' => false,
+          'message' => 'Sản phẩm '.$product->name.' đã bị xóa',
+        ]);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        Log::info($e->getMessage());
+
+        return response()->json([
+          'error' => true,
+          'message' => $e->getMessage()
+        ]);
+      }
+    } else {
+      return response()->json([
+        'error'     =>  true,
+        'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
+      ]);
+    }
+  }
+  
+}

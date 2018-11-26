@@ -6,7 +6,7 @@
 .imageProduct{
  max-width: 100%;
  margin: 5px auto;
-justify-content: center;
+ justify-content: center;
 </style>
 
 <div >
@@ -26,10 +26,10 @@ justify-content: center;
           <!-- required for floating -->
           <!-- Nav tabs -->
           @if($product->image)
-              <img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{asset($product->image)}}" alt="">
-              @else
-              <img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{ asset('image/noimage.png')}}" alt="">
-              @endif
+          <img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{asset($product->image)}}" alt="">
+          @else
+          <img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{ asset('image/noimage.png')}}" alt="">
+          @endif
         </div>
 
         <div class="col-xs-12 col-md-6 col-sm-6">
@@ -63,14 +63,14 @@ justify-content: center;
       <div class="col-xs-12">
         <!-- Tab panes -->
         <div class="tab-content">
-       <p>{!!$product->content!!}</p>
-      </div>
-    </div>
+         <p>{!!$product->content!!}</p>
+       </div>
+     </div>
 
-    <div class="clearfix"></div>
+     <div class="clearfix"></div>
 
-  </div>
-</div>
+   </div>
+ </div>
 </div>
 
 <div >
@@ -105,18 +105,23 @@ justify-content: center;
          @foreach($nodes as $key => $value)
          @if($key === $i)
          <div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
-          <p>{{$value->content}}</p>
-        </div>
-        @endif
-        @endforeach
-        @endfor
-      </div>
-    </div>
+           @if($value->status == 1)
+           <a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "><i class="fa fa-check"> Node đã được kích hoạt</i></a>
+           @else
+           <a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><i class="fa fa-check"> Node chưa được kích hoạt</i></a>
+           @endif
+           <p>{{$value->content}}</p>
+         </div>
+         @endif
+         @endforeach
+         @endfor
+       </div>
+     </div>
 
-    <div class="clearfix"></div>
+     <div class="clearfix"></div>
 
-  </div>
-</div>
+   </div>
+ </div>
 </div>
 
 @endsection
@@ -171,13 +176,39 @@ justify-content: center;
         }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
-                                        //toastr.error(thrownError);
-                                        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
-                                      }
 
-                                    });
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
+
+    });
    } 
  });
+ }
+</script>
+<script>
+  function activatedNode(id){
+   $.ajax({
+    url: '{{ route('node.activated') }}',
+    type: 'POST',
+    data: {id: id},
+
+    success: function success(res) {
+
+      if (res.status == true) {
+
+        toastr.success(res.message);
+        location.reload();
+        setTimeout(function(){
+             location.reload();
+        }, 5000);
+      } 
+    },
+    error: function error(xhr, ajaxOptions, thrownError) {
+
+      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+    }
+
+  });
  }
 </script>
 

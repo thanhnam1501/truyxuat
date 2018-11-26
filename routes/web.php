@@ -11,97 +11,6 @@
 |
 */
 
-Route::get('test/{tps}', function ($tps){
-  $tps = str_split($tps);
-  $rs = "";
-  $max = sizeof($tps);
-  try {
-   $i= 0;
-   while ($i < $max)
-   {
-    $trs = $tps[$i] ."". $tps[$i + 1];
-    if ($trs == "l2")
-    {
-      $rs = $rs . "0";
-    }
-    if ($trs == "x8")
-    {
-      $rs = $rs . "1";
-    }
-    if ($trs == "n4")
-    {
-      $rs = $rs. "2";
-    }
-    if ($trs == "k9")
-    {
-      $rs = $rs . "3";
-    }
-    if ($trs == "o7")
-    {
-      $rs = $rs . "4";
-    }
-    if ($trs == "p1")
-    {
-      $rs = $rs . "5";
-    }
-    if ($trs == "y3")
-    {
-      $rs = $rs . "6";
-    }
-    if ($trs == "z0")
-    {
-      $rs = $rs . "7";
-    }
-    if ($trs == "a5")
-    {
-      $rs = $rs . "8";
-    }
-    if ($trs == "c6")
-    {
-      $rs = $rs . "9";
-    }
-    $i = $i + 2;
-  }
-} catch (Exception $e) {
-  return "0";
-}
-  // $str = str_split($numbers);
-  // $max = sizeof($str);
-  //   $rs = "";
-  // for ($i = 0; $i < $max; $i++) {
-  //   if ($str[$i] == 0) {
-  //     $rs = $rs . "l2";
-  //   }
-  //   if ($str[$i] == 1) {
-  //     $rs = $rs . "x8";
-  //   }
-  //   if ($str[$i] == 2) {
-  //     $rs = $rs . "n4";
-  //   }
-  //   if ($str[$i] == 3) {
-  //     $rs = $rs . "k9";
-  //   }
-  //   if ($str[$i] == 4) {
-  //     $rs = $rs . "o7";
-  //   }
-  //   if ($str[$i] == 5) {
-  //     $rs = $rs . "p1";
-  //   }
-  //   if ($str[$i] == 6) {
-  //     $rs = $rs . "y3";
-  //   }
-  //   if ($str[$i] == 7) {
-  //     $rs = $rs . "z0";
-  //   }
-  //   if ($str[$i] == 8) {
-  //     $rs = $rs . "a5";
-  //   }
-  //   if ($str[$i] == 9) {
-  //     $rs = $rs . "c6";
-  //   }           
-  // }
-return($rs);
-});
 
 Route::middleware('revalidate')->group(function () {
 
@@ -112,70 +21,82 @@ Route::middleware('revalidate')->group(function () {
     //  Route::get('qr-code', function () {
     //   return QrCode::size(500)->generate('Welcome to kerneldev.com!');
     // });
+            //* Quản lý lịch sử
+      Route::group(['prefix' => 'lịch-su-nguoi-dung'], function () {
+        Route::get('get-list', 'User_HistoryController@getlist')->name('history.getList');
+        Route::get('/', 'User_HistoryController@index')->name('admin.history.index');
+
+      });
+            //* End
+
             //* Quản lý doanh nghiệp
-     Route::group(['prefix' => 'doanh-nghiep'], function () {
-      Route::get('get-list', 'CompanyController@getlist')->name('company.getList');
-      Route::get('/', 'CompanyController@index')->name('company.index');
-      Route::get('tao-moi', 'CompanyController@getFormCreate')->name('company.ShowFormCreate');
-      Route::post('create', 'CompanyController@create')->name('company.create');
-      Route::get('cap-nhat-thong-tin-doanh-nghiep/{id}', 'CompanyController@edit')->name('company.edit');
-      Route::post('update-thong-tin-doanh-nghiep', 'CompanyController@update')->name('company.update');
-      Route::post('xoa-doanh-nghiep','CompanyController@delete')->name('company.delete');
-    });
-     Auth::routes();
-     Route::get('/', 'UserController@home')->name('admin.index');
+      Route::group(['prefix' => 'doanh-nghiep'], function () {
+        Route::get('get-list', 'CompanyController@getlist')->name('company.getList');
+        Route::get('/', 'CompanyController@index')->name('company.index');
+        Route::get('tao-moi', 'CompanyController@getFormCreate')->name('company.ShowFormCreate');
+        Route::post('create', 'CompanyController@create')->name('company.create');
+        Route::get('cap-nhat-thong-tin-doanh-nghiep/{id}', 'CompanyController@edit')->name('company.edit');
+        Route::post('update-thong-tin-doanh-nghiep', 'CompanyController@update')->name('company.update');
+        Route::post('xoa-doanh-nghiep','CompanyController@delete')->name('company.delete');
+      });
+      Auth::routes();
+      Route::get('/', 'UserController@home')->name('admin.index');
 
             //* Quản lý quản trị viênus
-     Route::group(['prefix' => 'quan-tri-vien'], function () {
-      Route::get('get-list', 'UserController@getlist')->name('user.getList');
-      Route::get('/', 'UserController@index')->name('admin.user.index');
-      Route::get('tao-moi', 'UserController@getFormCreate')->name('user.ShowFormCreate');
-      Route::post('create', 'UserController@store')->name('user.create');
-      Route::get('cap-nhat-thong-tin-quan-tri-vien/{id}', 'UserController@edit')->name('user.edit');
-      Route::post('update-thong-tin-quan-tri-vien', 'UserController@update')->name('user.update');
-      Route::post('xoa-quan-tri-vien','UserController@destroy')->name('user.delete');
-    });
+      Route::group(['prefix' => 'quan-tri-vien'], function () {
+        Route::get('get-list', 'UserController@getlist')->name('user.getList');
+        Route::get('/', 'UserController@index')->name('admin.user.index');
+        Route::get('tao-moi', 'UserController@getFormCreate')->name('user.ShowFormCreate');
+        Route::post('create', 'UserController@store')->name('user.create');
+        Route::get('cap-nhat-thong-tin-quan-tri-vien/{id}', 'UserController@edit')->name('user.edit');
+        Route::post('update-thong-tin-quan-tri-vien', 'UserController@update')->name('user.update');
+        Route::post('xoa-quan-tri-vien','UserController@destroy')->name('user.delete');
+      });
             //* End
 
             //* Quản lý người dùng
-     Route::group(['prefix' => 'nguoi-dung'], function () {
-      Route::get('get-list', 'AdminProfileController@getlist')->name('profile.getList');
-      Route::get('/', 'AdminProfileController@index')->name('profile.index');
-      Route::get('tao-moi', 'AdminProfileController@getFormCreate')->name('profile.ShowFormCreate');
-      Route::post('create', 'AdminProfileController@store')->name('profile.create');
-      Route::get('cap-nhat-thong-tin-nguoi-dung/{id}', 'AdminProfileController@edit')->name('profile.edit');
-      Route::post('update-thong-tin-nguoi-dung', 'AdminProfileController@update')->name('profile.update');
-      Route::post('xoa-nguoi-dung','AdminProfileController@destroy')->name('profile.delete');
-    });
+      Route::group(['prefix' => 'nguoi-dung'], function () {
+        Route::get('get-list', 'AdminProfileController@getlist')->name('profile.getList');
+        Route::get('/', 'AdminProfileController@index')->name('profile.index');
+        Route::get('tao-moi', 'AdminProfileController@getFormCreate')->name('profile.ShowFormCreate');
+        Route::post('create', 'AdminProfileController@store')->name('profile.create');
+        Route::get('cap-nhat-thong-tin-nguoi-dung/{id}', 'AdminProfileController@edit')->name('profile.edit');
+        Route::post('update-thong-tin-nguoi-dung', 'AdminProfileController@update')->name('profile.update');
+        Route::post('xoa-nguoi-dung','AdminProfileController@destroy')->name('profile.delete');
+      });
             //* End
 
             //* Quản lý sản phẩm
-     Route::group(['prefix' => 'san-pham'], function () {
-      Route::get('get-list', 'AdminProductController@getlist')->name('product.getList');
-      Route::get('/', 'AdminProductController@index')->name('product.index');
-      Route::get('tao-moi', 'AdminProductController@getFormCreate')->name('product.ShowFormCreate');
-      Route::post('create', 'AdminProductController@store')->name('product.create');
-      Route::get('cap-nhat-thong-tin-san-pham/{id}', 'AdminProductController@edit')->name('product.edit');
-      Route::post('update-thong-tin-san-pham', 'AdminProductController@update')->name('product.update');
-      Route::post('xoa-san-pham','AdminProductController@destroy')->name('product.delete');
-      Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
-    });
+      Route::group(['prefix' => 'san-pham'], function () {
+        Route::get('get-list', 'AdminProductController@getlist')->name('product.getList');
+        Route::get('/', 'AdminProductController@index')->name('product.index');
+        Route::get('tao-moi', 'AdminProductController@getFormCreate')->name('product.ShowFormCreate');
+        Route::post('create', 'AdminProductController@store')->name('product.create');
+        Route::get('cap-nhat-thong-tin-san-pham/{id}', 'AdminProductController@edit')->name('product.edit');
+        Route::post('update-thong-tin-san-pham', 'AdminProductController@update')->name('product.update');
+        Route::post('xoa-san-pham','AdminProductController@destroy')->name('product.delete');
+        Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
+        Route::post('activated', 'AdminProductController@activated')->name('product.activated');
+
+      });
             //* End
 
        //* Quản lý các node
-     Route::group(['prefix' => 'node'], function () {
-      Route::get('get-list', 'AdminNodeController@getlist')->name('node.getList');
-      Route::get('/', 'AdminNodeController@index')->name('node.index');
-      Route::get('tao-moi', 'AdminNodeController@getFormCreate')->name('node.ShowFormCreate');
-      Route::post('create', 'AdminNodeController@store')->name('node.create');
-      Route::get('cap-nhat-thong-tin-node/{id}', 'AdminNodeController@edit')->name('node.edit');
-      Route::post('update-node', 'AdminNodeController@update')->name('node.update');
-      Route::post('xoa-node','AdminNodeController@destroy')->name('node.delete');
+      Route::group(['prefix' => 'node'], function () {
+        Route::get('get-list', 'AdminNodeController@getlist')->name('node.getList');
+        Route::get('/', 'AdminNodeController@index')->name('node.index');
+        Route::get('tao-moi', 'AdminNodeController@getFormCreate')->name('node.ShowFormCreate');
+        Route::post('create', 'AdminNodeController@store')->name('node.create');
+        Route::get('cap-nhat-thong-tin-node/{id}', 'AdminNodeController@edit')->name('node.edit');
+        Route::post('update-node', 'AdminNodeController@update')->name('node.update');
+        Route::post('xoa-node','AdminNodeController@destroy')->name('node.delete');
+        Route::post('activated', 'AdminNodeController@activated')->name('node.activated');
 
 
-    });
+
+      });
         //*end
-   });
+    });
 
         //* End Quản lý doanh nghiệp
 
@@ -197,13 +118,6 @@ Route::get('change-password', 'UserController@showLinkChangePassword')->name('us
 Route::post('change-password', 'UserController@ChangePassword')->name('user.post.change-password');
       //* End
 
-      //* Quản lý lịch sử
-Route::group(['prefix' => 'lịch-su-nguoi-dung'], function () {
-  Route::get('get-list', 'User_HistoryController@getlist')->name('history.getList');
-  Route::get('/', 'User_HistoryController@index')->name('admin.history.index');
-
-});
-            //* End
 
 });
     //* End Prefix Admin
@@ -251,6 +165,14 @@ Route::get('profile', 'ProfileController@index')->name('profile');
 Route::post('get-info-profile', 'OrganizationController@getDetail');
     //* End
 
+        //* Quản lý lịch sử
+Route::group(['prefix' => 'lich-su-nguoi-dung'], function () {
+  Route::get('get-list', 'User_HistoryController@getlist')->name('user.history.getList');
+  Route::get('/', 'User_HistoryController@index')->name('user.history.index');
+
+});
+            //* End
+
 //* Quản lý người dùng
 Route::group(['prefix' => 'nguoi-dung'], function () {
   Route::get('get-list', 'ProfileController@getlist')->name('user.profile.getList');
@@ -273,17 +195,11 @@ Route::group(['prefix' => 'san-pham'], function () {
   Route::post('update-thong-tin-san-pham', 'ProductController@update')->name('user.product.update');
   Route::post('xoa-san-pham','ProductController@destroy')->name('user.product.delete');
   Route::get('xem-chi-tiet/{id}', 'ProductController@show')->name('user.product.show');
+  Route::post('activated', 'ProductController@activated')->name('user.product.activated');
 
 });
             //* End
 
-        //* Quản lý lịch sử
-Route::group(['prefix' => 'lich-su-nguoi-dung'], function () {
-  Route::get('get-list', 'User_HistoryController@getlist')->name('user.history.getList');
-  Route::get('/', 'User_HistoryController@index')->name('user.history.index');
-
-});
-            //* End
 
        //* Quản lý các node
 Route::group(['prefix' => 'node'], function () {
@@ -296,6 +212,7 @@ Route::group(['prefix' => 'node'], function () {
   Route::post('xoa-node','NodeController@destroy')->name('user.node.delete');
   Route::get('tao-moi-buoc', 'NodeController@ShowFormCreateOne')->name('user.node.ShowFormCreateOne');
   Route::post('createOne', 'NodeController@create')->name('user.node.createOne');
+  Route::post('activated', 'NodeController@activated')->name('user.node.activated');
 
 
 });

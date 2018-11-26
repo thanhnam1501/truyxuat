@@ -17,6 +17,11 @@ class CompanyController extends Controller
   $data = Company::orderBy('id', 'desc');
   return Datatables::of($data)
   ->addIndexColumn()
+  ->addColumn('expiration_date',function($data){
+      $date = $data->created_at;
+      $date = $date->addMonths($data->time_limit);
+      return $date;
+  })
   ->addColumn('action', function($data) {
     $string = "";
 
@@ -51,9 +56,13 @@ public static function edit(Request $request){
 
 public static function update(Request $request){
   $data = $request->all();
+  if(!empty($data['add_time_limit'])){
+     $company = Company::find($data['id']);
+    $data['time_limit'] =  $data['add_time_limit'] + $company->time_limit;
+  }
   Company::find($data['id'])->update($data);
   $company = Company::find($data['id']);
-  $message = 'Cập nhật công ty ' . $company->name . 'thành công !';
+  $message = 'Cập nhật công ty ' . $company->name . ' thành công !';
   return view('company.index',['messageSuccess' => $message]);
 }
 

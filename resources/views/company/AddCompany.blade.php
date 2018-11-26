@@ -57,8 +57,21 @@
 					</div>
 
 					<div class="form-group">
+						<label for="exampleInputEmail1">Giới hạn thời gian</label>
+						
+						<select class="form-control" name="time_limit" id="time_limit" required>
+							<option value="5">3 Tháng</option>
+							<option value="10">6 Tháng</option>
+							<option value="25">9 Tháng</option>
+							<option value="100">12 Tháng</option>							
+						</select>
+						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+					</div>
+
+
+					<div class="form-group">
 						<label>Content</label>
-						<textarea name="content" class="form-control " id="article-ckeditor"></textarea>
+						<textarea name="content" class="form-control " id="editor1"></textarea>
 					</div> 
 					  {{ csrf_field() }}
 

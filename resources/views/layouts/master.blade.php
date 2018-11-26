@@ -1,32 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+  <html lang="en">
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <!-- Meta, title, CSS, favicons, etc. -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
+    <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
-  <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
 
-  <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
 
-  <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
-  <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+    <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
 
-  <!-- Custom styling plus plugins -->
-  <link href="{{asset('css/custom.css')}}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{asset('css/maps/jquery-jvectormap-2.0.1.css')}}" />
-  <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
-  <link href="{{asset('css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
-  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
+    <!-- Custom styling plus plugins -->
+    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/maps/jquery-jvectormap-2.0.1.css')}}" />
+    <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
+    <link href="{{asset('css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
 
 
@@ -348,55 +349,55 @@
           <div class="clearfix"></div>
           <div id="notif-group" class="tabbed_notifications"></div>
         </div>
-        <script src="{{asset('js/jquery.min.js')}}"></script>
-        <script src="{{asset('js/nprogress.js')}}"></script>
-        <script>
-          NProgress.start();
-        </script> 
-        <script src="{{asset('js/bootstrap.min.js')}}"></script>
+         <!-- /footer content -->
+      <script src="{{asset('js/jquery.min.js')}}"></script>
+      <script src="{{asset('js/nprogress.js')}}"></script>
+      <script>
+        NProgress.start();
+      </script> 
+      <script src="{{asset('js/bootstrap.min.js')}}"></script>
 
-        <!-- gauge js -->
-        <script type="text/javascript" src="{{asset('js/gauge/gauge.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/gauge/gauge_demo.js')}}"></script>
-        <!-- chart js -->
-        <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
-        <!-- bootstrap progress js -->
-        <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-        <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
-        <!-- icheck -->
-        <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
-        <!-- daterangepicker -->
-        <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/datepicker/daterangepicker.js')}}"></script>
+      <!-- gauge js -->
+      <script type="text/javascript" src="{{asset('js/gauge/gauge.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/gauge/gauge_demo.js')}}"></script>
+      <!-- chart js -->
+      <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+      <!-- bootstrap progress js -->
+      <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+      <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+      <!-- icheck -->
+      <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+      <!-- daterangepicker -->
+      <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/datepicker/daterangepicker.js')}}"></script>
 
-        <script src="{{asset('js/custom.js')}}"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+      <script src="{{asset('js/custom.js')}}"></script>
 
-        <!-- flot js -->
-        <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.pie.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.orderBars.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.time.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/date.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.spline.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.stack.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/curvedLines.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/flot/jquery.flot.resize.js')}}"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        {!! Toastr::render() !!}
+      <!-- flot js -->
+      <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.pie.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.orderBars.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.time.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/date.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.spline.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.stack.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/curvedLines.js')}}"></script>
+      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.resize.js')}}"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+      {!! Toastr::render() !!}
 
-        
-        <script>
-         $.ajaxSetup({
-           headers: {
-             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-           }
-         });
-       </script>
-       <script>
-        $(document).ready(function () {
+      <script type="text/javascript" src="{{asset('js/datatables.min.js')}}"></script>
+      <script>
+       $.ajaxSetup({
+         headers: {
+           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         }
+       });
+     </script>
+     <script>
+      $(document).ready(function () {
             // [17, 74, 6, 39, 20, 85, 7]
             //[82, 23, 66, 9, 99, 6, 2]
             var data1 = [[gd(2012, 1, 1), 17], [gd(2012, 1, 2), 74], [gd(2012, 1, 3), 6], [gd(2012, 1, 4), 39], [gd(2012, 1, 5), 20], [gd(2012, 1, 6), 85], [gd(2012, 1, 7), 7]];
@@ -462,52 +463,101 @@
         <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-world-mill-en.js')}}"></script>
         <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
         
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
-        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script>         <script > 
-          $ ( 'textarea' ). ckeditor ();
+        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script> 
+        <script > 
 
         </script>
+       {{--  <script  type = " text / javascript "  src = " /js/ckfinder/ckfinder.js "> </script> --}}
+        // <script>  
+        CKEDITOR.replace('editor1', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        
+        } );
 
-        @yield('script') 
-        <script>
-          $(function () {
-            $('#world-map-gdp').vectorMap({
-              map: 'world_mill_en',
-              backgroundColor: 'transparent',
-              zoomOnScroll: false,
-              series: {
-                regions: [{
-                  values: gdpData,
-                  scale: ['#E6F2F0', '#149B7E'],
-                  normalizeFunction: 'polynomial'
-                }]
-              },
-              onRegionTipShow: function (e, el, code) {
-                el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
-              }
-            });
+        CKEDITOR.replace( 'editor2', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor3', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor4', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );
+      CKEDITOR.replace( 'editor5', {
+          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+        } );</script>
+    {{--   <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script> --}}
+      {{-- <script>
+        CKEDITOR.replace( 'article-ckeditor' );
+      </script> --}}
+     
+      @yield('script') 
+      <script>
+        $(function () {
+          $('#world-map-gdp').vectorMap({
+            map: 'world_mill_en',
+            backgroundColor: 'transparent',
+            zoomOnScroll: false,
+            series: {
+              regions: [{
+                values: gdpData,
+                scale: ['#E6F2F0', '#149B7E'],
+                normalizeFunction: 'polynomial'
+              }]
+            },
+            onRegionTipShow: function (e, el, code) {
+              el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
+            }
           });
-        </script>
-        <!-- skycons -->
-        <script src="{{asset('js/skycons/skycons.js')}}"></script>
-        <script>
-          var icons = new Skycons({
-            "color": "#73879C"
-          }),
-          list = [
-          "clear-day", "clear-night", "partly-cloudy-day",
-          "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
-          "fog"
-          ],
-          i;
+        });
+      </script>
+      <!-- skycons -->
+      <script src="{{asset('js/skycons/skycons.js')}}"></script>
+      <script>
+        var icons = new Skycons({
+          "color": "#73879C"
+        }),
+        list = [
+        "clear-day", "clear-night", "partly-cloudy-day",
+        "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+        "fog"
+        ],
+        i;
 
-          for (i = list.length; i--;)
-            icons.set(list[i], list[i]);
+        for (i = list.length; i--;)
+          icons.set(list[i], list[i]);
 
-          icons.play();
-        </script>
+        icons.play();
+      </script>
 
-        <!-- dashbord linegraph -->
+      <!-- dashbord linegraph -->
         {{-- <script>
           var doughnutData = [
           {

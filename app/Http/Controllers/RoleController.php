@@ -15,9 +15,9 @@ use App\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function __construct() {
+    public function __construct(){
 
-
+        $this->middleware('auth.profile');
     }
 
     /**
@@ -58,21 +58,21 @@ class RoleController extends Controller
             $role = Role::where('name', $data['name'])->first();
             if (empty($role) && $role == 0) {
 
-                 Role::create($data);
+               Role::create($data);
 
-                 \DB::commit();
+               \DB::commit();
 
-                 return response()->json([
-                    'error' => false,
-                    'data' => 'success'
-                ]);
-             }
-             else {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Vai trò đã tồn tại'
-                ]);
-             }
+               return response()->json([
+                'error' => false,
+                'data' => 'success'
+            ]);
+           }
+           else {
+            return response()->json([
+                'error' => true,
+                'message' => 'Vai trò đã tồn tại'
+            ]);
+        }
 
 
             // $user->attachRole($role);
@@ -80,19 +80,19 @@ class RoleController extends Controller
             // Commit d
 
 
-        } catch (\Exception $e) {
+    } catch (\Exception $e) {
 
-            \DB::rollback();
+        \DB::rollback();
 
-            \Log::info($e->getMessage());
+        \Log::info($e->getMessage());
 
-            return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessage()
-                ]);
-        }
-
+        return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
+        ]);
     }
+
+}
 
     /**
      * Display the specified resource.
@@ -161,9 +161,9 @@ class RoleController extends Controller
                 \DB::commit();
 
                 return response()->json([
-                        'error' => false,
-                        'data' => 'success'
-                    ]);
+                    'error' => false,
+                    'data' => 'success'
+                ]);
 
             } catch (\Exception $e) {
 
@@ -172,9 +172,9 @@ class RoleController extends Controller
                 \Log::info($e->getMessage());
 
                 return response()->json([
-                        'error' => false,
-                        'message' => $e->getMessage()
-                    ]);
+                    'error' => false,
+                    'message' => $e->getMessage()
+                ]);
             }
         }
     }
@@ -197,17 +197,17 @@ class RoleController extends Controller
             DB::commit();
 
             return response()->json([
-                    'error' => false,
-                    'message' => 'Delete success!'
-                ], 200);
+                'error' => false,
+                'message' => 'Delete success!'
+            ], 200);
 
         } catch(Exception $e) {
             Log::info('Can not delete role has id = ' . $id);
             DB::rollback();
             return response()->json([
-                    'error' => true,
-                    'message' => 'Internal Server Error'
-                ], 500);
+                'error' => true,
+                'message' => 'Internal Server Error'
+            ], 500);
         }
     }
 
@@ -215,23 +215,23 @@ class RoleController extends Controller
         $roles = Role::orderBy('id', 'DESC')->get();
 
         return Datatables::of($roles)
-            ->addColumn('action', function ($role) {
-                $string = '';
-                if (true) {
-                    $string = $string .' <a href="roles/' . $role->name .'/list-permissions" data-tooltip="tooltip" title="Xem vai trò" class="btn btn-info btn-xs">
-                            <i class="fa fa-shield" aria-hidden="true"></i></a>';
-                }
+        ->addColumn('action', function ($role) {
+            $string = '';
+            if (true) {
+                $string = $string .' <a href="roles/' . $role->name .'/list-permissions" data-tooltip="tooltip" title="Xem vai trò" class="btn btn-info btn-xs">
+                <i class="fa fa-shield" aria-hidden="true"></i></a>';
+            }
 
-                if (Entrust::can(['roles-edit'])) {
-                    $string = $string . '<a href="javascript:;" onclick="" data-tooltip="tooltip" title="Sửa vai trò" class="btn btn-warning btn-xs editRole" data-id="' .$role->id .'">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-                }
-                if (Entrust::can(['roles-delete'])) {
-                    $string = $string . '<a href="javascript:;" type="submit" data-tooltip="tooltip" title="Xoá vai trò" class="btn btn-danger btn-xs alertDel" data-id="' .$role->id .'">
-                            <i class="fa fa-trash-o"></i></a>';
-                }
-                return $string;
-            })
+            if (Entrust::can(['roles-edit'])) {
+                $string = $string . '<a href="javascript:;" onclick="" data-tooltip="tooltip" title="Sửa vai trò" class="btn btn-warning btn-xs editRole" data-id="' .$role->id .'">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            }
+            if (Entrust::can(['roles-delete'])) {
+                $string = $string . '<a href="javascript:;" type="submit" data-tooltip="tooltip" title="Xoá vai trò" class="btn btn-danger btn-xs alertDel" data-id="' .$role->id .'">
+                <i class="fa fa-trash-o"></i></a>';
+            }
+            return $string;
+        })
         ->addIndexColumn()
         ->make(true);
     }
@@ -261,18 +261,18 @@ class RoleController extends Controller
             }
         }
         return Datatables::of($permissions)
-            ->addColumn('action', function ($permission) use ($role) {
+        ->addColumn('action', function ($permission) use ($role) {
 
-                $string = '<input type="hidden" id="checked-' .$permission->id . '" value="'. $permission->checked . '">';
-                if (!empty($permission->checked)) {
-                    $string = $string .'<i id="action-'. $permission->id .'" class="fa fa-check-circle addPermission" title="Xoá" aria-hidden="true" style="cursor: pointer; color: #3598dc;font-size: 20px;" data-role="'.$role->id.'" data-permission="'.$permission->id .'"></i>';
-                }
-                else {
-                    $string = $string .'<i id="action-'. $permission->id .'" class="fa fa-circle-o addPermission" title="Thêm" aria-hidden="true" style="cursor: pointer; color: #3598dc;font-size: 20px;" data-role="'.$role->id.'" data-permission="'.$permission->id .'"></i>';
-                }
-                return $string;
-            })
-            ->make(true);
+            $string = '<input type="hidden" id="checked-' .$permission->id . '" value="'. $permission->checked . '">';
+            if (!empty($permission->checked)) {
+                $string = $string .'<i id="action-'. $permission->id .'" class="fa fa-check-circle addPermission" title="Xoá" aria-hidden="true" style="cursor: pointer; color: #3598dc;font-size: 20px;" data-role="'.$role->id.'" data-permission="'.$permission->id .'"></i>';
+            }
+            else {
+                $string = $string .'<i id="action-'. $permission->id .'" class="fa fa-circle-o addPermission" title="Thêm" aria-hidden="true" style="cursor: pointer; color: #3598dc;font-size: 20px;" data-role="'.$role->id.'" data-permission="'.$permission->id .'"></i>';
+            }
+            return $string;
+        })
+        ->make(true);
     }
 
     public function postPermissions(Request $request) {
