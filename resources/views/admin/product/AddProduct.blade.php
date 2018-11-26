@@ -35,7 +35,7 @@
 				</div> 
 				<div class="form-group">
 					<label>Mô tả</label>
-					<textarea name="content" class="form-control " id="editor1"></textarea>
+					<textarea name="content" class="form-control " id="editor2"></textarea>
 				</div> 
 				<div class="form-group">
 					<label for="exampleInputEmail1">Các bước cập nhật</label>

@@ -30,7 +30,7 @@ class AdminNodeController extends Controller
 
 	public function index()
 	{ 
-		return view('user.node.index');
+		return view('admin.node.index');
 	}
 
     /**
@@ -40,7 +40,7 @@ class AdminNodeController extends Controller
      */
     public function getlist()
     {
-    	if( Auth::guard('profile')->user()->status == 1)
+    	if( Auth::guard('web')->user()->status == 1)
     		{
 
     			$nodes = DB::table('nodes')
@@ -53,7 +53,7 @@ class AdminNodeController extends Controller
     			$nodes = DB::table('nodes')
     			->join('products', 'products.id', '=', 'nodes.product_id')
     			->select('nodes.*', 'products.name as product_name')
-    			->where('user_id', Auth::guard('profile')->user()->id)
+    			->where('user_id', Auth::guard('web')->user()->id)
     			->orderBy('nodes.created_at', 'desc')
     			->get();
     		}
@@ -65,7 +65,7 @@ class AdminNodeController extends Controller
     		->addColumn('action', function($nodes) {
     			$string = "";
 
-    			$string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('user.node.edit', $nodes->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+    			$string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('node.edit', $nodes->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
     			$string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteNode('. $nodes->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
@@ -87,18 +87,18 @@ class AdminNodeController extends Controller
     			$node = Node::create(['name' => $data['name'],'content' => $data['content'],'user_id' => $data['user_id'],'product_id' => $data['product_id']]);
 
     			$node_history = new User_History();
-    			$node_history->user_id = Auth::guard('profile')->user()->id;
-    			$node_history->company_id = Auth::guard('profile')->user()->company_id;
+    			$node_history->user_id = Auth::guard('web')->user()->id;
+    			$node_history->company_id = Auth::guard('web')->user()->company_id;
     			$node_history->content = 'Tạo mới node: ' . $node->name;
     			$node_history->product_id = $node->product_id;
     			$node_history->save();
     		}
 
     		if($data['node'] != 0){
-    			return redirect()->route('user.product.edit',['id' => $data['product_id']]);
+    			return redirect()->route('product.edit',['id' => $data['product_id']]);
     		} 
     		else{
-    			return redirect()->route('user.node.ShowFormCreate');
+    			return redirect()->route('node.ShowFormCreate');
     		}
 
     	}
@@ -115,7 +115,7 @@ class AdminNodeController extends Controller
     {
     	$data = Node::find($id);
 
-    	return view('user.node.EditNode', ['data' => $data]);
+    	return view('admin.node.EditNode', ['data' => $data]);
     }
     
     public function update(Request $request)

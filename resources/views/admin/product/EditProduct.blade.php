@@ -48,11 +48,11 @@
 					
 					<div class="form-group">
 						<label>Mô tả ngắn sản phẩm</label>
-						<textarea name="sort_content" value="{{$data->sort_content}}" class="form-control " id="editor1">{{$data->sort_content}}</textarea>
+						<textarea name="sort_content" value="{{$data->sort_content}}" class="form-control " id="editor1">{!!$data->sort_content!!}</textarea>
 					</div> 
 					<div class="form-group">
 						<label>Mô tả</label>
-						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor1">{{$data->content}}</textarea>
+						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor2">{!!$data->content!!}</textarea>
 					</div> 
 					{{ csrf_field() }}
 					<div class="form-group">

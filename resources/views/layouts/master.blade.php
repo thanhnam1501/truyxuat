@@ -167,7 +167,14 @@
 
                         </ul>
                       </li>
+                      
+                      <li ><a><i class="fa fa-edit"></i>CÁC BƯỚC CẬP NHÂT<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                          <li><a href="{{route('node.index')}}">DS các bước cập nhật</a>
+                          </li>
 
+                        </ul>
+                      </li>
 
                     </ul>
                   </div>

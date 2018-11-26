@@ -41,7 +41,7 @@
             processing: false,
             serverSide: true,
             order: [],
-            ajax: '{!! route('user.node.getList') !!}',
+            ajax: '{!! route('node.getList') !!}',
             pageLength: 30,
             lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
             columns: [

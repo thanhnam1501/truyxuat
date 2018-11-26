@@ -103,7 +103,7 @@
 
   @for($i= 0; $i < $data->node ; $i++)
   @foreach($nodes as $key => $value)
-  @if($key == $i)
+  @if($key == $i && $value['status'] == 1)
   <div class="row">
     <legend class="panel-heading" style="background-color: red;">
       <a href="#content{{$i}}" style="background-color: red; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true"><span class="fieldset-legend-prefix element-invisible""></span><span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="fa fa-chevron-down" style="float: right;"></i></span>
@@ -125,10 +125,7 @@
   @endif
 
 
-
-  <script>
-
-    <!-- chart js -->
+    <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
     <!-- bootstrap progress js -->
     <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
