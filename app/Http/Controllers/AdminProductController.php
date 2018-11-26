@@ -99,10 +99,19 @@ class AdminProductController extends Controller
 
     $data['slug'] = str_slug($data['name']);
 
-    if(Product::where('slug', $data['slug'])){
+    $slug = Product::where('slug', $data['slug'])->first();
+    if(!empty($slug['slug'])){
       $data['slug'] = $data['slug'] .'-'. $product->id;
     }
-    Product::find($product->id)->update(['slug' => $data['slug']]);
+    $check = Product::find($product->id)->update(['slug' => $data['slug']]);
+    if($check == true){
+      $user_history = new User_History();
+      $user_history->user_id = Auth::guard('profile')->user()->id;
+      $user_history->company_id = Auth::guard('profile')->user()->company_id;
+      $user_history->content = 'Thêm mới sản phẩm: ' . $product->name;
+      $user_history->save();
+    }
+
     if($request->hasFile('image')){
       $image = new Imageupload();
       $image->content_id = $product->id;
@@ -131,6 +140,13 @@ class AdminProductController extends Controller
       $data = $request->all();
 
       $product = Product::where('id', $data['id'])->first();
+
+      $slug = Product::where('slug', $data['slug'])->first();
+      if(!empty($slug['slug']) && $slug['id'] !== $product['id']){
+        $data['slug'] = $data['slug'] .'-'. $product->id;
+      }
+      $check = Product::find($product->id)->update(['slug' => $data['slug']]);
+      
 
       if (!empty($product)) {
         DB::beginTransaction();

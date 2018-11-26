@@ -46,8 +46,8 @@ public function index()
  if($now > $date){
   $message = "Thời gian sử dịch dịch vụ của bạn đã hết <br>! Liên hệ với quản trị viên để gia hạn thêm ! <br>Xin cảm ơn !";
   return view('expired');
- }  
- return view('user.product.index');
+}  
+return view('user.product.index');
 }
 
 public function show($id)
@@ -114,12 +114,14 @@ public function show($id)
     $product = Product::create($data);
 
     $data['slug'] = str_slug($data['name']);
-
-    if(Product::where('slug', $data['slug'])){
+    // kiểm tra trùng lặp slug sau đó thêm vào csdl
+    $slug = Product::where('slug', $data['slug'])->first();
+    if(!empty($slug['slug'])){
       $data['slug'] = $data['slug'] .'-'. $product->id;
     }
     $check = Product::find($product->id)->update(['slug' => $data['slug']]);
-    
+
+    //thêm dữ liệu vào history
     if($check == true){
       $user_history = new User_History();
       $user_history->user_id = Auth::guard('profile')->user()->id;
@@ -164,8 +166,13 @@ public function show($id)
     public function update(Request $request)
     {
       $data = $request->all();
-
       $product = Product::where('id', $data['id'])->first();
+      $slug = Product::where('slug', $data['slug'])->first();
+      if(!empty($slug['slug']) && $slug['id'] !== $product['id']){
+        $data['slug'] = $data['slug'] .'-'. $product->id;
+      }
+      $check = Product::find($product->id)->update(['slug' => $data['slug']]);
+      
       if($request->hasFile('image_update')){
         $path = $request->file('image_update')->store('image');
         $data['image'] = $path;

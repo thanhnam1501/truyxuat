@@ -7,7 +7,6 @@
 		<div class="card mb-3">
 			<div class="card-header">
 				<h3><i class="fa fa-check-square-o"></i> Cập nhật thông tin sản phẩm</h3>
-
 			</div>
 
 			<div class="card-body">
@@ -32,6 +31,11 @@
 							<div class="form-group">
 								<label for="exampleInputEmail1">Các bước cập nhật</label>
 								<input type="number" class="form-control" id="node" name="node" value="{{$data->node}}" disabled>
+							</div>
+
+							<div class="form-group">
+								<label for="exampleInputEmail1">Liên kết tĩnh</label>
+								<input type="text" class="form-control" id="slug" name="slug" value="{{$data->slug}}" >
 							</div>	
 							
 						</div>
