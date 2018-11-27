@@ -133,6 +133,7 @@ Route::post('change-password', 'UserController@ChangePassword')->name('user.post
 Route::get('/', 'ProductController@index')->name('user.index');
 Route::get('/home', 'ProductController@index')->name('user.index');
 Route::get('check/{id}', 'HomeController@show');
+Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
 
 
 Route::get('/qrcode', function(){

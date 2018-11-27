@@ -36,16 +36,16 @@ public function index()
 public function ShowFormCreateOne(){
   $products = Product::where('company_id',Auth::guard('profile')->user()->company_id)->get();
   $user = Profile::where('company_id',Auth::guard('profile')->user()->company_id)->get();
-   return view('user.node.AddOneNode',[ 'products' => $products, 'user' => $user]);
+  return view('user.node.addOneNode',[ 'products' => $products, 'user' => $user]);
 }
 
 Public function create(Request $request){
   $data = $request->all();
   Node::create($data);
-   $product = Product::where('id', $data['product_id'])->first();
-   $product['node'] = $product['node'] + 1;
+  $product = Product::where('id', $data['product_id'])->first();
+  $product['node'] = $product['node'] + 1;
   $a = Product::where('id', $data['product_id'])->update(['node' => $product['node']]);
-   return redirect()->route('user.product.edit',['id' => $data['product_id']]);
+  return redirect()->route('user.product.edit',['id' => $data['product_id']]);
 }
 
     /**
@@ -76,7 +76,6 @@ Public function create(Request $request){
 
        return Datatables::of($nodes)
        ->addIndexColumn()
-      // ->addColumn()           
        ->addColumn('action', function($nodes) {
         $string = "";
 
@@ -101,12 +100,12 @@ Public function create(Request $request){
          $data['user_id'] = $data['user_id'.$i];
          $node = Node::create(['name' => $data['name'],'content' => $data['content'],'user_id' => $data['user_id'],'product_id' => $data['product_id']]);
 
-          $node_history = new User_History();
-          $node_history->user_id = Auth::guard('profile')->user()->id;
-          $node_history->company_id = Auth::guard('profile')->user()->company_id;
-          $node_history->content = 'Tạo mới node: ' . $node->name;
-          $node_history->product_id = $node->product_id;
-          $node_history->save();
+         $node_history = new User_History();
+         $node_history->user_id = Auth::guard('profile')->user()->id;
+         $node_history->company_id = Auth::guard('profile')->user()->company_id;
+         $node_history->content = 'Tạo mới node: ' . $node->name;
+         $node_history->product_id = $node->product_id;
+         $node_history->save();
        }
 
        if($data['node'] != 0){
@@ -147,7 +146,7 @@ Public function create(Request $request){
         try {
           $node->update($data);
 
-           $node_history = new User_History();
+          $node_history = new User_History();
           $node_history->user_id = Auth::guard('profile')->user()->id;
           $node_history->company_id = Auth::guard('profile')->user()->company_id;
           $node_history->content = 'Chỉnh sửa node: ' . $node->name ;
@@ -171,24 +170,24 @@ Public function create(Request $request){
    }
 
    public function activated(Request $request){
-      $id = $request->id;
-      $node = Node::find($id);
-      if($node->status == 1){
-        $data = Node::where('id', $id)->update(['status' => 0]);
-      }
-      else{
-          $data = Node::where('id', $id)->update(['status' => 1]);
-      }
+    $id = $request->id;
+    $node = Node::find($id);
+    if($node->status == 1){
+      $data = Node::where('id', $id)->update(['status' => 0]);
+    }
+    else{
+      $data = Node::where('id', $id)->update(['status' => 1]);
+    }
 
-      return response()->json([
-        'status' => true,
-        'message' => 'Thay đổi trạng thái thành công !',
-      ]);
-   }
+    return response()->json([
+      'status' => true,
+      'message' => 'Thay đổi trạng thái thành công !',
+    ]);
+  }
 
 
-   public function destroy(Request $request)
-   {
+  public function destroy(Request $request)
+  {
     $node = Node::find($request->id);
 
     if (!empty($node)) {
@@ -196,12 +195,12 @@ Public function create(Request $request){
       try {
         $node->delete();
 
-          $node_history = new User_History();
-          $node_history->user_id = Auth::guard('profile')->user()->id;
-          $node_history->company_id = Auth::guard('profile')->user()->company_id;
-          $node_history->content = 'đã xóa node: ' . $node->name ;
-          $node_history->product_id = $node->product_id;
-          $node_history->save();
+        $node_history = new User_History();
+        $node_history->user_id = Auth::guard('profile')->user()->id;
+        $node_history->company_id = Auth::guard('profile')->user()->company_id;
+        $node_history->content = 'đã xóa node: ' . $node->name ;
+        $node_history->product_id = $node->product_id;
+        $node_history->save();
 
         DB::commit();
 

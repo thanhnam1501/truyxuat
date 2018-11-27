@@ -18,20 +18,20 @@ class AdminNodeController extends Controller
 {
 	public function __construct()
 	{
-		 $this->middleware('auth');
-	}
-	public function getFormCreate (Request $request){
+   $this->middleware('auth');
+ }
+ public function getFormCreate (Request $request){
 
-		$data = $request->all();
-		$user = Profile::where('company_id', $data['company_id'])->get();
-		return view('admin.node.AddNode',['node' => $data['node'], 'product_id' => $data['product_id'],'company_id' => $data['company_id'], 'user' => $user]);
+  $data = $request->all();
+  $user = Profile::where('company_id', $data['company_id'])->get();
+  return view('admin.node.AddNode',['node' => $data['node'], 'product_id' => $data['product_id'],'company_id' => $data['company_id'], 'user' => $user]);
 
-	}
+}
 
-	public function index()
-	{ 
-		return view('admin.node.index');
-	}
+public function index()
+{ 
+  return view('admin.node.index');
+}
 
     /**
      * Get the list of scientist accounts.
@@ -40,25 +40,12 @@ class AdminNodeController extends Controller
      */
     public function getlist()
     {
-    	if( Auth::guard('web')->user()->status == 1)
-    		{
-
     			$nodes = DB::table('nodes')
     			->join('products', 'products.id', '=', 'nodes.product_id')
     			->select('nodes.*', 'products.name as product_name')
     			->orderBy('nodes.created_at', 'desc')
     			->get();
-    		}else{
-
-    			$nodes = DB::table('nodes')
-    			->join('products', 'products.id', '=', 'nodes.product_id')
-    			->select('nodes.*', 'products.name as product_name')
-    			->where('user_id', Auth::guard('web')->user()->id)
-    			->orderBy('nodes.created_at', 'desc')
-    			->get();
-    		}
-
-
+    		
     		return Datatables::of($nodes)
     		->addIndexColumn()
       // ->addColumn()           
@@ -130,25 +117,25 @@ class AdminNodeController extends Controller
     			$node->update($data);
 
     			$node_history = new User_History();
-    			$node_history->user_id = Auth::guard('profile')->user()->id;
-    			$node_history->company_id = Auth::guard('profile')->user()->company_id;
+    			$node_history->user_id = Auth::guard('web')->user()->id;
+    			$node_history->company_id = Auth::guard('web')->user()->company_id;
     			$node_history->content = 'Chỉnh sửa node: ' . $node->name ;
     			$node_history->product_id = $node->product_id;
     			$node_history->save();
 
     			DB::commit();
 
-    			return redirect()->route('user.node.edit',['id' => $node['id']]);
+    			return redirect()->route('node.edit',['id' => $node['id']]);
     		} catch (Exception $e) {
     			DB::rollback();
 
     			Log::info($e->getMessage());
 
-    			return redirect()->route('user.node.edit',['id' => $node['id']]);
+    			return redirect()->route('node.edit',['id' => $node['id']]);
     		}
     	} else {
 
-    		return redirect()->route('user.node.edit',['id' => $node['id']]);
+    		return redirect()->route('node.edit',['id' => $node['id']]);
     	}
     }
 
@@ -157,55 +144,55 @@ class AdminNodeController extends Controller
       $node = Node::find($id);
       if($node->status == 1){
         $data = Node::where('id', $id)->update(['status' => 0]);
+      }
+      else{
+        $data = Node::where('id', $id)->update(['status' => 1]);
+      }
+
+      return response()->json([
+        'status' => true,
+        'message' => 'Thay đổi trạng thái thành công !',
+      ]);
     }
-    else{
-      $data = Node::where('id', $id)->update(['status' => 1]);
+
+
+    public function destroy(Request $request)
+    {
+     $node = Node::find($request->id);
+
+     if (!empty($node)) {
+      DB::beginTransaction();
+      try {
+       $node->delete();
+
+       $node_history = new User_History();
+       $node_history->user_id = Auth::guard('web')->user()->id;
+       $node_history->company_id = Auth::guard('web')->user()->company_id;
+       $node_history->content = 'đã xóa node: ' . $node->name ;
+       $node_history->product_id = $node->product_id;
+       $node_history->save();
+
+       DB::commit();
+
+       return response()->json([
+        'error' => false,
+        'message' => 'Bước cập nhật '.$node->name.' đã bị xóa',
+      ]);
+     } catch (Exception $e) {
+       DB::rollback();
+
+       Log::info($e->getMessage());
+
+       return response()->json([
+        'error' => true,
+        'message' => $e->getMessage()
+      ]);
+     }
+   } else {
+    return response()->json([
+     'error'     =>  true,
+     'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
+   ]);
   }
-
-  return response()->json([
-    'status' => true,
-    'message' => 'Thay đổi trạng thái thành công !',
-]);
-}
-
-
-public function destroy(Request $request)
-{
- $node = Node::find($request->id);
-
- if (!empty($node)) {
-  DB::beginTransaction();
-  try {
-   $node->delete();
-
-   $node_history = new User_History();
-   $node_history->user_id = Auth::guard('profile')->user()->id;
-   $node_history->company_id = Auth::guard('profile')->user()->company_id;
-   $node_history->content = 'đã xóa node: ' . $node->name ;
-   $node_history->product_id = $node->product_id;
-   $node_history->save();
-
-   DB::commit();
-
-   return response()->json([
-    'error' => false,
-    'message' => 'Bước cập nhật '.$node->name.' đã bị xóa',
-]);
-} catch (Exception $e) {
-   DB::rollback();
-
-   Log::info($e->getMessage());
-
-   return response()->json([
-    'error' => true,
-    'message' => $e->getMessage()
-]);
-}
-} else {
-  return response()->json([
-   'error'     =>  true,
-   'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
-]);
-}
 }
 }

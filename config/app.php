@@ -171,6 +171,8 @@ return [
         Kamaln7\Toastr\ToastrServiceProvider::class,
         // LaravelQRCode\Providers\QRCodeServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Cviebrock\EloquentSluggable\ServiceProvider::class,
+        
         
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],

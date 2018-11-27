@@ -27,6 +27,7 @@
         <th>Tên sản phẩm</th>
         <th>Cập nhật</th>
         <th>Ngày tạo</th>
+        <th>Trạn thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -86,25 +87,27 @@
 @section('script')
 <script>
   $(function() {
-    $('#product-list').DataTable({
-     aaSorting: [[5, 'desc']],
-     bPaginate: false,
-     bFilter: false,
-     bInfo: false,
-     bSortable: true,
-     bRetrieve: true,
-     ajax: '{!! route('user.node.getList') !!}',
-     pageLength: 30,
-     lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
-     columns: [
-     {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
-     {data: 'id', name: 'id'},
-     {data: 'name', name: 'name'},
-     {data: 'updated_at', name: 'updated_at'},
-     {data: 'created_at', name: 'created_at',},
-     {data: 'action', name: 'action', searchable: false},
-     ]
-   });
+     $('#product-list').DataTable({
+      bPaginate: false,
+      bFilter: false,
+      bInfo: false,
+      order: [],
+      searching: true,
+      bSortable: true,
+      bRetrieve: true,
+      ajax: '{!! route('user.node.getList') !!}',
+      pageLength: 30,
+      lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
+      columns: [
+      {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
+      {data: 'name', name: 'name'},
+      {data: 'product_name', name: 'product_name'},
+      {data: 'updated_at', name: 'updated_at'},
+      {data: 'created_at', name: 'created_at'},
+      {data: 'status', name: 'status'},
+      {data: 'action', name: 'action', searchable: false},
+      ]
+    });
 
   });
 
@@ -147,5 +150,30 @@
  });
  }
 </script>
+<script>
+  function activated(id){
+     $.ajax({
+        url: '{{ route('node.activated') }}',
+        type: 'POST',
+        data: {id: id},
 
+        success: function success(res) {
+
+          if (res.status == true) {
+
+            toastr.success(res.message);
+            $('#product-list').DataTable().ajax.reload();
+        } else {
+
+            toastr.success(res.message);
+        }
+    },
+    error: function error(xhr, ajaxOptions, thrownError) {
+
+      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+  }
+
+});
+ }
+</script>
 @endsection

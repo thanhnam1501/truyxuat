@@ -39,12 +39,13 @@
 							<div class="form-group">
 								<label for="exampleInputEmail1">Các bước cập nhật</label>
 								<input type="number" class="form-control" id="node" name="node" value="{{$data->node}}" disabled>
-							</div>
+							</div>				
 
 							<div class="form-group">
 								<label for="exampleInputEmail1">Liên kết tĩnh</label>
 								<input type="text" class="form-control" id="slug" name="slug" value="{{$data->slug}}" >
 							</div>	
+							<a onclick="window.open('{{$urlSlug}}')">{{$urlSlug}}</a>
 							
 						</div>
 						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">

@@ -83,6 +83,7 @@ class AdminProductController extends Controller
       $data = Product::find($id);
       $companies = Company::get();
       $url = url("san-pham/{$data->id}");
+      $urlSlug = url("/{$data->slug}");
       return view('admin.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,]);
     }
 

@@ -12,7 +12,7 @@
 		<br>
 		<div class="clearfix"></div>
 		<div class="card-body">
-			<form action="{{route('user.node.update')}}" method="POST">
+			<form action="{{route('node.update')}}" method="POST">
 
 				<div class="form-group">
 					<label>Tên bước cập nhật</label>

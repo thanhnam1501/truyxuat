@@ -158,9 +158,11 @@ public function show($id)
       $data = Product::find($id);
       $companies = Company::get();
       $url = url("/check/{$data->id}");
+      $urlSlug = url("/show/{$data->slug}");
+
       $user = Profile::where('company_id',Auth::guard('profile')->user()->company_id)->get();
-      
-      return view('user.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url, 'user' => $user]);
+      $nodes = Node::where('product_id', $data['id'])->get();
+      return view('user.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,'urlSlug' => $urlSlug, 'user' => $user, 'nodes' => $nodes]);
     }
     
     public function update(Request $request)

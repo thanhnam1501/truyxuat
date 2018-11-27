@@ -27,9 +27,20 @@ class HomeController extends Controller
             $nodes = Node::where('product_id', $data->id)->get();
         }else{
             $nodes = null;
+            $data = null;
         }
+        return view('check',['data' => $data, 'nodes' => $nodes]);
+    }
 
-        
+    public function showBySlug($slug)
+    {       
+        $data = Product::whereSlug($slug)->firstOrFail();
+        if(!empty($data)){
+            $nodes = Node::where('product_id', $data[''])->get();
+        }else{
+            $nodes = null;
+             $data = null;
+        }
         return view('check',['data' => $data, 'nodes' => $nodes]);
     }
 

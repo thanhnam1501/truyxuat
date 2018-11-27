@@ -37,6 +37,8 @@
 								<label for="exampleInputEmail1">Liên kết tĩnh</label>
 								<input type="text" class="form-control" id="slug" name="slug" value="{{$data->slug}}" >
 							</div>	
+							<a onclick="window.open('{{$urlSlug}}')">{{$urlSlug}}</a>
+
 							
 						</div>
 						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -81,6 +83,57 @@
 		</div><!-- end card-->					
 	</div>
 
+
+	@for($i=0; $i <= $data->node ; $i++)
+	@foreach($nodes as $key => $value)
+	@if($i == $key)
+	<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 x_panel">						
+		<div class="card mb-3" >
+			<div class="card-header">
+				<h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3>
+				
+				<div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
+					@if($value->status == 1)
+					<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "><i class="fa fa-check"> Node đã được kích hoạt</i></a>
+					@else
+					<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><i class="fa fa-check"> Node chưa được kích hoạt</i></a>
+					@endif
+
+				</div>
+			</div>
+			@if ($errors->any())
+			<div class="alert alert-danger">{{ implode('', $errors->all(':message')) }}</div>
+			@endif
+			<br>
+			<div class="clearfix"></div>
+			<div class="card-body" >
+				<form action="{{route('user.node.update')}}" method="POST">
+
+					<div class="form-group">
+						<label>Tên bước cập nhật</label>
+						<input type="text" class="form-control" id="name" name="name" value="{{$data->name}}" placeholder="Họ và Tên" required>
+						<input type="hidden" class="form-control" id="id" name="id" value="{{$data->id}}" placeholder="Họ và Tên" required>
+					</div>
+
+					<div class="form-group">
+						<label>Mô tả</label>
+						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor{{$i + 3}}">{{$value->content}}</textarea>
+					</div> 
+
+					{{ csrf_field() }}
+
+					<button type="submit" class="btn btn-primary">Cập nhật</button>
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+	@endif
+	@endforeach
+	@endfor
+
+
 	@endsection
 
 	@section('footer')
@@ -90,4 +143,32 @@
 			$('#qrcode').svgmagic();
 		});
 	</script>
+	
+	<script>
+		function activatedNode(id){
+			$.ajax({
+				url: '{{ route('user.node.activated') }}',
+				type: 'POST',
+				data: {id: id},
+
+				success: function success(res) {
+
+					if (res.status == true) {
+
+						toastr.success(res.message);
+						location.reload();
+						setTimeout(function(){
+							   location.reload();
+						}, 5000);
+					} 
+				},
+				error: function error(xhr, ajaxOptions, thrownError) {
+
+					toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+				}
+
+			});
+		}
+	</script>
+	
 	@endsection
