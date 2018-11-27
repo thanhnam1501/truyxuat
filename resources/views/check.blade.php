@@ -88,15 +88,15 @@
   </div>
 
   <div class="row">
-    <legend class="panel-heading container" style="background-color: red; width: 100%; text-align: center; justify-content: center; ">
+    <legend class="panel-heading container" style="background-color: #e0384f; width: 100%; text-align: center; justify-content: center; ">
 
-     <a href="#sort-content" style="background-color: red; width: 100%; margin: 0 auto !important; padding: auto; float: left"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
+     <a href="#sort-content" style="background-color: #e0384f; width: 100%; margin: 0 auto !important; padding: auto; float: left"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
       <i class="fa fa-qrcode" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
       {{--   <span class="fieldset-legend-prefix element-invisible"">          
       </span> --}}
       <span style="color: #fff !important; ">
         <strong style="float: left;">THÔNG TIN SẢN PHẨM</strong>
-        <i class="fa fa-chevron-down" style="float: right; margin-right: 5%;"></i>
+        <i class="ChangeIcon fa fa-chevron-up" style="float: right; margin-right: 5%;"></i>
       </span>
     </a>
   </legend>
@@ -117,7 +117,7 @@
       <i class="fa fa-search" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
       <span style="color: #fff !important; ">
         <strong style="float: left;">THÔNG TIN CHI TIẾT</strong>
-        <i class="fa fa-chevron-up" style="float: right;margin-right: 5%;"></i></span>
+        <i class=" ChangeIcon fa fa-chevron-down" style="float: right;margin-right: 5%;"></i></span>
       </a>
     </legend>
     <div class="panel-body panel-collapse fade collapse" id="content" aria-expanded="true" style="">
@@ -136,7 +136,7 @@
     <legend class="panel-heading container" style="background-color: #82898f; max-width: 100%">
       <a href="#content{{$i}}" style="background-color: #82898f; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
        <div class="iconfirst">  <span><i class="fa fa-tag" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i></span></div>
-       <span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="fa fa-chevron-up" style="float: right; margin-right: 5%;"></i></span>
+       <span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="ChangeIcon fa fa-chevron-down" style="float: right; margin-right: 5%;"></i></span>
      </a>
    </legend>
    <div class="panel-body panel-collapse fade collapse " id="content{{$i}}" aria-expanded="true" style="">

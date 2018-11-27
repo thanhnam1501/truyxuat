@@ -93,7 +93,7 @@ $('.close-link').click(function () {
 // Collapse ibox function
 $('.collapse-link').click(function () {
     var x_panel = $(this).closest('div.x_panel');
-    var button = $(this).find('i');
+    var button = $(this).find('.ChangeIcon');
     var content = x_panel.find('div.x_content');
     content.slideToggle(200);
     (x_panel.hasClass('fixed_height_390') ? x_panel.toggleClass('').toggleClass('fixed_height_390') : '');
