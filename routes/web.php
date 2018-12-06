@@ -42,7 +42,7 @@ Route::middleware('revalidate')->group(function () {
       Auth::routes();
       Route::get('/', 'UserController@home')->name('admin.index');
 
-            //* Quản lý quản trị viênus
+            //* Quản lý quản trị viên
       Route::group(['prefix' => 'quan-tri-vien'], function () {
         Route::get('get-list', 'UserController@getlist')->name('user.getList');
         Route::get('/', 'UserController@index')->name('admin.user.index');
@@ -91,6 +91,8 @@ Route::middleware('revalidate')->group(function () {
         Route::post('update-node', 'AdminNodeController@update')->name('node.update');
         Route::post('xoa-node','AdminNodeController@destroy')->name('node.delete');
         Route::post('activated', 'AdminNodeController@activated')->name('node.activated');
+        Route::patch('chinh-sua-node', 'AdminNodeController@updateById')->name('node.updateById');
+
 
 
 
@@ -134,6 +136,7 @@ Route::get('/', 'ProductController@index')->name('user.index');
 Route::get('/home', 'ProductController@index')->name('user.index');
 Route::get('check/{id}', 'HomeController@show');
 Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
+
 
 
 Route::get('/qrcode', function(){
@@ -198,6 +201,7 @@ Route::group(['prefix' => 'san-pham'], function () {
   Route::get('xem-chi-tiet/{id}', 'ProductController@show')->name('user.product.show');
   Route::post('activated', 'ProductController@activated')->name('user.product.activated');
 
+
 });
             //* End
 
@@ -214,6 +218,7 @@ Route::group(['prefix' => 'node'], function () {
   Route::get('tao-moi-buoc', 'NodeController@ShowFormCreateOne')->name('user.node.ShowFormCreateOne');
   Route::post('createOne', 'NodeController@create')->name('user.node.createOne');
   Route::post('activated', 'NodeController@activated')->name('user.node.activated');
+  Route::post('chinh-sua-node', 'NodeController@updateById')->name('user.node.updateById');
 
 
 });

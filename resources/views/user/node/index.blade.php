@@ -87,29 +87,29 @@
 @section('script')
 <script>
   $(function() {
-     $('#product-list').DataTable({
-      bPaginate: false,
-      bFilter: false,
-      bInfo: false,
-      order: [],
-      searching: true,
-      bSortable: true,
-      bRetrieve: true,
-      ajax: '{!! route('user.node.getList') !!}',
-      pageLength: 30,
-      lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
-      columns: [
-      {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
-      {data: 'name', name: 'name'},
-      {data: 'product_name', name: 'product_name'},
-      {data: 'updated_at', name: 'updated_at'},
-      {data: 'created_at', name: 'created_at'},
-      {data: 'status', name: 'status'},
-      {data: 'action', name: 'action', searchable: false},
-      ]
-    });
-
+   $('#product-list').DataTable({
+    bPaginate: false,
+    bFilter: false,
+    bInfo: false,
+    order: [],
+    searching: true,
+    bSortable: true,
+    bRetrieve: true,
+    ajax: '{!! route('user.node.getList') !!}',
+    pageLength: 30,
+    lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
+    columns: [
+    {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
+    {data: 'name', name: 'name'},
+    {data: 'product_name', name: 'product_name'},
+    {data: 'updated_at', name: 'updated_at'},
+    {data: 'created_at', name: 'created_at'},
+    {data: 'nodes.status', name: 'nodes.status'},
+    {data: 'action', name: 'action', searchable: false},
+    ]
   });
+
+ });
 
 </script>
 <script>    
@@ -141,39 +141,45 @@
         }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
-                                        //toastr.error(thrownError);
-                                        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
-                                      }
+       
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
 
-                                    });
+    });
    } 
  });
  }
 </script>
 <script>
-  function activated(id){
-     $.ajax({
-        url: '{{ route('node.activated') }}',
-        type: 'POST',
-        data: {id: id},
+  function activatedNode(id){
+    $.ajax({
+      url: '{{ route('user.node.activated') }}',
+      type: 'POST',
+      data: {id: id},
 
-        success: function success(res) {
+      success: function success(res) {
+        if (res.node_status == 0) {
 
-          if (res.status == true) {
-
-            toastr.success(res.message);
-            $('#product-list').DataTable().ajax.reload();
-        } else {
-
-            toastr.success(res.message);
+          toastr.success('Bước cập nhật đã được mở khóa thành công!');
+          location.reload();
+          setTimeout(function(){
+               location.reload();
+          }, 3000);
         }
-    },
-    error: function error(xhr, ajaxOptions, thrownError) {
+        else{
+          toastr.error('Bước cập nhật đã bị khóa!');
+        
+          setTimeout(function(){
+               location.reload();
+          }, 3000);
+        } 
+      },
+      error: function error(xhr, ajaxOptions, thrownError) {
 
-      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+        toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
+
+    });
   }
-
-});
- }
-</script>
+ </script>
 @endsection

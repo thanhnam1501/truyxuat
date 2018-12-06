@@ -80,11 +80,14 @@ class AdminProductController extends Controller
 
     public function edit($id)
     {
+    
+
       $data = Product::find($id);
       $companies = Company::get();
-      $url = url("san-pham/{$data->id}");
-      $urlSlug = url("/{$data->slug}");
-      return view('admin.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,]);
+      $url = url("/check/{$data->id}");
+      $urlSlug = url("/show/{$data->slug}");
+      $nodes = Node::where('product_id', $data['id'])->get();
+      return view('admin.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,'urlSlug' => $urlSlug, 'nodes' => $nodes]);
     }
 
     public function store(Request $request)

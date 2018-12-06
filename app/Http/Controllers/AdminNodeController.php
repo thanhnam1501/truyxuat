@@ -139,6 +139,40 @@ public function index()
     	}
     }
 
+    public function updateById(Request $request)
+   {
+    $data = $request->all();
+
+    $node = Node::where('id', $data['id'])->first();
+
+    if (!empty($node)) {
+      DB::beginTransaction();
+      try {
+        $node->update($data);
+
+        $node_history = new User_History();
+        $node_history->user_id = Auth::guard('web')->user()->id;
+        $node_history->company_id = Auth::guard('web')->user()->company_id;
+        $node_history->content = 'Chỉnh sửa node: ' . $node->name ;
+        $node_history->product_id = $node->product_id;
+        $node_history->save();
+
+        DB::commit();
+
+     return redirect()->route('product.edit',['id' => $node['product_id'],]);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        Log::info($e->getMessage());
+
+       return redirect()->route('product.edit',['id' => $node['product_id'],]);
+      }
+    } else {
+
+      return redirect()->route('product.edit',['id' => $node['product_id'],]);
+    }
+  }
+
     public function activated(Request $request){
       $id = $request->id;
       $node = Node::find($id);
@@ -150,6 +184,7 @@ public function index()
       }
 
       return response()->json([
+        'node_status' => $node['status'],
         'status' => true,
         'message' => 'Thay đổi trạng thái thành công !',
       ]);

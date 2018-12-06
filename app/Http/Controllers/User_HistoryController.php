@@ -14,11 +14,11 @@ class User_HistoryController extends Controller
 {
     public function __construct(){
 
-     $this->middleware('auth');
+     $this->middleware('auth.profile');
   }
 	public function index()
 	{ 
-		return view('admin.history');
+		return view('user.index_history');
 	}
 
     /**
@@ -33,8 +33,7 @@ class User_HistoryController extends Controller
             ->select('user_histories.*', 'profiles.name as user_name')
             ->orderBy('user_histories.created_at', 'desc')
             ->get();
-    	
-
+    
     	return Datatables::of($history)
     	->addIndexColumn()
       // ->addColumn()           

@@ -1,14 +1,15 @@
-@include ( 'ckfinder::setup')
+
 @extends('layouts.master_user')
 @section('content')
 <div class="row">
+	
 
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">						
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 x_panel">						
 		<div class="card mb-3">
 			<div class="card-header">
 				<h3><i class="fa fa-check-square-o"></i> Cập nhật thông tin sản phẩm</h3>
 			</div>
-
+			
 			<div class="card-body">
 
 				<form action="{{route('user.product.update')}}" method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
@@ -87,88 +88,95 @@
 	@for($i=0; $i <= $data->node ; $i++)
 	@foreach($nodes as $key => $value)
 	@if($i == $key)
-	<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 x_panel">						
-		<div class="card mb-3" >
-			<div class="card-header">
-				<h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3>
-				
-				<div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
-					@if($value->status == 1)
-					<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "><i class="fa fa-check"> Node đã được kích hoạt</i></a>
-					@else
-					<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><i class="fa fa-check"> Node chưa được kích hoạt</i></a>
-					@endif
+	<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 x_panel" 
+	style="border-color:red !important;">						
+	<div class="card mb-3" >
+		<div class="card-header">
+			<h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3>
 
-				</div>
-			</div>
-			@if ($errors->any())
-			<div class="alert alert-danger">{{ implode('', $errors->all(':message')) }}</div>
-			@endif
-			<br>
-			<div class="clearfix"></div>
-			<div class="card-body" >
-				<form action="{{route('user.node.update')}}" method="POST">
-
-					<div class="form-group">
-						<label>Tên bước cập nhật</label>
-						<input type="text" class="form-control" id="name" name="name" value="{{$data->name}}" placeholder="Họ và Tên" required>
-						<input type="hidden" class="form-control" id="id" name="id" value="{{$data->id}}" placeholder="Họ và Tên" required>
-					</div>
-
-					<div class="form-group">
-						<label>Mô tả</label>
-						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor{{$i + 3}}">{{$value->content}}</textarea>
-					</div> 
-
-					{{ csrf_field() }}
-
-					<button type="submit" class="btn btn-primary">Cập nhật</button>
-				</form>
-
+			<div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
+				@if($value->status == 1)
+				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "><i class="fa fa-check"> Node đã được kích hoạt</i></a>
+				@else
+				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><i class="fa fa-check"> Node chưa được kích hoạt</i></a>
+				@endif
 
 			</div>
 		</div>
+		@if ($errors->any())
+		<div class="alert alert-danger">{{ implode('', $errors->all(':message')) }}</div>
+		@endif
+		<br>
+		<div class="clearfix"></div>
+		<div class="card-body" >
+			<form action="{{route('user.node.updateById')}}" method="POST" class="form-horizontal" role="form" enctype="multipart/form-data" id="formUpdate{{$i}}">
+
+				<div class="form-group">
+					<label>Tên bước cập nhật</label>
+					<input type="text" class="form-control" id="name{{$i}}" name="name" value="{{$value->name}}" placeholder="Họ và Tên" required>
+					<input type="hidden" class="form-control" id="id{{$i}}" name="id" value="{{$value->id}}" placeholder="Họ và Tên" required>
+					<input name="_method" type="hidden" value="PATCH">
+				</div>
+
+				<div class="form-group">
+					<label>Mô tả</label>
+					<textarea name="content" class="form-control " id="editor{{$i + 3}}">{{$value->content}}</textarea>
+				</div> 
+				@method('post')
+				@csrf
+				
+
+				<button type="submit" class="btn btn-primary">Cập nhật</button>
+			</form>
+
+
+		</div>
 	</div>
-	@endif
-	@endforeach
-	@endfor
+</div>
+@endif
+@endforeach
+@endfor
 
 
-	@endsection
+@endsection
 
-	@section('footer')
-	<script src="SVGMagic.min.js"></script>
-	<script>
-		$(document).ready(function(){
-			$('#qrcode').svgmagic();
-		});
-	</script>
-	
-	<script>
-		function activatedNode(id){
-			$.ajax({
-				url: '{{ route('user.node.activated') }}',
-				type: 'POST',
-				data: {id: id},
+@section('script')
 
-				success: function success(res) {
+<script>
+	function activatedNode(id){
+		$.ajax({
+			url: '{{ route('user.node.activated') }}',
+			type: 'POST',
+			data: {id: id},
 
-					if (res.status == true) {
+			success: function success(res) {
+				if (res.node_status == 0) {
 
-						toastr.success(res.message);
-						location.reload();
-						setTimeout(function(){
-							   location.reload();
-						}, 5000);
-					} 
-				},
-				error: function error(xhr, ajaxOptions, thrownError) {
-
-					toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+					toastr.success('Bước cập nhật đã được mở khóa thành công!');			
+					setTimeout(function(){
+						   location.reload();
+					}, 3000);
+					
 				}
+				else{
+					toastr.error('Bước cập nhật đã bị khóa!');
 
-			});
-		}
-	</script>
+					setTimeout(function(){
+						   location.reload();
+					}, 3000);
+				} 
+			},
+			error: function error(xhr, ajaxOptions, thrownError) {
+
+				toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+			}
+
+		});
+	}
+</script>
+@for($i=0; $i <= $data->node ; $i++)
+<script>
 	
-	@endsection
+</script>
+@endfor
+@endsection

@@ -390,12 +390,12 @@
         <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
         
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
-        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script> 
+       {{--  <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
+        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script>  --}}
         <script > 
 
         </script>
-       {{--  <script  type = " text / javascript "  src = " /js/ckfinder/ckfinder.js "> </script> --}}
+       <script  type = "text/javascript "  src ="{{asset('js/ckeditor/ckeditor.js')}}"> </script>
         // <script>  
         CKEDITOR.replace('editor1', {
           filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',

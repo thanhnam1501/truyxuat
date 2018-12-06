@@ -161,7 +161,12 @@ public function show($id)
       $urlSlug = url("/show/{$data->slug}");
 
       $user = Profile::where('company_id',Auth::guard('profile')->user()->company_id)->get();
-      $nodes = Node::where('product_id', $data['id'])->get();
+      
+      if (Auth::guard('profile')->user()->status !== 1) {
+        $nodes = Node::where('product_id', $data['id'])->where('user_id',Auth::guard('profile')->user()->id )->get();
+      }else{
+         $nodes = Node::where('product_id', $data['id'])->get();
+      }
       return view('user.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,'urlSlug' => $urlSlug, 'user' => $user, 'nodes' => $nodes]);
     }
     
@@ -209,6 +214,8 @@ public function show($id)
        return redirect()->route('user.product.edit',['id' => $product['id']]);
      }
    }
+
+  
 
    public function activated(Request $request){
     $id = $request->id;

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Node;
+use App\Models\Qr_Code;
+
 
 
 class HomeController extends Controller
@@ -34,12 +36,12 @@ class HomeController extends Controller
 
     public function showBySlug($slug)
     {       
-        $data = Product::whereSlug($slug)->firstOrFail();
+        $data = Product::where('slug', $slug)->first();
         if(!empty($data)){
-            $nodes = Node::where('product_id', $data[''])->get();
+            $nodes = Node::where('product_id', $data['id'])->get();
         }else{
             $nodes = null;
-             $data = null;
+            $data = null;
         }
         return view('check',['data' => $data, 'nodes' => $nodes]);
     }

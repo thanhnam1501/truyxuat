@@ -73,7 +73,7 @@
       HỆ THỐNG TRUY XUẤT NGUỒN GỐC HÀNG HÓA
     </p>
   </div>
-  @if(!empty($data))
+  @if(!empty($data->status == 1))
   <div class="x_panel">
     @if($data->image)
     <img class="imageProduct" src="{{asset($data->image)}}" alt="">

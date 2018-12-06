@@ -76,6 +76,16 @@ Public function create(Request $request){
 
        return Datatables::of($nodes)
        ->addIndexColumn()
+       ->editColumn('nodes.status', function($nodes){
+        $string = "";
+        if($nodes->status == 1){
+          $string = '<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activated('. $nodes->id .')" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>';
+        }
+        else{
+          $string = '<a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('. $nodes->id .')" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>';
+        }
+        return $string;      
+      })
        ->addColumn('action', function($nodes) {
         $string = "";
 
@@ -169,7 +179,48 @@ Public function create(Request $request){
      }
    }
 
-   public function activated(Request $request){
+   public function updateById(Request $request)
+   {
+    $data = $request->all();
+
+    $node = Node::where('id', $data['id'])->first();
+
+    if (!empty($node)) {
+      DB::beginTransaction();
+      try {
+        $node->update($data);
+
+        $node_history = new User_History();
+        $node_history->user_id = Auth::guard('profile')->user()->id;
+        $node_history->company_id = Auth::guard('profile')->user()->company_id;
+        $node_history->content = 'Chỉnh sửa node: ' . $node->name ;
+        $node_history->product_id = $node->product_id;
+        $node_history->save();
+
+        DB::commit();
+
+        return redirect()->route('user.product.edit',['id' => $node['product_id'],]);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        Log::info($e->getMessage());
+
+        return response()->json([
+          'status' => true,
+          'message' => 'Thay đổi thông tin thành công!',
+        ]);
+      }
+    } else {
+
+      return response()->json([
+          'status' => false,
+          'message' => 'Thay đổi thông tin không thành công!',
+        ]);
+    }
+  }
+
+
+  public function activated(Request $request){
     $id = $request->id;
     $node = Node::find($id);
     if($node->status == 1){
@@ -180,6 +231,7 @@ Public function create(Request $request){
     }
 
     return response()->json([
+      'node_status' => $node['status'],
       'status' => true,
       'message' => 'Thay đổi trạng thái thành công !',
     ]);

@@ -44,10 +44,9 @@
             pageLength: 30,
             lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
             columns: [
-            {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
+            {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',},
             {data: 'user_name', name: 'user_name',},
             {data: 'content', name: 'content'},
-            {data: 'status', name: 'status'},
             {data: 'created_at', name: 'created_at',},
             ]
         });
