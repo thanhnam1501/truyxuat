@@ -16,9 +16,9 @@
 					<div class="form-group">
 						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
 							@if($data->image)
-							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="/{{$data->image}}" alt="">
+							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{asset('public/'.$data->image)}}" alt="">
 							@else
-							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{ asset('image/noimage.png')}}" alt="">
+							<img style="width: 50%;margin-left: 20%; border: solid 1px black" src="{{ asset('public/image/noimage.png')}}" alt="">
 							@endif
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -86,13 +86,13 @@
 	style="border-color:red !important;">						
 	<div class="card mb-3" >
 		<div class="card-header">
-			<h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3>
+			
 			
 			<div role="tabpanel" class="tab-pane @if($i==0)active @endif fade in" id="tab_content{{$i}}" aria-labelledby="home-tab">
 				@if($value->status == 1)
-				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "><i class="fa fa-check"> Node đã được kích hoạt</i></a>
+				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-success "> <h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3></i></a>
 				@else
-				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><i class="fa fa-check"> Node chưa được kích hoạt</i></a>
+				<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activatedNode({{$value->id}})" class="btn btn-danger "><h3><i class="fa fa-check-square-o"></i> {{$value->name}}</h3></i></a>
 				@endif
 
 			</div>
@@ -134,7 +134,7 @@
 @endsection
 
 @section('script')
-
+@include('ckfinder::setup')
 <script>
  	function activatedNode(id){
  		$.ajax({

@@ -14,8 +14,8 @@ class AdminProfileController extends Controller
 {
  public function __construct(){
 
-    $this->middleware('auth');
-  }
+  $this->middleware('auth');
+}
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +23,7 @@ class AdminProfileController extends Controller
      */
     public function index()
     {  
-            
+
       return view('admin.user.index');
     }
 
@@ -40,23 +40,23 @@ class AdminProfileController extends Controller
     public function getlist()
     {
      $profiles = DB::table('profiles')
-            ->join('companies', 'companies.id', '=', 'profiles.company_id')
-            ->select('profiles.*','companies.name as company_name')
-            ->get();
+     ->join('companies', 'companies.id', '=', 'profiles.company_id')
+     ->select('profiles.*','companies.name as company_name')
+     ->get();
 
-      return Datatables::of($profiles)
-      ->addIndexColumn()           
-      ->addColumn('action', function($profiles) {
-        $string = "";
+     return Datatables::of($profiles)
+     ->addIndexColumn()           
+     ->addColumn('action', function($profiles) {
+      $string = "";
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+      $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+      $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
-        return $string;
-      })
-      ->make(true);
-    }
+      return $string;
+    })
+     ->make(true);
+   }
 
     /**
      * Show the form for creating a new resource.
@@ -124,32 +124,49 @@ class AdminProfileController extends Controller
     {
      $data = $request->all();
 
-      $profile = Profile::where('email', $data['email'])->first();
+     $profile = Profile::where('email', $data['email'])->first();
 
-      if (!empty($profile) ) {
-        DB::beginTransaction();
-        try {
+     if (!empty($profile) ) {
+      DB::beginTransaction();
+      try {
+        if (!empty($data->password)) {
+         $oldpassword = $request->oldpassword;
+         $password = $request->password;
+         $passwordconf = $request->password_confirmation;
+
+         if(Hash::check($request->oldpassword, Auth::guard('profile')->user()->password) == true && $password == $passwordconf){
+          $password = bcrypt($password);
           $profile->update([
             'name'  => $data['name'],
             'email'  => $data['email'],
-          
+            'mobile' => $data['mobile'],
+            'password' => $password,
           ]);
-          $message = 'Cập nhập thành công tài khoản '. $profile->email;
-          DB::commit();
-          return view('admin.user.index',['messageSuccess' => $message]);
-
-        } catch (Exception $e) {
-          DB::rollback();
-
-          Log::info($e->getMessage());
-          $message = $e->getMessage();
-          return view('admin.user.index',['messageSuccess' => $message]);
         }
-      } else {
-        $message =  'Không tìm thấy người dùng, vui lòng thử lại sau';
-        return view('admin.user.index',['messageError' => $message]);
+      }else{
+        $profile->update([
+          'name'  => $data['name'],
+          'email'  => $data['email'],
+          'mobile' => $data['mobile'],
+        ]);
       }
+
+      $message = 'Cập nhập thành công tài khoản '. $profile->email;
+      DB::commit();
+      return view('admin.user.index',['messageSuccess' => $message]);
+
+    } catch (Exception $e) {
+      DB::rollback();
+
+      Log::info($e->getMessage());
+      $message = $e->getMessage();
+      return view('admin.user.index',['messageSuccess' => $message]);
     }
+  } else {
+    $message =  'Không tìm thấy người dùng, vui lòng thử lại sau';
+    return view('admin.user.index',['messageError' => $message]);
+  }
+}
     /**
      * Display the specified resource.
      *
@@ -168,7 +185,8 @@ class AdminProfileController extends Controller
      */
     public function destroy(Request $request)
     {
-      $profile = Profile::find($request->id);
+      $id = $request->id;
+      $profile = Profile::find($id);
 
       if (!empty($profile)) {
         DB::beginTransaction();
@@ -187,12 +205,14 @@ class AdminProfileController extends Controller
           Log::info($e->getMessage());
 
           return response()->json([
+
             'error' => true,
             'message' => $e->getMessage()
           ]);
         }
       } else {
         return response()->json([
+          'data' => $id,
           'error'     =>  true,
           'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
         ]);
@@ -249,4 +269,4 @@ class AdminProfileController extends Controller
         return view('backend.profile.change-password', ['messageError'   =>  $message]);
       }
     }
-}
+  }

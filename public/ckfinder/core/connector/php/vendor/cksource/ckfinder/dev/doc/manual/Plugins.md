@@ -8,7 +8,7 @@ CKFinder uses two types of plugins:
 - JavaScript plugins, used by the CKFinder frontend, which can be used to alter and extend CKFinder UI.
 - PHP plugins that can be used to change and extend the behavior of the server-side connector.
 
-Below you can find information and examples for CKFinder PHP plugins. For details about JavaScript plugins please refer to [Creating CKFinder 3.x JavaScript Plugins](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_plugins) documentation.
+Below you can find information and examples for CKFinder PHP plugins. For details about JavaScript plugins please refer to [Creating CKFinder 3.x JavaScript Plugins](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_plugins) documentation.
 
 
 @subsection plugins_introduction_installation Plugin Installation
@@ -119,7 +119,7 @@ Plugins can perform many different tasks. Depending on your plugin purpose you n
 There are two main plugin types:
  * **Event subscribers** &ndash; Plugins that perform actions for defined application events (see @ref events for details). If
                        you want to create this type of plugin, you have to implement
-                       [EventSubscriberInterface](http://symfony.com/doc/current/components/event_dispatcher/introduction.html#using-event-subscribers)
+                       [EventSubscriberInterface](https://symfony.com/doc/current/components/event_dispatcher/introduction.html#using-event-subscribers)
                        in your plugin class.
  * **Command plugins** &ndash; Plugins that behave like other CKFinder commands (see @ref commands for details). In this case
                        you need to extend the [CommandAbstract](@ref CKSource::CKFinder::Command::CommandAbstract) class,

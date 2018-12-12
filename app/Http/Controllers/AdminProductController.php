@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
 use App\Models\Node;
+use App\Models\Admin_History;
 
 use DB;
 use Datatables;
@@ -109,9 +110,8 @@ class AdminProductController extends Controller
     }
     $check = Product::find($product->id)->update(['slug' => $data['slug']]);
     if($check == true){
-      $user_history = new User_History();
-      $user_history->user_id = Auth::guard('profile')->user()->id;
-      $user_history->company_id = Auth::guard('profile')->user()->company_id;
+      $user_history = new Admin_History();
+      $user_history->user_id = Auth::guard('web')->user()->id;
       $user_history->content = 'Thêm mới sản phẩm: ' . $product->name;
       $user_history->save();
     }

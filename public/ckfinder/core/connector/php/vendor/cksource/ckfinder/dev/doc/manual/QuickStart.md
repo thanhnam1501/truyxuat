@@ -12,7 +12,7 @@ When you are sure that your server configuration is correct, complete the steps 
 
 @subsection quickstart_installation_download Download CKFinder
 
-Visit the [CKFinder Download](http://cksource.com/ckfinder/download) site and download the PHP version. Copy the distribution files to your web server and place them inside the `/ckfinder/` folder or any other folder of your choice on your website.
+Visit the [CKFinder Download](https://ckeditor.com/ckeditor-4/download/#ckfinder) site and download the PHP version. Copy the distribution files to your web server and place them inside the `/ckfinder/` folder or any other folder of your choice on your website.
 
 @subsection quickstart_installation_enable Enable CKFinder
 
@@ -62,7 +62,7 @@ Once the backend is configured, the last thing to do is to make sure that the we
 
 ### Example 2
 
-Suppose that CKFinder is installed in `http://example.com/` and on the server the full path to the website folder is `/home/joe/www/example.com/`.
+Suppose that CKFinder is installed in `https://example.com/` and on the server the full path to the website folder is `/home/joe/www/example.com/`.
 If the backend location (`baseUrl`) is set to `/userfiles/`, the uploaded files will land in `/home/joe/www/example.com/userfiles/`.
 
 Now in order to correctly setup the file permissions:
@@ -108,8 +108,8 @@ You may use this script to test your PHP installation (save it as `test.php` and
 
 ~~~
 <?php
-if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-    echo ' [OK] PHP version is newer than 5.4: '.phpversion();
+if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
+    echo ' [OK] PHP version is newer than 5.6: '.phpversion();
 } else {
     echo ' [ERROR] Your PHP version is too old for CKFinder 3.x.';
 }

@@ -5,17 +5,17 @@
 @section integration_embedding Embedding CKFinder on a Website
 
 Once you are able to run CKFinder samples it is time to connect CKFinder with your application.
-Please refer to the [Quick Start Guide](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_installation) to read more about integrating CKFinder with your website (e.g. displaying it embedded on a page, in a popup etc.).
+Please refer to the [Quick Start Guide](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_installation) to read more about integrating CKFinder with your website (e.g. displaying it embedded on a page, in a popup etc.).
 
 @section integration_ckeditor CKEditor Integration
 
-CKFinder can be easily integrated with [CKEditor](http://ckeditor.com/). Refer to the [CKEditor Integration](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_ckeditor) article for a more detailed documentation. See also the [working demo](https://cksource.com/ckfinder/demo#ckeditor) on the CKFinder site.
+CKFinder can be easily integrated with [CKEditor](https://ckeditor.com/). Refer to the [CKEditor Integration](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_ckeditor) article for a more detailed documentation. See also the [working demo](https://cksource.com/ckfinder/demo#ckeditor) on the CKFinder site.
 
 @subsection integration_ckeditor_manual Manual Integration
 
 In order to manually configure CKEditor to use CKFinder, you will need to pass some additional CKFinder configuration settings to the CKEditor instance. This method, although slightly more complex, gives you more flexibility.
 
-Refer to [CKEditor documentation](http://docs.ckeditor.com/#!/guide/dev_ckfinder_integration) for a detailed explanation of particular configuration settings that you can use.
+Refer to [CKEditor documentation](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_ckfinder_integration.html) for a detailed explanation of particular configuration settings that you can use.
 
 <h4>Example 1</h4>
 
@@ -40,7 +40,7 @@ Specifying destination folder for uploads made directly in the **Upload** tab (1
 
 ![CKEditor Image Dialog Window](/manual/images/ckeditor_image_dialog.png)
 
-When configuring CKEditor [filebrowserUploadUrl](http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-filebrowserUploadUrl) settings, it is possible to point CKFinder to a subfolder for a given resource type and upload files directly to this subfolder.
+When configuring CKEditor [filebrowserUploadUrl](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-filebrowserUploadUrl) settings, it is possible to point CKFinder to a subfolder for a given resource type and upload files directly to this subfolder.
 In order to do this, add the `currentFolder` attribute to the query string for `*UploadUrl` settings:
 
 ~~~

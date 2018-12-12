@@ -21,7 +21,7 @@ For licensing, see LICENSE.html or https://ckeditor.com/sales/license/ckfinder
 		</h1>
 		<nav class="navigation-b grid-width-70">
 			<ul>
-				<li><a href="https://docs.ckeditor.com/ckfinder/ckfinder3/" class="button-a">Documentation</a></li>
+				<li><a href="https://ckeditor.com/docs/ckfinder/ckfinder3/" class="button-a">Documentation</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -39,6 +39,7 @@ For licensing, see LICENSE.html or https://ckeditor.com/sales/license/ckfinder
 		<h2 class="tree-a-no-sub"><a href="ckeditor.html">CKEditor Integration</a></h2>
 		<h2>Skins</h2>
 		<ul>
+			<li><a href="skins-neko.html">Neko</a></li>
 			<li><a href="skins-moono.html">Moono</a></li>
 			<li><a href="skins-jquery-mobile.html">jQuery Mobile</a></li>
 		</ul>
@@ -139,6 +140,15 @@ function selectFileWithCKFinder( elementId ) {
 <script src="js/tree-a.js"></script>
 <script src="../ckfinder.js"></script>
 <script>
+	function escapeHtml(unsafe) {
+		return unsafe
+			.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#039;");
+	}
+
 	var button = document.getElementById( 'ckfinder-modal' );
 
 	button.onclick = function() {
@@ -150,12 +160,12 @@ function selectFileWithCKFinder( elementId ) {
 				finder.on( 'files:choose', function( evt ) {
 					var file = evt.data.files.first();
 					var output = document.getElementById( 'output' );
-					output.innerHTML = 'Selected: ' + file.get( 'name' ) + '<br>URL: ' + file.getUrl();
+					output.innerHTML = 'Selected: ' + escapeHtml( file.get( 'name' ) ) + '<br>URL: ' + escapeHtml( file.getUrl() );
 				} );
 
 				finder.on( 'file:choose:resizedImage', function( evt ) {
 					var output = document.getElementById( 'output' );
-					output.innerHTML = 'Selected resized image: ' + evt.data.file.get( 'name' ) + '<br>url: ' + evt.data.resizedUrl;
+					output.innerHTML = 'Selected resized image: ' + escapeHtml( evt.data.file.get( 'name' ) ) + '<br>url: ' + escapeHtml( evt.data.resizedUrl );
 				} );
 			}
 		} );

@@ -11,18 +11,18 @@
     <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
     <!-- Bootstrap core CSS -->
+    <link href="{{asset('public/image/favicon.png')}}" rel='shortcut icon' type='image/vnd.microsoft.icon' />
+    <link href="{{asset('public/css/bootstrap.min.css')}}" rel="stylesheet">
 
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-
-    <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/fonts/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/animate.min.css')}}" rel="stylesheet">
 
     <!-- Custom styling plus plugins -->
-    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
-    <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/custom.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/icheck/flat/green.css')}}" rel="stylesheet">
 
 
-    <script src="{{asset('js/jquery.min.js')}}"></script>
+    <script src="{{asset('public/js/jquery.min.js')}}"></script>
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>

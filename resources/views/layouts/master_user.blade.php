@@ -9,25 +9,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+  
     <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
     <!-- Bootstrap core CSS -->
+    <link href="{{asset('public/image/favicon.png')}}" rel='shortcut icon' type='image/vnd.microsoft.icon' />
+    <link href="{{asset('public/css/bootstrap.min.css')}}" rel="stylesheet">
 
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-
-    <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/fonts/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/animate.min.css')}}" rel="stylesheet">
 
 
     <!-- Custom styling plus plugins -->
-    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/maps/jquery-jvectormap-2.0.1.css')}}" />
-    <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
-    <link href="{{asset('css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}"/>
+    <link href="{{asset('public/css/custom.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/css/maps/jquery-jvectormap-2.0.1.css')}}" />
+    <link href="{{asset('public/css/icheck/flat/green.css')}}" rel="stylesheet" />
+    <link href="{{asset('public/css/floatexamples.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('public/css/datatables.min.css')}}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <script src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
+  <script src="{{asset('public/ckfinder/ckfinder.js')}}"></script>
 
 
 
@@ -47,15 +49,16 @@
       <body class="nav-md">
 
         <div class="container body" >
-
-
           <div class="main_container">
 
             <div class="col-md-3 left_col">
               <div class="left_col scroll-view">
 
                 <div class="navbar nav_title" style="border: 0;">
-                  <a href="{{route('user.index')}}" class="site_title"><i class="fa fa-paw"></i> <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></a>
+                  <a href="{{route('user.index')}}" class="site_title">
+                    <img class="fa" style="width: 24px;height: 24px; border-radius: 50%;" src="{{asset('public/image/favicon.png')}}" alt="">
+                   
+                    <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></a>
                 </div>
                 <div class="clearfix"></div>
 
@@ -63,7 +66,7 @@
                 <!-- menu prile quick info -->
                 <div class="profile">
                   <div class="profile_pic">
-                    <img src="{{ asset('image/hello.gif')}}" alt="..." class="img-circle profile_img">
+                    <img src="{{ asset('public/image/hello.gif')}}" alt="..." class="img-circle profile_img">
                   </div>
                   <div class="profile_info">
                     <span>Chào,</span>
@@ -116,7 +119,7 @@
                     </ul>
                   </div>
                   <div class="menu_section">
-                    <img src="{{asset('image/smc.gif')}}" width="100%" alt="">
+                    <img src="{{asset('public/image/smc.gif')}}" width="100%" alt="">
 
                   </div>
 
@@ -166,7 +169,12 @@
                             <span>Settings</span>
                           </a>
                         </li>
-                        --}}                        
+                        --}}
+                        <li>
+                          @if(Auth::guard('profile')->user()->status == 1)
+                          <a href="">Gia hạn tài khoản <i class="fa fa-clock-o pull-right"></i></a>
+                          @endif
+                        </li>                        
                         <li>
                          <a href='{{route('user.profile.ShowFormChangePassword')}}'>Đổi mật khẩu</a>
                        </li>
@@ -256,8 +264,8 @@
               @yield('content')
               <footer>
                 <div class="">
-                  <p class="pull-right">Công ty Cổ phần Giải pháp Chống giả An Hà – AnHaCorp <a>NamLemon</a>. |
-                    <span class="lead"> <i class="fa fa-paw"></i> <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></span>
+                  <p class="pull-right">Công ty Cổ phần Giải pháp Chống giả An Hà – AnHaCorp |
+                    <span class="lead"> <img class="fa" style="width: 24px;height: 24px; border-radius: 50%;" src="{{asset('public/image/favicon.png')}}" alt=""> &nbsp;<span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></span>
                   </p>
                 </div>
 
@@ -276,45 +284,46 @@
 
 
       <!-- /footer content -->
-      <script src="{{asset('js/jquery.min.js')}}"></script>
-      <script src="{{asset('js/nprogress.js')}}"></script>
+      <script src="{{asset('public/js/jquery.min.js')}}"></script>
+      <script src="{{asset('public/js/nprogress.js')}}"></script>
       <script>
         NProgress.start();
       </script> 
-      <script src="{{asset('js/bootstrap.min.js')}}"></script>
+      <script src="{{asset('public/js/bootstrap.min.js')}}"></script>
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
 
       <!-- gauge js -->
-      <script type="text/javascript" src="{{asset('js/gauge/gauge.min.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/gauge/gauge_demo.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/gauge/gauge.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/gauge/gauge_demo.js')}}"></script>
       <!-- chart js -->
-      <script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+      <script src="{{asset('public/js/chartjs/chart.min.js')}}"></script>
       <!-- bootstrap progress js -->
-      <script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-      <script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+      <script src="{{asset('public/js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+      <script src="{{asset('public/js/nicescroll/jquery.nicescroll.min.js')}}"></script>
       <!-- icheck -->
-      <script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+      <script src="{{asset('public/js/icheck/icheck.min.js')}}"></script>
       <!-- daterangepicker -->
-      <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/datepicker/daterangepicker.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/moment.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/datepicker/daterangepicker.js')}}"></script>
 
-      <script src="{{asset('js/custom.js')}}"></script>
+      <script src="{{asset('public/js/custom.js')}}"></script>
 
       <!-- flot js -->
       <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.pie.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.orderBars.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.time.min.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/date.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.spline.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.stack.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/curvedLines.js')}}"></script>
-      <script type="text/javascript" src="{{asset('js/flot/jquery.flot.resize.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.pie.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.orderBars.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.time.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/date.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.spline.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.stack.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/curvedLines.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/flot/jquery.flot.resize.js')}}"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
       {!! Toastr::render() !!}
 
-      <script type="text/javascript" src="{{asset('js/datatables.min.js')}}"></script>
+      <script type="text/javascript" src="{{asset('public/js/datatables.min.js')}}"></script>
       <script>
        $.ajaxSetup({
          headers: {
@@ -384,148 +393,147 @@
         </script>
 
         <!-- worldmap -->
-        <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-2.0.1.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/maps/gdp-data.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-world-mill-en.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
+        <script type="text/javascript" src="{{asset('public/js/maps/jquery-jvectormap-2.0.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('public/js/maps/gdp-data.js')}}"></script>
+        <script type="text/javascript" src="{{asset('public/js/maps/jquery-jvectormap-world-mill-en.js')}}"></script>
+        <script type="text/javascript" src="{{asset('public/js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
         
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-       {{--  <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
-        <script src = "{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}" > </script>  --}}
-        <script > 
+     
 
         </script>
-       <script  type = "text/javascript "  src ="{{asset('js/ckeditor/ckeditor.js')}}"> </script>
-        // <script>  
+       <script  type = "text/javascript "  src ="{{asset('public/ckeditor/ckeditor.js')}}"> 
+       </script>
+       <script>  
         CKEDITOR.replace('editor1', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         
-        } );
+        });
 
         CKEDITOR.replace( 'editor2', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
       CKEDITOR.replace( 'editor3', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
       CKEDITOR.replace( 'editor4', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
       CKEDITOR.replace( 'editor5', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
        CKEDITOR.replace( 'editor6', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
         CKEDITOR.replace( 'editor7', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
          CKEDITOR.replace( 'editor8', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
           CKEDITOR.replace( 'editor9', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
            CKEDITOR.replace( 'editor10', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
             CKEDITOR.replace( 'editor11', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
              CKEDITOR.replace( 'editor4', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
               CKEDITOR.replace( 'editor12', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
                CKEDITOR.replace( 'editor13', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
                 CKEDITOR.replace( 'editor14', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
                  CKEDITOR.replace( 'editor15', {
-          filebrowserBrowseUrl: '{{ asset('ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
+          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
+          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
+          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
+          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
+          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
+          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         } );
       </script>
     {{--   <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script> --}}

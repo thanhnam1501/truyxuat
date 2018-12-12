@@ -103,11 +103,11 @@ After that you can retry the action that caused an error and in the console you 
 @subsection debugging_debugging_php PHP Error Reporting
 
 PHP has built-in features that can help you understand why code execution has failed:
- * [error_reporting](http://php.net/manual/en/function.error-reporting.php)
- * [display_errors](http://php.net/manual/en/errorfunc.configuration.php#ini.display-errors) setting that can be enabled with [ini_set](http://php.net/manual/en/function.ini-set.php)
+ * [error_reporting](https://secure.php.net/manual/en/function.error-reporting.php)
+ * [display_errors](https://secure.php.net/manual/en/errorfunc.configuration.php#ini.display-errors) setting that can be enabled with [ini_set](https://secure.php.net/manual/en/function.ini-set.php)
 
 When working on a development server, you may configure `error_reporting` and `display_errors` using the `php.ini` file that is loaded by the web server (make sure to restart the server after applying changes).
-In such case enabling [display-startup-errors](http://php.net/manual/en/errorfunc.configuration.php#ini.display-startup-errors) might be a good idea as well.
+In such case enabling [display-startup-errors](https://secure.php.net/manual/en/errorfunc.configuration.php#ini.display-startup-errors) might be a good idea as well.
 
 On a production server it is highly unrecommended to leave the `display_errors` option enabled, so a more convenient way is to set PHP error reporting directly in the `config.php` file used by CKFinder.
 

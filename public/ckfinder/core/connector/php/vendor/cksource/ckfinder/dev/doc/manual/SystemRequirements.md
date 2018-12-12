@@ -39,7 +39,7 @@ CKFinder is also compatible with mobile browsers. The application is tested on:
  - Google Chrome on Android
  - Safari on iOS
 
-As CKFinder is using jQuery Mobile as a dependency, the set of currently supported mobile browses is wider (see [jQuery Mobile GBS](http://jquerymobile.com/gbs/) for the list of browsers supported by jQuery Mobile), however, please note that the application is only tested in the environments listed above.
+As CKFinder is using jQuery Mobile as a dependency, the set of currently supported mobile browses is wider (see [jQuery Mobile GBS](https://jquerymobile.com/browser-support/1.4/) for the list of browsers supported by jQuery Mobile), however, please note that the application is only tested in the environments listed above.
 
 ### Important Note
 

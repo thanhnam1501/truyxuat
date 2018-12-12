@@ -2,7 +2,7 @@
 
 \tableofcontents
 
-If you did not find the answer you are looking for, send us your question: http://cksource.com/contact
+If you did not find the answer you are looking for, send us your question: https://cksource.com/contact
 
 @section howto_folder_instance Different Folder per Instance
 
@@ -232,7 +232,7 @@ Get basic information about the `foo.png` file located in the `sub1` directory o
 ~~~
 $workingFolder->omitResponseInfo();
 ~~~
-        Another solution is to return any other type of [Response](http://symfony.com/doc/current/components/http_foundation/introduction.html#response) object directly from the `execute` method.
+        Another solution is to return any other type of [Response](https://symfony.com/doc/current/components/http_foundation/introduction.html#response) object directly from the `execute` method.
 
         </td>
     </tr>
@@ -308,17 +308,17 @@ $config['resourceTypes'][] = array(
 @section howto_php_session_performance Avoiding Performance Issues Related to PHP Sessions
 
 By default, the PHP session mechanism uses regular files to save the session data. When a request
-is sent to a PHP script that starts the session with [session_start()](http://php.net/manual/en/function.session-start.php),
+is sent to a PHP script that starts the session with [session_start()](https://secure.php.net/manual/en/function.session-start.php),
 it locks the session file. That means that any concurrent requests that use the same session will remain pending
 until the processing required by the previous request is finished.
 
 This may be particularly undesirable when one of the requests is time-consuming, and blocks a bunch of requests that are processed relatively fast. To avoid this issue, the PHP connector closes the write access to the session with 
-[session_write_close()](http://php.net/manual/en/function.session-write-close.php) as soon as possible,
+[session_write_close()](https://secure.php.net/manual/en/function.session-write-close.php) as soon as possible,
 so requests can be processed simultaneously (see @ref configuration_options_sessionWriteClose).
 
 PHP sessions may also cause issues with caching of the content in the browser, which may slow down the application and degrade the user experience.
 
-The cache headers added by the session depend on the [session_cache_limiter()](http://php.net/manual/en/function.session-cache-limiter.php) configuration. The `session_cache_limiter()` function needs to be called before `session_start()`.
+The cache headers added by the session depend on the [session_cache_limiter()](https://secure.php.net/manual/en/function.session-cache-limiter.php) configuration. The `session_cache_limiter()` function needs to be called before `session_start()`.
 
 As CKFinder connector does not control the moment when the session starts, it needs to be configured in the main application.
 The automatic sending of cache headers can be turned off by providing an empty string as a parameter of the `session_cache_limiter()` function, as presented below:
@@ -326,6 +326,18 @@ The automatic sending of cache headers can be turned off by providing an empty s
 ~~~
 session_cache_limiter('');
 ~~~
+
+
+@section howto_caching_layer Adding a Caching Layer in the Backend Adapter
+
+Adding a caching layer to any backend adapter type is a fairly simple task. The CKFinder PHP connector uses
+the [Flysystem](https://flysystem.thephpleague.com/) abstraction layer under the hood,
+so there are [quite a few](https://flysystem.thephpleague.com/docs/advanced/caching/#persistent-caching)
+ready-to-use caching adapters available that can be used to decorate the regular backend adapter.
+
+Please have a look at the following [ticket on GitHub](https://github.com/ckfinder/ckfinder/issues/365) to read about
+a sample implementation of Redis cache in the S3 backend.
+
 
 @section howto_custom_storage Adding Support for Custom Storage
 
@@ -364,9 +376,9 @@ CREATE TABLE files (
 
 ## Implementing a Custom Flysystem Adapter {#howto_custom_storage_flysystem_adapter}
 
-The CKFinder 3 PHP server-side connector uses [Flysystem](http://flysystem.thephpleague.com/) as a file system abstraction layer.
+The CKFinder 3 PHP server-side connector uses [Flysystem](https://flysystem.thephpleague.com/docs/) as a file system abstraction layer.
 Flysystem offers a very convenient way for communication with various file systems using a common API, and allows
-to plug adapters that can be used to communicate with any kind of custom storage. To get familiar with the concept of Flysystem adapters, have a look at the ["Creating an adapter"](http://flysystem.thephpleague.com/creating-an-adapter/) article in the official Flysystem documentation.
+to plug adapters that can be used to communicate with any kind of custom storage. To get familiar with the concept of Flysystem adapters, have a look at the ["Creating an adapter"](https://flysystem.thephpleague.com/docs/advanced/creating-an-adapter/) article in the official Flysystem documentation.
 
 The first step in adding a custom storage in the CKFinder 3 PHP connector is creating an implementation
 of [League\\Flysystem\\AdapterInterface](https://github.com/thephpleague/flysystem/blob/master/src/AdapterInterface.php).
@@ -375,20 +387,20 @@ or deleting a file.
 
 Have a look at a custom implementation of [League\\Flysystem\\AdapterInterface](https://github.com/thephpleague/flysystem/blob/master/src/AdapterInterface.php)
 required to save files in a database table with the assumed schema. The [PDOAdapter](https://github.com/ckfinder/ckfinder-plugin-database-adapter-php/blob/master/src/DatabaseAdapter/PDOAdapter.php)
-class uses the [PDO](http://php.net/manual/en/book.pdo.php) PHP extension, which defines an interface for accessing many database systems in PHP.
+class uses the [PDO](https://secure.php.net/manual/en/book.pdo.php) PHP extension, which defines an interface for accessing many database systems in PHP.
 The constructor of the `PDOAdapter` class takes two parameters: a valid `PDO` object and a table name where files should be stored.
 The instantiation of the `PDOAdapter` class is presented below.
 
 **MySQL**
 ~~~
-// http://php.net/manual/en/ref.pdo-mysql.connection.php
+// https://secure.php.net/manual/en/ref.pdo-mysql.connection.php
 $pdo = new PDO('mysql:host=hostname;dbname=database_name', 'username', 'password');
 $adapter = new PDOAdapter($pdo, 'files');
 ~~~
 
 **SQLite**
 ~~~
-// http://php.net/manual/en/ref.pdo-sqlite.connection.php
+// https://secure.php.net/manual/en/ref.pdo-sqlite.connection.php
 $pdo = new PDO('sqlite:/absolute/path/to/database.sqlite');
 $adapter = new PDOAdapter($pdo, 'files');
 ~~~
@@ -437,3 +449,4 @@ class DatabaseAdapter implements PluginInterface
 ~~~
 
 See the [DatabaseAdapter plugin sample](https://github.com/ckfinder/ckfinder-plugin-database-adapter-php) for the complete source code implementing this functionality.
+

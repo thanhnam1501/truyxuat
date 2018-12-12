@@ -5,11 +5,9 @@
 Latest CKFinder is always the greatest CKFinder. Each new release brings plenty of bug fixes and new features, so it is highly recommended to upgrade often.
 Upgrading CKFinder is an easy task. See the complete upgrade instructions below.
 
-Please note that each CKFinder license grants you one year of free upgrades. If you want to take advantage of new CKFinder releases after that time, you can [renew your license](https://cksource.com/ckfinder/buy#renewal) at any time for a discounted price.
-
 @section upgrading_3 Upgrading CKFinder 3.x
 
-1. Download the latest CKFinder version from the official [CKFinder website](https://ckeditor.com/ckeditor-4/ckfinder/).
+1. Download the latest CKFinder version from the official [CKFinder website](https://ckeditor.com/ckeditor-4/download/#ckfinder).
 2. Backup your old copy of CKFinder to a safe place.
 3. Temporarily disable access to CKFinder for all users of your application.
 4. Delete all files from the CKFinder folder (**remember to not delete the `userfiles` folder** if you configured CKFinder to store files there).
@@ -38,7 +36,7 @@ CKFinder 3.x also dropped support for Internet Explorer 8 and is no longer shipp
 
 @subsection upgrading_2to3_upgrading Upgrading
 
-1. Download the latest CKFinder version from the official [CKFinder website](https://ckeditor.com/ckeditor-4/ckfinder/).
+1. Download the latest CKFinder version from the official [CKFinder website](https://ckeditor.com/ckeditor-4/download/#ckfinder).
 2. Backup your old copy of CKFinder to a safe place.
 3. Temporarily disable access to CKFinder for all users of your application.
 4. Delete all files from the CKFinder folder (**remember to not delete the `userfiles` folder** if you configured CKFinder to store files there).
@@ -62,10 +60,10 @@ CKFinder 3.x also dropped support for Internet Explorer 8 and is no longer shipp
             } );
         </script>
 
-    Please refer to CKFinder [Quick Start Guide](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_installation) to find more information about integrating CKFinder with your website.
+    Please refer to CKFinder [Quick Start Guide](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_installation) to find more information about integrating CKFinder with your website.
 
     **Note**: The plugins from version 2.x are not compatible with version 3.x. If you created any custom plugins, they need to be rewritten.
-    To check what custom changes you made in the past in your own copy of CKFinder 2.x, you can download a fresh copy from https://ckeditor.com/ckeditor-4/ckfinder/ and compare both versions using a `diff` tool (for example [WinMerge](http://winmerge.org/)).
+    To check what custom changes you made in the past in your own copy of CKFinder 2.x, you can download a fresh copy from the official [CKFinder website](https://ckeditor.com/ckeditor-4/download/#ckfinder) and compare both versions using a `diff` tool (for example [WinMerge](http://winmerge.org/)).
 
 9. Perform some simple tests to ensure that CKFinder is running fine.
 10. Enable access to CKFinder for all users of your application.
@@ -74,8 +72,8 @@ CKFinder 3.x also dropped support for Internet Explorer 8 and is no longer shipp
 
 As mentioned in point 8 above, **it is no longer possible to enable CKFinder on a page from the PHP level**. If you previously used PHP to start CKFinder, you need to use JavaScript now.
 
-The example below shows similar setups for CKFinder 2 and CKFinder 3. Note that available client-side configuration options are described in the [CKFinder 3 documentation](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/api/CKFinder.Config).
-On the same website there is also a handy table available that describes [configuration migration for JavaScript settings](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_upgrading).
+The example below shows similar setups for CKFinder 2 and CKFinder 3. Note that available client-side configuration options are described in the [CKFinder 3 documentation](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/api/CKFinder.Config).
+On the same website there is also a handy table available that describes [configuration migration for JavaScript settings](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_upgrading).
 
 **CKFinder 2**
 
@@ -133,7 +131,7 @@ On the same website there is also a handy table available that describes [config
 A short explanation of main differences:
 
  * `BasePath` is not set, because the `<script>` tag with `ckfinder.js` is included manually.
- * When using [CKFinder.widget](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/api/CKFinder-method-widget), an element where CKFinder is to be rendered must be first output on the page (here: `<div id="ckfinder-widget"></div>`).
+ * When using [CKFinder.widget](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/api/CKFinder-method-widget), an element where CKFinder is to be rendered must be first output on the page (here: `<div id="ckfinder-widget"></div>`).
  * The `id` configuration option is no longer automatically passed to the connector, thus `config.pass` needs to be used.
  * Unless CKFinder is launched by CKEditor, choosing files must be enabled manually with `config.chooseFiles`. 
  * There is no `SelectFunction` configuration option, CKFinder now offers events and requests to interact with the application.
@@ -258,4 +256,4 @@ CKFinder 2.x | CKFinder 3.x | Additional Comments
 `Thumbnails` | @ref configuration_options_thumbnails | The array structure has changed. Multiple sizes supported in CKFinder 3.x.
 `XSendfile` | @ref configuration_options_xSendfile | -
 
-Refer to the [Configuration Options Migration - JavaScript Settings](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_upgrading-section-configuration-options-migration---javascript-settings) section for a list of changes in the client-side options (defined in `config.js` or passed inline when creating CKFinder instances).
+Refer to the [Configuration Options Migration - JavaScript Settings](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_upgrading-section-configuration-options-migration---javascript-settings) section for a list of changes in the client-side options (defined in `config.js` or passed inline when creating CKFinder instances).

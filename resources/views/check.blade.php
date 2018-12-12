@@ -11,18 +11,18 @@
   <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
   <!-- Bootstrap core CSS -->
+  <link href="{{asset('public/image/favicon.png')}}" rel='shortcut icon' type='image/vnd.microsoft.icon' />
+  <link href="{{asset('public/css/bootstrap.min.css')}}" rel="stylesheet">
 
-  <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-
-  <link href="{{asset('fonts/css/font-awesome.min.css')}}" rel="stylesheet">
-  <link href="{{asset('css/animate.min.css')}}" rel="stylesheet">
+  <link href="{{asset('public/fonts/css/font-awesome.min.css')}}" rel="stylesheet">
+  <link href="{{asset('public/css/animate.min.css')}}" rel="stylesheet">
 
   <!-- Custom styling plus plugins -->
-  <link href="{{asset('css/custom.css')}}" rel="stylesheet">
-  <link href="{{asset('css/icheck/flat/green.css')}}" rel="stylesheet" />
+  <link href="{{asset('public/css/custom.css')}}" rel="stylesheet">
+  <link href="{{asset('public/css/icheck/flat/green.css')}}" rel="stylesheet" />
 
 
-  <script src="{{asset('js/jquery.min.js')}}"></script>
+  <script src="{{asset('public/js/jquery.min.js')}}"></script>
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -67,18 +67,18 @@
 
  <div class="FirstContent" style="width: 100%;margin-right: 0 !important;">
   <div class="x_panel">
-    <img class="imageProduct" src="{{asset('image/logo.jpg')}}" alt="">
+    <img class="imageProduct" src="{{asset('public/image/logo.jpg')}}" alt="">
     <br>
     <p style="text-align: center">
       HỆ THỐNG TRUY XUẤT NGUỒN GỐC HÀNG HÓA
     </p>
   </div>
-  @if(!empty($data->status == 1))
+  @if(!empty($data) && $data->status == 1)
   <div class="x_panel">
     @if($data->image)
-    <img class="imageProduct" src="{{asset($data->image)}}" alt="">
+    <img class="imageProduct" src="{{asset('public/'.$data->image)}}" alt="">
     @else
-    <img class="imageProduct" src="{{ asset('image/noimage.png')}}" alt="">
+    <img class="imageProduct" src="{{ asset('public/image/noimage.png')}}" alt="">
     @endif
   </div>
 
@@ -150,7 +150,7 @@
 @endfor
 @else
 <div class="x_panel">
-  <img class="imageProduct" src="{{ asset('image/noimage.png')}}" alt="">
+  <img class="imageProduct" src="{{ asset('public/image/noimage.png')}}" alt="">
 </div>
 <h4 style="text-align: center;color: red;">Sản phẩm không có trong hệ thống của chúng tôi!</h4>
 @endif
@@ -184,15 +184,15 @@
 </div>
 </div>
 
-<script src="{{asset('js/bootstrap.min.js')}}"></script>
-<script src="{{asset('js/chartjs/chart.min.js')}}"></script>
+<script src="{{asset('public/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('public/js/chartjs/chart.min.js')}}"></script>
 <!-- bootstrap progress js -->
-<script src="{{asset('js/progressbar/bootstrap-progressbar.min.js')}}"></script>
-<script src="{{asset('js/nicescroll/jquery.nicescroll.min.js')}}"></script>
+<script src="{{asset('public/js/progressbar/bootstrap-progressbar.min.js')}}"></script>
+<script src="{{asset('public/js/nicescroll/jquery.nicescroll.min.js')}}"></script>
 <!-- icheck -->
-<script src="{{asset('js/icheck/icheck.min.js')}}"></script>
+<script src="{{asset('public/js/icheck/icheck.min.js')}}"></script>
 
-<script src="{{asset('js/custom.js')}}"></script>
+<script src="{{asset('public/js/custom.js')}}"></script>
 
 <!-- /footer content -->
 </body>

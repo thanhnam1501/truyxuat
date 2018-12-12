@@ -81,6 +81,21 @@ Route::middleware('revalidate')->group(function () {
       });
             //* End
 
+      //* Quản lý sản phẩm
+      Route::group(['prefix' => 'gia-han'], function () {
+        Route::get('get-list', 'AdminProductController@getlist')->name('product.getList');
+        Route::get('/', 'AdminProductController@index')->name('product.index');
+        Route::get('tao-moi', 'AdminProductController@getFormCreate')->name('product.ShowFormCreate');
+        Route::post('create', 'AdminProductController@store')->name('product.create');
+        Route::get('cap-nhat-thong-tin-san-pham/{id}', 'AdminProductController@edit')->name('product.edit');
+        Route::post('update-thong-tin-san-pham', 'AdminProductController@update')->name('product.update');
+        Route::post('xoa-san-pham','AdminProductController@destroy')->name('product.delete');
+        Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
+        Route::post('activated', 'AdminProductController@activated')->name('product.activated');
+
+      });
+            //* End
+
        //* Quản lý các node
       Route::group(['prefix' => 'node'], function () {
         Route::get('get-list', 'AdminNodeController@getlist')->name('node.getList');
@@ -92,9 +107,6 @@ Route::middleware('revalidate')->group(function () {
         Route::post('xoa-node','AdminNodeController@destroy')->name('node.delete');
         Route::post('activated', 'AdminNodeController@activated')->name('node.activated');
         Route::patch('chinh-sua-node', 'AdminNodeController@updateById')->name('node.updateById');
-
-
-
 
       });
         //*end
@@ -136,7 +148,6 @@ Route::get('/', 'ProductController@index')->name('user.index');
 Route::get('/home', 'ProductController@index')->name('user.index');
 Route::get('check/{id}', 'HomeController@show');
 Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
-
 
 
 Route::get('/qrcode', function(){

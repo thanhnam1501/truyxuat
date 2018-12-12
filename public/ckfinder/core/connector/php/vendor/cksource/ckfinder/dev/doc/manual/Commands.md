@@ -18,9 +18,9 @@ public function execute(Request $request, Config $config)
 ~~~~~~~~~~~~~
 
 The objects that can be injected as the `execute` method arguments are:
- - [Request](http://api.symfony.com/2.5/Symfony/Component/HttpFoundation/Request.html)
+ - [Request](https://api.symfony.com/2.8/Symfony/Component/HttpFoundation/Request.html)
  - [CKFinder](@ref CKSource::CKFinder::CKFinder)
- - [EventDispatcher](http://api.symfony.com/2.5/Symfony/Component/EventDispatcher/EventDispatcher.html)
+ - [EventDispatcher](https://api.symfony.com/2.8/Symfony/Component/EventDispatcher/EventDispatcher.html)
  - [Config](@ref CKSource::CKFinder::Config)
  - [Acl](@ref CKSource::CKFinder::Acl::Acl)
  - [BackendFactory](@ref CKSource::CKFinder::Backend::BackendFactory)
@@ -91,7 +91,7 @@ plugin in the [CKFinder 3 Sample JavaScript Plugins](https://github.com/ckfinder
 Custom CKFinder commands can be implemented as plugins. You can find the description of a sample plugin in the @ref howto_custom_commands section of the HOWTO.
 
 It may also be useful to have a look at the [ImageInfo](https://github.com/ckfinder/ckfinder-docs-samples/blob/master/ImageInfo/ImageInfo.js) plugin in the [CKFinder 3 Sample JavaScript Plugins](https://github.com/ckfinder/ckfinder-docs-samples) repository to check out how to request commands from a JavaScript plugin.
-You can find more information in the [Sending Command to the Server](https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_requests-section-sending-command-to-the-server) section of the [CKFinder 3 JavaScript Documentation](https://docs.ckeditor.com/ckfinder/ckfinder3/).
+You can find more information in the [Sending Command to the Server](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_requests-section-sending-command-to-the-server) section of the [CKFinder 3 JavaScript Documentation](https://ckeditor.com/docs/ckfinder/ckfinder3/).
 
 
 # CSRF Protection {#commands_csrf_protection}
@@ -99,7 +99,7 @@ You can find more information in the [Sending Command to the Server](https://doc
 \since CKFinder 3.2.0
 
 The CKFinder 3 PHP connector provides a mechanism to secure the application against [Cross-Site Request Forgery (CSRF)](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29)
-attacks (see the @ref configuration_options_csrfProtection configuration option). The default protection method is based on [double submit cookies](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet#Double_Submit_Cookies).
+attacks (see the @ref configuration_options_csrfProtection configuration option). The default protection method is based on [double submit cookies](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet#Double_Submit_Cookie).
 
 If the protection is enabled, all requests to commands that modify any kind of resources are checked for a valid CSRF token. 
 The token is a random string value with the length of 32 or more characters which should be generated using a cryptographically

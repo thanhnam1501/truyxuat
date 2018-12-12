@@ -17,7 +17,7 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">						
 	<div class="card mb-3">
 		<div class="card-header">
-			<h3><i class="fa fa-check-square-o"></i> Cập nhật quản trị viên</h3>
+			<h3><i class="fa fa-check-square-o"></i> Cập nhật thông tin người dùng</h3>
 			
 		</div>
 		@if ($errors->any())
@@ -52,6 +52,29 @@
 					{{-- <input type="s" class="form-control has-feedback-left" id="company_id" name="company_id" placeholder="Số điện thoại" required>
 					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span> --}}
 				</div>
+
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                <label for="password" class="col-md-4 col-form-label text-md-right">Mật khẩu mới</label>
+                <div class="col-md-12">
+                    <input style="color: black" type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" id="newpassword" placeholder="Mật khẩu mới" autofocus/>
+                </div>
+
+                @if ($errors->has('password'))
+                <span class=“help-block” role="alert">
+                    <div style="color:red"><strong>{{ $errors->first('password') }}</strong></div>
+                </span>
+                @endif
+
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Xác nhận lại</label>
+
+                <div class="col-md-12">
+                    <input style="color: black"  id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Xác nhận mật khẩu" >
+                </div>
+
+            </div>
 				{{ csrf_field() }}
 
 				<button type="submit" class="btn btn-primary">Cập nhật</button>

@@ -9,13 +9,13 @@ language, which handles the front end requests. The following diagram illustrate
 ![Application structure overview](/manual/images/ckfinder_overview.png)
 
 The CKFinder 3 PHP connector is built on top of the following Symfony 2 components:
- - [HttpKernel](http://symfony.com/doc/current/components/http_kernel/introduction.html)
- - [HttpFoundation](http://symfony.com/doc/current/components/http_foundation/introduction.html)
- - [EventDispatcher](http://symfony.com/doc/current/components/event_dispatcher/introduction.html)
+ - [HttpKernel](https://symfony.com/doc/current/components/http_kernel/introduction.html)
+ - [HttpFoundation](https://symfony.com/doc/current/components/http_foundation/introduction.html)
+ - [EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher/introduction.html)
 
-[Pimple](http://pimple.sensiolabs.org/) is used as a dependency injection container.
+[Pimple](https://pimple.symfony.com/) is used as a dependency injection container.
 
-[Flysystem](http://flysystem.thephpleague.com/) file system abstraction layer is used for communication with multiple
+[Flysystem](https://flysystem.thephpleague.com/docs/) file system abstraction layer is used for communication with multiple
 [CKFinder backends](@ref backends).
 
 
@@ -24,7 +24,7 @@ The CKFinder 3 PHP connector is built on top of the following Symfony 2 componen
 
 # Dependency Injection Container {#dependency_injection}
 
-The main CKFinder application class, [CKFinder](@ref CKSource::CKFinder::CKFinder), extends `Pimple\Container` and acts as a dependency injection container (approach inspired by [Silex](http://silex.sensiolabs.org)). All defined dependencies
+The main CKFinder application class, [CKFinder](@ref CKSource::CKFinder::CKFinder), extends `Pimple\Container` and acts as a dependency injection container (approach inspired by [Silex](https://silex.symfony.com/)). All defined dependencies
 are instantiated in the lazy way &mdash; objects are created only if they are actually used during the application lifecycle.
 
 You can access the following application components inside the container:
@@ -36,11 +36,11 @@ Key                   | Object Type                                             
 `config`              | [Config](@ref CKSource::CKFinder::Config)                                                                     | CKFinder configuration.
 `csrf_token_validator` @labelSince{3.2.0}| [DoubleSubmitCookieTokenValidator](@ref CKSource::CKFinder::Security::Csrf::DoubleSubmitCookieTokenValidator) | An implementation of [TokenValidatorInterface](@ref CKSource::CKFinder::Security::Csrf::TokenValidatorInterface) used to validate CSRF tokens in requests.
 `debug`               | Boolean value                                                                                                 | A Boolean flag indicating if the application is running in debugging mode.
-`dispatcher`          | [EventDispatcher](http://api.symfony.com/2.5/Symfony/Component/EventDispatcher/EventDispatcher.html)          | A Symfony `EventDispatcher` instance.
+`dispatcher`          | [EventDispatcher](https://api.symfony.com/2.8/Symfony/Component/EventDispatcher/EventDispatcher.html)                               | A Symfony `EventDispatcher` instance.
 `exception_handler`   | [ExceptionHandler](@ref CKSource::CKFinder::ExceptionHandler)                                                 | Exception handler.
-`kernel`              | [HttpKernel](http://api.symfony.com/2.5/Symfony/Component/HttpKernel/HttpKernel.html)                         | A Symfony `HttpKernel`.
+`kernel`              | [HttpKernel](https://api.symfony.com/2.8/Symfony/Component/HttpKernel/HttpKernel.html)                         | A Symfony `HttpKernel`.
 `logger`              | `Monolog\Logger`                                                                                              | A `Psr\Log\LoggerInterface` instance (by default `Monolog\Logger` using `FirePHPHandler`).
-`request_stack`       | [RequestStack](http://api.symfony.com/2.5/Symfony/Component/HttpFoundation/RequestStack.html)                 | A Symfony `RequestStack`.
+`request_stack`       | [RequestStack](https://api.symfony.com/2.8/Symfony/Component/HttpFoundation/RequestStack.html)                 | A Symfony `RequestStack`.
 `resolver`            | [CommandResolver](@ref CKSource::CKFinder::CommandResolver)                                                   | The CKFinder command resolver.
 `request_transformer` @labelSince{3.1.1} | [JsonTransformer](@ref CKSource::CKFinder::Request::Transformer::JsonTransformer)          | A request transformer instance used for transforming requests to format understandable by connector.
 `working_folder`      | [WorkingFolder](@ref CKSource::CKFinder::Filesystem::Folder::WorkingFolder)                                   | The CKFinder `WorkingFolder` object that represents the current working directory defined by resource type and its backend, backend's root folder, and relative path passed in the `currentFolder` URL parameter.
@@ -176,8 +176,8 @@ Note that this is a generic event that can also be used for any commands provide
 
 
 
-You can also listen for any event dispatched by the [HttpKernel](http://symfony.com/doc/current/components/http_kernel/introduction.html) component.
-See the [HttpKernel events information table](http://symfony.com/doc/current/components/http_kernel/introduction.html#component-http-kernel-event-table)
+You can also listen for any event dispatched by the [HttpKernel](https://symfony.com/doc/current/components/http_kernel/introduction.html) component.
+See the [HttpKernel events information table](https://symfony.com/doc/current/components/http_kernel/introduction.html#component-http-kernel-event-table)
 
 For more information about events and events listeners please read the documentation
-of Symfony [EventDispatcher component](http://symfony.com/doc/current/components/event_dispatcher/introduction.html).
+of Symfony [EventDispatcher component](https://symfony.com/doc/current/components/event_dispatcher/introduction.html).

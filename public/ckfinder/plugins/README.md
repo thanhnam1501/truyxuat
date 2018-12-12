@@ -1,1 +1,1 @@
-For example plugins check https://docs.ckeditor.com/ckfinder/ckfinder3/#!/guide/dev_plugins
+For example plugins check [Creating CKFinder 3 Plugins](https://ckeditor.com/docs/ckfinder/ckfinder3/#!/guide/dev_plugins)
