@@ -70,42 +70,40 @@
 </script>
 <script>    
   function deleteAdmin(id){
-    
-    swal({
-      title: "Bạn có chắc muốn xóa?",
-      text: "Bạn sẽ không thể khôi phục dữ liệu này!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    })
-    .then((willDelete) => {
-      if (willDelete) {
+   swal({
+    title: "Bạn có chắc muốn xóa?",
+    text: "Bạn sẽ không thể khôi phục dữ liệu này!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+   .then((willDelete) => {
+    if (willDelete) {
 
-       $.ajax({
-        url: '{{ route('user.delete') }}',
-        type: 'POST',
-        data: {id: id},
+     $.ajax({
+      url: '{{ route('user.delete') }}',
+      type: 'POST',
+      data: {id: id},
 
-        success: function success(res) {
+      success: function success(res) {
 
-          if (!res.error) {
+        if (!res.error) {
 
-            toastr.error(res.message);
-            $('#user-list').DataTable().ajax.reload();
-          } else {
+          toastr.error(res.message);
+          $('#user-list').DataTable().ajax.reload();
+        } else {
 
-            toastr.error(res.message);
-          }
-        },
-        error: function error(xhr, ajaxOptions, thrownError) {
-         
-          toastr.error("Lỗi! Không thể đăng ký! <br>Vui lòng thử lại hoặc liên lạc với IT");
+          toastr.error(res.message);
         }
+      },
+      error: function error(xhr, ajaxOptions, thrownError) {
+       
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
 
-      });
-     } 
-   });
-  }
+    });
+   } 
+ });
+ }
 </script>
-
 @endsection

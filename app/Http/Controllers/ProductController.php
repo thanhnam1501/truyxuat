@@ -81,7 +81,7 @@ public function show($id)
       // ->addColumn()           
       ->addColumn('action', function($products) {
         $string = "";
-        $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" href="'.route('user.product.show', $products->id).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" target="_blank" href="'.route('showBySlug', $products->slug).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
 
         $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('user.product.edit', $products->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 

@@ -63,6 +63,11 @@ Route::middleware('revalidate')->group(function () {
         Route::get('cap-nhat-thong-tin-nguoi-dung/{id}', 'AdminProfileController@edit')->name('profile.edit');
         Route::post('update-thong-tin-nguoi-dung', 'AdminProfileController@update')->name('profile.update');
         Route::post('xoa-nguoi-dung','AdminProfileController@destroy')->name('profile.delete');
+
+        // gia hạn tai khoan (Renewal)
+        Route::get('get-list-renewal', 'AdminProfileController@getListRenewal')->name('renewal.getList');
+        Route::get('gia-han', 'AdminProfileController@getRenewal')->name('renewal.index');
+        Route::post('doi-trang-thai', 'AdminProfileController@activatedRenewal')->name('renewal.activatedRenewal');
       });
             //* End
 
@@ -82,18 +87,21 @@ Route::middleware('revalidate')->group(function () {
             //* End
 
       //* Quản lý sản phẩm
-      Route::group(['prefix' => 'gia-han'], function () {
-        Route::get('get-list', 'AdminProductController@getlist')->name('product.getList');
-        Route::get('/', 'AdminProductController@index')->name('product.index');
-        Route::get('tao-moi', 'AdminProductController@getFormCreate')->name('product.ShowFormCreate');
-        Route::post('create', 'AdminProductController@store')->name('product.create');
-        Route::get('cap-nhat-thong-tin-san-pham/{id}', 'AdminProductController@edit')->name('product.edit');
-        Route::post('update-thong-tin-san-pham', 'AdminProductController@update')->name('product.update');
-        Route::post('xoa-san-pham','AdminProductController@destroy')->name('product.delete');
-        Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
-        Route::post('activated', 'AdminProductController@activated')->name('product.activated');
+
+       Route::group(['prefix' => 'gia-han'], function () {
+        Route::get('get-list', 'QuotesController@getlist')->name('quotes.getList');
+        Route::get('/', 'QuotesController@index')->name('quotes.index');
+        Route::get('tao-moi', 'QuotesController@getFormCreate')->name('quotes.ShowFormCreate');
+        Route::post('create', 'QuotesController@store')->name('quotes.create');
+        Route::get('cap-nhat-thong-tin-san-pham/{id}', 'QuotesController@edit')->name('quotes.edit');
+        Route::post('update-thong-tin-san-pham', 'QuotesController@update')->name('quotes.update');
+        Route::post('xoa-san-pham','QuotesController@destroy')->name('quotes.delete');
+        Route::get('xem-chi-tiet/{id}', 'QuotesController@show')->name('quotes.show');
+        Route::post('activated', 'QuotesController@activated')->name('quotes.activated');
 
       });
+
+    
             //* End
 
        //* Quản lý các node
@@ -148,14 +156,14 @@ Route::get('/', 'ProductController@index')->name('user.index');
 Route::get('/home', 'ProductController@index')->name('user.index');
 Route::get('check/{id}', 'HomeController@show');
 Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
-
-
-Route::get('/qrcode', function(){
-  $message = '<h1>Chào mừng quý khách đến với <span style="color: red">S</span>martCheck</h1>'; 
-  return $message;
- // // $url = url('/check/24');
- // // return view('qrcode', ['url' => $url]);
+Route::get('qr-code', function () 
+{
+  return QRCode::text('QR Code Generator for Laravel!')->png();    
 });
+
+    // list all lfm routes here...
+
+
 
       // //* Thay đổi ảnh đại diện
       //   Route::post('change-avatar', 'ProfileController@postUpload')->name('profile.change-avatar');
@@ -197,9 +205,18 @@ Route::group(['prefix' => 'nguoi-dung'], function () {
   Route::get('cap-nhat-thong-tin-nguoi-dung/{id}', 'ProfileController@edit')->name('user.profile.edit');
   Route::post('update-thong-tin-nguoi-dung', 'ProfileController@update')->name('user.profile.update');
   Route::post('xoa-nguoi-dung','ProfileController@destroy')->name('user.profile.delete');
+
+  // gia hạn tài khoản
+  Route::get('gia-han-tai-khoan', 'ProfileController@getFormRenewal')->name('user.profile.renewal');
+
 });
             //* End
-
+Route::group(['prefix' => 'gia-han'], function () {
+  // gia hạn tài khoản
+  Route::get('gia-han-tai-khoan', 'ProfileController@getFormRenewal')->name('user.profile.renewal');
+  Route::post('create', 'ProfileController@creatRenewal')->name('user.profile.renewalCreate');
+  
+});
         //* Quản lý sản phẩm
 Route::group(['prefix' => 'san-pham'], function () {
   Route::get('get-list', 'ProductController@getlist')->name('user.product.getList');

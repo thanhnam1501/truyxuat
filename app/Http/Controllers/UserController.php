@@ -51,9 +51,9 @@ class UserController extends Controller
       ->addColumn('action', function($profiles) {
         $string = "";
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('user.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Sửa" href="'.route('user.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-        $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteAdmin('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+        $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="deleteAdmin('. $profiles->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
         return $string;
       })
@@ -84,35 +84,35 @@ class UserController extends Controller
 
       DB::beginTransaction();
       try {
-         $data['password'] = bcrypt( $data['password']);
+       $data['password'] = bcrypt( $data['password']);
 
-        $user = User::withTrashed()->where('email', $data['email'])->first();
+       $user = User::withTrashed()->where('email', $data['email'])->first();
 
-        if (!empty($user)) {
-          $user->restore();
+       if (!empty($user)) {
+        $user->restore();
 
-          $user->update([
-            'name'    => $data['name'],
-            'password'    => $data['password'],
-            'mobile'    => $data['mobile'],
-            'status'  => 1,
-          ]);
-        } else {
-          $user = User::create($data);
-        }
-
-        DB::commit();
-        $message = 'Tài khoản ' . $data['name'] . ' đã được tạo thành công !'; 
-        \Session::flash('flash_message','Thêm quản trị viên thành công !');
-        return view('admin.index',['messageSuccess' => $message]);
-      } catch (Exception $e) {
-        DB::rollback();
-
-        Log::info($e->getMessage());
-        $message = $e->getMessage();
-        return view('admin.index',['messageSuccess' => $message]);
+        $user->update([
+          'name'    => $data['name'],
+          'password'    => $data['password'],
+          'mobile'    => $data['mobile'],
+          'status'  => 1,
+        ]);
+      } else {
+        $user = User::create($data);
       }
+
+      DB::commit();
+      $message = 'Tài khoản ' . $data['name'] . ' đã được tạo thành công !'; 
+      \Session::flash('flash_message','Thêm quản trị viên thành công !');
+      return view('admin.index',['messageSuccess' => $message]);
+    } catch (Exception $e) {
+      DB::rollback();
+
+      Log::info($e->getMessage());
+      $message = $e->getMessage();
+      return view('admin.index',['messageSuccess' => $message]);
     }
+  }
 
     /**
      * Display the specified resource.
@@ -159,7 +159,7 @@ class UserController extends Controller
           $profile->update([
             'name'  => $data['name'],
             'email'  => $data['email'],
-          
+            
           ]);
           $message = 'Cập nhập thành công tài khoản '. $profile->email;
           DB::commit();
@@ -178,37 +178,10 @@ class UserController extends Controller
       }
     }
 
-    /**
-     * Check email if exists.
-     *
-     * @param  string  $email
-     * @return boolean
-     */
-    public function checkEmail($email)
-    {
-      $user = User::where('email', $email)->count();
-
-      if ($user == 0) {
-        return response()->json([
-          'exists'  => false,
-        ]);
-      } else {
-        return response()->json([
-          'exists'  => true,
-        ]);
-      }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
+    function destroy(Request $request)
     {
       $user = User::find($request->id);
-
+      
       if (!empty($user)) {
         DB::beginTransaction();
         try {
@@ -238,97 +211,20 @@ class UserController extends Controller
       }
     }
 
-    public function lockAccount(Request $request)
-    {
-      $user = User::find($request->user_id);
-
-      if (!empty($user)) {
-        DB::beginTransaction();
-        try {
-          $user->update([
-            'status'  => $request->status,
-          ]);
-
-          if ($request->status == 1) {
-            $msg = "Tài khoản $user->email đã được kích hoạt";
-          } else {
-            $msg = "Tài khoản $user->email đã bị khóa";
-          }
-
-          DB::commit();
-
-          return response()->json([
-            'error' => false,
-            'message' => $msg,
-          ]);
-        } catch (Exception $e) {
-          DB::rollback();
-
-          Log::info($e->getMessage());
-
-          return response()->json([
-            'error' => true,
-            'message' => $e->getMessage()
-          ]);
-        }
-      } else {
-        return response()->json([
-          'error'     =>  true,
-          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
-        ]);
-      }
-    }
+    
 
     /**
      * get list role for user
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    public function getRoles($id)
-    {
-      $user = User::find($id);
-      $roles = Role::orderBy('created_at', 'desc')->get();
 
-      if (!empty($roles)) {
-        foreach ($roles as $key => &$role) {
-          $role->checked = 0;
-          $flag = RoleUser::where('user_id', $id)->where('role_id', $role->id)->first();
-
-          if (!empty($flag)) {
-            $role->checked = 1;
-          }
-        }
-      }
-      return view('backend.accounts.user_roles', [
-        'roles' => $roles,
-        'user' => $user
-      ]);
-    }
 
     /**
      * add or delete role
      * @return [type] [description]
      */
-    public function postRoles(Request $request)
-    {
-      $data = $request->all();
 
-      if ($data['checked']) {
-        DB::delete('delete from role_users where user_id = ? and role_id = ?', [$data['user_id'], $data['role_id']]);
-
-        return response()->json([
-          'error' => false,
-          'message' => 'deleted'
-        ], 200);
-      } else {
-        RoleUser::create($data);
-
-        return response()->json([
-          'error' => false,
-          'message' => 'added'
-        ], 200);
-      }
-    }
 
 
     public function postUpload(Request $request)

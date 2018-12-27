@@ -13,6 +13,9 @@ use App\Models\RoundCollection;
 use App\Models\Company;
 use Validator;
 use App\Models\User_History;
+use App\Models\Quote;
+use App\Models\Renewal;
+
 
 class ProfileController extends Controller
 {
@@ -263,4 +266,51 @@ class ProfileController extends Controller
      return view('user.product.index', ['messageError'   =>  $message]);
    }
  }
+
+ // Gia hạn tài khoản Renewal
+
+ public function getFormRenewal(){
+  $profile = Profile::find(Auth::guard('profile')->user()->id);
+  $company = Company::find(Auth::guard('profile')->user()->company_id);
+  $quotes = Quote::get();
+  return view('user.renewal', ['profile' => $profile, 'company'=>$company,'quotes' => $quotes]);
+}
+
+public function creatRenewal(Request $request){
+  $data = $request->all();
+
+      // $validatedData = $request->validate([
+      //   'name' => 'required',
+      //   'email' => 'required|string|unique:profiles,email',
+      //   'mobile' => 'required',     
+      // ]);
+
+  DB::beginTransaction();
+  try {
+    $quotes = Quote::find($data['quotes_id']);
+
+    $renewal = array();
+    $renewal['time_limit'] = $quotes->time_limit;
+    $renewal['company_id'] = Auth::guard('profile')->user()->company_id;
+    $renewal['content'] = $data['content'];
+    $renewal['price'] = $quotes->price;
+    $renewal['account_limit'] = $quotes->account_limit;
+    $renewal['product_limit'] = $quotes->product_limit;
+    
+    Renewal::create($renewal);
+
+    DB::commit();
+    \Session::flash('flash_message','Bạn đã yêu cầu gia hạn thành công, Chúng tôi sẽ sớm xử lý và liên lạc với bạn, Xin cảm ơn!');
+    return redirect()->route('user.product.index');
+  } catch (Exception $e) {
+    DB::rollback();
+
+    Log::info($e->getMessage());
+
+    return response()->json([
+      'error' => true,
+      'message' => $e->getMessage()
+    ]);
+  }
+}
 }

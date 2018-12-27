@@ -9,6 +9,8 @@ use Datatables;
 use Entrust;
 use App\Models\Email;
 use App\Models\Company;
+use App\Models\Renewal;
+
 
 class AdminProfileController extends Controller
 {
@@ -49,9 +51,9 @@ class AdminProfileController extends Controller
      ->addColumn('action', function($profiles) {
       $string = "";
 
-      $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+      $string .= '<a data-tooltip="tooltip" title="Sửa thông tin" href="'.route('profile.edit', $profiles->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-      $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteUser('. $profiles->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+      $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="deleteUser('. $profiles->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
       return $string;
     })
@@ -183,41 +185,38 @@ class AdminProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
-    {
-      $id = $request->id;
-      $profile = Profile::find($id);
+     public function destroy(Request $request)
+  {
+    $user = User::find($request->id);
 
-      if (!empty($profile)) {
-        DB::beginTransaction();
-        try {
-          $profile->delete();
+    if (!empty($user)) {
+      DB::beginTransaction();
+      try {
+        $user->delete();
 
-          DB::commit();
+        DB::commit();
 
-          return response()->json([
-            'error' => false,
-            'message' => 'Tài khoản '.$profile->email.' đã bị xóa',
-          ]);
-        } catch (Exception $e) {
-          DB::rollback();
-
-          Log::info($e->getMessage());
-
-          return response()->json([
-
-            'error' => true,
-            'message' => $e->getMessage()
-          ]);
-        }
-      } else {
         return response()->json([
-          'data' => $id,
-          'error'     =>  true,
-          'message' =>  'Không tìm thấy người dùng, vui lòng thử lại sau',
+          'error' => false,
+          'message' => 'Quản trị viên '.$user->name.' đã bị xóa',
+        ]);
+      } catch (Exception $e) {
+        DB::rollback();
+
+        Log::info($e->getMessage());
+
+        return response()->json([
+          'error' => true,
+          'message' => $e->getMessage()
         ]);
       }
+    } else {
+      return response()->json([
+        'error'     =>  true,
+        'message' =>  'Không tìm thấy quản trị viên, vui lòng thử lại sau',
+      ]);
     }
+  }
 
     public function postUpload(Request $request)
     {
@@ -245,12 +244,6 @@ class AdminProfileController extends Controller
 
     }
 
-    public function listMissions() {
-      $round_collections = RoundCollection::where('status', 1)->orderBy('id', 'DESC')->get();
-
-      return view('backend.profile.list-missions', ['round_collections'   =>  $round_collections]);
-    }
-
     public  function showLinkChangePassword(){
       return view('backend.profile.change-password');
     }
@@ -268,5 +261,70 @@ class AdminProfileController extends Controller
         $message = 'Nhập chưa đúng, Xin mời nhập lại !';
         return view('backend.profile.change-password', ['messageError'   =>  $message]);
       }
+    }
+
+    // Gia hạn tài khoản (Renewal)
+    public function getRenewal(){
+      return view('admin.indexRenewal');
+    }
+
+    public function getListRenewal(){
+      $data = DB::table('renewals')
+      ->join('companies', 'companies.id', '=', 'renewals.company_id')
+      ->select('renewals.*','companies.name as company_name')
+      ->get();
+
+      return Datatables::of($data)
+      ->editColumn('status', function($data){
+        $string = "";
+        if($data->status == 1){
+          $string = '<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activated('. $data->id .')" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>';
+        }
+        else{
+          $string = '<a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('. $data->id .')" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>';
+        }
+        return $string;      
+      })
+      ->addIndexColumn()
+      // ->addColumn()           
+      ->addColumn('action', function($data) {
+        $string = "";
+        $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" href="'.route('user.product.show', $data->id).'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
+
+        return $string;
+      })
+      ->make(true);
+    }
+
+    public function activatedRenewal(Request $request){
+      $id = $request->id;
+      $renewal = Renewal::find($id);
+      if (!empty($renewal)) {
+        $company = Company::find($renewal->company_id);
+        $data['time_limit'] = $company->time_limit + $renewal->time_limit;
+        $data['account_limit'] = $renewal->account_limit;
+        $data['product_limit'] = $renewal->product_limit;
+        $check = Company::find($renewal->company_id)->update(['time_limit' => $data['time_limit'], 'account_limit' => $data['account_limit'], 'product_limit' => $data['product_limit']]);
+        if($renewal->status == 0 && $check == true){
+        $data = Renewal::find($id)->update(['status' => 1]);
+
+        return response()->json([
+          'status' => true,
+          'message' => 'Thay đổi trạng thái thành công !',
+        ]);
+      }
+      else{ 
+        return response()->json([
+          'status' => false,
+          'message' => 'Không thể thay đổi trạng thái !',
+        ]);
+      }
+      }else{
+        return response()->json([
+          'status' => false,
+          'message' => 'Không tìm thấy yêu cầu gian hạn ! Liên hệ với IT để giải quyết!',
+        ]);
+      }
+      
     }
   }

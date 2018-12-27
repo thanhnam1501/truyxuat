@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+    
     <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
 
     <!-- Bootstrap core CSS -->
@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     <script src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
-  <script src="{{asset('public/ckfinder/ckfinder.js')}}"></script>
 
 
 
@@ -57,110 +56,110 @@
                 <div class="navbar nav_title" style="border: 0;">
                   <a href="{{route('user.index')}}" class="site_title">
                     <img class="fa" style="width: 24px;height: 24px; border-radius: 50%;" src="{{asset('public/image/favicon.png')}}" alt="">
-                   
+                    
                     <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></a>
-                </div>
-                <div class="clearfix"></div>
-
-
-                <!-- menu prile quick info -->
-                <div class="profile">
-                  <div class="profile_pic">
-                    <img src="{{ asset('public/image/hello.gif')}}" alt="..." class="img-circle profile_img">
                   </div>
-                  <div class="profile_info">
-                    <span>Chào,</span>
-                    <h2>{{Auth::guard('profile')->user()->name}}</h2>
+                  <div class="clearfix"></div>
+
+
+                  <!-- menu prile quick info -->
+                  <div class="profile">
+                    <div class="profile_pic">
+                      <img src="{{ asset('public/image/hello.gif')}}" alt="..." class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                      <span>Chào,</span>
+                      <h2>{{Auth::guard('profile')->user()->name}}</h2>
+                    </div>
                   </div>
-                </div>
-                <!-- /menu prile quick info -->
+                  <!-- /menu prile quick info -->
 
-                <br />
+                  <br />
 
-                <!-- sidebar menu -->
-                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                  <!-- sidebar menu -->
+                  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
-                  <div class="menu_section">
-                    <div class="clearfix"></div>
-                    <ul class="nav side-menu">
+                    <div class="menu_section">
+                      <div class="clearfix"></div>
+                      <ul class="nav side-menu">
 
-                      <li><a><i class="fa fa-cubes"></i>SẢN PHẨM<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="{{route('user.product.index')}}">Tất cả sản phẩm</a>
-                          </li>
-                          <li><a href="{{route('user.product.ShowFormCreate')}}">Thêm mới sản phẩm</a>
-                          </li>
-                        </ul>
-                      </li>
+                        <li><a><i class="fa fa-cubes"></i>SẢN PHẨM<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{route('user.product.index')}}">Tất cả sản phẩm</a>
+                            </li>
+                            <li><a href="{{route('user.product.ShowFormCreate')}}">Thêm mới sản phẩm</a>
+                            </li>
+                          </ul>
+                        </li>
 
 
-                      <li class="@if(Auth::guard('profile')->user()->status != 1) hidden @endif"><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="{{route('user.profile.index')}}">Người dùng</a>
-                          </li>
+                        <li class="@if(Auth::guard('profile')->user()->status != 1) hidden @endif"><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{route('user.profile.index')}}">Người dùng</a>
+                            </li>
 
-                        </ul>
-                      </li>
-                      <li ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="{{route('user.history.index')}}">Tất cả lịch sử</a>
-                          </li>
+                          </ul>
+                        </li>
+                        <li ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{route('user.history.index')}}">Tất cả lịch sử</a>
+                            </li>
 
-                        </ul>
-                      </li>
+                          </ul>
+                        </li>
 
-                      <li ><a><i class="fa fa-edit"></i>CÁC BƯỚC CẬP NHÂT<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">
-                          <li><a href="{{route('user.node.index')}}">DS các bước cập nhật</a>
-                          </li>
+                        <li ><a><i class="fa fa-edit"></i>CÁC BƯỚC CẬP NHÂT<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{route('user.node.index')}}">DS các bước cập nhật</a>
+                            </li>
 
-                        </ul>
-                      </li>
-                    </ul>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="menu_section">
+                      <img src="{{asset('public/image/smc.gif')}}" width="100%" alt="">
+
+                    </div>
+
                   </div>
-                  <div class="menu_section">
-                    <img src="{{asset('public/image/smc.gif')}}" width="100%" alt="">
+                  <!-- /sidebar menu -->
 
+                  <!-- /menu footer buttons -->
+                  <div class="sidebar-footer hidden-small">
+                    <a data-toggle="tooltip" data-placement="top" title="Settings">
+                      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                      <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Lock">
+                      <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Logout">
+                      <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                    </a>
                   </div>
-
+                  <!-- /menu footer buttons -->
                 </div>
-                <!-- /sidebar menu -->
-
-                <!-- /menu footer buttons -->
-                <div class="sidebar-footer hidden-small">
-                  <a data-toggle="tooltip" data-placement="top" title="Settings">
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                  </a>
-                  <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                    <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                  </a>
-                  <a data-toggle="tooltip" data-placement="top" title="Lock">
-                    <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                  </a>
-                  <a data-toggle="tooltip" data-placement="top" title="Logout">
-                    <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                  </a>
-                </div>
-                <!-- /menu footer buttons -->
               </div>
-            </div>
 
-            <!-- top navigation -->
-            <div class="top_nav">
+              <!-- top navigation -->
+              <div class="top_nav">
 
-              <div class="nav_menu">
-                <nav class="" role="navigation">
-                  <div class="nav toggle">
-                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                  </div>
+                <div class="nav_menu">
+                  <nav class="" role="navigation">
+                    <div class="nav toggle">
+                      <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
 
-                  <ul class="nav navbar-nav navbar-right">
-                    <li class="">
-                      <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                       {{--  <img src="images/img.jpg" alt=""> --}}{{Auth::guard('profile')->user()->name}}
-                       <span class=" fa fa-angle-down"></span>
-                     </a>
-                     <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="">
+                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                         {{--  <img src="images/img.jpg" alt=""> --}}{{Auth::guard('profile')->user()->name}}
+                         <span class=" fa fa-angle-down"></span>
+                       </a>
+                       <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
                       {{--   <li><a href="javascript:;">  Profile</a>
                         </li>
                         <li>
@@ -172,7 +171,7 @@
                         --}}
                         <li>
                           @if(Auth::guard('profile')->user()->status == 1)
-                          <a href="">Gia hạn tài khoản <i class="fa fa-clock-o pull-right"></i></a>
+                          <a href="{{route('user.profile.renewal')}}">Gia hạn tài khoản <i class="fa fa-clock-o pull-right"></i></a>
                           @endif
                         </li>                        
                         <li>
@@ -290,7 +289,7 @@
         NProgress.start();
       </script> 
       <script src="{{asset('public/js/bootstrap.min.js')}}"></script>
-       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
 
       <!-- gauge js -->
       <script type="text/javascript" src="{{asset('public/js/gauge/gauge.min.js')}}"></script>
@@ -399,148 +398,41 @@
         <script type="text/javascript" src="{{asset('public/js/maps/jquery-jvectormap-us-aea-en.js')}}"></script>
         
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-     
-
-        </script>
-       <script  type = "text/javascript "  src ="{{asset('public/ckeditor/ckeditor.js')}}"> 
-       </script>
-       <script>  
-        CKEDITOR.replace('editor1', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
         
-        });
 
-        CKEDITOR.replace( 'editor2', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-      CKEDITOR.replace( 'editor3', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-      CKEDITOR.replace( 'editor4', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-      CKEDITOR.replace( 'editor5', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-       CKEDITOR.replace( 'editor6', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-        CKEDITOR.replace( 'editor7', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-         CKEDITOR.replace( 'editor8', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-          CKEDITOR.replace( 'editor9', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-           CKEDITOR.replace( 'editor10', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-            CKEDITOR.replace( 'editor11', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-             CKEDITOR.replace( 'editor4', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-              CKEDITOR.replace( 'editor12', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-               CKEDITOR.replace( 'editor13', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-                CKEDITOR.replace( 'editor14', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
-                 CKEDITOR.replace( 'editor15', {
-          filebrowserBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html') }}',
-          filebrowserImageBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Images') }}',
-          filebrowserFlashBrowseUrl: '{{ asset('public/ckfinder/ckfinder.html?type=Flash') }}',
-          filebrowserUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files') }}',
-          filebrowserImageUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images') }}',
-          filebrowserFlashUploadUrl: '{{ asset('public/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash') }}'
-        } );
       </script>
+      <script  type = "text/javascript "  src ="{{asset('public/ckeditor/ckeditor.js')}}"> 
+      </script>
+      <script>
+        var options = {
+         filebrowserImageBrowseUrl: '{{ asset('public/laravel-filemanager?type=Images')}}',
+         filebrowserImageUploadUrl: '{{ asset('public/laravel-filemanager/upload?type=Images&_token=')}}',
+         filebrowserBrowseUrl: '{{ asset('public/laravel-filemanager?type=Files')}}',
+         filebrowserUploadUrl: '{{ asset('public/laravel-filemanager/upload?type=Files&_token=')}}'
+       };
+     </script>
+     <script>  
+      CKEDITOR.replace( 'editor1',  options);
+      CKEDITOR.replace( 'editor2',  options);
+      CKEDITOR.replace( 'editor3',  options);
+      CKEDITOR.replace( 'editor4',  options);
+      CKEDITOR.replace( 'editor5',  options);
+      CKEDITOR.replace( 'editor6',  options);
+      CKEDITOR.replace( 'editor7',  options);
+      CKEDITOR.replace( 'editor8',  options);
+      CKEDITOR.replace( 'editor9',  options);
+      CKEDITOR.replace( 'editor10', options);
+      CKEDITOR.replace( 'editor11', options);
+      CKEDITOR.replace( 'editor12', options);
+      CKEDITOR.replace( 'editor13', options);
+      CKEDITOR.replace( 'editor14', options);
+      CKEDITOR.replace( 'editor15', options);
+    </script>
     {{--   <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script> --}}
       {{-- <script>
         CKEDITOR.replace( 'article-ckeditor' );
       </script> --}}
-     
+      
       @yield('script') 
       <script>
         $(function () {
