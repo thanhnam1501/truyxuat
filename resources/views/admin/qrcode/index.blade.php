@@ -1,7 +1,7 @@
-@extends('layouts.master_user')
+@extends('layouts.master')
 @section('content')
+<div class="clearfix"></div>
 <div>
-	<a class="btn btn-primary" href='{{route('user.profile.ShowFormCreate')}}'>Thêm người dùng mới</a>
  @if(isset($messageError))
  <div class="alert alert-danger">
    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -14,42 +14,55 @@
    {{ $messageSuccess }}
  </div>
  @endif
- <div class="">
-  <table id="user-list" class="table table-striped responsive-utilities jambo_table">
-    <thead>
-      <tr class="headings">
-        <th>
-          #
-        </th>
-        <th>Tên  </th>
-        <th>Email</th>
-        <th>Số điện thoại</th>
-        <th>Ngày tạo</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+ <div>
+   <a class="btn btn-primary" href='{{route('qrcode.ShowFormCreate')}}'>Tạo khối mới</a>
+
+   <div class="">
+    <table id="user-list" class="table table-striped responsive-utilities jambo_table">
+      <thead>
+        <tr class="headings">
+          <th>
+            #
+          </th>
+          <th>Tên công ty </th>
+          <th>Số đầu</th>
+          <th>Số cuối</th>
+          <th>Tên người tạo</th>
+          <th>Ngày tạo</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
 
-  </table>
-</div>
+    </table>
+  </div>
 
-@endsection
-@section('script')
-<script>
+  @endsection
+  @section('script')
+  <script>
+   $.ajaxSetup({
+     headers: {
+       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+     }
+   });
+ </script>
+ <script>
   $(function() {
     $('#user-list').DataTable({
       processing: false,
       serverSide: true,
       order: [],
-      ajax: '{!! route('user.profile.getList') !!}',
+      ajax: '{!! route('qrcode.getList') !!}',
       pageLength: 30,
+      ordering: false,
       lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
       columns: [
       {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center',searchable: false},
-      {data: 'name', name: 'name'},
-      {data: 'email', name: 'email'},
-      {data: 'mobile', name: 'mobile'},
-      {data: 'created_at', name: 'created_at'},
+      {data: 'company_name', name: 'company_name'},
+      {data: 'start', name: 'start', 'class':'dt-center'},
+      {data: 'end', name: 'end', 'class':'dt-center'},
+      {data: 'user_name', name: 'user_name', 'class':'dt-center'},
+      {data: 'created_at', name: 'created_at',orderable: false, searchable: false},
       {data: 'action', name: 'action',searchable: false},
       ]
     });
@@ -58,7 +71,7 @@
 
 </script>
 <script>    
-  function deleteUser(id){
+  function deleteAdmin(id){
    swal({
     title: "Bạn có chắc muốn xóa?",
     text: "Bạn sẽ không thể khôi phục dữ liệu này!",
@@ -70,7 +83,7 @@
     if (willDelete) {
 
      $.ajax({
-      url: '{{ route('user.profile.delete') }}',
+      url: '{{ route('user.delete') }}',
       type: 'POST',
       data: {id: id},
 
@@ -86,14 +99,13 @@
         }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
-                                        //toastr.error(thrownError);
-                                        toastr.error("Lỗi! Không thể đăng ký! <br>Vui lòng thử lại hoặc liên lạc với IT");
-                                      }
+       
+        toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+      }
 
-                                    });
+    });
    } 
  });
  }
 </script>
-
 @endsection

@@ -24,6 +24,14 @@
 					<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<select type="number" class="form-control has-feedback-left" id="mobile" name="mobile" placeholder="Số điện thoại" value="{{ old('mobile') }}" required> 
+						<option value="">Chọn chức năng</option>
+						<option value="2">Quản trị viên</option>
+						<option value="3">Biên tập viên</option>
+					</select>
+					<span class="fa fa-eyedropper form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 					<input type="number" class="form-control has-feedback-left" id="mobile" name="mobile" placeholder="Số điện thoại" value="{{ old('mobile') }}" required>
 					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 				</div>

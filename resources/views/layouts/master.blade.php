@@ -29,6 +29,7 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
   <script src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{asset('public/css/summernote.css')}}">
 
 
 
@@ -55,7 +56,7 @@
               <div class="left_col scroll-view">
 
                 <div class="navbar nav_title" style="border: 0;">
-                  <a href="{{route('user.index')}}" class="site_title">
+                  <a href="{{route('admin.user.index')}}" class="site_title">
                     <img class="fa" style="width: 24px;height: 24px; border-radius: 50%;" src="{{asset('public/image/favicon.png')}}" alt="">
 
                     <span style="color: red">S</span><span>mart<span style="color: red">C</span>heck</span></a>
@@ -120,6 +121,22 @@
 
                         </ul>
                       </li>
+
+                        <li ><a><i class="fa fa-qrcode"></i>IN MÃ QRCODE<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                          <li><a href="{{route('qrcode.ShowFormCreate')}}">In mã QR-Code</a>
+                          <li><a href="{{route('qrcode.index')}}">Nhật ký in</a>
+                          </li>
+                       {{--    <li><a href="{{route('qrcode.ShowFormCreate')}}">Tạo mới khối QR-Code</a>
+                          </li>
+                          <li><a href="{{route('qrcode.index')}}">Danh sách khối</a> --}}
+
+                         {{--  <li><a href="">Lịch sử quét</a>
+                          </li> --}}
+
+                        </ul>
+                      </li>
+
                       <li ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                           <li><a href="{{route('admin.history.index')}}">Tất cả lịch sử</a>
@@ -157,20 +174,7 @@
                <!-- /sidebar menu -->
 
                <!-- /menu footer buttons -->
-               <div class="sidebar-footer hidden-small">
-                <a data-toggle="tooltip" data-placement="top" title="Settings">
-                  <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                  <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="Lock">
-                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="Logout">
-                  <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                </a>
-              </div>
+              
               <!-- /menu footer buttons -->
             </div>
           </div>
@@ -232,6 +236,7 @@
     </div>
     <!-- /footer content -->
     <script src="{{asset('public/js/jquery.min.js')}}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{{asset('public/js/nprogress.js')}}"></script>
     <script>
       NProgress.start();
@@ -240,8 +245,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">  </script>
 
     <!-- gauge js -->
-    <script type="text/javascript" src="{{asset('public/js/gauge/gauge.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('public/js/gauge/gauge_demo.js')}}"></script>
+  {{--   <script type="text/javascript" src="{{asset('public/js/gauge/gauge.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('public/js/gauge/gauge_demo.js')}}"></script> --}}
     <!-- chart js -->
     <script src="{{asset('public/js/chartjs/chart.min.js')}}"></script>
     <!-- bootstrap progress js -->
@@ -254,6 +259,7 @@
     <script type="text/javascript" src="{{asset('public/js/datepicker/daterangepicker.js')}}"></script>
 
     <script src="{{asset('public/js/custom.js')}}"></script>
+    <script type="text/javascript" src="{{asset('public/js/summernote.js')}}"></script>
 
     <!-- flot js -->
     <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
@@ -403,7 +409,7 @@
       </script>
       <!-- skycons -->
       <script src="{{asset('js/skycons/skycons.js')}}"></script>
-      <script>
+     {{--  <script>
         var icons = new Skycons({
           "color": "#73879C"
         }),
@@ -418,7 +424,7 @@
           icons.set(list[i], list[i]);
 
         icons.play();
-      </script>
+      </script> --}}
 
       <!-- dashbord linegraph -->
         {{-- <script>

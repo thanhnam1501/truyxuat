@@ -65,13 +65,14 @@
 						<label>Mô tả</label>
 						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor2">{!!$data->content!!}</textarea>
 					</div> 
-					{{ csrf_field() }}
+					
 					<div class="form-group">
 						<label for="exampleInputEmail1">Ảnh sản phẩm</label>
 						<input type="file" id="image_update" name="image_update" >
 
 						{{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
+					{{ csrf_field() }}
 					<button type="submit" class="btn btn-primary">Cập nhật</button>
 				</form>
 

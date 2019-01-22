@@ -37,7 +37,15 @@
 
 					<div class="form-group">
 						<label for="exampleInputEmail1">Giới hạn tài khoản</label>
-						<input type="number" class="form-control" id="account_limit" name="account_limit" placeholder="Giới hạn tài khoản" required>
+						<select class="form-control" name="account_limit" id="account_limit" required>
+
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="100">100</option>
+							<option value="10000">Không giới hạn</option>
+							
+						</select>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
 
@@ -50,7 +58,7 @@
 							<option value="10">10</option>
 							<option value="25">25</option>
 							<option value="100">100</option>
-							<option value="1000">không giới hạn</option>
+							<option value="10000">Không giới hạn</option>
 							
 						</select>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
@@ -60,10 +68,13 @@
 						<label for="exampleInputEmail1">Giới hạn thời gian</label>
 						
 						<select class="form-control" name="time_limit" id="time_limit" required>
-							<option value="5">3 Tháng</option>
-							<option value="10">6 Tháng</option>
-							<option value="25">9 Tháng</option>
-							<option value="100">12 Tháng</option>							
+							<option value="3">3 tháng</option>
+							<option value="12">1 năm</option>
+							<option value="24">2 năm</option>
+							<option value="36">3 năm</option>
+							<option value="48">4 năm</option>
+							<option value="60">5 năm</option>
+							<option value="10000">Không giới hạn</option>							
 						</select>
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>

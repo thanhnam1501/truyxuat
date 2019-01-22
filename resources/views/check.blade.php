@@ -53,7 +53,7 @@
       .FirstContent{
         height: 100%;
         max-width: 100%;
-       
+
         z-index: 1;
         top: 0;
         overflow-x: hidden;
@@ -126,28 +126,57 @@
       </div>
     </div>
   </div>
-  @endif
-  
+</div>
+@endif
 
-  @for($i= 0; $i < $data->node ; $i++)
-  @foreach($nodes as $key => $value)
-  @if($key == $i && $value['status'] == 1)
-  <div class="row">
-    <legend class="panel-heading container" style="background-color: #82898f; max-width: 100%">
-      <a href="#content{{$i}}" style="background-color: #82898f; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
-       <div class="iconfirst">  <span><i class="fa fa-tag" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i></span></div>
-       <span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="ChangeIcon fa fa-chevron-down" style="float: right; margin-right: 5%;"></i></span>
-     </a>
-   </legend>
-   <div class="panel-body panel-collapse fade collapse " id="content{{$i}}" aria-expanded="true" style="">
-    <div id="content" class="btn-group content">
-      {!!$value->content!!}
-    </div>
+
+@for($i= 0; $i < $data->node ; $i++)
+@foreach($nodes as $key => $value)
+@if($key == $i && $value['status'] == 1)
+<div class="row">
+  <legend class="panel-heading container" style="background-color: #82898f; max-width: 100%">
+    <a href="#content{{$i}}" style="background-color: #82898f; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
+     <div class="iconfirst">  <span><i class="fa fa-tag" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i></span></div>
+     <span style="color: #fff !important; "><strong style="float: left;">{{mb_strtoupper($value->name,'utf8')}}</strong><i class="ChangeIcon fa fa-chevron-down" style="float: right; margin-right: 5%;"></i></span>
+   </a>
+ </legend>
+ <div class="panel-body panel-collapse fade collapse " id="content{{$i}}" aria-expanded="true" style="">
+  <div id="content" class="btn-group content">
+    {!!$value->content!!}
   </div>
+</div>
 </div>
 @endif
 @endforeach
 @endfor
+
+{{--  nhật ký sản xuất --}}
+<div class="row">
+  <legend class="panel-heading container" style="background-color: #82898f; max-width: 100%">
+    <a href="#process" style="background-color: #82898f; width: 100%"  class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
+     <div class="iconfirst">  <span><i class="fa fa-tag" style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i></span></div>
+     <span style="color: #fff !important; "><strong style="float: left;">NHẬT KÝ SẢN XUẤT</strong><i class="ChangeIcon fa fa-chevron-down" style="float: right; margin-right: 5%;"></i></span>
+   </a>
+ </legend>
+ <div class="panel-body panel-collapse fade collapse " id="process" aria-expanded="true" style="">
+  <div id="content" class="btn-group content">
+
+    @foreach($process as $key => $value)
+    @if($value['status'] == 1)
+      <legend style="color: #fff;background-color: #7fbe42;padding: 0 auto;"><strong>{{$value->name}}</strong></legend>
+      <div>{!!$value->content!!} </div>
+    @endif
+    @endforeach
+
+  </div>
+</div>
+</div>
+
+
+
+{{-- end --}}
+
+
 @else
 <div class="x_panel">
   <img class="imageProduct" src="{{ asset('public/image/noimage.png')}}" alt="">
@@ -164,7 +193,7 @@
     <li>
       <i class="fa fa-map-marker" style="float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
       <p>P207, Tòa nhà Khách sạn Thể thao, <br>
-     Số 15  Lê Văn Thiêm, Quận Thanh Xuân, Hà Nội</p>
+      Số 15  Lê Văn Thiêm, Quận Thanh Xuân, Hà Nội</p>
     </li>
     <li>
      <i class="fa fa-phone" style="float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>

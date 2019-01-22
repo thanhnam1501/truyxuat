@@ -39,14 +39,9 @@
 <script>
   $(function() {
     $('#product-list').DataTable({
-      aaSorting: [[5, 'desc']],
-      bPaginate: false,
-      bFilter: false,
-      bInfo: false,
-      order: [],
-      searching: true,
-      bSortable: true,
-      bRetrieve: true,
+   processing: false,
+            serverSide: true,
+            order: [],
       ajax: '{!! route('user.product.getList') !!}',
       pageLength: 30,
       lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],

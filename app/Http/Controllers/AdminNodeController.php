@@ -40,55 +40,65 @@ public function index()
      */
     public function getlist()
     {
-    			$nodes = DB::table('nodes')
-    			->join('products', 'products.id', '=', 'nodes.product_id')
-    			->select('nodes.*', 'products.name as product_name')
-    			->orderBy('nodes.created_at', 'desc')
-    			->get();
-    		
-    		return Datatables::of($nodes)
-    		->addIndexColumn()
+     $nodes = DB::table('nodes')
+     ->join('products', 'products.id', '=', 'nodes.product_id')
+     ->select('nodes.*', 'products.name as product_name')
+     ->orderBy('nodes.created_at', 'desc')
+     ->get();
+
+     return Datatables::of($nodes)
+     ->addIndexColumn()
+     ->editColumn('nodes.status', function($nodes){
+      $string = "";
+      if($nodes->status == 1){
+        $string = '<a data-tooltip="tooltip" title="Đã kích hoạt" href="javascript:;" onclick="activated('. $nodes->id .')" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>';
+      }
+      else{
+        $string = '<a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('. $nodes->id .')" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>';
+      }
+      return $string;
+    })
       // ->addColumn()           
-    		->addColumn('action', function($nodes) {
-    			$string = "";
+     ->addColumn('action', function($nodes) {
+       $string = "";
 
-    			$string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('node.edit', $nodes->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+       $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="'.route('node.edit', $nodes->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-    			$string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteNode('. $nodes->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+       $string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteNode('. $nodes->id .')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
-    			return $string;
-    		})
-    		->make(true);
-    	}
+       return $string;
+     })
+     ->make(true);
+   }
 
 
-    	public function store(Request $request)
-    	{
+   public function store(Request $request)
+   {
 
-    		$data = $request->all();
+    $data = $request->all();
 
-    		for ($i=1; $i <= $data['node'] ; $i++) { 
-    			$data['name'] = $data ['name'.$i] ;
-    			$data['content'] = $data['content'.$i];
-    			$data['user_id'] = $data['user_id'.$i];
-    			$node = Node::create(['name' => $data['name'],'content' => $data['content'],'user_id' => $data['user_id'],'product_id' => $data['product_id']]);
+    for ($i=1; $i <= $data['node'] ; $i++) { 
+     $data['name'] = $data ['name'.$i] ;
+     $data['content'] = $data['content'.$i];
+     $data['user_id'] = $data['user_id'.$i];
+     $node = Node::create(['name' => $data['name'],'content' => $data['content'],'user_id' => $data['user_id'],'product_id' => $data['product_id']]);
 
-    			$node_history = new User_History();
-    			$node_history->user_id = Auth::guard('web')->user()->id;
-    			$node_history->company_id = Auth::guard('web')->user()->company_id;
-    			$node_history->content = 'Tạo mới node: ' . $node->name;
-    			$node_history->product_id = $node->product_id;
-    			$node_history->save();
-    		}
+     $node_history = new User_History();
+     $node_history->user_id = Auth::guard('web')->user()->id;
+     $node_history->company_id = Auth::guard('web')->user()->company_id;
+     $node_history->content = 'Tạo mới node: ' . $node->name;
+     $node_history->product_id = $node->product_id;
+     $node_history->save();
+   }
 
-    		if($data['node'] != 0){
-    			return redirect()->route('product.edit',['id' => $data['product_id']]);
-    		} 
-    		else{
-    			return redirect()->route('node.ShowFormCreate');
-    		}
+   if($data['node'] != 0){
+     return redirect()->route('product.edit',['id' => $data['product_id']]);
+   } 
+   else{
+     return redirect()->route('node.ShowFormCreate');
+   }
 
-    	}
+ }
 
     /**
      * Update the specified resource in storage.
@@ -140,38 +150,38 @@ public function index()
     }
 
     public function updateById(Request $request)
-   {
-    $data = $request->all();
+    {
+      $data = $request->all();
 
-    $node = Node::where('id', $data['id'])->first();
+      $node = Node::where('id', $data['id'])->first();
 
-    if (!empty($node)) {
-      DB::beginTransaction();
-      try {
-        $node->update($data);
+      if (!empty($node)) {
+        DB::beginTransaction();
+        try {
+          $node->update($data);
 
-        $node_history = new User_History();
-        $node_history->user_id = Auth::guard('web')->user()->id;
-        $node_history->company_id = Auth::guard('web')->user()->company_id;
-        $node_history->content = 'Chỉnh sửa node: ' . $node->name ;
-        $node_history->product_id = $node->product_id;
-        $node_history->save();
+          $node_history = new User_History();
+          $node_history->user_id = Auth::guard('web')->user()->id;
+          $node_history->company_id = Auth::guard('web')->user()->company_id;
+          $node_history->content = 'Chỉnh sửa node: ' . $node->name ;
+          $node_history->product_id = $node->product_id;
+          $node_history->save();
 
-        DB::commit();
+          DB::commit();
 
-     return redirect()->route('product.edit',['id' => $node['product_id'],]);
-      } catch (Exception $e) {
-        DB::rollback();
+          return redirect()->route('product.edit',['id' => $node['product_id'],]);
+        } catch (Exception $e) {
+          DB::rollback();
 
-        Log::info($e->getMessage());
+          Log::info($e->getMessage());
 
-       return redirect()->route('product.edit',['id' => $node['product_id'],]);
+          return redirect()->route('product.edit',['id' => $node['product_id'],]);
+        }
+      } else {
+
+        return redirect()->route('product.edit',['id' => $node['product_id'],]);
       }
-    } else {
-
-      return redirect()->route('product.edit',['id' => $node['product_id'],]);
     }
-  }
 
     public function activated(Request $request){
       $id = $request->id;

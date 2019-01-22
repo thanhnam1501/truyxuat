@@ -89,18 +89,32 @@
                             </li>
                             <li><a href="{{route('user.product.ShowFormCreate')}}">Thêm mới sản phẩm</a>
                             </li>
+                            
+                          </ul>
+                        </li>
+
+                          <li><a><i class="fa fa-bars"></i>QUY TRÌNH SẢN XUẤT<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{route('user.process.index')}}">Tất cả quy trình</a>
+                            </li>
+                           
+                            @if(Auth::guard('profile')->user()->type == 1 || Auth::guard('profile')->user()->type == 2)
+                             <li><a href="{{route('user.process.ShowFormCreate')}}">Thêm mới quy trình</a>
+                            </li>
+                            @endif
                           </ul>
                         </li>
 
 
-                        <li class="@if(Auth::guard('profile')->user()->status != 1) hidden @endif"><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
+
+                        <li class="@if(Auth::guard('profile')->user()->type != 1) hidden @endif"><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu" style="display: none">
                             <li><a href="{{route('user.profile.index')}}">Người dùng</a>
                             </li>
 
                           </ul>
                         </li>
-                        <li ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
+                        <li class="@if(Auth::guard('profile')->user()->type != [1,2]) hidden @endif" ><a><i class="fa fa-history"></i>LỊCH SỬ<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu" style="display: none">
                             <li><a href="{{route('user.history.index')}}">Tất cả lịch sử</a>
                             </li>

@@ -98,18 +98,15 @@ class ProfileController extends Controller
             'name'    => $data['name'],
             'password'    => $data['password'],
             'company_id'    => $data['company_id'],
-            'status'  => 2,
           ]);
 
         } else {
-          $data['status'] = 2;
+          $data['type'] = 2;
           $user = Profile::create($data);
           $user_history = new User_History();
           $user_history->user_id = Auth::guard('profile')->user()->id;
           $user_history->company_id = Auth::guard('profile')->user()->company_id;
           $user_history->content = 'Tạo mới người dùng: ' . $user->name . ' mã id = ' . $user->id;
-
-
           $user_history->save();
         }
         $message = 'Thêm quản trị viên thành công !';

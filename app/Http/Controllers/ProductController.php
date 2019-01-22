@@ -64,7 +64,10 @@ public function show($id)
      */
     public function getlist()
     {
-      $products = Product::where('company_id', Auth::guard('profile')->user()->company_id)->orderBy('id', 'desc');    
+      $products =  Product::select('products.*','companies.name as company_name')
+      ->join('companies', 'products.company_id', '=', 'companies.id')
+      ->where('company_id', Auth::guard('profile')->user()->company_id)
+      ->orderBy('id', 'desc');    
 
       return Datatables::of($products)
       ->editColumn('status', function($products){
@@ -165,106 +168,106 @@ public function show($id)
       if (Auth::guard('profile')->user()->status !== 1) {
         $nodes = Node::where('product_id', $data['id'])->where('user_id',Auth::guard('profile')->user()->id )->get();
       }else{
-         $nodes = Node::where('product_id', $data['id'])->get();
-      }
-      return view('user.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,'urlSlug' => $urlSlug, 'user' => $user, 'nodes' => $nodes]);
-    }
-    
-    public function update(Request $request)
-    {
-      $data = $request->all();
-      $product = Product::where('id', $data['id'])->first();
-      $slug = Product::where('slug', $data['slug'])->first();
-      if(!empty($slug['slug']) && $slug['id'] !== $product['id']){
-        $data['slug'] = $data['slug'] .'-'. $product->id;
-      }
-      $check = Product::find($product->id)->update(['slug' => $data['slug']]);
-      
-      if($request->hasFile('image_update')){
-        $path = $request->file('image_update')->store('image');
-        $data['image'] = $path;
-        $image = new Imageupload();
-        $image->content_id = $product->id;
-        $image->path = $data['image'];
-        $image->save();
-      };
-
-      if (!empty($product)) {
-        DB::beginTransaction();
-        try {
-
-          $product->update($data);
-          $user_history = new User_History();
-          $user_history->user_id = Auth::guard('profile')->user()->id;
-          $user_history->company_id = Auth::guard('profile')->user()->company_id;
-          $user_history->content = 'Cập nhật sản phẩm: ' . $product->name;
-          $user_history->save();
-          DB::commit();
-          return redirect()->route('user.product.edit',['id' => $product['id']]);        
-
-        } catch (Exception $e) {
-          DB::rollback();
-
-          Log::info($e->getMessage());
-
-          return redirect()->route('user.product.edit',['id' => $product['id']]);
-        }
-      } else {
-
-       return redirect()->route('user.product.edit',['id' => $product['id']]);
+       $nodes = Node::where('product_id', $data['id'])->get();
      }
+     return view('user.product.EditProduct', ['data' => $data, 'companies' => $companies, 'url' => $url,'urlSlug' => $urlSlug, 'user' => $user, 'nodes' => $nodes]);
    }
 
-  
-
-   public function activated(Request $request){
-    $id = $request->id;
-    $products = Product::find($id);
-    if($products->status == 1){
-      $data = Product::find($id)->update(['status' => 0]);
+   public function update(Request $request)
+   {
+    $data = $request->all();
+    $product = Product::where('id', $data['id'])->first();
+    $slug = Product::where('slug', $data['slug'])->first();
+    if(!empty($slug['slug']) && $slug['id'] !== $product['id']){
+      $data['slug'] = $data['slug'] .'-'. $product->id;
     }
-    else{
-      $data = Product::find($id)->update(['status' => 1]);
-    }
+    $check = Product::find($product->id)->update(['slug' => $data['slug']]);
 
-    return response()->json([
-      'status' => true,
-      'message' => 'Thay đổi trạng thái thành công !',
-    ]);
-  }
-
-
-
-  public function destroy(Request $request)
-  {
-    $product = Product::find($request->id);
+    if($request->hasFile('image_update')){
+      $path = $request->file('image_update')->store('image');
+      $data['image'] = $path;
+      $image = new Imageupload();
+      $image->content_id = $product->id;
+      $image->path = $data['image'];
+      $image->save();
+    };
 
     if (!empty($product)) {
       DB::beginTransaction();
       try {
-        $product->delete();
 
+        $product->update($data);
+        $user_history = new User_History();
+        $user_history->user_id = Auth::guard('profile')->user()->id;
+        $user_history->company_id = Auth::guard('profile')->user()->company_id;
+        $user_history->content = 'Cập nhật sản phẩm: ' . $product->name;
+        $user_history->save();
         DB::commit();
+        return redirect()->route('user.product.edit',['id' => $product['id']]);        
 
-        return response()->json([
-          'error' => false,
-          'message' => 'Sản phẩm '.$product->name.' đã bị xóa',
-        ]);
       } catch (Exception $e) {
         DB::rollback();
 
         Log::info($e->getMessage());
 
-        return response()->json([
-          'error' => true,
-          'message' => $e->getMessage()
-        ]);
+        return redirect()->route('user.product.edit',['id' => $product['id']]);
       }
     } else {
+
+     return redirect()->route('user.product.edit',['id' => $product['id']]);
+   }
+ }
+
+
+
+ public function activated(Request $request){
+  $id = $request->id;
+  $products = Product::find($id);
+  if($products->status == 1){
+    $data = Product::find($id)->update(['status' => 0]);
+  }
+  else{
+    $data = Product::find($id)->update(['status' => 1]);
+  }
+
+  return response()->json([
+    'status' => true,
+    'message' => 'Thay đổi trạng thái thành công !',
+  ]);
+}
+
+
+
+public function destroy(Request $request)
+{
+  $product = Product::find($request->id);
+
+  if (!empty($product)) {
+    DB::beginTransaction();
+    try {
+      $product->delete();
+
+      DB::commit();
+
       return response()->json([
-        'error'     =>  true,
-        'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
+        'error' => false,
+        'message' => 'Sản phẩm '.$product->name.' đã bị xóa',
+      ]);
+    } catch (Exception $e) {
+      DB::rollback();
+
+      Log::info($e->getMessage());
+
+      return response()->json([
+        'error' => true,
+        'message' => $e->getMessage()
       ]);
     }
+  } else {
+    return response()->json([
+      'error'     =>  true,
+      'message' =>  'Không tìm thấy sản phẩm, vui lòng thử lại sau',
+    ]);
   }
+}
 }

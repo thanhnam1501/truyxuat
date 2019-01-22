@@ -15,6 +15,8 @@
  </div>
  @endif
  <div class="">
+  <a class="btn btn-primary" data-toggle="modal" href='{{route('user.node.ShowFormCreateOne')}}'>Tạo bước cập nhật</a>
+
   <table id="product-list" class="table table-striped responsive-utilities jambo_table">
     <thead>
       <tr class="headings">
@@ -34,33 +36,77 @@
   </table>
 </div>
 
+<div class="modal fade" id="add-node">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+          <input type="text" class="form-control has-feedback-left" id="name1" name="name1" placeholder="Tên bước"  required>
+          <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+
+          {{--    <textarea name="content{{$i}}" class="form-control" id="editor{{$i}}"></textarea> --}}
+          <textarea  class="form-control " id="editor1" name="content1"></textarea>
+          
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+
+          <select class="form-control has-feedback-left" name="user_id1" id="user_id1" required>
+            <option value="">Chọn nhân viên quản lý</option>
+           {{--  @foreach($user as $key => $value)
+            <option value="{{$value->id}}">{{$value->name}}</option>
+            @endforeach --}}
+          </select>
+          <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+        </div>
+        
+
+        {{ csrf_field() }}  
+
+        <button type="submit" class="btn btn-primary">Tạo mới</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @endsection
 @section('script')
 <script>
   $(function() {
-    $('#product-list').DataTable({
-      bPaginate: false,
-      bFilter: false,
-      bInfo: false,
-      order: [],
-      searching: true,
-      bSortable: true,
-      bRetrieve: true,
-      ajax: '{!! route('node.getList') !!}',
-      pageLength: 30,
-      lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
-      columns: [
-      {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
-      {data: 'name', name: 'name'},
-      {data: 'product_name', name: 'product_name'},
-      {data: 'updated_at', name: 'updated_at'},
-      {data: 'created_at', name: 'created_at'},
-      {data: 'status', name: 'status'},
-      {data: 'action', name: 'action', searchable: false},
-      ]
-    });
-
+   $('#product-list').DataTable({
+    serverSide: true,
+    order: [],
+    searching: true,
+    ajax: '{!! route('node.getList') !!}',
+    pageLength: 30,
+    lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
+    columns: [
+    {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
+    {data: 'name', name: 'name'},
+    {data: 'product_name', name: 'product_name'},
+    {data: 'updated_at', name: 'updated_at'},
+    {data: 'created_at', name: 'created_at'},
+    {data: 'nodes.status', name: 'nodes.status'},
+    {data: 'action', name: 'action', searchable: false},
+    ]
   });
+
+ });
 
 </script>
 <script>    

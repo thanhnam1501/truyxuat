@@ -27,7 +27,7 @@
         <th>Tên sản phẩm</th>
         <th>Cập nhật</th>
         <th>Ngày tạo</th>
-        <th>Trạn thái</th>
+        <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -88,13 +88,9 @@
 <script>
   $(function() {
    $('#product-list').DataTable({
-    bPaginate: false,
-    bFilter: false,
-    bInfo: false,
+    serverSide: true,
     order: [],
     searching: true,
-    bSortable: true,
-    bRetrieve: true,
     ajax: '{!! route('user.node.getList') !!}',
     pageLength: 30,
     lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],

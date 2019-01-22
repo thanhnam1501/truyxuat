@@ -173,6 +173,8 @@ return [
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         
         
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
@@ -235,6 +237,7 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Toastr' => Kamaln7\Toastr\Facades\Toastr::class,
         'QRCode' => LaravelQRCode\Facades\QRCode::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         
     ],
 

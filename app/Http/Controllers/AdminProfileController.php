@@ -72,7 +72,8 @@ class AdminProfileController extends Controller
       $validatedData = $request->validate([
         'name' => 'required',
         'email' => 'required|string|unique:profiles,email',
-        'mobile' => 'required',     
+        'mobile' => 'required',
+
       ]);
 
       DB::beginTransaction();
@@ -89,6 +90,7 @@ class AdminProfileController extends Controller
             'password'    => $data['password'],
             'mobile'    => $data['mobile'],
             'status'  => 1,
+            'type'  => 1,
             'company_id' => $data['company_id'] 
           ]);
         } else {

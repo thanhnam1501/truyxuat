@@ -88,7 +88,7 @@ Route::middleware('revalidate')->group(function () {
 
       //* Quản lý sản phẩm
 
-       Route::group(['prefix' => 'gia-han'], function () {
+      Route::group(['prefix' => 'gia-han'], function () {
         Route::get('get-list', 'QuotesController@getlist')->name('quotes.getList');
         Route::get('/', 'QuotesController@index')->name('quotes.index');
         Route::get('tao-moi', 'QuotesController@getFormCreate')->name('quotes.ShowFormCreate');
@@ -101,7 +101,7 @@ Route::middleware('revalidate')->group(function () {
 
       });
 
-    
+      
             //* End
 
        //* Quản lý các node
@@ -118,6 +118,38 @@ Route::middleware('revalidate')->group(function () {
 
       });
         //*end
+
+      //* Quản lý QR-Code
+      Route::group(['prefix' => 'qrcode'], function () {
+        Route::get('get-list', 'QrcodeController@getlist')->name('qrcode.getList');
+        Route::get('/', 'QrcodeController@index')->name('qrcode.index');
+        Route::get('tao-moi', 'QrcodeController@getFormCreate')->name('qrcode.ShowFormCreate');
+        Route::post('create', 'QrcodeController@store')->name('qrcode.create');
+        Route::get('cap-nhat-thong-tin-node/{id}', 'QrcodeController@edit')->name('qrcode.edit');
+        Route::post('update-node', 'QrcodeController@update')->name('qrcode.update');
+        Route::post('xoa-node','QrcodeController@destroy')->name('qrcode.delete');
+        Route::post('activated', 'QrcodeController@activated')->name('qrcode.activated');
+        Route::get('xuat-file/{id}', 'QrcodeController@exportQrcode')->name('qrcode.exportQrcode');
+        Route::patch('chinh-sua-node', 'QrcodeController@updateById')->name('qrcode.updateById');
+        Route::post('qrcode/checkStart', [
+          'as' => 'backend.qrcode.checkStart',
+          'uses'  => 'QrcodeController@checkStart',
+      //'roles' => ['backend.qrcode.pImport']
+        ]);  
+
+        //* block
+        Route::get('block/{id}', 'QrcodeProductController@getFormCreate')->name('qrcode.block');
+        Route::post('qrcode/saveBlockProduct', [
+          'as' => 'qrcode.saveBlockProduct',
+          'uses'  => 'QrcodeProductController@saveBlockProduct',
+        ]);
+        
+
+        Route::post('them-san-pham-vao-khoi', 'QrcodeProductController@addProduct')->name('qrcode.addProduct'); 
+      });
+
+      //*end
+
     });
 
         //* End Quản lý doanh nghiệp
@@ -156,11 +188,7 @@ Route::get('/', 'ProductController@index')->name('user.index');
 Route::get('/home', 'ProductController@index')->name('user.index');
 Route::get('check/{id}', 'HomeController@show');
 Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
-Route::get('qr-code', function () 
-{
-  return QRCode::text('QR Code Generator for Laravel!')->png();    
-});
-
+Route::get('/truy-xuat', 'HomeController@getDetail')->name('getDetail');
     // list all lfm routes here...
 
 
@@ -250,12 +278,34 @@ Route::group(['prefix' => 'node'], function () {
 
 
 });
-            //* End
+        //* End
+
+        //* Quản lý quy trình sản xuất
+Route::group(['prefix' =>'process'],function(){
+  Route::get('/', 'ProcessController@index')->name('user.process.index');
+  Route::get('getList', 'ProcessController@getList')->name('user.process.getList');
+  Route::get('tao-moi/', 'ProcessController@getFormCreate')->name('user.process.ShowFormCreate');
+  Route::post('tao-moi', 'ProcessController@getFormCreateProcess')->name('user.process.getFormCreateProcess');
+  Route::post('create', 'ProcessController@create')->name('user.process.create');
+  Route::get('chinh-sua/{id}', 'ProcessController@edit')->name('user.process.edit');
+  Route::post('chinh-sua','ProcessController@update')->name('user.process.update');
+  Route::post('activated', 'ProcessController@activated')->name('user.process.activated');
+  Route::post('xoa-quy-trinh','ProcessController@delete')->name('user.process.delete');
+
+
+
+
+
+});
 
 Route::post('change-password', 'ProfileController@ChangePassword')->name('user.profile.change_password');
 Route::get('change-password', 'ProfileController@ShowFormChangePassword')->name('user.profile.ShowFormChangePassword');
 
+Route::group(['middleware' => 'auth.profile'], function () {
+  Route::get('user/laravel-filemanager', '\UniSharp\LaravelFilemanager\Controllers\LfmController@show')->name('user.filemanager');
+  Route::post('user/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\Controllers\UploadController@upload')->name('user.filemanager.upload');
 
+});
 });
 
 

@@ -42,8 +42,8 @@
       lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
       columns: [
       {data: 'DT_Row_Index', name: 'DT_Row_Index', 'class':'dt-center', searchable: false},
-      {data: 'id', name: 'id'},
       {data: 'name', name: 'name'},
+      {data: 'company_name', name: 'company_name'},
       {data: 'updated_at', name: 'updated_at'},
       {data: 'created_at', name: 'created_at',},
       {data: 'status', name: 'status'},

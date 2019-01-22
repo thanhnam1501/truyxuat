@@ -81,7 +81,7 @@ class AdminProductController extends Controller
 
     public function edit($id)
     {
-    
+      
 
       $data = Product::find($id);
       $companies = Company::get();
@@ -142,16 +142,21 @@ class AdminProductController extends Controller
     public function update(Request $request)
     {
       $data = $request->all();
-
       $product = Product::where('id', $data['id'])->first();
-
       $slug = Product::where('slug', $data['slug'])->first();
       if(!empty($slug['slug']) && $slug['id'] !== $product['id']){
         $data['slug'] = $data['slug'] .'-'. $product->id;
       }
       $check = Product::find($product->id)->update(['slug' => $data['slug']]);
-      
 
+      if($request->hasFile('image_update')){
+        $path = $request->file('image_update')->store('image');
+        $data['image'] = $path;
+        $image = new Imageupload();
+        $image->content_id = $product->id;
+        $image->path = $data['image'];
+        $image->save();
+      };
       if (!empty($product)) {
         DB::beginTransaction();
         try {
