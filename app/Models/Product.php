@@ -8,7 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Product extends Model
 {
      protected $fillable = [
-        'name', 'company_id','content','sort_content','slug','image','price','status','node','user_id'
+        'name', 'company_id','content','sort_content','slug','image','price','status','node','user_id','link_product'
     ];
 
     public function image(){

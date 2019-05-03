@@ -61,6 +61,7 @@ Public function create(Request $request){
          $nodes = DB::table('nodes')
          ->join('products', 'products.id', '=', 'nodes.product_id')
          ->select('nodes.*', 'products.name as product_name')
+         ->where('products.company_id', '=' , Auth::guard('profile')->user()->company_id)
          ->orderBy('nodes.created_at', 'desc')
          ->get();
        }else{
@@ -69,6 +70,7 @@ Public function create(Request $request){
          ->join('products', 'products.id', '=', 'nodes.product_id')
          ->select('nodes.*', 'products.name as product_name')
          ->where('user_id', Auth::guard('profile')->user()->id)
+         ->where('products.company_id', '=' , Auth::guard('profile')->user()->company_id)
          ->orderBy('nodes.created_at', 'desc')
          ->get();
        }

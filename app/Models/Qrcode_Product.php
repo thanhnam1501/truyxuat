@@ -14,7 +14,7 @@ class Qrcode_Product extends Model
      * @var array
      */
     protected $fillable = [
-        'id','company_id', 'start','end','note','user_id','product_id','qrcode_id',
+        'id','company_id', 'start','end','note','user_id','product_id','qrcode_id', 'time_scans',
     ];
 
        public function company() {

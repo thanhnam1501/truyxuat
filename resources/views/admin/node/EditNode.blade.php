@@ -24,6 +24,15 @@
 						<label>Mô tả</label>
 						<textarea name="content" value="{{$data->content}}" class="form-control " id="editor1">{{$data->content}}</textarea>
 					</div> 
+					<div class="form-group">
+						<label>Người quản lý</label>
+						<select name="user_id" id="user_id" class="form-control">
+							<option value="">Chọn người quản lý</option>
+							@foreach($users as $key => $value)
+							<option value="{{$value['id']}}">{{$value['name']}}</option>
+							@endforeach
+						</select>
+					</div> 
 
 				{{ csrf_field() }}
 

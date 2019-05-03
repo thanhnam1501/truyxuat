@@ -15,7 +15,7 @@
  </div>
  @endif
  <div class="">
-  <a class="btn btn-primary" data-toggle="modal" href='{{route('user.node.ShowFormCreateOne')}}'>Tạo bước cập nhật</a>
+  <a class="btn btn-primary" data-toggle="modal" href='{{route('node.ShowFormCreateOne')}}'>Tạo bước cập nhật</a>
 
   <table id="product-list" class="table table-striped responsive-utilities jambo_table">
     <thead>

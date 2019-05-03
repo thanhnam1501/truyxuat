@@ -40,7 +40,8 @@
                     <th class="text-center" width="12%">Số lượng</th>
                     <th class="text-center" width="12%">Serial cuối</th>
                     <th class="text-center" width="12%">Thời hạn tem</th>
-                    <th class="text-center" width="5%">Tùy chọn</th>
+                    <th class="text-center" width="12%">Giới hạn quét</th>
+                    <th class="text-center" width="15%">Tùy chọn</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -80,8 +81,19 @@
                         @endfor
                       </select>
                     </td>
+                    <td>
+                      <select class="form-control" id="time_scans_{{$product->id}}" name="product[{{$product->id}}][time_scans]">
+                        @for($i=0;$i<100;$i++)
+                        <option value="{{$i}}" {{$product->time_scans == $i ? 'selected' : ''}}>{{$i.' lần'}}</option>
+                        @endfor
+                      </select>
+                    </td>
                     <td class="text-center">
-                      <a href="javascript: void(0);" class="deleteItemBlock" title="Xóa"><i class="fa fa-fw fa-remove"></i></a>
+                      
+                     {{--  <a data-tooltip="tooltip" title="Chưa kích hoạt" href="javascript:;" onclick="activated('products->id')" class="btn btn-default btn-xs"><i class="fa fa-times"></i></a> --}}
+                      <a href="javascript:;" class="btn btn-info" title="Type hiển thị" onclick="changeType({{$product->qrcode_products_id}})">Kiểu hiển thị {{$product->type}}</a>
+                      <a href="javascript: void(0);" class="btn btn-danger deleteItemBlock" title="Xóa"><i class="fa fa-fw fa-remove"></i></a>
+                     
                     </td>
                   </tr>
                   @endforeach
@@ -190,28 +202,24 @@
   @endsection
   @section('script')
   <script type="text/javascript" src="{{asset('public/js/block.page.js')}}"></script>
-  <script type="text/javascript">
-    $("#form-product").submit(function(e){
-      e.preventDefault();
-      var id = $('#addProduct_id').val();
-      var company_id = $('#addProduct_company_id').val();
-      var product_id = $('#addProduct').val();
-      $.ajax({
-        url: '{{route('qrcode.addProduct')}}',
-        type: 'POST',
-        dataType: 'JSON',
-        data: {
-          id: id,
-          company_id: company_id,
-          product_id:product_id
-        },
-        success : function(res) {
-          var data = res.data;
-          window.location.reload();
-          toastr.success('Sửa thành công !');
-        }
-      })
-    });
-  </script>>
+  <script>
+  function changeType(id){
+   $.ajax({
+    url: '{{ route('qrcode.changeType') }}',
+    type: 'POST',
+    data: {id: id},
+
+    success: function success(res) {
+       window.location.reload();
+    },
+    error: function error(xhr, ajaxOptions, thrownError) {
+
+      toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
+    }
+
+});
+ }
+</script>
+
   @endsection
 

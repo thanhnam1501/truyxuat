@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Models\User_History;
+use App\Models\QrcodeHistory;
 use App\Models\Qrcode_Product;
 use Datatables;
 use Auth;
@@ -47,9 +48,9 @@ class QrcodeController extends Controller
         })       
         ->addColumn('action', function($data) {
          $str = "";
-         $str .= '<a data-tooltip="tooltip" title="Xem chi tiết" target="_blank" href="'.route('qrcode.exportQrcode', $data->id).'" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>';
+         $str .= '<a data-tooltip="tooltip" title="Xuất file Excel" target="_blank" href="'.route('qrcode.exportQrcode', $data->id).'" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i></a>';
 
-         $str .= '<a data-tooltip="tooltip" title="Xem chi tiết" target="_blank" href="'.route('qrcode.block', $data->id).'" class="btn btn-success btn-xs"><i class="fa fa-gear"></i></a>';
+         $str .= '<a data-tooltip="tooltip" title="Chỉnh sửa" target="_blank" href="'.route('qrcode.block', $data->id).'" class="btn btn-warning btn-xs"><i class="fa fa-gear"></i></a>';
          return $str; 
      })   
         ->make(true);
@@ -130,7 +131,7 @@ class QrcodeController extends Controller
                 ];
                 $stt++;
             }
-            
+           
             return view('admin.qrcode.exportQrcode', ['data' => $data, 'guid' => $id, 'name' => $qrcode->company->name]);
         } else {
             return redirect()->route('qrcode.index', ['errorCode'=>404, 'msg'=>"Not found request!"]);
@@ -144,4 +145,39 @@ class QrcodeController extends Controller
             $view = view('admin.qrcode.AddProduct', $data)->render();
         return response()->json(['html' => $view]);
     }
+
+    public function getFormRestore(){
+        $company = Company::get();
+        return view('admin.qrcode.restore',['companies' => $company]);
+    }
+
+    public function restore(Request $request){
+        try {
+           $serial = str_pad($request->serial, 10, '0', STR_PAD_LEFT);
+           QrcodeHistory::where('company_id', $request->company_id)
+           ->where('stt', $serial)
+           ->delete();
+           return redirect()->route('qrcode.getRestore')->with('messageSuccess' , 'Khôi phục thành công!');
+        } catch (Exception $e) {
+            return view('errors.500')->withErrors();
+        }
+    }
+
+    public function getHistory(){
+        return view('admin.qrcode.historyQrcode');
+    }
+
+     public function getListHistory(Request $request){
+        $data =  QrcodeHistory::orderBy('created_at', 'desc')->get();
+
+        return Datatables::of($data)
+        ->addIndexColumn()
+        ->addColumn('company_name', function($data) {
+        $str = $data->company->name;
+         return $str; 
+     })   
+        ->make(true);
+    }
+
+    
 }

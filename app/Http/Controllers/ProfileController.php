@@ -9,6 +9,7 @@ use DB;
 use Datatables;
 use UploadFile;
 use Auth;
+use Mail;
 use App\Models\RoundCollection;
 use App\Models\Company;
 use Validator;
@@ -276,12 +277,6 @@ class ProfileController extends Controller
 public function creatRenewal(Request $request){
   $data = $request->all();
 
-      // $validatedData = $request->validate([
-      //   'name' => 'required',
-      //   'email' => 'required|string|unique:profiles,email',
-      //   'mobile' => 'required',     
-      // ]);
-
   DB::beginTransaction();
   try {
     $quotes = Quote::find($data['quotes_id']);
@@ -294,11 +289,23 @@ public function creatRenewal(Request $request){
     $renewal['account_limit'] = $quotes->account_limit;
     $renewal['product_limit'] = $quotes->product_limit;
     
-    Renewal::create($renewal);
+    $data = Renewal::create($renewal);
+
+    $user = Auth::guard('profile')->user();
+  
+    Mail::send('user/EmailRenewal', ['data' => $data], function ($message) use ($user) {
+
+      $message->from('thanhnam@gmail.com', 'AnHaCorp');
+
+      $message->to($user->email, $user->name);
+
+      $message->subject('Xác Nhận yêu cầu gia hạn tài khoản');
+    });
 
     DB::commit();
-    \Session::flash('flash_message','Bạn đã yêu cầu gia hạn thành công, Chúng tôi sẽ sớm xử lý và liên lạc với bạn, Xin cảm ơn!');
-    return redirect()->route('user.product.index');
+    // \Session::flash('flash_message','Bạn đã yêu cầu gia hạn thành công, Chúng tôi sẽ sớm xử lý và liên lạc với bạn, Xin cảm ơn!');
+    $EmailSuccess = "Bạn đã yêu cầu gia hạn thành công, Chúng tôi sẽ sớm xử lý và liên lạc với bạn, Xin cảm ơn!";
+    return view('user.product.index',['EmailSuccess' => $EmailSuccess, 'renewal' => $data]);
   } catch (Exception $e) {
     DB::rollback();
 

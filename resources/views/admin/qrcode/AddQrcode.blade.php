@@ -52,6 +52,8 @@
                   <span class="help-block">{{$errors->first("end")}}</span>
                   <span id="spanend" style="color: #f00;"></span>
                 </div>
+                   <!-- /.form-group -->
+                <!-- /.form-group -->
                 <!-- /.form-group -->
                 <div class="form-group">
                   <label class="" for="note">Ghi chú</label>

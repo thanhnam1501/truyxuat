@@ -35,11 +35,7 @@
 								<option @if($data->company_id == $company->id) selected @endif value="{{$company->id}}">{{$company->name}}</option>
 								@endforeach
 							</select>
-
-							<div class="form-group">
-								<label for="exampleInputEmail1">Các bước cập nhật</label>
-								<input type="number" class="form-control" id="node" name="node" value="{{$data->node}}" disabled>
-							</div>				
+			
 
 							<div class="form-group">
 								<label for="exampleInputEmail1">Liên kết tĩnh</label>
@@ -56,7 +52,11 @@
 						</div>
 					</div> 
 
-					
+					<div class="form-group">
+						<label>Mô tả ngắn sản phẩm <span style="color: red">(Nếu muốn chuyển sang trang web thông tin sản phẩm thì điền link vào đây)</span></label>
+						<input type="text" name="link_product" value="{{$data->link_product}}" class="form-control " >
+					</div> 
+
 					<div class="form-group">
 						<label>Mô tả ngắn sản phẩm</label>
 						<textarea name="sort_content" value="{{$data->sort_content}}" class="form-control " id="editor1">{!!$data->sort_content!!}</textarea>

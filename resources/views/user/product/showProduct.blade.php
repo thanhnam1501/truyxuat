@@ -180,7 +180,7 @@
           toastr.error(res.message);
         }
       },
-      error: function error(xhr, ajaxOptions, thrownError) {
+      error: function error() {
 
         toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
       }

@@ -19,19 +19,19 @@
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Mã số thuế</label>
-						<input type="number" class="form-control" id="tax_code" name="tax_code" {{-- aria-describedby="emailHelp" --}} placeholder="Mã số thuế" required>
+						<input type="number" class="form-control" id="tax_code" name="tax_code" {{-- aria-describedby="emailHelp" --}} placeholder="Mã số thuế" >
 						{{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
 					
 					<div class="form-group">
 						<label for="exampleInputEmail1">Số điện thoại</label>
-						<input type="number" class="form-control" id="mobile_phone" name="mobile_phone" {{-- aria-describedby="emailHelp" --}} placeholder="Số điện thoại" required>
+						<input type="number" class="form-control" id="mobile_phone" name="mobile_phone" {{-- aria-describedby="emailHelp" --}} placeholder="Số điện thoại" >
 						{{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
 					
 					<div class="form-group">
 						<label for="exampleInputEmail1">Địa chỉ</label>
-						<input type="text" class="form-control" id="address" name="address" placeholder="Địa chỉ" required>
+						<input type="text" class="form-control" id="address" name="address" placeholder="Địa chỉ" >
 						{{-- <small id="numberlHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
 					</div>
 

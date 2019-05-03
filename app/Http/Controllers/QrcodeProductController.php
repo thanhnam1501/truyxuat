@@ -36,7 +36,7 @@ class QrcodeProductController extends Controller
 
         $listProductAdd = Product::where('products.company_id', $block->company_id)->get();
 
-        $list_product = Product::select('products.id', 'products.name', 'qrcode_products.start', 'qrcode_products.end', 'qrcode_products.amount', 'qrcode_products.protected_time_of_tem','qrcode_products.qrcode_id')
+        $list_product = Product::select('products.id', 'products.name', 'qrcode_products.start', 'qrcode_products.end', 'qrcode_products.amount', 'qrcode_products.protected_time_of_tem','qrcode_products.qrcode_id','qrcode_products.time_scans','qrcode_products.type','qrcode_products.id as qrcode_products_id')
         ->join('qrcode_products', function($join) use ($id){
             $join->on('products.id', '=', 'qrcode_products.product_id');
             $join->where('qrcode_products.qrcode_id', $id);
@@ -50,10 +50,7 @@ class QrcodeProductController extends Controller
             ->orderBy('products.id', 'ASC')
             ->get();
         }
-
-
-
-
+    
         return view('admin.qrcode.block', ['block' => $block,'listProduct' => $list_product,'listProductAdd' => $listProductAdd]);
 
     }
@@ -71,6 +68,7 @@ class QrcodeProductController extends Controller
                         $insert_item['start'] = $product['start'];
                         $insert_item['amount'] = $product['amount'];
                         $insert_item['end'] = $product['end'];
+                        $insert_item['time_scans'] = $product['time_scans'];
                         $insert_item['protected_time_of_tem'] = $product['protected_time_of_tem'];
                         $insert_item['user_id'] = Auth::user()->id;
                         $insert_item['created_at'] = date('Y-m-d H:i:s');
@@ -104,4 +102,25 @@ class QrcodeProductController extends Controller
            return response()->json(['msg' => 'Có lỗi xảy ra!']);
        }
    }
+
+   public function changeType(Request $request)
+    {
+        $id = $request->id;
+        $products = Qrcode_Product::find($id);
+        
+        if($products->type == 1){
+           $products['type'] = 0;
+            $products->update();
+        }
+        else{
+            $products['type'] = 1;
+            $products->update();
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $products,
+            'message' => 'Thay đổi kiểu hiển thị thành công !',
+        ]);
+    }
 }

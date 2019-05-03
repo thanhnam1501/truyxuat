@@ -175,7 +175,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
         
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
@@ -236,8 +236,8 @@ return [
         'ExportExcel'  =>  App\Helpers\ExportExcel::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Toastr' => Kamaln7\Toastr\Facades\Toastr::class,
-        'QRCode' => LaravelQRCode\Facades\QRCode::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        
         
     ],
 

@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     <script src="{{asset('public/ckeditor/ckeditor.js')}}"></script>
+    
 
 
 
@@ -118,7 +119,6 @@
                           <ul class="nav child_menu" style="display: none">
                             <li><a href="{{route('user.history.index')}}">Tất cả lịch sử</a>
                             </li>
-
                           </ul>
                         </li>
 
@@ -126,7 +126,18 @@
                           <ul class="nav child_menu" style="display: none">
                             <li><a href="{{route('user.node.index')}}">DS các bước cập nhật</a>
                             </li>
-
+                          </ul>
+                        </li>
+                           <li ><a><i class="fa fa-bar-chart"></i>BÁO CÁO IN QRCODE<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            @if(Auth::guard('profile')->user()->type != [1]) 
+                            <li><a href="{{route('user.report.qrcode.index')}}">DS báo cáo in</a>
+                            </li>
+                            @else
+                              <li><a href="{{route('user.report.qrcode.index')}}">DS báo cáo in</a>
+                                <li><a href="{{route('user.report.qrcode.ShowFormCreate')}}">Tạo báo cáo</a>
+                            </li>
+                            @endif
                           </ul>
                         </li>
                       </ul>

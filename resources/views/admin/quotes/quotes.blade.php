@@ -94,7 +94,7 @@
         }
       },
       error: function error(xhr, ajaxOptions, thrownError) {
-       
+
         toastr.error("Lỗi! Không thể xóa! <br>Vui lòng thử lại hoặc liên lạc với IT");
       }
 
@@ -112,18 +112,14 @@
     data: {id: id},
 
     success: function success(res) {
-
-      if (res.status == true) {
-
+      if (res.data == 1) {
         toastr.success(res.message);
-        $('#product-list').DataTable().ajax.reload();
       } else {
-
-        toastr.success(res.message);
+        toastr.error(res.message);        
       }
+      $('#product-list').DataTable().ajax.reload();
     },
     error: function error(xhr, ajaxOptions, thrownError) {
-
       toastr.error("Lỗi! Không thể sửa! <br>Vui lòng thử lại hoặc liên lạc với IT");
     }
 
