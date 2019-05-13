@@ -90,7 +90,7 @@
         if (!res.error) {
 
           toastr.error(res.message);
-          $('#user-list').DataTable().ajax.reload();
+          $('#user-list').Datatable().ajax.reload();
         } else {
 
           toastr.error(res.message);

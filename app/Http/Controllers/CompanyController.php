@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use Datatables;
 use DB;
 use Validator;
+use Auth;
 
 class CompanyController extends Controller
 {
@@ -17,7 +19,14 @@ class CompanyController extends Controller
 
     public static function getlist(Request $request)
     {
-        $data = Company::orderBy('id', 'desc');
+        if (Auth::guard('web')->user()->type === 7) {
+            $data = CompanyUser::join('companies', 'company_users.company_id', 'companies.id')
+                ->select('companies.*')
+                ->where('company_users.user_id', Auth::guard('web')->user()->id)
+                ->orderBy('id', 'desc');
+        } else {
+            $data = Company::orderBy('id', 'desc');
+        }
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('expiration_date', function ($data) {
@@ -45,7 +54,11 @@ class CompanyController extends Controller
     public static function create(Request $request)
     {
         $data = $request->all();
-        $create = Company::create($data);
+        $company = Company::create($data);
+        CompanyUser::create([
+            'user_id' => Auth::guard('web')->user()->id,
+            'company_id' => $company->id,
+        ]);
         $message = 'Thêm mới thành công !';
         return redirect()->route('company.index', ['message' => $message]);
 
@@ -90,6 +103,63 @@ class CompanyController extends Controller
                 return response()->json([
                     'error' => false,
                     'message' => 'Tài khoản ' . $company->email . ' đã bị xóa',
+                ]);
+
+            } catch (Exception $e) {
+
+                DB::rollback();
+
+                Log::info($e->getMessage());
+
+                return response()->json([
+                    'error' => true,
+                    'message' => $e->getMessage()
+                ]);
+            }
+        } else {
+
+            return response()->json([
+                'error' => true,
+                'message' => 'Không tìm thấy người dùng, vui lòng thử lại sau',
+            ]);
+        }
+    }
+
+    public function getListCompanyUser(Request $request)
+    {
+        $data = DB::table('company_users')
+            ->join('companies', 'companies.id', '=', 'company_users.company_id')
+            ->select('company_users.*','companies.name as name')
+            ->where('company_users.user_id', $request->user_id)
+            ->orderBy('id', 'desc')
+            ->get();
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($data) {
+                $string = "";
+                $string .= '<a data-tooltip="tooltip" title="Thêm vai trò" href="javascript:;" onclick="deleteCompanyUser(' . $data->id . ')" class="btn btn-danger btn_delete btn-xs"><i class="fa fa-trash"></i></a>';
+                return $string;
+            })
+            ->make(true);
+    }
+
+    public static function deleteCompanyUser(Request $request)
+    {
+        $id = $request->id;
+        $company = CompanyUser::find($id);
+
+        if (!empty($company)) {
+
+            DB::beginTransaction();
+            try {
+
+                $company->delete();
+
+                DB::commit();
+
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Bản ghi đã bị xóa!',
                 ]);
 
             } catch (Exception $e) {

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Option;
 use App\Models\OptionValue;
 use App\Models\User;
+use App\Models\CompanyUser;
 use Auth;
 use Datatables;
 use DB;
@@ -43,17 +45,18 @@ class UserController extends Controller
      */
     public function getlist()
     {
-        $profiles = User::orderBy('id', 'desc');
+        $admin = User::orderBy('id', 'desc');
 
-        return Datatables::of($profiles)
+        return Datatables::of($admin)
             ->addIndexColumn()
-            ->addColumn('action', function ($profiles) {
+            ->addColumn('action', function ($admin) {
                 $string = "";
 
-                $string .= '<a data-tooltip="tooltip" title="Sửa" href="' . route('user.edit', $profiles->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
+              if (Auth::guard('web')->user()->type == 1 || Auth::guard('web')->user()->type == 2) {
+                  $string .= '<a data-tooltip="tooltip" title="Sửa" href="' . route('user.edit', $admin->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
 
-                $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="deleteAdmin(' . $profiles->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
-
+                  $string .= '<a data-tooltip="tooltip" title="Xóa" href="javascript:;" onclick="deleteAdmin(' . $admin->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
+              }
                 return $string;
             })
             ->make(true);
@@ -96,9 +99,10 @@ class UserController extends Controller
                     'password' => $data['password'],
                     'mobile' => $data['mobile'],
                     'status' => 1,
+                    'type' => $data['type']
                 ]);
             } else {
-                $user = User::create($data);
+                User::create($data);
             }
 
             DB::commit();
@@ -134,8 +138,10 @@ class UserController extends Controller
     {
         $id = $request->id;
         $data = User::find($id);
+        $companies = Company::get();
         return view('admin.EditAdmin', [
             'data' => $data,
+            'companies' => $companies,
         ]);
 
     }
@@ -159,8 +165,15 @@ class UserController extends Controller
                 $profile->update([
                     'name' => $data['name'],
                     'email' => $data['email'],
-
                 ]);
+                if (!empty($data['company_id'])){
+
+                    CompanyUser::create([
+                        'user_id' => $profile->id,
+                        'company_id' => $data['company_id']
+                    ]);
+                }
+
                 $message = 'Cập nhập thành công tài khoản ' . $profile->email;
                 DB::commit();
                 return view('admin.index', ['messageSuccess' => $message]);

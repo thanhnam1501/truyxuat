@@ -83,16 +83,7 @@
                     <div class="menu_section">
                         <div class="clearfix"></div>
                         <ul class="nav side-menu">
-                            {{--      <li><a><i class="fa fa-home"></i> HỆ THỐNG <span class="fa fa-chevron-down"></span></a>
-                                   <ul class="nav child_menu" style="display: none">
-                                     <li><a href="index.html">Cấu hình APP</a>
-                                     </li>
-                                     <li><a href="index2.html">Quản trị tài khoản</a>
-                                     </li>
-                                     <li><a href="index3.html">...</a>
-                                     </li>
-                                   </ul>
-                                 </li> --}}
+
                             <li><a><i class="fa fa-bank"></i> DOANH NGHIỆP <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu" style="display: none">
                                     <li><a href="{{route('company.ShowFormCreate')}}">Thêm doanh nghiệp</a>
@@ -112,15 +103,17 @@
                                 </ul>
                             </li>
 
-                            <li><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu" style="display: none">
-                                    <li><a href="{{route('admin.user.index')}}">Quản trị viên</a>
-                                    </li>
-                                    <li><a href="{{route('profile.index')}}">Người dùng</a>
-                                    </li>
+                            @if (Auth::guard('web')->user()->type === 1)
+                                <li><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        <li><a href="{{route('admin.user.index')}}">Quản trị viên</a>
+                                        </li>
+                                        <li><a href="{{route('profile.index')}}">Người dùng</a>
+                                        </li>
 
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                            @endif
 
                             <li><a><i class="fa fa-qrcode"></i>IN MÃ QRCODE<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu" style="display: none">
@@ -154,6 +147,8 @@
 
                                 </ul>
                             </li>
+
+                            @if (Auth::guard('web')->user()->type === 1)
                             <li><a><i class="fa fa-money"></i>GIA HẠN<span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu" style="display: none">
                                     <li><a href="{{route('renewal.index')}}">Doanh nghiệp gia hạn</a>
@@ -164,6 +159,7 @@
 
                                 </ul>
                             </li>
+                                @endif
 
                         </ul>
                     </div>

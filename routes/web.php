@@ -38,6 +38,8 @@ Route::middleware('revalidate')->group(function () {
                 Route::get('cap-nhat-thong-tin-doanh-nghiep/{id}', 'CompanyController@edit')->name('company.edit');
                 Route::post('update-thong-tin-doanh-nghiep', 'CompanyController@update')->name('company.update');
                 Route::post('xoa-doanh-nghiep', 'CompanyController@delete')->name('company.delete');
+
+
             });
             Auth::routes();
             Route::get('/', 'UserController@home')->name('admin.index');
@@ -51,6 +53,9 @@ Route::middleware('revalidate')->group(function () {
                 Route::get('cap-nhat-thong-tin-quan-tri-vien/{id}', 'UserController@edit')->name('user.edit');
                 Route::post('update-thong-tin-quan-tri-vien', 'UserController@update')->name('user.update');
                 Route::post('xoa-quan-tri-vien', 'UserController@destroy')->name('user.delete');
+
+                Route::get('get-list-company-user','CompanyController@getListCompanyUser')->name('company.getListCompanyUser');
+                Route::post('delete-company-user','CompanyController@deleteCompanyUser')->name('company.deleteCompanyUser');
             });
             //* End
 

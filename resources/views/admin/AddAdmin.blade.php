@@ -28,6 +28,16 @@
 					<input type="phone" class="form-control has-feedback-left" id="mobile" name="mobile" placeholder="Số điện thoại" required>
 					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 				</div>
+
+				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+					<select class="form-control has-feedback-left" name="type" id="type">
+						<option value="1">Admin</option>
+						<option value="2">Biên tập</option>
+						<option value="7">Quản lý doanh nghiệp</option>
+					</select>
+					<span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+				</div>
+				
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 					<input type="password" class="form-control has-feedback-left" id="password" name="password" placeholder="Mật khẩu" required>
 					<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>

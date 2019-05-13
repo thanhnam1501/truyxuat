@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Node;
@@ -50,11 +51,26 @@ class AdminNodeController extends Controller
      */
     public function getlist()
     {
-        $nodes = DB::table('nodes')
-            ->join('products', 'products.id', '=', 'nodes.product_id')
-            ->select('nodes.*', 'products.name as product_name')
-            ->orderBy('nodes.created_at', 'desc')
-            ->get();
+        if (Auth::guard('web')->user()->type === 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $nodes = DB::table('nodes')
+                ->join('products', 'products.id', '=', 'nodes.product_id')
+                ->select('nodes.*', 'products.name as product_name')
+                ->whereIn('products.company_id', $companyIdList)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $nodes = DB::table('nodes')
+                ->join('products', 'products.id', '=', 'nodes.product_id')
+                ->select('nodes.*', 'products.name as product_name')
+                ->orderBy('nodes.created_at', 'desc')
+                ->get();
+        }
 
         return Datatables::of($nodes)
             ->addIndexColumn()

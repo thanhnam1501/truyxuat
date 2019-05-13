@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin_History;
 use App\Models\Company;
+use App\Models\CompanyUser;
 use App\Models\Imageupload;
 use App\Models\Node;
 use App\Models\Product;
@@ -42,11 +43,26 @@ class AdminProductController extends Controller
      */
     public function getlist()
     {
-        $products = DB::table('products')
-            ->join('companies', 'companies.id', '=', 'products.company_id')
-            ->select('products.*', 'companies.name as company_name')
-            ->orderBy('id', 'desc')
-            ->get();
+        if (Auth::guard('web')->user()->type === 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $products = DB::table('products')
+                ->join('companies', 'companies.id', '=', 'products.company_id')
+                ->select('products.*', 'companies.name as company_name')
+                ->whereIn('company_id', $companyIdList)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $products = DB::table('products')
+                ->join('companies', 'companies.id', '=', 'products.company_id')
+                ->select('products.*', 'companies.name as company_name')
+                ->orderBy('id', 'desc')
+                ->get();
+        }
 
         return Datatables::of($products)
             ->editColumn('status', function ($products) {
