@@ -33,8 +33,39 @@ class AdminNodeController extends Controller
 
     public function ShowFormCreateOne()
     {
-        $products = Product::get();
-        $user = Profile::get();
+        if (Auth::guard('web')->user()->type == 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $products = DB::table('products')
+                ->join('companies', 'companies.id', '=', 'products.company_id')
+                ->select('products.*', 'companies.name as company_name')
+                ->whereIn('company_id', $companyIdList)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $products = Product::get();
+        }
+
+        if (Auth::guard('web')->user()->type == 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $user = DB::table('profiles')
+                ->join('companies', 'companies.id', '=', 'profiles.company_id')
+                ->select('profiles.*', 'companies.name as company_name')
+                ->whereIn('company_id', $companyIdList)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $user = Profile::get();
+        }
         return view('admin.node.addOneNode', ['products' => $products, 'user' => $user]);
     }
 
@@ -51,7 +82,7 @@ class AdminNodeController extends Controller
      */
     public function getlist()
     {
-        if (Auth::guard('web')->user()->type === 7) {
+        if (Auth::guard('web')->user()->type == 7) {
             $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
             $companyIdList = [];
             foreach ($company_users as $company_users) {

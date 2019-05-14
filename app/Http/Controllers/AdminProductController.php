@@ -19,7 +19,15 @@ class AdminProductController extends Controller
 {
     public function getFormCreate()
     {
-        $companies = Company::get();
+        if (Auth::guard('web')->user()->type == 7) {
+            $companies = CompanyUser::join('companies', 'company_users.company_id', 'companies.id')
+                ->select('companies.*')
+                ->where('company_users.user_id', Auth::guard('web')->user()->id)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $companies = Company::orderBy('id', 'desc')->get();
+        }
         return view('admin.product.AddProduct', ['companies' => $companies]);
     }
 
@@ -43,7 +51,7 @@ class AdminProductController extends Controller
      */
     public function getlist()
     {
-        if (Auth::guard('web')->user()->type === 7) {
+        if (Auth::guard('web')->user()->type == 7) {
             $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
             $companyIdList = [];
             foreach ($company_users as $company_users) {

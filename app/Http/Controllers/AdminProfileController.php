@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyUser;
 use App\Models\Profile;
 use App\Models\Renewal;
 use Datatables;
 use DB;
 use Entrust;
 use Illuminate\Http\Request;
+use Auth;
 
 
 class AdminProfileController extends Controller
@@ -32,7 +34,17 @@ class AdminProfileController extends Controller
 
     public function getFormCreate()
     {
-        $companies = Company::get();
+        if (Auth::guard('web')->user()->type == 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $companies = Company::whereIn('id', $companyIdList)->orderBy('created_at', 'desc')->get();
+        } else {
+            $companies = Company::orderBy('created_at', 'desc')->get();
+        }
         return view('admin.user.AddUser', ['companies' => $companies]);
     }
 
@@ -43,10 +55,26 @@ class AdminProfileController extends Controller
      */
     public function getlist()
     {
-        $profiles = DB::table('profiles')
-            ->join('companies', 'companies.id', '=', 'profiles.company_id')
-            ->select('profiles.*', 'companies.name as company_name')
-            ->get();
+        if (Auth::guard('web')->user()->type == 7) {
+            $company_users = CompanyUser::where('user_id', Auth::guard('web')->user()->id)->get();
+            $companyIdList = [];
+            foreach ($company_users as $company_users) {
+                array_push($companyIdList, $company_users->company_id);
+            }
+
+            $profiles = DB::table('profiles')
+                ->join('companies', 'companies.id', '=', 'profiles.company_id')
+                ->select('profiles.*', 'companies.name as company_name')
+                ->whereIn('company_id', $companyIdList)
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $profiles = DB::table('profiles')
+                ->join('companies', 'companies.id', '=', 'profiles.company_id')
+                ->select('profiles.*', 'companies.name as company_name')
+                ->orderBy('id', 'desc')
+                ->get();
+        }
 
         return Datatables::of($profiles)
             ->addIndexColumn()

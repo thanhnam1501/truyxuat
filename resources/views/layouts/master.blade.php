@@ -86,8 +86,10 @@
 
                             <li><a><i class="fa fa-bank"></i> DOANH NGHIỆP <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu" style="display: none">
-                                    <li><a href="{{route('company.ShowFormCreate')}}">Thêm doanh nghiệp</a>
-                                    </li>
+                                    @if (Auth::guard('web')->user()->type == 1)
+                                        <li><a href="{{route('company.ShowFormCreate')}}">Thêm doanh nghiệp</a>
+                                        </li>
+                                    @endif
                                     <li><a href="{{route('company.index')}}">Quản lý doanh nghiệp</a>
                                     </li>
 
@@ -103,7 +105,7 @@
                                 </ul>
                             </li>
 
-                            @if (Auth::guard('web')->user()->type === 1)
+                            @if (Auth::guard('web')->user()->type == 1)
                                 <li><a><i class="fa fa-users"></i>TÀI KHOẢN<span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="{{route('admin.user.index')}}">Quản trị viên</a>
@@ -148,18 +150,18 @@
                                 </ul>
                             </li>
 
-                            @if (Auth::guard('web')->user()->type === 1)
-                            <li><a><i class="fa fa-money"></i>GIA HẠN<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu" style="display: none">
-                                    <li><a href="{{route('renewal.index')}}">Doanh nghiệp gia hạn</a>
-                                    </li>
+                            @if (Auth::guard('web')->user()->type == 1)
+                                <li><a><i class="fa fa-money"></i>GIA HẠN<span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        <li><a href="{{route('renewal.index')}}">Doanh nghiệp gia hạn</a>
+                                        </li>
 
-                                    <li><a href="{{route('quotes.index')}}">Báo giá</a>
-                                    </li>
+                                        <li><a href="{{route('quotes.index')}}">Báo giá</a>
+                                        </li>
 
-                                </ul>
-                            </li>
-                                @endif
+                                    </ul>
+                                </li>
+                            @endif
 
                         </ul>
                     </div>

@@ -264,7 +264,6 @@
                             product_id:product_id
                         },
                         success : function(res) {
-                            var data = res.data;
                             window.location.reload();
                             toastr.success('Sửa thành công !');
                         }

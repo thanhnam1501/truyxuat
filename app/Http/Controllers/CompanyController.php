@@ -19,7 +19,7 @@ class CompanyController extends Controller
 
     public static function getlist(Request $request)
     {
-        if (Auth::guard('web')->user()->type === 7) {
+        if (Auth::guard('web')->user()->type == 7) {
             $data = CompanyUser::join('companies', 'company_users.company_id', 'companies.id')
                 ->select('companies.*')
                 ->where('company_users.user_id', Auth::guard('web')->user()->id)
