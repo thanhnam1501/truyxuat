@@ -223,7 +223,7 @@
                         <form action="{{route('getViewPrint')}}" method="POST" id="formPrint" style="">
                             <div class="slidecontainer">
                                 <p>Value: <span id="demo">%</span></p>
-                                <input type="range" min="0" max="65" value="33" name="stampWidth" class="slider"
+                                <input type="range" min="-10" max="75" value="33" name="stampWidth" class="slider"
                                        id="stampWidth" onchange="myFunction()">
                             </div>
 
@@ -237,7 +237,7 @@
 
                             <div class="slidecontainer">
                                 <p>Value: <span id="demo2">%</span></p>
-                                <input type="range" min="0" max="34" value="17" name="stampHeight" class="slider"
+                                <input type="range" min="-10" max="45" value="17" name="stampHeight" class="slider"
                                        id="stampHeight" onchange="myFunction2()">
                             </div>
                             <div>

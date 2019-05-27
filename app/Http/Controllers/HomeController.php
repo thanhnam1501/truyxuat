@@ -10,10 +10,13 @@ use App\Models\Qrcode_Product;
 use App\Models\QrcodeHistory;
 use App\Models\SpProduct;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    const para_true = 0;
+    const para_false = 1;
     /**
      * Create a new controller instance.
      *
@@ -130,9 +133,14 @@ class HomeController extends Controller
         $data = SpProduct::select()
             ->join('products', 'products.id', '=', 'sp_products.product_id')
             ->where('sp_products.id', $request->spProduct_id)
-            ->get();
-        $nodes = Node::where('product_id', $data['0']['product_id'])->get();
-        return view('check2', ['data' => $data['0'], 'nodes' => $nodes]);
+            ->first();
+        $nodes = Node::where('product_id', $data['product_id'])->get();
+
+        $expire_date = self::para_true;
+        if ($data['expiration_date'] <= Carbon::now())
+             $expire_date = self::para_false;
+
+        return view('check2', ['data' => $data, 'nodes' => $nodes, 'expire_date' => $expire_date]);
     }
 
 }

@@ -34,9 +34,9 @@
 
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                         <select class="form-control has-feedback-left" name="company_id" id="company_id">
+                            <option value="">==Chọn doanh nghiệp quản lý ==</option>
                             @foreach($companies as $company)
-                                <option @if($data->company_id == $company->id) selected
-                                        @endif value="{{$company->id}}">{{$company->name}}</option>
+                                <option value="{{$company->id}}">{{$company->name}}</option>
                             @endforeach
                         </select>
                         <span class="fa fa-university form-control-feedback left" aria-hidden="true"></span>

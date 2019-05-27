@@ -88,6 +88,11 @@ Route::middleware('revalidate')->group(function () {
                 Route::get('xem-chi-tiet/{id}', 'AdminProductController@show')->name('product.show');
                 Route::post('activated', 'AdminProductController@activated')->name('product.activated');
 
+                Route::post('create-sp-product', 'AdminSpProductController@store')->name('admin.sp.product.store');
+                Route::get('index-sp-product/{id}', 'AdminSpProductController@index')->name('admin.sp.product.index');
+                Route::get('get-list-sp-product', 'AdminSpProductController@getlist')->name('admin.sp.product.getlist');
+                Route::get('print-qrcode/{id}', 'AdminSpProductController@printQrcode')->name('admin.print.qrcode');
+
                 // Quản lý Sp product
 
             });

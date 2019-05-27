@@ -1,4 +1,4 @@
-@extends('layouts.master_user')
+@extends('layouts.master')
 @section('content')
     <form action="{{route('getViewPrint')}}" method="POST" id="formPrint" style="width: 30%;margin-left: 35%">
         <div class="slidecontainer">

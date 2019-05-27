@@ -86,14 +86,11 @@ class AdminProductController extends Controller
             // ->addColumn()
             ->addColumn('action', function ($products) {
                 $string = "";
+                $string .= '<a data-tooltip="tooltip" title="Danh sách thu hoạch" href="' . route('admin.sp.product.index', $products->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-list"></i></a>';
+
                 $string .= '<a data-tooltip="tooltip" title="Xem chi tiết" target="_blank" href="' . route('showBySlug', $products->slug) . '" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>';
 
                 $string .= '<a data-tooltip="tooltip" title="Chỉnh sửa" href="' . route('product.edit', $products->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>';
-
-                $string .= '<a href="javascript:;" title="In mã QR-Code" class="btn btn-warning btn-xs" onclick="PrintImage(' . "'" .
-                    base64_encode(QrCode::format('png')
-                        ->size(200)
-                        ->generate(url("/check/{$products->id}"))) . "'" . '); return false;"><i class="fa fa-print"></i></a></a>';
 
                 $string .= '<a data-tooltip="tooltip" title="Xóa sản phẩm" href="javascript:;" onclick="deleteProduct(' . $products->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
 
