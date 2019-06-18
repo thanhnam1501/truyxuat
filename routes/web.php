@@ -204,10 +204,9 @@ Route::middleware('revalidate')->group(function () {
     Route::get('check/{id}', 'HomeController@show');
     Route::get('/show/{slug}', 'HomeController@showBySlug')->name('showBySlug');
     Route::get('/truy-xuat', 'HomeController@getDetail')->name('getDetail');
-    Route::get('view', 'HomeController@getProductBySpProduct');
+    Route::get('view/{spProduct_id}', 'HomeController@getProductBySpProduct');
     Route::get('qr-code', function () {
-        return QRCode::text('QR Code Generator for Laravel!')
-            ->png();
+        return QrCode::size(45)->generate('Welcome to kerneldev.com!');
     });
 
 

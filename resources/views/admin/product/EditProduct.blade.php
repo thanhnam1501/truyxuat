@@ -228,10 +228,10 @@
 							</div>
 
 							<div id="view-print"
-								 style="width: 294px;height: 204px; border: 1px solid black;margin-right: auto;margin-left: auto;">
+								 style="width: 98px;height: 68px; border: 1px solid black;margin-right: auto;margin-left: auto;">
 								<img id="qr-code" style="border: 1px solid black;margin-left: 33%;margin-top: 15%; "
 									 src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
-							->size(102)
+							->size(35)
 							->generate($url)) !!} ">
 							</div>
 
@@ -382,7 +382,7 @@
 		function testView() {
 			var x = document.getElementById("stampWidth").value;
 			var y = document.getElementById("stampHeight").value;
-			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(102)->generate($url)) !!} ">';
+			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(35)->generate($url)) !!} ">';
 
 		}
 	</script>
@@ -391,7 +391,7 @@
 		function myFunction() {
 			var x = document.getElementById("stampWidth").value;
 			var y = document.getElementById("stampHeight").value;
-			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(102)->generate($url)) !!} ">';
+			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(35)->generate($url)) !!} ">';
 		}
 	</script>
 
@@ -399,7 +399,7 @@
 		function myFunction2() {
 			var y = document.getElementById("stampHeight").value;
 			var x = document.getElementById("stampWidth").value;
-			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(102)->generate($url)) !!} ">';
+			document.getElementById("view-print").innerHTML = '<img style="border: 1px solid black;margin-left: ' + x + '%;margin-top: ' + y + '%;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(35)->generate($url)) !!} ">';
 		}
 	</script>
 

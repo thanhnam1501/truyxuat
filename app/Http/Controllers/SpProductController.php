@@ -65,7 +65,7 @@ class SpProductController extends Controller
 
     public function printQrcode($id)
     {
-        $url = url("/view?spProduct_id=$id");
+        $url = url("/view/$id");
        return view('user.product.printQrcode',['url' => $url]);
     }
 }
