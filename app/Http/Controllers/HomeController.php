@@ -32,7 +32,6 @@ class HomeController extends Controller
     {
 
         $data = Product::find($id);
-
         // kiểm tra hạn
         $company = Company::find($data->company_id);
         $created_at = $company->created_at;
