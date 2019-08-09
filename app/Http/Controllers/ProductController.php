@@ -239,7 +239,7 @@ class ProductController extends Controller
         if (!empty($product)) {
             DB::beginTransaction();
             try {
-                $product->delete();
+
 
                 DB::commit();
 

@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>SmartCheck | Giải pháp chống giả cho bạn ! </title>
+    <title>SmartCheck | Giải pháp truy xuất nguồn gốc hàng hóa </title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{asset('public/image/favicon.png')}}" rel='shortcut icon' type='image/vnd.microsoft.icon'/>
@@ -19,6 +19,7 @@
 
     <!-- Custom styling plus plugins -->
     <link href="{{asset('public/css/custom.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/translateelement.css')}}" rel="stylesheet">
     <link href="{{asset('public/css/icheck/flat/green.css')}}" rel="stylesheet"/>
 
 
@@ -26,11 +27,6 @@
 
 
     <style type="text/css">
-
-        @font-face {
-            font-family: Lora;
-            src: '../fonts/lora-v12-latin-regular.woff)';
-        }
 
         body {
             font-family: "Lora";
@@ -96,11 +92,20 @@
 
         /* lora-regular - latin */
 
-
+        .goog-te-gadget span{
+            display: none;
+        }
+        .gadget-te-gadget{
+            color: white !important;
+          }
+        .goog-te-combo{
+            color: #0c0c0c;
+        }
     </style>
 </head>
 
 <body>
+<center> <div id="translate_select"></div></center>
 
 @if(!empty($data) && $data->status == 1)
 
@@ -118,7 +123,7 @@
                 </p>
             @endif
             @if(!empty($time_scans))
-                <p style="text-align: center;color: #ff0000;font-size: 12">
+                <p style="text-align: center;color: #ff0000;font-size: 12px">
                     (Số lần quét:{{$time_scans}})
                 </p>
             @endif
@@ -126,7 +131,7 @@
     @else
         <div class="x_panel">
             <img class="imageSuccess" src="{{asset('public/image/logo.jpg')}}" alt="">
-            <h6 style="text-align: center;margin-right: 0 auto;margin-left: 0 auto;">HỆ THỐNG TRUY XUẤT NGUỒN GỐC HÀNG
+            <h6 style="text-align: center;margin-right: auto;margin-left: auto;">HỆ THỐNG TRUY XUẤT NGUỒN GỐC HÀNG
                 HÓA</h6>
         </div>
     @endif
@@ -150,7 +155,7 @@
                    style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
 
                 <span style="color: #fff !important; ">
-      <strong style="float: left;">THÔNG TIN SẢN PHẨM</strong>
+      <strong style="float: left;">THÔNG TIN CHUNG</strong>
       <i class="ChangeIcon fa fa-chevron-up" style="float: right; margin-right: 5%;"></i>
     </span>
             </a>
@@ -170,7 +175,7 @@
         <div>
             <a href="#content" style="background-color: #338841; width: 100%"
                class="btn panel-title fieldset-legend collapse-link" data-toggle="collapse" aria-expanded="true">
-                <span class="fieldset-legend-prefix element-invisible""></span>
+                <span class="fieldset-legend-prefix element-invisible"></span>
                 <i class="fa fa-search"
                    style="color: #fff; float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
                 <span style="color: #fff !important; ">
@@ -247,12 +252,11 @@
 
 
     <div class="footer">
-        <img class="imageLogo" src="{{asset('public/image/logo.jpg')}}" alt="">
+        <img class="imageLogo" src="{{asset('public/image/logo.jpg')}}" alt="" width=80%>
 
         <ul style="list-style: none;">
             <li>
-                <p><strong>Hệ thống truy xuất nguồn gốc hàng hóa - <span style="color: red">S</span>mart<span
-                                style="color: red">C</span>heck</strong></p>
+                <p><strong>Hệ thống truy xuất nguồn gốc hàng hóa và xác thực điện tử</strong></p>
             </li>
             <li>
                 <i class="fa fa-map-marker" style="float: left; margin-left: 5%; margin-right: 5%; margin-top: 1%"></i>
@@ -274,10 +278,6 @@
 
         </ul>
     </div>
-
-
-
-
     <script src="{{asset('public/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('public/js/chartjs/chart.min.js')}}"></script>
     <!-- bootstrap progress js -->
@@ -316,5 +316,17 @@
 
     <!-- /footer content -->
 </body>
+
+
+
+
+<script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+</script>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'vi'}, 'translate_select');
+    }
+</script>
 
 </html>
